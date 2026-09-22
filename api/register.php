@@ -11,6 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $data = json_decode(file_get_contents('php://input'), true) ?: [];
 $fullName = trim($data['fullName'] ?? '');
 $email = trim($data['email'] ?? '');
+$department = trim($data['department'] ?? '');
+$position = trim($data['position'] ?? '');
+$purpose = trim($data['purpose'] ?? '');
 
 if ($fullName === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(422);
@@ -19,20 +22,19 @@ if ($fullName === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 try {
-    $temporaryPassword = bin2hex(random_bytes(16));
     $query = $pdo->prepare(
-        'INSERT INTO users
-         (username, email, password_hash, full_name, role, is_active, must_change_password)
-         VALUES (:username, :email, :password_hash, :full_name, :role, :is_active, :must_change_password)'
+        'INSERT INTO pending_users
+         (full_name, email, department, position, purpose, requested_role, status)
+         VALUES (:full_name, :email, :department, :position, :purpose, :requested_role, :status)'
     );
     $query->execute([
-        ':username' => $email,
-        ':email' => $email,
-        ':password_hash' => password_hash($temporaryPassword, PASSWORD_DEFAULT),
         ':full_name' => $fullName,
-        ':role' => 'buyer',
-        ':is_active' => 0,
-        ':must_change_password' => 1
+        ':email' => $email,
+        ':department' => $department ?: null,
+        ':position' => $position ?: null,
+        ':purpose' => $purpose,
+        ':requested_role' => 'buyer',
+        ':status' => 'Pending'
     ]);
 
     echo json_encode(['message' => 'Registration request submitted successfully.']);

@@ -2,6 +2,7 @@ const registrationForm = document.querySelector('#registrationForm');
 const fullNameInput = document.querySelector('#fullName');
 const emailInput = document.querySelector('#registrationEmail');
 const agreementInput = document.querySelector('#registrationAgreement');
+const purposeInput = document.querySelector('#purpose');
 const formMessage = document.querySelector('#formMessage');
 const toast = document.querySelector('#toast');
 
@@ -34,6 +35,12 @@ registrationForm.addEventListener('submit', async (event) => {
     return;
   }
 
+  if (!purposeInput.value.trim()) {
+    formMessage.textContent = 'Enter the purpose of your access request.';
+    purposeInput.focus();
+    return;
+  }
+
   try {
     const response = await fetch('api/register.php', {
       method: 'POST',
@@ -57,7 +64,9 @@ registrationForm.addEventListener('submit', async (event) => {
     showToast(result.message);
     registrationForm.reset();
   } catch (error) {
-    formMessage.textContent = 'Unable to connect to the server.';
+    formMessage.textContent = window.location.protocol === 'file:'
+      ? 'Open this page through http://localhost/uniprocur2/.'
+      : 'The server returned an invalid response.';
   }
 });
 

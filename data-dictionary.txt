@@ -1,0 +1,205 @@
+Data Dictionary 
+ 
+users (System Users) 
+Field Name Data Type Nullable Example 
+user_id INT  No (PK) 1001 
+username VARCHAR(50) No (Unique) juan.dela.cruz@comp
+any.com 
+email VARCHAR(100) No (Unique) juan.dela.cruz@comp
+any.com 
+password_hash VARCHAR(255) No $2y$10$X9k2Lm... 
+(bcrypt hash) 
+full_name VARCHAR(100) No Juan Dela Cruz 
+role ENUM No 'buyer' 
+manager_id INT Yes (FK) 1000 
+is_active BOOLEAN No (Default: TRUE) True 
+must_change_passwo
+rd 
+BOOLEAN No (Default: TRUE) True 
+created_at TIMESTAMP No 2026-01-15 09:30:00 
+ 
+suppliers (Vendor Master) 
+Field Name Data Type Nullable Example 
+supplier_id INT No (PK) 2001 
+supplier_code VARCHAR(20) No (Unique) SUP-001 
+supplier_name VARCHAR(100) No ABC Trading 
+Corporation 
+tax_id VARCHAR(50) Yes 123-456-789-000 
+address TEXT Yes 123 Rizal St., Makati 
+City, Metro Manila 
+contact_person VARCHAR(100) Yes Maria Santos 
+phone VARCHAR(20) Yes +63-2-8123-4567 
+email VARCHAR(100) Yes sales@abctrading.ph 
+payment_terms VARCHAR(50) No (Default; ‘Net 
+30’) 
+Net 30 
+bank_details TEXT Yes BDO Savings Acct 
+#1234-5678-90 
+status ENUM No (Default: 
+‘Active’) 
+Active 
+created_at TIMESTAMP No 2026-01-10 14:22:00 
+ 
+ 
+ 
+items (Product Master) 
+Field Name Data Type Nullable Example 
+item_id  INT No (PK) 3001 
+item_code VARCHAR(20) No (Unique) ITM-0001 
+item_name VARCHAR(100) No A4 Bond Paper 
+70gsm 
+category VARCHAR(50) Yes Office Supplies 
+uom VARCHAR(10) No ream 
+unit_price DECIMAL(10, 2) Yes 250.00 
+reorder_level INT No (Default: 0) 50 
+is_active BOOLEAN No (Default: TRUE) TRUE 
+created_at TIMESTAMP No 2026-01-05 08:00:00 
+ 
+purchase_request (Internal Requisition) 
+Field Name Data Type Nullable Example 
+pr_id INT No (PK) 4001 
+pr_number VARCHAR(20) No (Unique) PR-2026-0001 
+item_id INT No (FK) 3001 
+quantity INT No 100 
+uom VARCHAR(10) No ream 
+required_date DATE Yes 2026-02-15 
+justification TEXT Yes Monthly office 
+supply replenishment 
+status ENUM No (Default: ‘Draft’) Submitted 
+created_by INT No (FK) 1001 
+approved_by INT Yes (FK) 1000 
+created_at TIMESTAMP No 2026-01-20 10:15:00 
+approved_at TIMESTAMP No 2026-01-21 09:00:00 
+ 
+rfqs (Request for Quotation Header) 
+Field Name Data Type Nullable Example 
+rfq_id INT No (PK) 5001 
+rfq_number VARCHAR(20) No (Unique) RFQ-2026-0001 
+pr_id INT No (FK) 4001 
+title VARCHAR(100) No (FK) A4 Bond Paper 
+Supply Q1 2026 
+description TEXT No 70gsm, 500 sheets 
+per ream, white 
+submission_deadline DATE Yes 2026-02-01 
+status ENUM Yes Sent 
+created_by INT No (FK) 1001 
+created_at TIMESTAMP No 2026-01-22 11:00:00 
+ 
+quotations (Supplier Price Responses) 
+Field Name Data Type Nullable Example 
+quotation_id INT No (PK) 6001 
+rfq_id INT No (FK) 5001 
+supplier_id INT No (FK) 2001 
+total_amount DECIMAL(10,2) Yes 24000.00 
+currency VARCHAR(3) No (Default: ‘PHP’) PHP 
+delivery_terms VARCHAR(50) Yes 7 days upon receipt 
+of PO 
+validity_days INT No (Default: 30) 30 
+warranty VARCHAR(50) Yes 6 months replacement 
+status ENUM (Default: 'Received') Selected 
+selected BOOLEAN (Default: FALSE) TRUE 
+created_at TIMESTAMP No 2026-01-25 13:45:00 
+ 
+purchase_orders (Header - Legal Contract) 
+Field Name Data Type Nullable Example 
+po_id INT No (PK) 7001 
+po_number VARCHAR(20) No (Unique) PO-2026-0001 
+supplier_id INT No (FK) 2001 
+pr_id INT No (FK) 4001 
+rfq_id INT Yes (FK) 5001 
+order_date DATE No 2026-02-05 
+delivery_date DATE Yes 2026-02-12 
+ship_to_address TEXT Yes 456 Ayala Ave., 
+Makati City 
+payment_terms VARCHAR(50) Yes Net 30 
+currency VARCHAR(3) No (Default: ‘PHP’) PHP 
+incoterms VARCHAR(10) Yes DDP 
+total_amount DECIMAL(10,2) No (Default: 0) 24000.00 
+status ENUM No (Default: ‘Draft) Sent 
+created_by INT No (FK) 1001 
+approved_by INT Yes(FK) 1000 
+created_at TIMESTAMP No  2026-02-05 09:00:00 
+approved_at TIMESTAMP Yes 2026-02-05 15:30:00 
+ 
+po_items (Details - Multiple Product) 
+Field Name Data Type Nullable Example 
+po_item_id INT No (PK) 8001 
+po_id INT No (FK) 7001 
+item_id INT No (FK) 3001 
+quantity INT No 100 
+uom VARCHAR(10) No ream 
+unit_price DECIMAL(10,2) No 240.00 
+discount DECIMAL(5,2) No (Default: 0) 0.00 
+total_line DECIMAL(10,2) No (Default: 0) 24000.00 
+ 
+goods_receipts (Header - Receiving Document) 
+Field Name Data Type Nullable Example 
+gr_id INT No (PK) 9001 
+gr_number VARCHAR(20) No (Unique) GR-2026-0001 
+po_id INT No (FK) 7001 
+receipt_date DATE DATE 2026-02-12 
+received_by INT INT 1002 
+status ENUM No (Default: 
+‘Pending’) 
+Confirmed 
+created_at TIMESTAMP No 2026-02-12 10:00:00 
+ 
+gr_items (Details - Partial Receiving) 
+Field Name Data Type Nullable Example 
+gr_id INT No (PK) 9001 
+gr_number VARCHAR(20) No (Unique) GR-2026-0001 
+po_id INT No (FK) 7001 
+receipt_date DATE DATE 2026-02-12 
+received_by INT INT 1002 
+status ENUM No (Default: 
+‘Pending’) 
+Confirmed 
+created_at TIMESTAMP No 2026-02-12 10:00:00 
+ 
+purchase_invoices (Supplier Billing - 3-Way Match) 
+Field Name Data Type Nullable Example 
+invoice_id INT No (PK) 11001 
+invoice_number VARCHAR(50) No (Unique) INV-2026-0001 
+po_id INT No (FK) 7001 
+supplier_invoice VARCHAR(50) No ABC-2026-0045 
+invoice_date DATE No 2026-02-13 
+total_amount DECIMAL(10,2) No 24000.00 
+tax_amount DECIMAL(10,2) No (Default: 0) 2880.00 
+status ENUM No (Default: ‘Draft’) Matched 
+matched_by INT Yes (FK) 1001 
+posted_by INT Yes (FK) 1003 
+created_at TIMESTAMP No 2026-02-14 09:00:00 
+posted_at TIMESTAMP Yes 2026-02-15 14:00:00 
+ 
+audit_logs (System Compliance) 
+Field Name Data Type Nullable Example 
+log_id INT No (PK) 12001 
+user_id INT No (FK) 1001 
+action VARCHAR(50) No UPDATE 
+table_name VARCHAR(50) No purchase_orders 
+record_id INT No 7001 
+old_value TEXT Yes {"status":"Draft"} 
+new_value TEXT Yes {"status":"Sent"} 
+ip_address VARCHAR(45) Yes 192.168.1.100 
+timestamp TIMESTAMP No 2026-02-05 09:05:00 
+ 
+pending_users (Account Request) 
+Field Name Data Type Nullable Example 
+request_id INT No 9PK) 13001 
+full_name VARCHAR(100) No Pedro Reyes 
+email VARCHAR(100) No (Unique) pedro.reyes@compan
+y.com 
+department VARCHAR(50) Yes Procurement 
+position VARCHAR(50) Yes Purchasing Staff 
+purpose TEXT No Need access to create 
+purchase requests for 
+IT dept 
+requested_role ENUM No (Default: ‘buyer’) buyer 
+status ENUM No (Default: 
+‘Pending’) 
+Pending 
+rejection_reason TEXT Yes NULL 
+reviewed_by INT Yes (FK) 1000 
+created_at TIMESTAMP No 2026-01-18 16:45:00 
+reveiwed_at TIMESTAMP Yes 2026-01-19 10:00:00 
+ 
