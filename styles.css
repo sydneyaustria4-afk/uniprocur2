@@ -1,0 +1,249 @@
+:root {
+  --ink: #111111;
+  --paper: #ffffff;
+  --glass: rgba(203, 191, 191, 0.68);
+  --red: #d92c2a;
+  --red-deep: #9e171c;
+  --line: rgba(255, 255, 255, 0.85);
+  --soft-shadow: 0 5px 12px rgba(69, 0, 0, 0.28);
+  font-family: Inter, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body { min-height: 100%; margin: 0; }
+
+body {
+  min-width: 320px;
+  color: var(--ink);
+  background: #e5281b url("assets/LoginPage.png") center / cover fixed no-repeat;
+}
+
+button, input { font: inherit; }
+button { border: 0; cursor: pointer; }
+
+.page-shell {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  width: min(100% - 32px, 726px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 47px 0 28px;
+}
+
+.login-panel {
+  position: relative;
+  width: 365px;
+  flex: 0 0 365px;
+}
+
+.back-button {
+  position: absolute;
+  z-index: 2;
+  top: 7px;
+  left: 2px;
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 30px;
+  line-height: 1;
+  box-shadow: var(--soft-shadow);
+  transition: transform 160ms ease;
+}
+
+.back-button:hover, .back-button:focus-visible { transform: translateX(-3px); }
+
+.login-card {
+  position: relative;
+  min-height: 329px;
+  padding: 68px 48px 20px;
+  color: var(--paper);
+  background-image: url("assets/drive.svg");
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px 12px 12px 0;
+  box-shadow: var(--soft-shadow);
+}
+
+.login-card::before {
+  display: none;
+}
+
+h1 { margin: 0 0 10px; font-size: 23px; font-weight: 500; letter-spacing: -1px; }
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 40px;
+  padding: 4px 10px;
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+}
+
+.field-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.key-icon { width: 28px; height: 28px; flex-basis: 28px; background: transparent; }
+.key-icon img { display: block; width: 28px; height: 28px; }
+.password-field { min-height: 40px; gap: 9px; padding: 4px 10px; }
+.password-field input { font-size: 14px; letter-spacing: normal; }
+.field input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 14px; }
+.field input::placeholder { color: var(--ink); opacity: 1; }
+
+.password-toggle { display: grid; width: 24px; height: 24px; flex: 0 0 24px; padding: 0; place-items: center; border-radius: 50%; background: transparent; color: var(--ink); }
+.password-toggle svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; }
+.password-toggle svg[hidden] { display: none; }
+.password-toggle:hover { background: rgba(17, 17, 17, 0.08); }
+.password-toggle:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+
+.forgot-button {
+  padding: 6px 13px;
+  border-radius: 20px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 10px;
+  letter-spacing: normal;
+  white-space: nowrap;
+}
+
+.agreement-row { display: flex; align-items: center; gap: 5px; margin: 7px 7px 0; font-size: 9px; }
+.agreement-row input { width: 13px; height: 13px; accent-color: var(--paper); }
+.helper-copy { margin: 4px 0 0 7px; font-size: 8px; line-height: 1.35; }
+
+.submit-button {
+  position: absolute;
+  right: 51px;
+  bottom: 76px;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 26px;
+  line-height: 1;
+}
+
+.submit-button:hover, .forgot-button:hover, .discover-card button:hover { filter: brightness(.92); }
+.form-message { min-height: 15px; margin: 4px 0 0 7px; color: #fff6a8; font-size: 10px; }
+
+.register-copy { position: absolute; right: 0; bottom: 18px; left: 0; margin: 0; text-align: center; font-size: 9px; }
+.register-copy button { padding: 0; background: transparent; color: inherit; font-weight: 700; text-decoration: underline; }
+
+.discover-card {
+  min-height: 139px;
+  margin-top: 14px;
+  padding: 10px 15px;
+  border-radius: 12px;
+  background: var(--paper);
+  box-shadow: var(--soft-shadow);
+}
+
+.discover-card p { margin: 0; font-size: 22px; line-height: 1.1; letter-spacing: -1.1px; }
+.discover-card button { display: block; margin: 16px 0 0 auto; padding: 0; background: transparent; font-size: 16px; }
+.discover-card button span { margin-left: 3px; }
+
+.service-card {
+  position: relative;
+  width: 345px;
+  height: 482px;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: var(--soft-shadow);
+  background: #1684a7;
+}
+
+.service-photo { width: 100%; height: 100%; object-fit: cover; object-position: 58% center; }
+.service-overlay { position: absolute; inset: 0 50% 0 0; background: rgba(120, 190, 215, .7); backdrop-filter: blur(10px); }
+.service-title { position: absolute; top: 14px; right: 14px; margin: 0; color: var(--paper); font-size: 14px; }
+.brand-mark { position: absolute; bottom: 16px; left: 68px; display: flex; flex-direction: column; align-items: center; gap: 3px; color: var(--paper); font-size: 12px; }
+.brand-mark img { width: 15px; height: 15px; object-fit: contain; filter: brightness(0) invert(1); }
+
+.toast { position: fixed; right: 20px; bottom: 20px; z-index: 5; max-width: 280px; padding: 12px 16px; border-radius: 8px; background: rgba(17, 17, 17, .92); color: var(--paper); font-size: 13px; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity 180ms ease, transform 180ms ease; }
+.toast.is-visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 760px) {
+  .page-shell { align-items: center; flex-direction: column; width: min(100% - 28px, 430px); padding: 42px 0 28px; }
+  .login-panel { width: 100%; flex-basis: auto; }
+  .login-card { padding-right: 28px; padding-left: 28px; }
+  .service-card { width: 100%; height: 360px; }
+  .brand-mark { left: 22px; }
+}
+
+@media (max-width: 390px) {
+  .login-card { padding-right: 18px; padding-left: 18px; }
+  .submit-button { right: 25px; }
+  .discover-card p { font-size: 20px; }
+}
+
+/* Registration screen */
+body:has(.registration-shell) { background-image: url("assets/Registration Page.png"); }
+.registration-shell { gap: 16px; width: min(100% - 32px, 726px); padding-top: 49px; }
+.registration-panel { width: 365px; flex: 0 0 365px; }
+.registration-card { position: relative; min-height: 482px; padding: 14px 48px 20px; color: var(--paper); background: url("assets/reg-icon-4.svg") center / 100% 100% no-repeat; }
+.registration-card h1 { margin: 0 0 24px; font-size: 14px; font-weight: 400; letter-spacing: normal; }
+.registration-field { display: flex; align-items: center; gap: 8px; width: 100%; height: 40px; padding: 4px 10px; margin-top: 9px; border: 1px solid var(--line); border-radius: 30px; background: var(--glass); backdrop-filter: blur(8px); }
+.registration-field input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: var(--ink); font: 14px Inter, sans-serif; }
+.registration-field input::placeholder { color: var(--ink); opacity: 1; }
+.registration-icon { position: relative; display: grid; width: 28px; height: 28px; flex: 0 0 28px; place-items: center; }
+.registration-icon > img:first-child { display: block; width: 28px; height: 28px; }
+.registration-icon > span { position: absolute; color: var(--ink); font-size: 15px; line-height: 1; }
+.registration-icon-inner { position: absolute; width: 15px; height: 15px; object-fit: contain; }
+.registration-icon-inner[src*="reg-icon-2"] { filter: brightness(0); }
+.registration-icon-inner.position-icon { width: 18px; height: 18px; }
+.purpose-field { position: relative; display: block; height: 126px; margin-top: 8px; }
+.purpose-label, .purpose-note { position: absolute; top: 0; color: var(--paper); font-size: 10px; line-height: 1; }
+.purpose-label { left: 3px; }
+.purpose-note { right: 3px; color: rgba(255, 255, 255, 0.28); }
+.purpose-field textarea { position: absolute; top: 13px; left: 0; width: 100%; height: 112px; resize: none; padding: 8px 10px; border: 1px solid var(--line); border-radius: 11px; outline: 0; background: var(--glass); color: var(--ink); font: 9px Inter, sans-serif; backdrop-filter: blur(8px); }
+.purpose-field textarea::placeholder { color: var(--paper); opacity: 1; }
+.registration-actions { position: relative; min-height: 72px; margin-top: 4px; }
+.registration-agreement { display: flex; align-items: center; gap: 5px; width: 205px; color: var(--paper); font-size: 9px; line-height: 1.2; }
+.registration-agreement input { width: 13px; height: 13px; flex: 0 0 13px; margin: 0; accent-color: var(--paper); }
+.registration-agreement label { cursor: pointer; }
+.registration-note { width: 150px; margin: 4px 0 0 7px; color: var(--paper); font-size: 7px; line-height: 1.25; }
+.registration-submit, .explore-button { display: grid; place-items: center; border-radius: 30px; background: var(--paper); color: var(--ink); font: 14px Inter, sans-serif; }
+.registration-submit { position: absolute; top: 0; right: 5px; width: 98px; height: 34px; }
+.registration-submit:hover, .explore-button:hover { filter: brightness(.92); }
+.login-link { position: absolute; right: 0; bottom: 18px; left: 0; margin: 0; color: var(--paper); text-align: center; font-size: 10px; }
+.login-link button { padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 700; text-decoration: underline; }
+.registration-shell .service-card { width: 345px; height: 482px; }
+.registration-shell .service-title { top: 14px; right: 14px; font-size: 14px; }
+.registration-shell .brand-mark { bottom: 16px; left: 68px; transform: none; font-size: 12px; }
+.explore-button { position: absolute; right: 12px; bottom: 10px; width: 98px; height: 34px; }
+
+@media (max-width: 760px) {
+  .registration-shell { width: min(100% - 28px, 430px); padding-top: 42px; }
+  .registration-panel { width: 100%; flex-basis: auto; }
+  .registration-card { padding-right: 28px; padding-left: 28px; }
+  .registration-shell .service-card { width: 100%; height: 360px; }
+  .registration-shell .brand-mark { left: 22px; }
+}
+
+@media (max-width: 390px) {
+  .registration-card { padding-right: 18px; padding-left: 18px; }
+  .registration-shell .brand-mark { left: 22px; }
+}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UniProcur procurement service registration">
+  <title>UniProcur | Registration</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell registration-shell">
+    <section class="registration-panel" aria-labelledby="registration-title">
+      <div class="registration-card">
+        <form id="registrationForm" novalidate>
+          <h1 id="registration-title">Registration</h1>
+
+          <label class="registration-field" for="fullName">
+            <span class="registration-icon" aria-hidden="true"><img src="assets/reg-icon-1.svg" alt=""><span>@</span></span>
+            <input id="fullName" name="fullName" type="text" placeholder="full name" autocomplete="name" required>
+          </label>
+
+          <label class="registration-field" for="registrationEmail">
+            <span class="registration-icon" aria-hidden="true"><img src="assets/reg-icon-1.svg" alt=""><span>@</span></span>
+            <input id="registrationEmail" name="email" type="email" placeholder="e-mail address" autocomplete="email" required>
+          </label>
+
+          <label class="registration-field" for="department">
+            <span class="registration-icon" aria-hidden="true"><img src="assets/reg-icon-1.svg" alt=""><img class="registration-icon-inner" src="assets/reg-icon-2.svg" alt=""></span>
+            <input id="department" name="department" type="text" placeholder="department">
+          </label>
+
+          <label class="registration-field" for="position">
+            <span class="registration-icon" aria-hidden="true"><img src="assets/reg-icon-1.svg" alt=""><img class="registration-icon-inner position-icon" src="assets/reg-icon-3.svg" alt=""></span>
+            <input id="position" name="position" type="text" placeholder="position">
+          </label>
+
+          <label class="purpose-field" for="purpose">
+            <span class="purpose-label">Purpose</span>
+            <span class="purpose-note">A note for extra info</span>
+            <textarea id="purpose" name="purpose" placeholder="Write text here..."></textarea>
+          </label>
+
+          <div class="registration-actions">
+            <div class="registration-agreement">
+              <input id="registrationAgreement" name="agreement" type="checkbox" required>
+              <label for="registrationAgreement">I agree to all <strong>terms</strong> and <strong>conditions</strong></label>
+            </div>
+            <p class="registration-note">Department and Position are optional. If not applicable, leave them blank or enter &quot;N/A&quot;.</p>
+            <button class="registration-submit" type="submit">Submit</button>
+          </div>
+          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="login-link">Already have an account? <button id="loginButton" type="button">Login</button></p>
+      </div>
+    </section>
+
+    <section class="service-card" aria-label="UniProcur procurement service">
+      <img class="service-photo" src="assets/procurement-photo.jpg" alt="Red shipping container at a port">
+      <div class="service-overlay"></div>
+      <p class="service-title">Procurement Service</p>
+      <div class="brand-mark">
+        <img src="assets/Pro 2.png" alt="">
+        <span>UniProcur</span>
+      </div>
+      <button class="explore-button" id="exploreButton" type="button">Explore</button>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="registration.js"></script>
+</body>
+</html>

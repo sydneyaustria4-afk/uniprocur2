@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UniProcur buyer dashboard">
+  <title>UniProcur | Buyer Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-dashboard.css">
+  <style>
+    .dashboard-app { font-family: 'Inter', Arial, sans-serif; }
+    .brand-logo { display: block; width: 23px; height: 28px; object-fit: contain; }
+    .empty-state { padding: 24px 0; color: #666; text-align: center; font-size: 12px; }
+    .empty-state strong { display: block; margin-bottom: 4px; color: #111; font-size: 14px; }
+    .empty-state p { margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="dashboard-app">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="Login.html" aria-label="UniProcur home">
+        <img class="brand-logo" src="assets/logo.png" alt="">
+        <span>UniProcur</span>
+      </a>
+
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav>
+          <button class="nav-item is-active" type="button" data-view="Dashboard"><span class="nav-icon">▦</span>Dashboard</button>
+          <button class="nav-item" type="button" data-view="Suppliers"><span class="nav-icon">♧</span>Suppliers</button>
+          <button class="nav-item" type="button" data-view="Purchase Requests"><span class="nav-icon">＋</span>Purchase Request</button>
+          <button class="nav-item" type="button" data-view="RFQ Workspace"><span class="nav-icon">▤</span>RFQ Workspace</button>
+          <button class="nav-item" type="button" data-view="Purchase Order"><span class="nav-icon">▣</span>Purchase Order</button>
+          <button class="nav-item" type="button" data-view="Receiving"><span class="nav-icon">▱</span>Receiving</button>
+          <button class="nav-item" type="button" data-view="Reports"><span class="nav-icon">▥</span>Reports</button>
+        </nav>
+      </div>
+
+      <div class="sidebar-bottom">
+        <button class="nav-item" type="button" data-view="Support"><span class="nav-icon">?</span>Support</button>
+        <button class="nav-item" type="button" data-view="Settings"><span class="nav-icon">⚙</span>Settings</button>
+        <div class="profile-mini">
+          <span class="avatar avatar-gray">CA</span>
+          <span><strong>Clark Almeda</strong><small>buyer@company.com</small></span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="workspace-title"><span class="workspace-icon">▦</span><span><small>UniProcur Workspace</small><strong>Dashboard</strong></span></div>
+        <div class="account-actions">
+          <button class="icon-button" type="button" aria-label="Notifications">♧<span class="notification-dot"></span></button>
+          <span class="account-divider"></span>
+          <div class="account-name"><strong>Clark Almeda</strong><small>buyer@company.com</small></div>
+          <span class="avatar avatar-white">CA</span>
+        </div>
+      </header>
+
+      <section class="welcome-row">
+        <div><h1>Hello, Clark!</h1><p>Here’s what needs your attention today.</p></div>
+        <button class="primary-button" id="newRequestButton" type="button">+ New Request</button>
+      </section>
+
+      <section class="metric-grid" aria-label="Procurement summary">
+        <article class="metric-card metric-red"><span>Pending Request</span><strong>0</strong><small>₱0 total</small><span class="metric-icon">□</span></article>
+        <article class="metric-card"><span>Ready for RFQ</span><strong>0</strong><small>₱0 total</small><span class="metric-icon">✓</span></article>
+        <article class="metric-card"><span>Arriving Soon</span><strong>0</strong><small>No deliveries</small><span class="metric-icon">▣</span></article>
+      </section>
+
+      <section class="insight-grid">
+        <article class="panel pipeline-panel">
+          <div class="panel-heading"><div><h2>Pipeline pulse</h2><p>Monthly purchase activity.</p></div><button class="text-button" type="button" data-toast="Full pipeline report opened">View Full Report ↗</button></div>
+          <div class="chart" aria-label="Monthly purchase activity bar chart">
+            <div class="bars" aria-hidden="true"><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i><i style="--height:0%"></i></div>
+            <div class="months"><span>JAN</span><span>FEB</span><span>MAR</span><span>APR</span><span>MAY</span><span>JUNE</span><span>JULY</span><span>AUG</span><span>SEPT</span><span>OCT</span><span>NOV</span><span>DEC</span></div>
+          </div>
+        </article>
+        <article class="panel budget-panel"><div class="panel-heading"><h2>Budget Remaining</h2><span class="budget-icon">▣</span></div><strong class="budget-value">₱0</strong><p>No allocation activity yet</p><div class="budget-track"><span style="width:0"></span></div><div class="budget-meta"><span>Used ₱0</span><span>Plan ₱0</span></div><button class="text-button" type="button" data-toast="Budget analytics opened">Open spend analytics ↗</button></article>
+      </section>
+
+      <section class="panel requests-panel">
+        <div class="panel-heading requests-heading"><div><h2><span class="section-icon">▤</span>My Pending Requests</h2><div class="filters"><select aria-label="Filter request type"><option>All Types</option><option>IT Equipment</option><option>Office Supplies</option></select><select aria-label="Filter request status"><option>All Status</option><option>Approved</option><option>Pending</option></select></div></div><button class="text-button large" type="button" data-toast="All requests opened">See All ↗</button></div>
+        <div class="request-table" role="table" aria-label="Pending requests"><div class="table-head" role="row"><span>Request</span><span>Category</span><span>Supplier</span><span>Amount</span><span>Date</span><span>Status</span></div>
+          <div class="empty-state" role="row"><strong>No pending requests</strong><p>Create a new request to start your procurement pipeline.</p></div>
+        </div>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="panel arriving-panel"><div class="panel-heading"><h2>Arriving Next</h2><span class="panel-icon">▱</span></div><div class="empty-state"><strong>No deliveries scheduled</strong><p>Approved purchase orders will appear here.</p></div></article>
+        <article class="panel tasks-panel"><div class="panel-heading"><h2><span class="section-icon">▤</span>My Tasks</h2></div><div class="empty-state"><strong>0 tasks</strong><p>You are all caught up.</p></div></article>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="request-dialog" id="requestDialog"><form method="dialog"><button class="dialog-close" value="cancel" aria-label="Close">×</button><h2>New Purchase Request</h2><p>Start a request for your next procurement need.</p><label>Request title<input type="text" placeholder="e.g. Replacement laptops" required></label><label>Category<select><option>IT Equipment</option><option>Office Supplies</option><option>Facilities</option></select></label><button class="primary-button" value="submit">Create Request</button></form></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="buyer-dashboard.js"></script>
+</body>
+</html>

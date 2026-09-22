@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UniProcur procurement service login">
+  <title>UniProcur | Login</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="login-panel" aria-labelledby="login-title">
+      <button class="back-button" id="backButton" type="button" aria-label="Go back">&lsaquo;</button>
+
+      <div class="login-card">
+        <form id="loginForm" novalidate>
+          <h1 id="login-title">Login</h1>
+
+          <label class="field" for="email">
+            <span class="field-icon" aria-hidden="true">@</span>
+            <input id="email" name="email" type="email" placeholder="e-mail address" autocomplete="email" required>
+          </label>
+
+          <label class="field password-field" for="password">
+            <span class="field-icon key-icon" aria-hidden="true"><img src="assets/password-key.svg" alt=""></span>
+            <input id="password" name="password" type="password" placeholder="password" autocomplete="current-password" minlength="6" required>
+            <button class="password-toggle" id="passwordToggle" type="button" aria-label="Show password" aria-pressed="false">
+              <svg class="password-eye" viewBox="0 0 24 24" aria-hidden="true" focusable="false" hidden><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              <svg class="password-eye-off" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+            </button>
+            <button class="forgot-button" id="forgotButton" type="button">I forgot</button>
+          </label>
+
+          <div class="agreement-row">
+            <input id="agreement" name="agreement" type="checkbox">
+            <label for="agreement">I agree to all <strong>terms</strong> and <strong>conditions</strong></label>
+          </div>
+
+          <p class="helper-copy">Accounts are Admin-provisioned. Initiate via Sales/<br>Legal. Credentials emailed upon approval.</p>
+
+          <button class="submit-button" id="submitButton" type="submit" aria-label="Submit login">&rsaquo;</button>
+          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="register-copy">Doesn&apos;t have an account? <button id="registerButton" type="button">Register</button></p>
+      </div>
+
+      <article class="discover-card">
+        <p>Own your supply chain.<br>Streamline, forecast, and<br>grow, all in one place.</p>
+        <button id="discoverButton" type="button">Discover <span aria-hidden="true">&gt;</span></button>
+      </article>
+    </section>
+
+    <section class="service-card" aria-label="UniProcur procurement service">
+      <img class="service-photo" src="assets/procurement-photo.jpg" alt="Red shipping container at a port">
+      <div class="service-overlay"></div>
+      <p class="service-title">Procurement Service</p>
+      <div class="brand-mark">
+        <img src="assets/Pro 2.png" alt="">
+        <span>UniProcur</span>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

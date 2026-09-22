@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Verify your UniProcur sign in">
+  <title>UniProcur | Verify Sign In</title>
+  <link rel="stylesheet" href="go-to-dashboard.css">
+</head>
+<body>
+  <main class="verify-shell">
+    <section class="verify-column" aria-labelledby="verify-title">
+      <button class="back-button" id="backButton" type="button" aria-label="Back to sign in">&lsaquo;</button>
+      <div class="verify-card">
+        <p class="welcome-label">Welcome back</p>
+        <h1 id="verify-title">Sign in to your workspace</h1>
+        <p class="welcome-copy">Welcome back</p>
+        <form id="verifyForm" novalidate>
+          <label class="code-label" for="code-1">6 digit-verification code</label>
+          <div class="code-inputs" role="group" aria-label="Six digit verification code">
+            <input id="code-1" maxlength="1" inputmode="numeric" autocomplete="one-time-code" aria-label="Digit 1" required>
+            <input maxlength="1" inputmode="numeric" aria-label="Digit 2" required>
+            <input maxlength="1" inputmode="numeric" aria-label="Digit 3" required>
+            <input maxlength="1" inputmode="numeric" aria-label="Digit 4" required>
+            <input maxlength="1" inputmode="numeric" aria-label="Digit 5" required>
+            <input maxlength="1" inputmode="numeric" aria-label="Digit 6" required>
+          </div>
+          <button class="enter-button" type="submit">Enter workspace <span aria-hidden="true">→</span></button>
+          <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+      <article class="confirmation-card">
+        <h2>Verify your sign in</h2>
+        <p>We sent a code to <strong id="accountEmail">buyer@company.com</strong></p>
+      </article>
+    </section>
+
+    <section class="service-card" aria-label="UniProcur procurement service">
+      <img class="service-photo" src="assets/procurement-photo.jpg" alt="Red shipping container at a port">
+      <div class="service-overlay"></div>
+      <p class="service-title">Procurement Service</p>
+      <div class="brand-mark"><img src="assets/logo.png" alt=""><span>UniProcur</span></div>
+    </section>
+  </main>
+  <script src="go-to-dashboard.js"></script>
+</body>
+</html>
