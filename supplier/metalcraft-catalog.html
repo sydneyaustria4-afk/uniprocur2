@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#a40e08" />
+
+    <title>MetalCraft Shoe Hardware | Catalog</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="catalog.css?v=5" />
+  </head>
+
+  <body>
+    <main class="catalog-stage" data-supplier="metalcraft">
+
+      <img
+        class="stage-background"
+        src="../assets/catalog/catalog-background.png"
+        alt=""
+      />
+
+    <form class="catalog-search" id="catalog-search" role="search">
+  <span
+    class="catalog-search-icon"
+    aria-hidden="true"
+  ></span>
+
+  <input
+    class="catalog-search-input"
+    id="product-search"
+    type="search"
+    name="q"
+    placeholder="search"
+    autocomplete="off"
+    aria-label="Search catalog products"
+  />
+
+  <button
+    class="catalog-search-button"
+    type="submit"
+  >
+    Search
+  </button>
+</form>
+
+      <label class="supplier-catalog-picker">
+        <span class="visually-hidden">
+          Choose supplier catalog
+        </span>
+
+        <select
+          id="supplier-catalog-picker"
+          aria-label="Choose supplier catalog"
+        >
+          <option value="catalog.html">
+            Marikina Hide and Leather Co
+          </option>
+
+          <option value="cordillera-catalog.html">
+            Cordillera Leather Works
+          </option>
+
+          <option value="synthhide-catalog.html">
+            SynthHide Textile Corp.
+          </option>
+
+          <option value="soletech-catalog.html">
+            SoleTech Rubber
+          </option>
+
+          <option
+            value="metalcraft-catalog.html"
+            selected
+          >
+            MetalCraft Shoe Hardware
+          </option>
+
+          <option value="ecobox-catalog.html">
+            EcoBox Packaging Solution
+          </option>
+        </select>
+      </label>
+
+      <section
+        class="catalog-sheet"
+        aria-labelledby="catalog-title"
+      >
+        <a
+          class="back-link"
+          href="supplier.html"
+          aria-label="Back to suppliers"
+        >
+          <img
+            src="../assets/catalog/back-chevron.svg"
+            alt=""
+          />
+        </a>
+
+        <h1 id="catalog-title">
+          MetalCraft Shoe Hardware
+        </h1>
+
+        <h2 class="section-title">
+          All Products
+        </h2>
+
+        <div
+          class="products-viewport"
+          aria-label="All products"
+        >
+          <div
+            class="products-grid"
+            id="products-grid"
+          ></div>
+
+          <p
+            class="search-empty-state"
+            id="search-empty-state"
+            role="status"
+            hidden
+          >
+            No products found.
+          </p>
+        </div>
+      </section>
+
+      <header class="catalog-header">
+
+        <a
+          class="supplier-brand"
+          href="supplier.html"
+          aria-label="Back to suppliers"
+        >
+          <span class="brand-mark">
+            <img
+              class="brand-outline"
+              src="../assets/catalog/brand-outline.svg"
+              alt=""
+            />
+
+            <img
+              class="brand-logo"
+              src="../assets/catalog/pro-logo.png"
+              alt=""
+            />
+          </span>
+
+          <span class="brand-copy">
+            <span data-supplier-name>
+              MetalCraft Shoe Hardware
+            </span>
+
+            <strong>
+              Catalog
+            </strong>
+          </span>
+        </a>
+
+        <div class="account-details">
+
+          <span
+            class="notification-mark"
+            aria-hidden="true"
+          >
+            <img
+              class="notification-outline"
+              src="../assets/catalog/notification-base.svg"
+              alt=""
+            />
+
+            <img
+              class="notification-bell"
+              src="../assets/catalog/notification-bell.svg"
+              alt=""
+            />
+          </span>
+
+          <span
+            class="account-divider"
+            aria-hidden="true"
+          ></span>
+
+          <span class="account-copy">
+            <strong>
+              Clark Almeda
+            </strong>
+
+            <span>
+              buyer@company.com
+            </span>
+          </span>
+
+          <span
+            class="avatar-mark"
+            aria-hidden="true"
+          >
+            <img
+              src="../assets/catalog/avatar-outline.svg"
+              alt=""
+            />
+          </span>
+
+        </div>
+      </header>
+
+    </main>
+
+    <script
+      src="catalog.js"
+      defer
+    ></script>
+  </body>
+</html>

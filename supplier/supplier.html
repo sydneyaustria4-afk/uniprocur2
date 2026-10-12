@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="UniProcur suppliers workspace">
+  <title>UniProcur | Suppliers</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="supplier.css">
+</head>
+
+<body>
+
+  <div class="dashboard-app suppliers-layout">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar" aria-label="Primary navigation">
+
+      <!-- Logo -->
+      <a class="brand" href="../buyerdashboard/buyer-dashboard.html" aria-label="UniProcur home">
+        <img
+          class="brand-logo"
+          src="../assets/Pro 3.svg"
+          alt="UniProcur logo"
+        >
+        <span>UniProcur</span>
+      </a>
+
+
+      <!-- Workspace Navigation -->
+      <div class="nav-group">
+
+        <p class="nav-label">Workspace</p>
+
+        <nav>
+
+         <!-- Dashboard -->
+<a
+  class="nav-item"
+  href="../buyerdashboard/buyer-dashboard.html"
+>
+  <span class="nav-icon">
+    <img
+      src="../assets/Vector.svg"
+      alt="Dashboard"
+    >
+  </span>
+
+  Dashboard
+</a>
+
+
+          <!-- Suppliers -->
+          <button
+            class="nav-item is-active"
+            type="button"
+            data-view="Suppliers"
+          >
+            <span class="nav-icon">
+              <img
+                src="../assets/Group 27.svg"
+                alt="Suppliers"
+              >
+            </span>
+
+            Suppliers
+          </button>
+
+
+          <!-- Purchase Request -->
+          <button
+            class="nav-item"
+            type="button"
+            data-view="Purchase Request"
+          >
+            <span class="nav-icon">
+              <img
+                src="../assets/Group 33.svg"
+                alt="Purchase Request"
+              >
+            </span>
+
+            Purchase Request
+          </button>
+
+
+          <!-- RFQ Workspace -->
+          <button
+            class="nav-item"
+            type="button"
+            data-view="RFQ Workspace"
+          >
+            <span class="nav-icon">
+              <img
+                src="../assets/Group.svg"
+                alt="RFQ Workspace"
+              >
+            </span>
+
+            RFQ Workspace
+          </button>
+
+
+          <!-- Purchase Order -->
+          <button
+            class="nav-item"
+            type="button"
+            data-view="Purchase Order"
+          >
+            <span class="nav-icon">
+              <img
+                src="../assets/Group 34.svg"
+                alt="Purchase Order"
+              >
+            </span>
+
+            Purchase Order
+          </button>
+
+
+          <!-- Receiving -->
+          <button
+            class="nav-item"
+            type="button"
+            data-view="Receiving"
+          >
+            <span class="nav-icon">
+              <img
+                src="../assets/Group 35 (1).svg"
+                alt="Receiving"
+              >
+            </span>
+
+            Receiving
+          </button>
+
+
+          <!-- Reports -->
+          <button
+            class="nav-item"
+            type="button"
+            data-view="Reports"
+          >
+            <span class="nav-icon">
+              <img
+                src="../assets/Group 31.svg"
+                alt="Reports"
+              >
+            </span>
+
+            Reports
+          </button>
+
+        </nav>
+
+      </div>
+
+
+      <!-- Sidebar Bottom -->
+      <div class="sidebar-bottom">
+
+        <!-- Support -->
+        <button
+          class="nav-item"
+          type="button"
+          data-view="Support"
+        >
+          <span class="nav-icon">?</span>
+          Support
+        </button>
+
+
+        <!-- Settings -->
+        <button
+          class="nav-item"
+          type="button"
+          data-view="Settings"
+        >
+          <span class="nav-icon">⚙</span>
+          Settings
+        </button>
+
+
+        <!-- Profile -->
+        <div class="profile-mini">
+
+          <span
+            class="avatar avatar-gray"
+            aria-hidden="true"
+          ></span>
+
+          <div class="profile-copy">
+            <strong>BuyerAcc</strong>
+            <small>buyer@company.com</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content suppliers-content">
+
+
+      <!-- ===================================================
+           TOP BAR
+      ==================================================== -->
+
+<!-- TOP BAR -->
+<header class="topbar suppliers-topbar">
+
+  <!-- Workspace Logo and Title -->
+  <div class="workspace-title suppliers-title">
+
+    <span class="workspace-icon">
+      <img
+        src="../assets/Pro 4.svg"
+        alt="UniProcur logo"
+      >
+    </span>
+
+    <div class="workspace-copy">
+      <large>UniProcur Workspace</large>
+      <strong>Suppliers</strong>
+    </div>
+
+  </div>
+
+  <!-- Account Actions -->
+  <div class="account-actions">
+
+    <!-- Notification Button -->
+    <button
+      class="icon-button notification-button"
+      type="button"
+      aria-label="Notifications"
+      data-toast="No notifications yet."
+    >
+      <img
+        class="bell-icon"
+        src="../assets/Group 50.svg"
+        alt=""
+      >
+
+     
+    </button>
+
+    <!-- Buyer Account Details -->
+    <div class="account-name">
+      <strong>Buyer Acc</strong>
+      <small>buyer@company.com</small>
+    </div>
+
+    <!-- Buyer Avatar -->
+    <span
+      class="avatar avatar-white"
+      aria-label="Buyer account"
+    >B</span>
+
+  </div>
+
+</header>
+
+
+
+
+      <!-- ===================================================
+           SEARCH
+      ==================================================== -->
+
+      <div class="supplier-search">
+
+        <label
+          class="search-shell"
+          aria-label="Search supplier"
+        >
+
+          <span
+            class="search-icon"
+            aria-hidden="true"
+          ></span>
+
+
+          <input
+            type="search"
+            placeholder="search"
+            aria-label="Search suppliers"
+          >
+
+
+          <button
+            type="button"
+            class="search-button"
+          >
+            Search
+          </button>
+
+        </label>
+
+      </div>
+
+
+
+      <!-- ===================================================
+           CATEGORY TITLE
+      ==================================================== -->
+
+      <section
+        class="supplier-heading"
+        aria-label="Supplier category"
+      >
+
+      
+
+      </section>
+
+
+
+      <!-- ===================================================
+           SUPPLIER CARDS
+      ==================================================== -->
+
+      <section
+        class="supplier-grid"
+        aria-label="Suppliers list"
+      >
+
+
+
+        <!-- =================================================
+             SUPPLIER 1
+        ================================================== -->
+
+        <article class="supplier-card">
+
+          <div class="supplier-poster poster-one">
+
+            <span class="supplier-status">
+              <span class="status-dot"></span>
+              Active
+            </span>
+
+         <div class="supplier-logo">
+    <img src="../assets/Ellipse 8.svg" alt="Cordillera Leather Works">
+</div>
+          </div>
+
+
+          <div class="supplier-info">
+
+            <h2>
+              Marikina Hide &amp; Leather Co.
+            </h2>
+
+            <p>
+              Marikina City, Metro Manila
+            </p>
+
+
+            <div class="supplier-tags">
+
+              <span>Ramon Villanueva</span>
+              
+
+            </div>
+
+
+            <div class="supplier-meta">
+
+              <div class="meta-block rating">
+
+                <span class="meta-icon">★</span>
+
+                <div>
+                  <strong>4.9</strong>
+                  <small>ratings</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block terms">
+
+                <div>
+                  <strong>7 days</strong>
+                  <small>Lead Time</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block quantity">
+
+                <div>
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="supplier-actions">
+
+             <button 
+                 class="icon-action phone-action" 
+                 type="button" 
+                 aria-label="Contact supplier via phone"
+                 data-toast="Supplier phone details are not available yet."
+>
+                 <img src="../assets/call.svg" alt="Call" />
+                 </button>
+
+             <button
+  class="icon-action mail-action"
+  type="button"
+  aria-label="Email supplier"
+  data-toast="Supplier email details are not available yet."
+>
+  <img src="../assets/mail.svg" alt="Email">
+</button>
+
+
+              <a
+  class="catalog-button"
+  href="catalog.html"
+>
+  Catalog
+</a>
+
+              <a class="rfq-button" href="#">Use for RFQ</a>
+
+            </div>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             SUPPLIER 2
+        ================================================== -->
+
+        <article class="supplier-card">
+
+          <div class="supplier-poster poster-two">
+
+            <span class="supplier-status">
+              <span class="status-dot"></span>
+              Active
+            </span>
+
+                <div class="supplier-logo">
+    <img src="../assets/Ellipse 2.svg" alt="Cordillera Leather Works">
+</div>
+
+          </div>
+
+
+          <div class="supplier-info">
+
+            <h2>
+              Cordillera Leather Works
+            </h2>
+
+            <p>
+              Baguio City, Benguet
+            </p>
+
+
+            <div class="supplier-tags">
+
+              <span>Elena Baustista</span>
+             
+            </div>
+
+
+            <div class="supplier-meta">
+
+              <div class="meta-block rating">
+
+                <span class="meta-icon">★</span>
+
+                <div>
+                  <strong>4.7</strong>
+                  <small>ratings</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block terms">
+
+                <div>
+                  <strong>8 days</strong>
+                  <small>Lead Time</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block quantity">
+
+                <div>
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="supplier-actions">
+
+            <button 
+  class="icon-action phone-action" 
+  type="button" 
+  aria-label="Contact supplier via phone"
+  data-toast="Supplier phone details are not available yet."
+>
+  <img src="../assets/call.svg" alt="Call" />
+</button>
+
+
+                   <button
+                     class="icon-action mail-action"
+                     type="button"
+                     aria-label="Email supplier"
+                     data-toast="Supplier email details are not available yet."
+>
+                    <img src="../assets/mail.svg" alt="Email">
+                    </button>
+
+
+              <a class="catalog-button" href="cordillera-catalog.html">
+  Catalog
+</a>
+
+
+
+              <a class="rfq-button" href="#">Use for RFQ</a>
+            </div>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             SUPPLIER 3
+        ================================================== -->
+
+        <article class="supplier-card">
+
+          <div class="supplier-poster poster-three">
+
+            <span class="supplier-status">
+              <span class="status-dot"></span>
+              Active
+            </span>
+
+               <div class="supplier-logo">
+    <img src="../assets/Ellipse 3.svg" alt="SynthHide Textile Corp.">
+</div>
+
+          </div>
+
+
+          <div class="supplier-info">
+
+            <h2>
+              SynthHide Textile Corp.
+            </h2>
+
+            <p>
+              Cavite Economic Zone, Cavite
+            </p>
+
+
+            <div class="supplier-tags">
+
+              <span>Michael Tan</span>
+             
+
+            </div>
+
+
+            <div class="supplier-meta">
+
+              <div class="meta-block rating">
+
+                <span class="meta-icon">★</span>
+
+                <div>
+                  <strong>4.5</strong>
+                  <small>ratings</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block terms">
+
+                <div>
+                  <strong>7 days</strong>
+                  <small>Lead Time</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block quantity">
+
+                <div>
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="supplier-actions">
+
+               <button 
+  class="icon-action phone-action" 
+  type="button" 
+  aria-label="Contact supplier via phone"
+  data-toast="Supplier phone details are not available yet."
+>
+  <img src="../assets/call.svg" alt="Call" />
+</button>
+
+
+
+              <button
+                     class="icon-action mail-action"
+                     type="button"
+                     aria-label="Email supplier"
+                     data-toast="Supplier email details are not available yet."
+>
+                    <img src="../assets/mail.svg" alt="Email">
+                    </button>
+
+
+
+              <a class="catalog-button" href="synthhide-catalog.html">
+  Catalog
+</a>
+
+
+              <a class="rfq-button" href="#">Use for RFQ</a>
+
+            </div>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             SUPPLIER 4
+        ================================================== -->
+
+        <article class="supplier-card">
+
+          <div class="supplier-poster poster-four">
+
+            <span class="supplier-status">
+              <span class="status-dot"></span>
+              Active
+            </span>
+
+               <div class="supplier-logo">
+    <img src="../assets/Ellipse 4.svg" alt="SoleTech">
+</div>
+
+          </div>
+
+
+          <div class="supplier-info">
+
+            <h2>
+              SoleTech Rubber Manufacturing
+            </h2>
+
+            <p>
+              Valenzuela City, Metro Manila
+            </p>
+
+
+            <div class="supplier-tags">
+
+              <span>Mario Lim</span>
+             
+
+            </div>
+
+
+            <div class="supplier-meta">
+
+              <div class="meta-block rating">
+
+                <span class="meta-icon">★</span>
+
+                <div>
+                  <strong>4.3</strong>
+                  <small>ratings</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block terms">
+
+                <div>
+                  <strong>8 days</strong>
+                  <small>Lead Time</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block quantity">
+
+                <div>
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="supplier-actions">
+
+               <button 
+  class="icon-action phone-action" 
+  type="button" 
+  aria-label="Contact supplier via phone"
+  data-toast="Supplier phone details are not available yet."
+>
+  <img src="../assets/call.svg" alt="Call" />
+</button>
+
+<button
+                     class="icon-action mail-action"
+                     type="button"
+                     aria-label="Email supplier"
+                     data-toast="Supplier email details are not available yet."
+>
+                    <img src="../assets/mail.svg" alt="Email">
+                    </button>
+
+
+
+            <a class="catalog-button" href="soletech-catalog.html">
+  Catalog
+</a>
+
+            <a class="rfq-button" href="#">Use for RFQ</a>
+
+            </div>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             SUPPLIER 5
+        ================================================== -->
+
+        <article class="supplier-card">
+
+          <div class="supplier-poster poster-five">
+
+            <span class="supplier-status">
+              <span class="status-dot"></span>
+              Active
+            </span>
+
+               <div class="supplier-logo">
+    <img src="../assets/Ellipse 5.svg" alt="MetalCraft">
+</div>
+
+          </div>
+
+
+          <div class="supplier-info">
+
+            <h2>
+              MetalCraft Shoe Hardware
+            </h2>
+
+            <p>
+              Caloocan City, Metro Manila
+            </p>
+
+
+            <div class="supplier-tags">
+
+              <span>Victor Reyes</span>
+              
+
+            </div>
+
+
+            <div class="supplier-meta">
+
+              <div class="meta-block rating">
+
+                <span class="meta-icon">★</span>
+
+                <div>
+                  <strong>4.8</strong>
+                  <small>ratings</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block terms">
+
+                <div>
+                  <strong>6 days</strong>
+                  <small>Lead Time</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block quantity">
+
+                <div>
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="supplier-actions">
+
+               <button 
+  class="icon-action phone-action" 
+  type="button" 
+  aria-label="Contact supplier via phone"
+  data-toast="Supplier phone details are not available yet."
+>
+  <img src="../assets/call.svg" alt="Call" />
+</button>
+
+
+              <button
+                     class="icon-action mail-action"
+                     type="button"
+                     aria-label="Email supplier"
+                     data-toast="Supplier email details are not available yet."
+>
+                    <img src="../assets/mail.svg" alt="Email">
+                    </button>
+
+
+
+             <a class="catalog-button" href="metalcraft-catalog.html">
+  Catalog
+</a>
+
+            <a class="rfq-button" href="#">Use for RFQ</a>
+            </div>
+
+          </div>
+
+        </article>
+
+
+
+        <!-- =================================================
+             SUPPLIER 6
+        ================================================== -->
+
+        <article class="supplier-card">
+
+          <div class="supplier-poster poster-six">
+
+            <span class="supplier-status">
+              <span class="status-dot"></span>
+              Active
+            </span>
+
+               <div class="supplier-logo">
+    <img src="../assets/Ellipse 6.svg" alt="Ecobox">
+</div>
+
+          </div>
+
+
+          <div class="supplier-info">
+
+            <h2>
+             Ecobox Packaging Solutions
+            </h2>
+
+            <p>
+              Laguna TechnoPark, Laguna
+            </p>
+
+
+            <div class="supplier-tags">
+
+              <span>Rodel Mercado</span>
+              
+
+            </div>
+
+
+            <div class="supplier-meta">
+
+              <div class="meta-block rating">
+
+                <span class="meta-icon">★</span>
+
+                <div>
+                  <strong>4.4</strong>
+                  <small>ratings</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block terms">
+
+                <div>
+                  <strong>7 days</strong>
+                  <small>Lead Time</small>
+                </div>
+
+              </div>
+
+
+              <div class="meta-block quantity">
+
+                <div>
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="supplier-actions">
+
+              <button 
+  class="icon-action phone-action" 
+  type="button" 
+  aria-label="Contact supplier via phone"
+  data-toast="Supplier phone details are not available yet."
+>
+  <img src="../assets/call.svg" alt="Call" />
+</button>
+
+
+             <button
+                     class="icon-action mail-action"
+                     type="button"
+                     aria-label="Email supplier"
+                     data-toast="Supplier email details are not available yet."
+>
+                    <img src="../assets/mail.svg" alt="Email">
+                    </button>
+
+
+
+              <a class="catalog-button" href="ecobox-catalog.html">
+  Catalog
+</a>
+
+           <a class="rfq-button" href="#">Use for RFQ</a>
+
+            </div>
+
+          </div>
+
+        </article>
+
+
+
+
+      </section>
+
+
+
+   
+
+      <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+
+    </main>
+
+  </div>
+
+
+  <!-- JavaScript -->
+  <script src="supplier.js"></script>
+
+</body>
+</html>

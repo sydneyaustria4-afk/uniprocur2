@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#bd1715" />
+    <title>UniProcur | Buyer Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="buyer-dashboard.css?v=5" />
+  </head>
+  <body>
+    <div class="dashboard-shell">
+      <aside class="sidebar">
+          <a class="brand" href="../buyerdashboard/buyer-dashboard.html" aria-label="UniProcur home">
+          <img class="brand-logo" src="../assets/Pro 3.svg" alt="" />
+          <span>UniProcur</span>
+        </a>
+
+        <div class="nav-group">
+          <p class="nav-label">Workspace</p>
+          <nav aria-label="Workspace">
+            <button class="nav-item is-active" type="button" data-view="Dashboard"><span class="nav-icon" aria-hidden="true"><img src="../assets/Vector.svg" alt="" /></span>Dashboard</button>
+            <a class="nav-item" href="../supplier/supplier.html" data-view="Suppliers"><span class="nav-icon" aria-hidden="true"><img src="../assets/Group 27.svg" alt="" /></span>Suppliers</a>
+            <button class="nav-item" type="button" data-view="Purchase Request"><span class="nav-icon" aria-hidden="true"><img src="../assets/Group 33.svg" alt="" /></span>Purchase Request</button>
+            <button class="nav-item" type="button" data-view="RFQ Workspace"><span class="nav-icon" aria-hidden="true"><img src="../assets/Group.svg" alt="" /></span>RFQ Workspace</button>
+            <button class="nav-item" type="button" data-view="Purchase Order"><span class="nav-icon" aria-hidden="true"><img src="../assets/Group 34.svg" alt="" /></span>Purchase Order</button>
+            <button class="nav-item" type="button" data-view="Receiving"><span class="nav-icon" aria-hidden="true"><img src="../assets/Group 35.svg" alt="" /></span>Receiving</button>
+            <button class="nav-item" type="button" data-view="Reports"><span class="nav-icon" aria-hidden="true"><img src="../assets/Group 31.svg" alt="" /></span>Reports</button>
+          </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+          <button class="nav-item" type="button" data-view="Support"><span class="nav-icon" aria-hidden="true">?</span>Support</button>
+          <button class="nav-item" type="button" data-view="Settings"><span class="nav-icon" aria-hidden="true">⚙</span>Settings</button>
+          <div class="profile-mini">
+            <span class="avatar avatar-gray" aria-hidden="true">B</span>
+            <div class="profile-copy">
+            <strong>Clark Alameda</strong>
+            <small>buyer@company.com</small>
+            </div>
+            <button class="profile-exit" type="button" aria-label="Sign out" data-toast="Sign out selected">↪</button>
+          </div>
+        </div>
+      </aside>
+
+ 
+
+        <main class="main-panel">
+  <!-- ===================================================
+           TOP BAR
+      ==================================================== -->
+     
+
+
+<!-- BUYER TOP BAR -->
+<header class="topbar suppliers-topbar">
+  <div class="workspace-title suppliers-title">
+    <span class="workspace-icon">
+      <img src="../assets/Pro 4.svg" alt="UniProcur logo">
+    </span>
+
+    <div class="workspace-copy">
+      <span>UniProcur Workspace</span>
+      <strong>Buyer</strong>
+    </div>
+  </div>
+
+  <div class="account-actions">
+  <button
+    class="icon-button notification-button"
+    type="button"
+    aria-label="Notifications"
+    data-toast="No notifications yet."
+  >
+    <img
+      class="bell-icon"
+      src="../assets/Group 50.svg"
+      alt=""
+    >
+  </button>
+</div>
+
+    <span class="account-divider" aria-hidden="true"></span>
+
+    
+    <div class="account-name">
+      <strong>Buyer Acc</strong>
+      <small>buyer@company.com</small>
+    </div>
+
+    <span class="avatar avatar-white" aria-label="Buyer account">B</span>
+</header>
+
+
+
+
+
+
+  <!-- Keep all your existing dashboard sections below this line -->
+
+
+
+        <section class="stats-row" aria-label="Procurement summary">
+          <article class="stat-card stat-red">
+            <div class="stat-header">
+              <span class="stat-label">My Pending PRs</span>
+              <span class="stat-badge" aria-hidden="true">↗</span>
+            </div>
+            <div class="stat-number" data-summary-count="pendingRequests">0</div>
+            <div class="stat-subtext" data-summary-state="pendingRequests">No requests yet.</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">My Sent POs</span>
+              <span class="stat-badge" aria-hidden="true">↗</span>
+            </div>
+            <div class="stat-number" data-summary-count="purchaseOrders">0</div>
+            <div class="stat-subtext" data-summary-state="purchaseOrders">No purchase orders yet.</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">My Drafts</span>
+              <span class="stat-badge" aria-hidden="true">↗</span>
+            </div>
+            <div class="stat-number" data-summary-count="drafts">0</div>
+            <div class="stat-subtext" data-summary-state="drafts">No drafts yet.</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Pending Invoices</span>
+              <span class="stat-badge" aria-hidden="true">↗</span>
+            </div>
+            <div class="stat-number" data-summary-count="invoices">0</div>
+            <div class="stat-subtext" data-summary-state="invoices">No pending invoices.</div>
+          </article>
+        </section>
+
+        <section class="panel chart-panel">
+          <div class="panel-heading">
+            <h2>Monthly Purchase Activity</h2>
+            <button class="text-link" type="button" data-toast="Full pipeline report opened">View Full Report <span aria-hidden="true">↗</span></button>
+          </div>
+          <div class="activity-chart is-empty" aria-label="Monthly purchase activity">
+            <p class="chart-empty-state" role="status">No recent activity.</p>
+            <div class="chart-values" aria-hidden="true">
+            </div>
+            <svg class="chart-plot" viewBox="454 458 917 194.565" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <linearGradient id="activityFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop stop-color="#FF0000" />
+                  <stop offset="1" stop-color="#FFFFFF" stop-opacity=".47" />
+                </linearGradient>
+              </defs>
+              <g class="chart-grid-lines">
+                <path d="M455 462.5H1371M455 500.5H1371M455 538.5H1371M455 576.5H1371M455 614.5H1371" />
+                <path class="chart-baseline" d="M455 652.5H1371" />
+              </g>
+              <path class="chart-area-fill"></path>
+              <path class="chart-area-line"></path>
+            </svg>
+            <div class="chart-months" aria-hidden="true">
+            </div>
+          </div>
+        </section>
+
+        <div class="lower-row">
+          <aside class="panel budget-panel">
+            <div class="panel-heading budget-head">
+              <h2>Budget Remaining</h2>
+              <span class="panel-chip" id="budget-percent" hidden></span>
+            </div>
+            <p class="budget-empty-state" id="budget-empty-state" role="status">No data available yet.</p>
+            <div class="budget-value" id="budget-remaining" hidden></div>
+            <div class="budget-sub" id="budget-total" hidden></div>
+            <div class="budget-meter" id="budget-meter" role="img" hidden>
+            </div>
+            <div class="budget-categories" id="budget-categories" hidden></div>
+            <button class="budget-button" type="button" data-toast="Transaction history opened">View Transaction</button>
+          </aside>
+
+          <section class="panel requests-panel">
+            <div class="panel-heading">
+              <h2>Pending Request Table</h2>
+            </div>
+            <div class="table-scroll">
+              <table class="dashboard-table">
+                <thead>
+                  <tr><th>Task name</th><th>Category</th><th>Amount</th><th>PR Number</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody id="pending-request-rows"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <div class="bottom-row">
+          <section class="panel arriving-panel">
+            <div class="panel-heading">
+              <h2>Arriving Next</h2>
+            </div>
+            <div class="table-scroll">
+              <table class="dashboard-table arriving-table">
+                <thead>
+                  <tr><th>Task Name</th><th>Category</th><th>Quantity</th><th>Amount</th><th>PO Number</th><th>Supplier</th><th>Action</th></tr>
+                </thead>
+                <tbody id="arriving-next-rows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <aside class="quick-actions" aria-label="Quick actions">
+            <button class="quick-action" type="button" aria-label="New Purchase Request" data-toast="New purchase request started">
+              <img class="quick-action-image" src="../assets/Group 381 (1).svg" alt="New Purchase Request. Request raw materials or software components." />
+            </button>
+            <button class="quick-action" type="button" aria-label="New RFQ" data-toast="New RFQ started">
+              <img class="quick-action-image" src="../assets/Group 381 (2).svg" alt="New RFQ. Request quotes for approved materials." />
+            </button>
+            <button class="quick-action" type="button" aria-label="New Purchase Order" data-toast="New purchase order started">
+              <img class="quick-action-image" src="../assets/Group 386.svg" alt="New Purchase Order. Issue a purchase order to a winning supplier." />
+            </button>
+            <button class="quick-action" type="button" aria-label="Post Invoice" data-toast="Invoice posting started">
+              <img class="quick-action-image" src="../assets/Group 383.svg" alt="Post Invoice." />
+            </button>
+          </aside>
+        </div>
+
+        <section class="panel tasks-panel">
+          <div class="panel-heading">
+            <h2>My Task</h2>
+          </div>
+          <div class="task-board" aria-label="Task list">
+            <p class="task-empty-state" role="status">No tasks available yet.</p>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="buyer-dashboard.js" defer></script>
+  </body>
+</html>

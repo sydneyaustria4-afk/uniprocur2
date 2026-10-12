@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+
+  <title>PR-2026-01 | View Purchase Request</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="PR202601.css">
+
+  <!-- JavaScript -->
+  <script src="PR202601.js" defer></script>
+</head>
+
+<body>
+  <main class="page-shell">
+
+    <!-- Buyer Dashboard Header -->
+    <header class="topbar suppliers-topbar">
+
+      <!-- Workspace Logo and Title -->
+      <div class="workspace-title suppliers-title">
+        <span class="workspace-icon">
+          <img
+            src="../assets/Pro 4.svg"
+            alt="UniProcur logo"
+          >
+        </span>
+
+        <div class="workspace-copy">
+          <span>UniProcur Workspace</span>
+          <strong>Buyer</strong>
+        </div>
+      </div>
+
+      <!-- Notification Bell -->
+      <div class="account-actions">
+        <button
+          class="icon-button notification-button"
+          type="button"
+          aria-label="Notifications"
+          data-toast="No notifications yet."
+        >
+          <img
+            class="bell-icon"
+            src="../assets/Group 50.svg"
+            alt=""
+          >
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <span
+        class="account-divider"
+        aria-hidden="true"
+      ></span>
+
+      <!-- Buyer Account Information -->
+      <div class="account-name">
+        <strong id="loggedInName">Clark Alameda</strong>
+        <small id="loggedInEmail">buyer@company.com</small>
+      </div>
+
+      <!-- Buyer Avatar -->
+      <span
+        class="avatar avatar-white"
+        id="loggedInAvatar"
+        aria-label="Buyer account"
+      >C</span>
+
+    </header>
+
+    <!-- Back Button -->
+    <button
+      type="button"
+      class="back-button"
+      id="backButton"
+      aria-label="Go back"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m14.5 5-7 7 7 7"></path>
+      </svg>
+    </button>
+
+    <!-- Purchase Request Card -->
+    <section class="outer-card">
+      <div class="details-card">
+
+        <!-- Purchase Request Metadata -->
+        <div class="metadata-row">
+
+          <div class="metadata-item">
+            <span>PR No.</span>
+            <strong>PR-2026-01</strong>
+          </div>
+
+          <div class="metadata-item">
+            <span>Date Created</span>
+            <strong>September 20, 2026</strong>
+          </div>
+
+          <div class="metadata-item">
+            <span>Approved Date</span>
+            <strong>September 25, 2026</strong>
+          </div>
+
+          <div class="metadata-item">
+            <span>Required Date</span>
+            <strong>October 05, 2026</strong>
+          </div>
+
+          <button
+            type="button"
+            class="rfq-button"
+            id="createRfqBtn"
+          >
+            <span aria-hidden="true">↗</span>
+            Create RFQ
+          </button>
+
+        </div>
+
+        <!-- Main Details Columns -->
+        <div class="details-columns">
+
+          <!-- Requested Products -->
+          <section
+            class="products-panel"
+            aria-label="Requested products"
+          >
+
+            <!-- Product 1: Full-Grain Leather -->
+            <article class="product-row">
+
+              <div class="product-image-wrap">
+                <img
+                  src="../assets/leather.svg"
+                  alt="Full-Grain Leather"
+                  class="product-image"
+                >
+
+                <div
+                  class="image-fallback leather-fallback"
+                  aria-hidden="true"
+                >
+                  <span></span>
+                </div>
+              </div>
+
+              <div class="product-copy">
+                <h2>Full-Grain Leather</h2>
+
+                <div class="product-meta">
+                  <span>Category:</span>
+                  <strong>Raw Materials</strong>
+                </div>
+
+                <div class="product-meta">
+                  <span>Qty:</span>
+                  <strong>100 sq. ft.</strong>
+                </div>
+
+                <p>
+                  <span>Description:</span>
+                  12mm, 54&quot; width
+                </p>
+              </div>
+
+            </article>
+
+            <!-- Product 2: Mesh Fabric -->
+            <article class="product-row">
+
+              <div class="product-image-wrap">
+                <img
+                  src="../assets/mesh.svg"
+                  alt="Mesh Fabric"
+                  class="product-image"
+                >
+
+                <div
+                  class="image-fallback mesh-fallback"
+                  aria-hidden="true"
+                >
+                  <span></span>
+                </div>
+              </div>
+
+              <div class="product-copy">
+                <h2>Mesh Fabric</h2>
+
+                <div class="product-meta">
+                  <span>Category:</span>
+                  <strong>Textile</strong>
+                </div>
+
+                <div class="product-meta">
+                  <span>Qty:</span>
+                  <strong>100 meters</strong>
+                </div>
+
+                <p>
+                  <span>Description:</span>
+                  Breathable mesh
+                </p>
+              </div>
+
+            </article>
+
+          </section>
+
+          <!-- Approval History -->
+          <aside
+            class="approval-panel"
+            aria-labelledby="approvalHistoryTitle"
+          >
+            <h2 id="approvalHistoryTitle">Approval History</h2>
+
+            <div class="timeline">
+
+              <!-- Created -->
+              <article class="timeline-item">
+                <span
+                  class="timeline-dot"
+                  aria-hidden="true"
+                ></span>
+
+                <div>
+                  <span class="timeline-label">Created</span>
+
+                  <strong>
+                    Created the Purchase Request as Draft.
+                  </strong>
+
+                  <time datetime="2026-09-20T10:30">
+                    Sep 20, 2026, 10:30 AM
+                  </time>
+                </div>
+              </article>
+
+              <!-- Submitted for Approval -->
+              <article class="timeline-item">
+                <span
+                  class="timeline-dot"
+                  aria-hidden="true"
+                ></span>
+
+                <div>
+                  <span class="timeline-label">
+                    Submitted for Approval
+                  </span>
+
+                  <strong>
+                    “Monthly raw material replenishment for Q4 production.”
+                  </strong>
+
+                  <time datetime="2026-09-22T14:15">
+                    Sep 22, 2026, 2:15 PM
+                  </time>
+                </div>
+              </article>
+
+              <!-- Manager Approved -->
+              <article class="timeline-item">
+                <span
+                  class="timeline-dot"
+                  aria-hidden="true"
+                ></span>
+
+                <div>
+                  <span class="timeline-label">Manager Approved</span>
+
+                  <strong>
+                    MJ Segovia (Manager)<br>
+                    “Approved. Proceed with supplier sourcing.”
+                  </strong>
+
+                  <time datetime="2026-09-25T11:00">
+                    Sep 25, 2026, 11:00 AM
+                  </time>
+                </div>
+              </article>
+
+              <!-- RFQ Pending -->
+              <article class="timeline-item pending">
+                <span
+                  class="timeline-dot"
+                  aria-hidden="true"
+                ></span>
+
+                <div>
+                  <span class="timeline-label">RFQ Created</span>
+
+                  <strong>Awaiting Buyer action</strong>
+
+                  <time>Pending</time>
+                </div>
+              </article>
+
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+</body>
+</html>
