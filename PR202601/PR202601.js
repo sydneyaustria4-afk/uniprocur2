@@ -33,8 +33,8 @@ document.getElementById("backButton").addEventListener("click", () => {
 });
 
 // Create RFQ button
-document.getElementById("createRfqBtn").addEventListener("click", () => {
-  window.location.href = "edit-rfq.html";
+createRfqBtn.addEventListener("click", () => {
+  window.location.href = "edit-rfq2.html";
 });
 
 // Notifications

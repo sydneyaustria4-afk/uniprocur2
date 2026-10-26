@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalCloseBtn = document.getElementById("modalCloseBtn");
   const modalCancelBtn = document.getElementById("modalCancelBtn");
   const modalConfirmBtn = document.getElementById("modalConfirmBtn");
+  const successModal = document.getElementById("successModal");
+const backToDashboardBtn = document.getElementById("backToDashboardBtn");
   const dropzone = document.getElementById("attachmentDropzone");
   const fileInput = document.getElementById("fileInput");
   const filesList = document.getElementById("uploadedFilesList");
@@ -291,99 +293,132 @@ document.addEventListener("DOMContentLoaded", () => {
       modalCancelBtn.addEventListener("click", () => reviewModal.close());
     }
 
-    if (modalConfirmBtn) {
-      modalConfirmBtn.addEventListener("click", () => {
-        reviewModal.close();
-        showToast("RFQ invitation drafted successfully! Preparing confirmation...");
-      });
-    }
+   // Return to the buyer dashboard
+if (backToDashboardBtn) {
+  backToDashboardBtn.addEventListener("click", () => {
+    window.location.href = "../buyerdashboard/buyer-dashboard.html";
+  });
+}
   }
 });
 
 
-/* ==========================================================================
+
+/* ======================MAP===================================================
    Delivery Map — Leaflet + OpenStreetMap
    ========================================================================== */
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("MAP SCRIPT IS RUNNING");
+
+
+
+/* =========================================================
+   DELIVERY MAP — edit-rfq.js
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("1. RFQ map script is running.");
+
   const mapElement = document.getElementById("deliveryMap");
   const warehouseSelect = document.getElementById("warehouseLocation");
+  const mapTag = document.querySelector(".map-tag");
 
-  // Stop safely if this page doesn't contain the map.
-  if (!mapElement) return;
-
-  // Check that Leaflet loaded.
-  if (typeof window.L === "undefined") {
-    console.error("Delivery map: Leaflet did not load.");
+  // Check required HTML elements.
+  if (!mapElement || !warehouseSelect) {
+    console.error("ERROR: Map element or warehouse dropdown is missing.");
     return;
   }
 
-  // Prevent initializing the same map twice.
-  if (mapElement._leaflet_id) {
-    console.warn("Delivery map is already initialized.");
+  // Check Leaflet.
+  if (typeof L === "undefined") {
+    console.error("ERROR: Leaflet did not load.");
     return;
   }
 
-  // Approximate coordinates for the dropdown locations.
-  const warehouseLocations = {
-    "san-pedro": {
-      coordinates: [14.3595, 121.0473],
-      label: "San Pedro Facility"
+  // Warehouse locations.
+  const warehouses = {
+    main: {
+      name: "Main Warehouse — San Pablo City, Laguna",
+      coordinates: [14.0657265, 121.3223515]
     },
-    "marikina": {
-      coordinates: [14.6507, 121.1029],
-      label: "Marikina Facility"
-    },
-    "valenzuela": {
-      coordinates: [14.7011, 120.9830],
-      label: "Valenzuela Facility"
+    second: {
+      name: "Second Warehouse — Nagcarlan, Laguna",
+      coordinates: [14.1398816, 121.4206179]
     }
   };
 
-  const initialLocation = warehouseLocations[warehouseSelect?.value]
-    || warehouseLocations["san-pedro"];
+  const startingLocation =
+    warehouses[warehouseSelect.value] || warehouses.main;
 
   // Create the map.
-  const map = window.L.map(mapElement).setView(
-    initialLocation.coordinates,
-    13
+  const map = L.map(mapElement).setView(
+    startingLocation.coordinates,
+    15
   );
 
-  // Load map tiles.
-  window.L.tileLayer(
-    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
-    }
-  ).addTo(map);
+  // Load OpenStreetMap tiles.
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors",
+    maxZoom: 19
+  }).addTo(map);
 
-  // Add the warehouse marker.
-  const marker = window.L.marker(initialLocation.coordinates)
-    .addTo(map)
-    .bindPopup(initialLocation.label);
+  // Create the warehouse marker.
+  const marker = L.marker(startingLocation.coordinates).addTo(map);
+  marker.bindPopup(startingLocation.name);
 
-  // Update the map when a different warehouse is selected.
-  if (warehouseSelect) {
-    warehouseSelect.addEventListener("change", () => {
-      const selectedLocation = warehouseLocations[warehouseSelect.value];
-
-      if (!selectedLocation) return;
-
-      map.flyTo(selectedLocation.coordinates, 13);
-      marker.setLatLng(selectedLocation.coordinates);
-      marker.setPopupContent(selectedLocation.label);
-    });
+  if (mapTag) {
+    mapTag.textContent = startingLocation.name;
   }
 
-  // Correct map sizing after the layout is rendered.
-  requestAnimationFrame(() => {
-    map.invalidateSize();
-  });
+  console.log("2. Map initialized at:", startingLocation.name);
 
-  window.addEventListener("resize", () => {
-    map.invalidateSize();
-  });
+  // Respond when the warehouse dropdown changes.
+  warehouseSelect.addEventListener("change", function () {
+    const selectedValue = warehouseSelect.value;
 
-  console.log("Delivery map initialized successfully.");
+    console.log("3. Dropdown changed to:", selectedValue);
+
+    const selectedWarehouse = warehouses[selectedValue];
+
+    if (!selectedWarehouse) {
+      console.error("ERROR: Unknown warehouse value:", selectedValue);
+      return;
+    }
+
+    // Move the map and marker.
+   // Smoothly fly to the selected warehouse.
+map.flyTo(selectedWarehouse.coordinates, 15, {
+  animate: true,
+  duration: 1.5,
+  easeLinearity: 0.25
 });
+
+    marker.setLatLng(selectedWarehouse.coordinates);
+    marker.setPopupContent(selectedWarehouse.name);
+
+    if (mapTag) {
+      mapTag.textContent = selectedWarehouse.name;
+    }
+
+    
+
+    console.log(
+      "4. Map moved to:",
+      selectedWarehouse.name,
+      selectedWarehouse.coordinates
+    );
+  });
+
+  // Correct map rendering after the page layout finishes.
+  setTimeout(function () {
+    map.invalidateSize(true);
+  }, 500);
+});
+
+
+// Back to Edit RFQ 2
+const backToEditBtn = document.getElementById("backToEditBtn");
+
+if (backToEditBtn) {
+  backToEditBtn.addEventListener("click", function () {
+    window.location.href = "edit-rfq2.html";
+  });
+}

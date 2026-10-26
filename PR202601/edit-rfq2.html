@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+
+  <title>PR-2026-01 | Edit RFQ</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="edit-rfq2.css">
+
+  <!--MAP-->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+
+  <!-- JavaScript -->
+ 
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  defer
+></script>
+
+<script src="edit-rfq2.js" defer></script>
+
+</head>
+
+<body>
+  <main class="page-shell">
+
+    <!-- Top Bar -->
+    <header class="topbar suppliers-topbar">
+
+      <!-- Workspace Logo and Title -->
+      <div class="workspace-title suppliers-title">
+        <span class="workspace-icon">
+          <img
+            src="../assets/Pro 4.svg"
+            alt="UniProcur logo"
+          >
+        </span>
+
+        <div class="workspace-copy">
+          <span>Edit RFQ</span>
+          <strong>PR-2026-01</strong>
+        </div>
+      </div>
+
+      <!-- Notification Bell -->
+      <div class="account-actions">
+        <button
+          class="icon-button notification-button"
+          type="button"
+          aria-label="Notifications"
+          data-toast="No notifications yet."
+        >
+          <img
+            class="bell-icon"
+            src="../assets/Group 50.svg"
+            alt="Notifications"
+          >
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <span
+        class="account-divider"
+        aria-hidden="true"
+      ></span>
+
+      <!-- Buyer Account Information -->
+      <div class="account-name">
+        <strong id="loggedInName">Clark Alameda</strong>
+        <small id="loggedInEmail">buyer@company.com</small>
+      </div>
+
+      <!-- Buyer Avatar -->
+      <span
+        class="avatar avatar-white"
+        id="loggedInAvatar"
+        aria-label="Buyer account"
+      >C</span>
+
+    </header>
+
+    <!-- Circular Back Button -->
+    <button
+      type="button"
+      class="back-button"
+      id="backButton"
+      aria-label="Go back to Purchase Request"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m14.5 5-7 7 7 7"></path>
+      </svg>
+    </button>
+
+    <!-- Main Content Container -->
+    <div class="rfq-container">
+
+      <!-- ============================================================
+           SECTION 1: PURCHASE REQUEST & RFQ SETTINGS CARD
+      ============================================================= -->
+      <section class="rfq-card card-primary" aria-label="Purchase request and RFQ settings">
+
+        <!-- Card Header / Metadata Row -->
+        <div class="metadata-row">
+
+          <div class="metadata-item">
+            <span>Purchase Request No.</span>
+            <strong>PR-2026-01</strong>
+          </div>
+
+          <div class="metadata-item">
+            <span>Required Date</span>
+            <strong>October 05, 2026</strong>
+          </div>
+
+          <!-- Right side: Count & Action Button -->
+          <div class="header-action-group">
+            <span class="selected-suppliers-badge">
+              <strong id="selectedSuppliersCount">2</strong> Selected Suppliers
+            </span>
+
+            <button
+              type="button"
+              class="review-button"
+              id="reviewSubmitBtn"
+            >
+              <svg
+                class="btn-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              Review &amp; Submit RFQ
+            </button>
+          </div>
+
+        </div>
+
+        <hr class="card-divider">
+
+        <!-- Two Columns Layout -->
+        <div class="rfq-two-columns">
+
+          <!-- Left Column: Products & Justification -->
+          <div class="products-column">
+
+            <!-- Product 1: Full-Grain Leather -->
+            <article class="product-item">
+              <div class="product-thumb">
+                <img
+                  src="../assets/leather.svg"
+                  alt="Full-Grain Leather"
+                  class="product-image"
+                >
+                <div class="thumb-fallback leather-fallback" aria-hidden="true"></div>
+              </div>
+
+              <div class="product-info">
+                <h3>Full-Grain Leather</h3>
+                <div class="meta-line">
+                  <span>Category:</span>
+                  <strong>Raw Materials</strong>
+                </div>
+                <div class="meta-line">
+                  <span>Qty:</span>
+                  <strong>100 sq. ft.</strong>
+                </div>
+                <div class="meta-line desc">
+                  <span>Description:</span>
+                  <p>12mm, 54&quot; width</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- Product 2: Mesh Fabric -->
+            <article class="product-item">
+              <div class="product-thumb">
+                <img
+                  src="../assets/mesh.svg"
+                  alt="Mesh Fabric"
+                  class="product-image"
+                >
+                <div class="thumb-fallback mesh-fallback" aria-hidden="true"></div>
+              </div>
+
+              <div class="product-info">
+                <h3>Mesh Fabric</h3>
+                <div class="meta-line">
+                  <span>Category:</span>
+                  <strong>Textile</strong>
+                </div>
+                <div class="meta-line">
+                  <span>Qty:</span>
+                  <strong>100 meters</strong>
+                </div>
+                <div class="meta-line desc">
+                  <span>Description:</span>
+                  <p>Breathable Mesh</p>
+                </div>
+              </div>
+            </article>
+
+            <!-- Justification Box -->
+            <div class="justification-box">
+              <h4>Justification</h4>
+              <p>Replenishment for Q4 production run. Bulk discount applies for quantities over 100 units. Includes delivery schedule.</p>
+            </div>
+
+          </div>
+
+          <!-- Vertical Divider -->
+          <div class="vertical-divider" aria-hidden="true"></div>
+
+          <!-- Right Column: RFQ Settings & Map -->
+          <div class="settings-column">
+
+            <h3 class="section-subtitle">RFQ Settings</h3>
+
+            <!-- Settings Fields Row -->
+<div class="settings-grid">
+
+  <!-- Submission Due Date -->
+  <div class="form-group">
+    <label for="submissionDate">Submission Due:</label>
+    <div class="input-shell date-shell">
+      <input
+        type="date"
+        id="submissionDate"
+        name="submissionDate"
+        value="2026-09-30"
+        class="field-input"
+      >
+    </div>
+  </div>
+
+  <!-- Submission Due Time -->
+  <div class="form-group">
+    <label for="submissionTime">Submission Time:</label>
+    <div class="time-group">
+      <input
+        type="text"
+        id="submissionTime"
+        name="submissionTime"
+        value="05:00"
+        maxlength="5"
+        class="field-input time-input"
+      >
+
+      <div class="ampm-toggle" role="radiogroup" aria-label="AM/PM">
+        <button
+          type="button"
+          class="ampm-btn"
+          data-ampm="AM"
+          role="radio"
+          aria-checked="false"
+        >AM</button>
+
+        <button
+          type="button"
+          class="ampm-btn is-active"
+          data-ampm="PM"
+          role="radio"
+          aria-checked="true"
+        >PM</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Warehouse Location Dropdown -->
+<div class="form-group location-group">
+  <label for="warehouseLocation">Warehouse Location:</label>
+
+  <div class="select-shell">
+    <select
+      id="warehouseLocation"
+      name="warehouseLocation"
+      class="field-select"
+    >
+      <option value="main" selected>
+        Main Warehouse — Brgy. II-C, San Pablo City, Laguna
+      </option>
+
+      <option value="second">
+        Second Warehouse — Palina, Nagcarlan, Laguna
+      </option>
+    </select>
+
+    <span class="select-chevron" aria-hidden="true">▾</span>
+  </div>
+</div>
+
+<!-- Interactive Map Section -->
+<div class="map-wrapper" aria-label="Warehouse delivery location map">
+  <div id="deliveryMap" class="map-preview"></div>
+  <div class="map-tag">Main Warehouse</div>
+</div>
+
+</div>
+<!-- End Settings Column -->
+
+</div>
+<!-- End RFQ Two Columns -->
+
+</section>
+<!-- End Purchase Request & RFQ Settings Card -->
+
+
+      <!-- ============================================================
+           SECTION 2: SUPPLIER SELECTION CARD
+      ============================================================= -->
+      <section class="rfq-card card-suppliers" aria-label="Select suppliers to invite">
+
+        <div class="section-title-row">
+          <h2>Select Suppliers to Invite</h2>
+        </div>
+
+        <hr class="card-divider">
+
+        <div class="suppliers-grid">
+
+          <!-- Supplier 1: SoleTech (Pre-selected) -->
+          <article class="supplier-selection-card is-selected" data-supplier="sole-tech">
+            <div class="supplier-banner poster-soletech">
+              <span class="status-pill">
+                <span class="status-dot"></span> Active
+              </span>
+              <div class="supplier-avatar-ring">
+                <img src="../assets/Ellipse 4.svg" alt="SoleTech logo">
+              </div>
+            </div>
+
+            <div class="supplier-card-body">
+              <h3>SoleTech Rubber Manufacturing</h3>
+              <p class="supplier-city">Valenzuela City, Metro Manila</p>
+
+              <div class="metrics-row">
+                <div class="metric">
+                  <strong>★ 4.8</strong>
+                  <small>ratings</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>10 days</strong>
+                  <small>Lead Time</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="supplier-toggle-btn is-selected"
+                data-action="toggle-supplier"
+              >
+                <span class="check-icon" aria-hidden="true">✓</span>
+                Selected
+              </button>
+            </div>
+          </article>
+
+          <!-- Supplier 2: EcoBox -->
+          <article class="supplier-selection-card" data-supplier="ecobox">
+            <div class="supplier-banner poster-ecobox">
+              <span class="status-pill">
+                <span class="status-dot"></span> Active
+              </span>
+              <div class="supplier-avatar-ring">
+                <img src="../assets/Ellipse 6.svg" alt="EcoBox logo">
+              </div>
+            </div>
+
+            <div class="supplier-card-body">
+              <h3>EcoBox Packaging Solutions</h3>
+              <p class="supplier-city">Pasig City, Metro Manila</p>
+
+              <div class="metrics-row">
+                <div class="metric">
+                  <strong>★ 4.6</strong>
+                  <small>ratings</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>12 days</strong>
+                  <small>Lead Time</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="supplier-toggle-btn"
+                data-action="toggle-supplier"
+              >
+                Select
+              </button>
+            </div>
+          </article>
+
+          <!-- Supplier 3: Cordillera (Pre-selected) -->
+          <article class="supplier-selection-card is-selected" data-supplier="cordillera">
+            <div class="supplier-banner poster-cordillera">
+              <span class="status-pill">
+                <span class="status-dot"></span> Active
+              </span>
+              <div class="supplier-avatar-ring">
+                <img src="../assets/Ellipse 2.svg" alt="Cordillera logo">
+              </div>
+            </div>
+
+            <div class="supplier-card-body">
+              <h3>Cordillera Leather Works</h3>
+              <p class="supplier-city">Baguio City, Benguet</p>
+
+              <div class="metrics-row">
+                <div class="metric">
+                  <strong>★ 4.9</strong>
+                  <small>ratings</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>7 days</strong>
+                  <small>Lead Time</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="supplier-toggle-btn is-selected"
+                data-action="toggle-supplier"
+              >
+                <span class="check-icon" aria-hidden="true">✓</span>
+                Selected
+              </button>
+            </div>
+          </article>
+
+          <!-- Supplier 4: MetalCraft -->
+          <article class="supplier-selection-card" data-supplier="metalcraft">
+            <div class="supplier-banner poster-metalcraft">
+              <span class="status-pill">
+                <span class="status-dot"></span> Active
+              </span>
+              <div class="supplier-avatar-ring">
+                <img src="../assets/Ellipse 5.svg" alt="MetalCraft logo">
+              </div>
+            </div>
+
+            <div class="supplier-card-body">
+              <h3>MetalCraft Shoe Hardware</h3>
+              <p class="supplier-city">Caloocan City, Metro Manila</p>
+
+              <div class="metrics-row">
+                <div class="metric">
+                  <strong>★ 4.7</strong>
+                  <small>ratings</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>8 days</strong>
+                  <small>Lead Time</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="supplier-toggle-btn"
+                data-action="toggle-supplier"
+              >
+                Select
+              </button>
+            </div>
+          </article>
+
+          <!-- Supplier 5: SynthHide -->
+          <article class="supplier-selection-card" data-supplier="synthhide">
+            <div class="supplier-banner poster-synthhide">
+              <span class="status-pill">
+                <span class="status-dot"></span> Active
+              </span>
+              <div class="supplier-avatar-ring">
+                <img src="../assets/Ellipse 3.svg" alt="SynthHide logo">
+              </div>
+            </div>
+
+            <div class="supplier-card-body">
+              <h3>SynthHide Textile Corp.</h3>
+              <p class="supplier-city">Cavite Economic Zone, Cavite</p>
+
+              <div class="metrics-row">
+                <div class="metric">
+                  <strong>★ 4.5</strong>
+                  <small>ratings</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>7 days</strong>
+                  <small>Lead Time</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="supplier-toggle-btn"
+                data-action="toggle-supplier"
+              >
+                Select
+              </button>
+            </div>
+          </article>
+
+          <!-- Supplier 6: Marikina Hide -->
+          <article class="supplier-selection-card" data-supplier="marikina">
+            <div class="supplier-banner poster-marikina">
+              <span class="status-pill">
+                <span class="status-dot"></span> Active
+              </span>
+              <div class="supplier-avatar-ring">
+                <img src="../assets/Ellipse 8.svg" alt="Marikina Leather logo">
+              </div>
+            </div>
+
+            <div class="supplier-card-body">
+              <h3>Marikina Hide &amp; Leather Co.</h3>
+              <p class="supplier-city">Marikina City, Metro Manila</p>
+
+              <div class="metrics-row">
+                <div class="metric">
+                  <strong>★ 4.9</strong>
+                  <small>ratings</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>7 days</strong>
+                  <small>Lead Time</small>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric">
+                  <strong>Net 30</strong>
+                  <small>payment terms</small>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="supplier-toggle-btn"
+                data-action="toggle-supplier"
+              >
+                Select
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- ============================================================
+           SECTION 3: BOTTOM SPLIT CARDS (ATTACHMENTS & TERMS)
+      ============================================================= -->
+      <div class="rfq-bottom-grid">
+
+        <!-- Attachment to Send Card -->
+        <section class="rfq-card card-attachments" aria-label="Attachment upload area">
+          <div class="section-title-row">
+            <h3>Attachments to Send</h3>
+          </div>
+
+          <hr class="card-divider">
+
+          <div
+            class="dropzone-shell"
+            id="attachmentDropzone"
+            role="button"
+            tabindex="0"
+            aria-label="Upload files by clicking or dropping"
+          >
+            <input
+              type="file"
+              id="fileInput"
+              class="hidden-file-input"
+              multiple
+              accept=".pdf,.png,.jpg,.jpeg,.doc,.docx"
+            >
+
+            <div class="dropzone-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                <path d="M12 12v9"></path>
+                <path d="m16 16-4-4-4 4"></path>
+              </svg>
+            </div>
+
+            <p class="dropzone-prompt">
+              <strong>Click to upload</strong> or drag and drop
+            </p>
+            <span class="dropzone-hint">PDF, PNG, JPG, DOC (Max 25MB)</span>
+          </div>
+
+          <!-- Uploaded Files List -->
+          <ul class="uploaded-files-list" id="uploadedFilesList" aria-label="Attached files"></ul>
+        </section>
+
+        <!-- Terms and Conditions Card -->
+        <section class="rfq-card card-terms" aria-label="Terms and Conditions section">
+          <div class="section-title-row">
+            <h3>Terms and Conditions</h3>
+          </div>
+
+          <hr class="card-divider">
+
+          <div class="terms-body">
+            <p><strong>1. Payment Terms:</strong> Net 30 days upon delivery and completion of material quality inspection sign-off.</p>
+            <p><strong>2. Delivery Schedule:</strong> Strict adherence to delivery required date (October 05, 2026). Late deliveries are subject to standard procurement penalty clauses.</p>
+            <p><strong>3. Quality Assurance:</strong> Raw materials must strictly conform to specified requirements (12mm Full-Grain Leather, breathable mesh textile). Non-compliant batches will be returned at supplier expense.</p>
+            <p><strong>4. Quotation Validity:</strong> Quoted prices must remain firm and binding for a minimum of 30 days from quotation closing date.</p>
+            <p><strong>5. Confidentiality:</strong> All technical specifications, drawings, and procurement quantities provided herein remain confidential proprietary property of UniProcur Workspace.</p>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Review Modal Dialog -->
+  <dialog class="rfq-modal" id="reviewModal" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Submit For Approval</h3>
+        <button type="button" class="modal-close" id="modalCloseBtn" aria-label="Close dialog">✕</button>
+      </div>
+
+      <div class="modal-content">
+        <p class="modal-intro">Please review your RFQ invitation details for <strong>PR-2026-01</strong> before proceeding:</p>
+        
+        <div class="summary-list">
+          <div class="summary-row">
+            <span>Selected Suppliers:</span>
+            <strong id="modalSuppliersCount">2 suppliers</strong>
+          </div>
+          <div class="summary-row">
+            <span>Submission Deadline:</span>
+            <strong id="modalDeadline">Sep 30, 2026 at 05:00 PM</strong>
+          </div>
+          <div class="summary-row">
+            <span>Delivery Destination:</span>
+            <strong id="modalLocation">350 Shoe Factory Rd, San Pedro City</strong>
+          </div>
+          <div class="summary-row">
+            <span>Attachments:</span>
+            <strong id="modalAttachmentCount">None</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="modal-btn secondary" id="modalCancelBtn">Cancel</button>
+        <button type="button" class="modal-btn primary" id="modalConfirmBtn">Submit for Approval</button>
+      </div>
+    </div>
+  </dialog>
+
+
+<!-- RFQ Submission Success Popup -->
+<dialog class="success-modal" id="successModal" aria-labelledby="successTitle">
+  <div class="success-card">
+
+    <div class="success-icon" aria-hidden="true">
+      <svg viewBox="0 0 64 64" fill="none">
+        <path
+          d="M19 13H39L47 21V49L43 46L39 49L35 46L31 49L27 46L23 49L19 46V13Z"
+          fill="white"
+        />
+        <path d="M39 13V22H47" stroke="#F04449" stroke-width="2"/>
+        <path
+          d="M25 27H39M25 33H36"
+          stroke="#F04449"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+        <circle cx="41" cy="41" r="10" fill="#E81720"/>
+        <path
+          d="M36 41L39.5 44.5L46 37.5"
+          stroke="white"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M15 21L17 15L19 21L25 23L19 25L17 31L15 25L9 23Z"
+          fill="white"
+        />
+        <path
+          d="M47 8L49 12L53 14L49 16L47 20L45 16L41 14L45 12Z"
+          fill="white"
+        />
+      </svg>
+    </div>
+
+    <h2 id="successTitle">
+      <span>PR-2026-01</span>
+      Submitted Successfully!
+    </h2>
+
+    <p class="success-message">
+      Your Purchase Request has been sent to the Manager for approval.
+    </p>
+
+    <button
+      type="button"
+      class="success-dashboard-btn"
+      id="backToDashboardBtn"
+    >
+      <span>Back to Dashboard</span>
+      <span class="dashboard-arrow" aria-hidden="true">➜</span>
+    </button>
+
+  </div>
+</dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Toast Notification -->
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+</body>
+</html>
+

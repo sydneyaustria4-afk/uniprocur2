@@ -16,7 +16,7 @@
   >
 
   <!-- CSS -->
-  <link rel="stylesheet" href="edit-rfq.css">
+  <link rel="stylesheet" href="edit-rfq.css?v=2">
 
   <!--MAP-->
 <link
@@ -33,7 +33,7 @@
   defer
 ></script>
 
-<script src="edit-rfq.js" defer></script>
+<script src="edit-rfq.js?v=3" defer></script>
 
 </head>
 
@@ -95,26 +95,9 @@
 
     </header>
 
-    <!-- Circular Back Button -->
-    <button
-      type="button"
-      class="back-button"
-      id="backButton"
-      aria-label="Go back to Purchase Request"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <path d="m14.5 5-7 7 7 7"></path>
-      </svg>
-    </button>
-
+   
+    
+    
     <!-- Main Content Container -->
     <div class="rfq-container">
 
@@ -124,47 +107,77 @@
       <section class="rfq-card card-primary" aria-label="Purchase request and RFQ settings">
 
         <!-- Card Header / Metadata Row -->
-        <div class="metadata-row">
+       
+<!-- RFQ Information and Actions -->
+<div class="metadata-row rfq-review-header">
 
-          <div class="metadata-item">
-            <span>Purchase Request No.</span>
-            <strong>PR-2026-01</strong>
-          </div>
+  <!-- RFQ Number -->
+  <div class="metadata-item rfq-header-item">
+    <span>RFQ Number</span>
+    <strong>RFQ-0001</strong>
+  </div>
 
-          <div class="metadata-item">
-            <span>Required Date</span>
-            <strong>October 05, 2026</strong>
-          </div>
+  <!-- Original Purchase Request -->
+  <div class="metadata-item rfq-header-item">
+    <span>Converted from:</span>
+    <strong>PR-2026-01</strong>
+  </div>
 
-          <!-- Right side: Count & Action Button -->
-          <div class="header-action-group">
-            <span class="selected-suppliers-badge">
-              <strong id="selectedSuppliersCount">2</strong> Selected Suppliers
-            </span>
+  <!-- Required Date -->
+  <div class="metadata-item rfq-header-item required-date-item">
+    <span>Required Date:</span>
+    <strong>October 05, 2026</strong>
+  </div>
 
-            <button
-              type="button"
-              class="review-button"
-              id="reviewSubmitBtn"
-            >
-              <svg
-                class="btn-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-              Review &amp; Submit RFQ
-            </button>
-          </div>
+  <!-- Action Buttons -->
+  <div class="rfq-header-actions">
 
-        </div>
+    <button
+      type="button"
+      class="rfq-action-btn"
+      id="backToEditBtn"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+      Back to Edit
+    </button>
+
+    <button
+      type="button"
+      class="rfq-action-btn"
+      id="reviewSubmitBtn"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M22 2 11 13"></path>
+        <path d="m22 2-7 20-4-9-9-4Z"></path>
+      </svg>
+      Yes, Send RFQ
+    </button>
+
+  </div>
+</div>
+
+
+         
+
+        
 
         <hr class="card-divider">
 
@@ -247,82 +260,94 @@
             <h3 class="section-subtitle">RFQ Settings</h3>
 
             <!-- Settings Fields Row -->
-            <div class="settings-grid">
+<div class="settings-grid">
 
-              <!-- Submission Due Date -->
-              <div class="form-group">
-                <label for="submissionDate">Submission Due:</label>
-                <div class="input-shell date-shell">
-                  <input
-                    type="date"
-                    id="submissionDate"
-                    name="submissionDate"
-                    value="2026-09-30"
-                    class="field-input"
-                  >
-                </div>
-              </div>
+  <!-- Submission Due Date -->
+  <div class="form-group">
+    <label for="submissionDate">Submission Due:</label>
+    <div class="input-shell date-shell">
+      <input
+        type="date"
+        id="submissionDate"
+        name="submissionDate"
+        value="2026-09-30"
+        class="field-input"
+      >
+    </div>
+  </div>
 
-              <!-- Submission Due Time -->
-              <div class="form-group">
-                <label for="submissionTime">Submission Time:</label>
-                <div class="time-group">
-                  <input
-                    type="text"
-                    id="submissionTime"
-                    name="submissionTime"
-                    value="05:00"
-                    maxlength="5"
-                    class="field-input time-input"
-                  >
-                  <div class="ampm-toggle" role="radiogroup" aria-label="AM/PM">
-                    <button
-                      type="button"
-                      class="ampm-btn"
-                      data-ampm="AM"
-                      role="radio"
-                      aria-checked="false"
-                    >AM</button>
-                    <button
-                      type="button"
-                      class="ampm-btn is-active"
-                      data-ampm="PM"
-                      role="radio"
-                      aria-checked="true"
-                    >PM</button>
-                  </div>
-                </div>
-              </div>
+  <!-- Submission Due Time -->
+  <div class="form-group">
+    <label for="submissionTime">Submission Time:</label>
+    <div class="time-group">
+      <input
+        type="text"
+        id="submissionTime"
+        name="submissionTime"
+        value="05:00"
+        maxlength="5"
+        class="field-input time-input"
+      >
 
-            </div>
+      <div class="ampm-toggle" role="radiogroup" aria-label="AM/PM">
+        <button
+          type="button"
+          class="ampm-btn"
+          data-ampm="AM"
+          role="radio"
+          aria-checked="false"
+        >AM</button>
 
-            <!-- Warehouse Location Dropdown -->
-            <div class="form-group location-group">
-              <label for="warehouseLocation">Warehouse Location:</label>
-              <div class="select-shell">
-                <select id="warehouseLocation" name="warehouseLocation" class="field-select">
-                  <option value="san-pedro" selected>350 Shoe Factory Rd, San Pedro City</option>
-                  <option value="marikina">102 Industrial Ave, Marikina City</option>
-                  <option value="valenzuela">88 Logistics Blvd, Valenzuela City</option>
-                </select>
-                <span class="select-chevron" aria-hidden="true">▾</span>
-              </div>
-            </div>
+        <button
+          type="button"
+          class="ampm-btn is-active"
+          data-ampm="PM"
+          role="radio"
+          aria-checked="true"
+        >PM</button>
+      </div>
+    </div>
+  </div>
 
-            <!-- Map Section -->
-           
+</div>
+
+<!-- Warehouse Location Dropdown -->
+<div class="form-group location-group">
+  <label for="warehouseLocation">Warehouse Location:</label>
+
+  <div class="select-shell">
+    <select
+      id="warehouseLocation"
+      name="warehouseLocation"
+      class="field-select"
+    >
+      <option value="main" selected>
+        Main Warehouse — Brgy. II-C, San Pablo City, Laguna
+      </option>
+
+      <option value="second">
+        Second Warehouse — Palina, Nagcarlan, Laguna
+      </option>
+    </select>
+
+    <span class="select-chevron" aria-hidden="true">▾</span>
+  </div>
+</div>
+
 <!-- Interactive Map Section -->
 <div class="map-wrapper" aria-label="Warehouse delivery location map">
   <div id="deliveryMap" class="map-preview"></div>
-  <div class="map-tag">San Pedro Facility</div>
+  <div class="map-tag">Main Warehouse</div>
 </div>
 
+</div>
+<!-- End Settings Column -->
 
-          </div>
+</div>
+<!-- End RFQ Two Columns -->
 
-        </div>
-
-      </section>
+</section>
+<!-- End Purchase Request & RFQ Settings Card -->
 
 
       <!-- ============================================================
@@ -653,17 +678,13 @@
         <!-- Terms and Conditions Card -->
         <section class="rfq-card card-terms" aria-label="Terms and Conditions section">
           <div class="section-title-row">
-            <h3>Terms and Conditions</h3>
+            <h3>What Will Happen?</h3>
           </div>
 
           <hr class="card-divider">
 
           <div class="terms-body">
-            <p><strong>1. Payment Terms:</strong> Net 30 days upon delivery and completion of material quality inspection sign-off.</p>
-            <p><strong>2. Delivery Schedule:</strong> Strict adherence to delivery required date (October 05, 2026). Late deliveries are subject to standard procurement penalty clauses.</p>
-            <p><strong>3. Quality Assurance:</strong> Raw materials must strictly conform to specified requirements (12mm Full-Grain Leather, breathable mesh textile). Non-compliant batches will be returned at supplier expense.</p>
-            <p><strong>4. Quotation Validity:</strong> Quoted prices must remain firm and binding for a minimum of 30 days from quotation closing date.</p>
-            <p><strong>5. Confidentiality:</strong> All technical specifications, drawings, and procurement quantities provided herein remain confidential proprietary property of UniProcur Workspace.</p>
+        
           </div>
         </section>
 
