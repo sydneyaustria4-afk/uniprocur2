@@ -293,10 +293,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-  // Review & Submit RFQ: Navigate directly to edit-rfq.html
+  // Review & Submit RFQ: Navigate directly to Confirm Submit RFQ (Figma node 2398-3166)
   if (reviewSubmitBtn) {
     reviewSubmitBtn.addEventListener("click", () => {
-      window.location.href = "edit-rfq.html";
+      window.location.href = "confirm-rfq.html";
     });
   }
 

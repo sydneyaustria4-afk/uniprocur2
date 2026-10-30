@@ -34,221 +34,28 @@ button {
     );
 }
 
-/* HEADER */
+/* =========================================
+   UNIPROCUR TOPBAR / HEADER
+   ========================================= */
 
 .topbar {
   width: 100%;
-  max-width: 2000px;
-  min-height: 75px;
+  max-width: 1360px;
+  min-height: 80px;
   margin: 0 auto;
-  padding: 9px 20px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.45);
-  border-radius: 22px;
-  background: linear-gradient(
-    105deg,
-    rgba(76, 28, 25, 0.82),
-    rgba(143, 38, 35, 0.65)
-  );
-}
-
-/* LOGO AND TITLE */
-
-.request-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-}
-
-.request-icon {
-  width: 54px;
-  height: 54px;
-  flex: 0 0 54px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border: 1px solid #fff;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.request-icon img {
-  width: 70%;
-  height: 70%;
-  display: block;
-  object-fit: contain;
-}
-
-.request-icon svg {
-  width: 27px;
-  height: 27px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-
-.request-brand {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-}
-
-.request-icon {
-  width: 54px;
-  height: 54px;
-  flex: 0 0 54px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.request-icon img {
-  width: 70%;
-  height: 70%;
-  object-fit: contain;
-}
-
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start !important;
-}
-
-
-/* Keep the logo and title together on the LEFT */
-.topbar {
-  display: flex !important;
-  justify-content: space-between !important;
-}
-
-.topbar .request-brand {
-  flex: 0 0 auto !important;
-  width: auto !important;
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 8px !important;
-  margin: 0 !important;
-}
-
-.topbar .brand-copy {
-  position: static !important;
-  flex: 0 0 auto !important;
-  width: auto !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  text-align: left !important;
-  margin: 0 !important;
-}
-
-.topbar .topbar-right {
-  flex: 0 0 auto !important;
-  margin-left: auto !important;
-}
-
-
-
-/* RIGHT SIDE OF HEADER */
-
-.topbar-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
   gap: 16px;
-  flex-shrink: 0;
-}
 
-.icon-button {
-  position: relative;
-  width: 53px;
-  height: 53px;
-  display: grid;
-  place-items: center;
-  color: #555;
-  background: #fff;
-  border: 1px solid #aaa;
-  border-radius: 50%;
-}
-
-.icon-button svg {
-  width: 28px;
-  height: 28px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.notification-button i {
-  position: absolute;
-  top: 11px;
-  right: 12px;
-  width: 6px;
-  height: 6px;
-  background: #bd1715;
-  border-radius: 50%;
-}
-
-.topbar-divider {
-  width: 1px;
-  height: 42px;
-  background: rgba(255, 255, 255, 0.8);
-}
-
-.user-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  white-space: nowrap;
-}
-
-.user-copy strong {
-  font-size: 17px;
-  font-weight: 700;
-}
-
-.user-copy span {
-  font-size: 13px;
-}
-
-.avatar {
-  width: 53px;
-  height: 53px;
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  color: #bd1715;
-  font-size: 18px;
-  font-weight: 600;
-  background: #fff;
-  border: 1px solid #aaa;
-  border-radius: 50%;
-}
-
-.profile-chevron {
-  padding: 8px 4px;
-  color: #fff;
-  font-size: 19px;
-  background: transparent;
-  border: none;
+  color: #111827;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* BACK BUTTON */
@@ -704,46 +511,6 @@ button {
 }
 
 @media (max-width: 700px) {
-  .topbar {
-    padding: 10px;
-    gap: 8px;
-  }
-
-  .request-icon {
-    width: 42px;
-    height: 42px;
-    flex-basis: 42px;
-  }
-
-  .brand-copy span {
-    font-size: 11px;
-  }
-
-  .brand-copy strong {
-    font-size: 15px;
-  }
-
-  .topbar-right {
-    gap: 7px;
-  }
-
-  .icon-button,
-  .avatar {
-    width: 38px;
-    height: 38px;
-  }
-
-  .icon-button svg {
-    width: 21px;
-    height: 21px;
-  }
-
-  .user-copy,
-  .topbar-divider,
-  .profile-chevron {
-    display: none;
-  }
-
   .back-button {
     margin-top: 30px;
     margin-bottom: 20px;
@@ -935,20 +702,21 @@ body {
 .page-shell > .topbar.suppliers-topbar {
   width: 100%;
   max-width: 1360px;
-  min-height: 88px;
+  min-height: 80px;
   margin: 0 auto;
-  padding: 12px 26px;
+  padding: 12px 24px;
+  box-sizing: border-box;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
 
-  color: #222;
-  background: #fff;
-  border: 1px solid #e3e3e3;
-  border-radius: 18px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+  color: #111827;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Left side: logo and workspace name */
@@ -961,23 +729,23 @@ body {
 }
 
 .suppliers-topbar .workspace-icon {
-  width: 54px;
-  height: 54px;
-  flex: 0 0 54px;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   overflow: hidden;
-  border: 1px solid #e7e7e7;
+  border: 1px solid #e5e7eb;
   border-radius: 50%;
-  background: #fff;
+  background: #ffffff;
 }
 
 .suppliers-topbar .workspace-icon img {
-  width: 80%;
-  height: 80%;
+  width: 72%;
+  height: 72%;
   display: block;
   object-fit: contain;
 }
@@ -986,20 +754,22 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 3px;
+  gap: 2px;
   white-space: nowrap;
 }
 
 .suppliers-topbar .workspace-copy span {
-  color: #777;
+  color: #6b7280;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 500;
+  line-height: 1.25;
 }
 
 .suppliers-topbar .workspace-copy strong {
-  color: #222;
-  font-size: 19px;
+  color: #111827;
+  font-size: 18px;
   font-weight: 700;
+  line-height: 1.25;
 }
 
 /* Right side: notification and account */
@@ -1011,23 +781,25 @@ body {
 
 .suppliers-topbar .icon-button {
   position: relative;
-  width: 60px;
-  height: 60px;
-  flex: 0 0 60px;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #fff;
-  border: 1px solid #e2e2e2;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 50%;
+  color: #6b7280;
   cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .suppliers-topbar .bell-icon {
-  width: 40px;
-  height: 40px;
+  width: 24px;
+  height: 24px;
   display: block;
   object-fit: contain;
 }
@@ -1039,28 +811,35 @@ body {
 
 .suppliers-topbar .account-divider {
   width: 1px;
-  height: 44px;
+  height: 38px;
   flex: 0 0 1px;
-  background: #e0e0e0;
+  background: #e5e7eb;
+  margin: 0 4px;
 }
 
 .suppliers-topbar .account-name {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 3px;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2px;
   min-width: 0;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .suppliers-topbar .account-name strong {
-  color: #222;
+  color: #111827;
   font-size: 14px;
   font-weight: 700;
+  line-height: 1.25;
 }
 
 .suppliers-topbar .account-name small {
-  color: #777;
+  color: #6b7280;
   font-size: 12px;
+  font-weight: 400;
+  line-height: 1.25;
 }
 
 .suppliers-topbar .avatar.avatar-white {
@@ -1073,18 +852,19 @@ body {
   justify-content: center;
 
   color: #bd1715;
-  background: #fff;
-  border: 1px solid #e2e2e2;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 50%;
-  font-size: 19px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
+  user-select: none;
 }
 
 /* Responsive header */
 @media (max-width: 700px) {
   .page-shell > .topbar.suppliers-topbar {
-    min-height: 68px;
-    padding: 10px 12px;
+    min-height: 64px;
+    padding: 8px 14px;
     gap: 10px;
     border-radius: 14px;
   }
@@ -1096,7 +876,7 @@ body {
   }
 
   .suppliers-topbar .workspace-copy span {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .suppliers-topbar .workspace-copy strong {
@@ -1104,18 +884,18 @@ body {
   }
 
   .suppliers-topbar .icon-button {
-    width: 42px;
-    height: 42px;
-    flex-basis: 42px;
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
   }
 
   .suppliers-topbar .bell-icon {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
   }
 
   .suppliers-topbar .account-divider {
-    height: 32px;
+    height: 30px;
   }
 
   .suppliers-topbar .account-name {
@@ -1132,20 +912,20 @@ body {
 
 @media (max-width: 380px) {
   .page-shell > .topbar.suppliers-topbar {
-    gap: 7px;
-    padding: 9px;
+    gap: 8px;
+    padding: 8px;
   }
 
   .suppliers-topbar .workspace-title {
-    gap: 7px;
+    gap: 8px;
   }
 
   .suppliers-topbar .workspace-copy span {
-    font-size: 9px;
+    font-size: 10px;
   }
 
   .suppliers-topbar .workspace-copy strong {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .suppliers-topbar .icon-button {
@@ -1155,65 +935,14 @@ body {
   }
 
   .suppliers-topbar .bell-icon {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   .suppliers-topbar .avatar.avatar-white {
     width: 34px;
     height: 34px;
     flex-basis: 34px;
+    font-size: 15px;
   }
-}
-
-
-
-/* Header colors - match UniProcur pages */
-.topbar {
-  background: #ffffff;
-  color: #111827;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-}
-
-/* Page title and workspace label */
-.brand-copy span,
-.user-copy span {
-  color: #6b7280;
-}
-
-.brand-copy strong,
-.user-copy strong {
-  color: #111827;
-}
-
-/* Logo icon */
-.request-icon {
-  border-color: #e5e7eb;
-}
-
-.request-icon svg {
-  stroke: #bd1715;
-}
-
-/* Divider between notification and account */
-.topbar-divider {
-  background: #e5e7eb;
-}
-
-/* Notification and profile */
-.icon-button {
-  background: #ffffff;
-  color: #6b7280;
-  border: 1px solid #e5e7eb;
-}
-
-.avatar {
-  background: #ffffff;
-  color: #bd1715;
-  border-color: #e5e7eb;
-}
-
-.profile-chevron {
-  color: #bd1715;
 }
