@@ -1165,3 +1165,55 @@ body {
     flex-basis: 34px;
   }
 }
+
+
+
+/* Header colors - match UniProcur pages */
+.topbar {
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Page title and workspace label */
+.brand-copy span,
+.user-copy span {
+  color: #6b7280;
+}
+
+.brand-copy strong,
+.user-copy strong {
+  color: #111827;
+}
+
+/* Logo icon */
+.request-icon {
+  border-color: #e5e7eb;
+}
+
+.request-icon svg {
+  stroke: #bd1715;
+}
+
+/* Divider between notification and account */
+.topbar-divider {
+  background: #e5e7eb;
+}
+
+/* Notification and profile */
+.icon-button {
+  background: #ffffff;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+}
+
+.avatar {
+  background: #ffffff;
+  color: #bd1715;
+  border-color: #e5e7eb;
+}
+
+.profile-chevron {
+  color: #bd1715;
+}

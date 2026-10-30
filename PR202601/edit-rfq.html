@@ -16,7 +16,7 @@
   >
 
   <!-- CSS -->
-  <link rel="stylesheet" href="edit-rfq.css?v=2">
+  <link rel="stylesheet" href="edit-rfq.css?v=3">
 
   <!--MAP-->
 <link
@@ -33,7 +33,7 @@
   defer
 ></script>
 
-<script src="edit-rfq.js?v=3" defer></script>
+<script src="edit-rfq.js?v=4" defer></script>
 
 </head>
 
@@ -731,6 +731,51 @@
       </div>
     </div>
   </dialog>
+
+<!-- RFQ Submission Success Popup -->
+<dialog class="success-modal" id="successModal" aria-labelledby="successTitle">
+  <div class="success-card">
+
+    <div class="success-icon">
+  <img
+    src="../assets/shoes.svg"
+    alt="UniProcur logo"
+  >
+</div>
+
+    <h2 id="successTitle">
+      <span>PR-2026-01</span>
+      Submitted Successfully!
+    </h2>
+
+    <p class="success-message">
+      Your Purchase Request has been sent to the Manager for approval.
+    </p>
+
+    <button
+      type="button"
+      class="success-dashboard-btn"
+      id="backToDashboardBtn"
+    >
+      <span>Back to Dashboard</span>
+      <span class="dashboard-arrow" aria-hidden="true">➜</span>
+    </button>
+
+  </div>
+</dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   <!-- Toast Notification -->
   <div

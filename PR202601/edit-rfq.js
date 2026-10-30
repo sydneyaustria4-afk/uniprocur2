@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalCancelBtn = document.getElementById("modalCancelBtn");
   const modalConfirmBtn = document.getElementById("modalConfirmBtn");
   const successModal = document.getElementById("successModal");
-const backToDashboardBtn = document.getElementById("backToDashboardBtn");
+  const backToDashboardBtn = document.getElementById("backToDashboardBtn");
   const dropzone = document.getElementById("attachmentDropzone");
   const fileInput = document.getElementById("fileInput");
   const filesList = document.getElementById("uploadedFilesList");
@@ -293,10 +293,23 @@ const backToDashboardBtn = document.getElementById("backToDashboardBtn");
       modalCancelBtn.addEventListener("click", () => reviewModal.close());
     }
 
-   // Return to the buyer dashboard
+
+// Return to the Buyer Dashboard
 if (backToDashboardBtn) {
   backToDashboardBtn.addEventListener("click", () => {
     window.location.href = "../buyerdashboard/buyer-dashboard.html";
+  });
+}
+
+
+
+
+
+ // Proceed to Confirm: show the success modal
+if (modalConfirmBtn && reviewModal && successModal) {
+  modalConfirmBtn.addEventListener("click", () => {
+    reviewModal.close();
+    successModal.showModal();
   });
 }
   }
