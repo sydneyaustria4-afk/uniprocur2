@@ -210,21 +210,65 @@
             </div>
           </section>
 
-          <aside class="quick-actions" aria-label="Quick actions">
-            <button class="quick-action" type="button" aria-label="New Purchase Request" data-toast="New purchase request started">
-              <img class="quick-action-image" src="../assets/Group 381 (1).svg" alt="New Purchase Request. Request raw materials or software components." />
-            </button>
-            <button class="quick-action" type="button" aria-label="New RFQ" data-toast="New RFQ started">
-              <img class="quick-action-image" src="../assets/Group 381 (2).svg" alt="New RFQ. Request quotes for approved materials." />
-            </button>
-            <button class="quick-action" type="button" aria-label="New Purchase Order" data-toast="New purchase order started">
-              <img class="quick-action-image" src="../assets/Group 386.svg" alt="New Purchase Order. Issue a purchase order to a winning supplier." />
-            </button>
-            <button class="quick-action" type="button" aria-label="Post Invoice" data-toast="Invoice posting started">
-              <img class="quick-action-image" src="../assets/Group 383.svg" alt="Post Invoice." />
-            </button>
-          </aside>
-        </div>
+          
+<aside class="quick-actions" aria-label="Quick actions">
+
+  <!-- New Purchase Request: opens the request page -->
+  <a
+    class="quick-action"
+    href="new-purchase-request.html"
+    aria-label="New Purchase Request"
+  >
+    <img
+      class="quick-action-image"
+      src="../assets/Group 381 (1).svg"
+      alt="New Purchase Request"
+    />
+  </a>
+
+  <!-- New RFQ -->
+<a
+  class="quick-action"
+  href="create-rfq.html"
+  aria-label="New RFQ"
+>
+  <img
+    class="quick-action-image"
+    src="../assets/Group 381 (2).svg"
+    alt="New RFQ"
+  />
+</a>
+
+  <!-- New Purchase Order -->
+  <button
+    class="quick-action"
+    type="button"
+    aria-label="New Purchase Order"
+    data-toast="New purchase order started"
+  >
+    <img
+      class="quick-action-image"
+      src="../assets/Group 386.svg"
+      alt="New Purchase Order"
+    />
+  </button>
+
+  <!-- Post Invoice -->
+  <button
+    class="quick-action"
+    type="button"
+    aria-label="Post Invoice"
+    data-toast="Invoice posting started"
+  >
+    <img
+      class="quick-action-image"
+      src="../assets/Group 383.svg"
+      alt="Post Invoice"
+    />
+  </button>
+
+</aside>
+
 
         <section class="panel tasks-panel">
           <div class="panel-heading">

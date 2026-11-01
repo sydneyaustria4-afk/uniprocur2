@@ -247,13 +247,275 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
   // Review & Submit RFQ Flow
   // ==========================================================================
-  if (reviewSubmitBtn && reviewModal) {
-    reviewSubmitBtn.addEventListener("click", () => {
-      const selectedCards = document.querySelectorAll(".supplier-selection-card.is-selected");
-      if (selectedCards.length === 0) {
-        showToast("Please select at least 1 supplier to invite.");
-        return;
+  
+// =========================================
+// REVIEW & SUBMIT RFQ
+// Pass selected RFQ information to Confirm RFQ.
+// =========================================
+
+if (reviewSubmitBtn) {
+
+  reviewSubmitBtn.addEventListener("click", () => {
+
+    // Get Purchase Request metadata.
+    const metadataItems = document.querySelectorAll(
+      ".metadata-row .metadata-item"
+    );
+
+    const prNumber =
+      metadataItems[0]?.querySelector("strong")?.textContent.trim()
+      || "PR-2026-01";
+
+    const prRequiredDate =
+      metadataItems[1]?.querySelector("strong")?.textContent.trim()
+      || "October 05, 2026";
+
+
+    // Convert the PR date into YYYY-MM-DD.
+    function convertDateToISO(value) {
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        return value;
       }
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return "2026-10-05";
+      }
+
+      const year = date.getFullYear();
+
+      const month = String(
+        date.getMonth() + 1
+      ).padStart(2, "0");
+
+      const day = String(
+        date.getDate()
+      ).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    }
+
+
+    // Get the RFQ deadline.
+    const submissionDate =
+      document.getElementById("submissionDate")?.value || "";
+
+    const submissionTime =
+      document.getElementById("submissionTime")?.value || "05:00";
+
+    const activeAmpm =
+      document.querySelector(".ampm-btn.is-active")?.dataset.ampm || "PM";
+
+
+    // Get selected warehouse.
+    const warehouseSelect =
+      document.getElementById("warehouseLocation");
+
+    const warehouseValue =
+      warehouseSelect?.value || "main";
+
+    const warehouseText =
+      warehouseSelect?.options[
+        warehouseSelect.selectedIndex
+      ]?.text.trim() ||
+      "Main Warehouse — Brgy. II-C, San Pablo City, Laguna";
+
+
+    // Get product metadata.
+    function getProductMeta(card, label) {
+
+      const rows = card.querySelectorAll(".meta-line");
+
+      for (const row of rows) {
+
+        const rowLabel =
+          row.querySelector("span")?.textContent.trim() || "";
+
+        if (
+          rowLabel.toLowerCase().startsWith(label.toLowerCase())
+        ) {
+
+          return (
+            row.querySelector("strong, p")?.textContent.trim() || ""
+          );
+
+        }
+
+      }
+
+      return "";
+    }
+
+
+    // Get every requested product.
+    const products = Array.from(
+      document.querySelectorAll(".product-item")
+    ).map((card) => {
+
+      const name =
+        card.querySelector(".product-info h3")?.textContent.trim() || "";
+
+      const imagePath =
+        card.querySelector(".product-image")?.getAttribute("src") || "";
+
+      const imageName = imagePath.split("/").pop();
+
+      return {
+
+        name,
+
+        category: getProductMeta(card, "Category"),
+
+        quantity: getProductMeta(card, "Qty"),
+
+        description: getProductMeta(card, "Description"),
+
+        image: imageName === "mesh.svg"
+          ? "mesh.svg"
+          : "leather.svg"
+
+      };
+
+    });
+
+
+    // Get only suppliers currently selected.
+    const suppliers = Array.from(
+      document.querySelectorAll(
+        ".supplier-selection-card.is-selected"
+      )
+    ).map((card) => {
+
+      const metrics = Array.from(
+        card.querySelectorAll(".metric strong")
+      ).map((metric) => metric.textContent.trim());
+
+      return {
+
+        key: card.dataset.supplier || "",
+
+        name:
+          card.querySelector(
+            ".supplier-card-body h3"
+          )?.textContent.trim() || "",
+
+        city:
+          card.querySelector(
+            ".supplier-city"
+          )?.textContent.trim() || "",
+
+        rating:
+          (metrics[0] || "").replace(/^★\s*/, ""),
+
+        leadTime: metrics[1] || "",
+
+        paymentTerms: metrics[2] || ""
+
+      };
+
+    });
+
+
+    // Get justification.
+    const justification =
+      document.querySelector(
+        ".justification-box p"
+      )?.textContent.trim() || "";
+
+
+    // Get attachments.
+    const attachments = attachedFiles.map((file) => ({
+
+      name: file.name,
+
+      size: file.size
+
+    }));
+
+
+    // Get buyer information.
+    const buyerName =
+      document.getElementById("loggedInName")?.textContent.trim() ||
+      "Clark Alameda";
+
+    const buyerEmail =
+      document.getElementById("loggedInEmail")?.textContent.trim() ||
+      "buyer@company.com";
+
+
+    // Generate a preview RFQ number from the PR number.
+    const prSuffix = prNumber.match(/(\d+)$/)?.[1] || "1";
+
+    const rfqNumber =
+      `RFQ-${prSuffix.padStart(4, "0")}`;
+
+
+    // Prepare everything for the confirmation page.
+    const previewData = {
+
+      rfqNumber,
+
+      prNumber,
+
+      prRequiredDate:
+        convertDateToISO(prRequiredDate),
+
+      submissionDueDate:
+        submissionDate,
+
+      requiredTime:
+        submissionTime,
+
+      ampm:
+        activeAmpm,
+
+      warehouseValue,
+
+      warehouseText,
+
+      justification,
+
+      products,
+
+      suppliers,
+
+      attachments,
+
+      buyerName,
+
+      buyerEmail
+
+    };
+
+
+    // Do not continue without products or selected suppliers.
+    if (products.length === 0) {
+      showToast("No requested products found.");
+      return;
+    }
+
+    if (suppliers.length === 0) {
+      showToast("Please select at least one supplier.");
+      return;
+    }
+
+
+    // Save preview data for the next page.
+    sessionStorage.setItem(
+      "uniprocur_rfq_preview",
+      JSON.stringify(previewData)
+    );
+
+
+    // Open Confirm RFQ.
+    window.location.href = "confirm-rfq.html";
+
+  });
+
+}
+
 
       // Populate modal summary
       const modalSuppliersCount = document.getElementById("modalSuppliersCount");

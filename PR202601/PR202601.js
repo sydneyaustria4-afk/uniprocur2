@@ -4,125 +4,195 @@
 const toast = document.getElementById("toast");
 let toastTimer;
 
+// Toast message
 function showToast(message) {
+  if (!toast) return;
+
   toast.textContent = message;
-  toast.classList.add("visible");
+  toast.classList.add("show");
 
-  window.clearTimeout(toastTimer);
+  clearTimeout(toastTimer);
 
-  toastTimer = window.setTimeout(() => {
-    toast.classList.remove("visible");
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
   }, 2600);
 }
 
-// Hide the image when its file path is missing.
-// The CSS fabric design will remain visible underneath.
-document.querySelectorAll(".product-image").forEach((img) => {
-  img.addEventListener("error", () => {
-    img.style.display = "none";
-  });
-});
+// Update text without changing the HTML structure
+function setText(id, value) {
+  const element = document.getElementById(id);
 
-// Back button
-document.getElementById("backButton").addEventListener("click", () => {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    showToast("Connect this button to your Buyer Dashboard page.");
+  if (element) {
+    element.textContent = value || "—";
   }
-});
+}
 
-// Create RFQ button
-createRfqBtn.addEventListener("click", () => {
-  window.location.href = "edit-rfq2.html";
-});
+// Format database dates
+function formatDate(value) {
+  if (!value) return "—";
 
-// Notifications
-document.querySelector(".notification-button").addEventListener("click", () => {
-  showToast("You have no new notifications.");
-});
+  const date = new Date(String(value).replace(" ", "T"));
 
-// Profile menu
-document.querySelector(".profile-chevron").addEventListener("click", () => {
-  showToast("The profile menu has not been connected yet.");
-});
+  if (Number.isNaN(date.getTime())) return "—";
 
+  return new Intl.DateTimeFormat("en-PH", {
+    year: "numeric",
+    month: "long",
+    day: "2-digit"
+  }).format(date);
+}
+
+// Format quantity
+function formatQuantity(value) {
+  return Number(value).toLocaleString("en-PH", {
+    maximumFractionDigits: 2
+  });
+}
 
 /* =========================================
-   Interactive Warehouse Location Map
-   ========================================= */
-document.addEventListener("DOMContentLoaded", () => {
-  const mapElement = document.getElementById("deliveryMap");
-  const locationSelect = document.getElementById("warehouseLocation");
-  const mapTag = document.querySelector(".map-tag");
+   UPDATE EXISTING PRODUCT CARDS
+   Keep images, categories and descriptions.
+========================================= */
 
-  if (!mapElement || !locationSelect) return;
-
-  if (typeof L === "undefined") {
-    mapElement.textContent =
-      "Map could not load. Check your internet connection and refresh.";
-    console.error("Leaflet did not load.");
-    return;
-  }
-
-  // Approximate city-center coordinates, not verified warehouse addresses.
-  const locations = {
-    "san-pedro": {
-      name: "San Pedro Facility",
-      coordinates: [14.3595, 121.0473]
-    },
-    marikina: {
-      name: "Marikina City",
-      coordinates: [14.6507, 121.1029]
-    },
-    valenzuela: {
-      name: "Valenzuela City",
-      coordinates: [14.7011, 120.9830]
-    }
-  };
-
-  const initialLocation =
-    locations[locationSelect.value] || locations["san-pedro"];
-
-  const map = L.map(mapElement, {
-    scrollWheelZoom: false
-  }).setView(initialLocation.coordinates, 13);
-
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(map);
-
-  const marker = L.marker(initialLocation.coordinates).addTo(map);
-
-  marker.bindPopup(
-    `<strong>${initialLocation.name}</strong><br>Approximate city-center location`
+function updateProductCards(items) {
+  const productCards = document.querySelectorAll(
+    ".products-panel .product-row"
   );
 
-  function updateMapLocation() {
-    const selected = locations[locationSelect.value];
+  productCards.forEach((card) => {
+    const title = card.querySelector(".product-copy h2");
 
-    if (!selected) return;
+    if (!title) return;
 
-    marker.setLatLng(selected.coordinates);
-    marker.setPopupContent(
-      `<strong>${selected.name}</strong><br>Approximate city-center location`
+    const productName = title.textContent.trim().toLowerCase();
+
+    const databaseItem = items.find((item) =>
+      item.item_name.trim().toLowerCase() === productName
     );
 
-    map.setView(selected.coordinates, 13);
+    // Do not remove the card if no matching database item exists.
+    if (!databaseItem) return;
 
-    if (mapTag) {
-      mapTag.textContent = selected.name;
+    const metadataRows = card.querySelectorAll(".product-meta");
+
+    // Find the existing Qty row.
+    const quantityRow = Array.from(metadataRows).find((row) => {
+      const label = row.querySelector("span");
+
+      return label &&
+        label.textContent.trim().toLowerCase() === "qty:";
+    });
+
+    if (!quantityRow) return;
+
+    const quantityValue = quantityRow.querySelector("strong");
+
+    if (quantityValue) {
+      quantityValue.textContent =
+        `${formatQuantity(databaseItem.qty)} ${databaseItem.unit}`;
     }
+  });
+}
+
+/* =========================================
+   LOAD PURCHASE REQUEST FROM MYSQL
+========================================= */
+
+async function loadPurchaseRequest() {
+  const params = new URLSearchParams(window.location.search);
+  const prNumber = params.get("pr") || "PR-2026-01";
+
+  try {
+    const response = await fetch(
+      `../database/get-purchase-request.php?pr_number=${encodeURIComponent(prNumber)}`
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Unable to load Purchase Request."
+      );
+    }
+
+    const pr = result.purchase_request;
+
+    // Update Purchase Request metadata.
+    setText("prNumber", pr.pr_number);
+    setText("prCreatedDate", formatDate(pr.created_at));
+    setText("prApprovedDate", formatDate(pr.approved_at));
+    setText("prNeededDate", formatDate(pr.needed_by));
+
+    // Update buyer account information.
+    setText("loggedInName", pr.created_by_name);
+    setText("loggedInEmail", pr.created_by_email);
+
+    const avatar = document.getElementById("loggedInAvatar");
+
+    if (avatar) {
+      avatar.textContent = pr.created_by_name
+        ? pr.created_by_name.charAt(0).toUpperCase()
+        : "?";
+    }
+
+    // Update quantities in the existing product cards.
+    updateProductCards(result.items);
+
+    document.title = `${pr.pr_number} | View Purchase Request`;
+
+  } catch (error) {
+    console.error("Purchase Request Error:", error);
+    showToast(error.message);
   }
+}
 
-  locationSelect.addEventListener("change", updateMapLocation);
+/* =========================================
+   EXISTING BUTTONS
+========================================= */
 
-  if (mapTag) {
-    mapTag.textContent = initialLocation.name;
-  }
+// Back button
+const backButton = document.getElementById("backButton");
 
-  // Helps Leaflet calculate the correct size inside the RFQ card.
-  window.setTimeout(() => map.invalidateSize(), 200);
-});
+if (backButton) {
+  backButton.addEventListener("click", () => {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href =
+        "../buyerdashboard/buyer-dashboard.html";
+    }
+  });
+}
+
+// Create RFQ button
+const createRfqBtn = document.getElementById("createRfqBtn");
+
+if (createRfqBtn) {
+  createRfqBtn.addEventListener("click", () => {
+    window.location.href = "edit-rfq2.html";
+  });
+}
+
+// Notifications
+const notificationButton = document.querySelector(
+  ".notification-button"
+);
+
+if (notificationButton) {
+  notificationButton.addEventListener("click", () => {
+    showToast("You have no new notifications.");
+  });
+}
+
+// Profile menu
+const profileButton = document.querySelector(".profile-chevron");
+
+if (profileButton) {
+  profileButton.addEventListener("click", () => {
+    showToast("The profile menu has not been connected yet.");
+  });
+}
+
+// Load Purchase Request
+loadPurchaseRequest();
+

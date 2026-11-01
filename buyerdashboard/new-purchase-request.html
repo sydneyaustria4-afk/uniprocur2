@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | New Purchase Request</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="new-purchase-request.css?v=2">
+  <script src="new-purchase-request.js?v=4" defer></script>
+</head>
+<body>
+  <main class="new-request-page">
+    <header class="request-topbar">
+      <a class="request-brand" href="buyer-dashboard.html" aria-label="Return to UniProcur Buyer Dashboard">
+        <span class="brand-mark">
+          <img src="../assets/Pro 4.svg" alt="UniProcur">
+        </span>
+        <span class="brand-copy">
+          <span>New Purchase Request</span>
+          <strong>Purchase Request</strong>
+        </span>
+      </a>
+
+      <div class="topbar-account">
+        <button class="notification-button" id="notificationButton" type="button" aria-label="Notifications">
+          <img src="../assets/Group 50.svg" alt="">
+        </button>
+        <span class="account-divider" aria-hidden="true"></span>
+        <div class="account-copy">
+          <strong id="buyerName">Clark Almeda</strong>
+          <span id="buyerEmail">buyer@company.com</span>
+        </div>
+        <span class="account-avatar" aria-label="Buyer profile"></span>
+      </div>
+    </header>
+
+    <section class="request-outer-card" aria-label="New Purchase Request form">
+      <form class="request-card" id="purchaseRequestForm" novalidate>
+        <div class="request-meta-row">
+          <div class="request-number-block">
+            <span>PR No.</span>
+            <strong id="requestNumber">PR-2026-NN</strong>
+          </div>
+
+          <div class="request-actions">
+            <button class="action-button cancel-button" id="cancelButton" type="button">Cancel</button>
+            <button class="action-button save-button" id="saveDraftButton" type="button">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.2 11.8 3 8.9 10.7 1.2a1.7 1.7 0 0 1 2.4 2.4L5.4 11.3l-3.2.5Z"/><path d="M8.8 3.1 11.4 5.7"/><path d="M2 14h12"/></svg>
+              Save Draft
+            </button>
+            <button class="action-button submit-button" id="submitButton" type="button">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.2 11.8 3 8.9 10.7 1.2a1.7 1.7 0 0 1 2.4 2.4L5.4 11.3l-3.2.5Z"/><path d="M8.8 3.1 11.4 5.7"/><path d="M2 14h12"/></svg>
+              Submit for Approval
+            </button>
+          </div>
+        </div>
+
+        <section class="items-section" aria-label="Purchase request items">
+          <button class="add-item-button" id="addItemButton" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Add Item</span>
+          </button>
+          <div class="item-entry-list" id="itemEntryList" aria-live="polite"></div>
+        </section>
+
+        <section class="attachment-map-row" aria-label="Attachments and delivery location">
+          <div class="upload-panel" id="uploadPanel">
+            <input
+              class="file-input"
+              id="attachmentInput"
+              type="file"
+              multiple
+              accept=".doc,.docx,.xls,.xlsx,.pdf,.jpg,.jpeg,.png"
+            >
+            <button class="upload-content" id="uploadButton" type="button">
+              <svg class="upload-icon" viewBox="0 0 48 48" aria-hidden="true">
+                <path d="M14.5 31.5h-2a7.5 7.5 0 0 1-.7-15 12.2 12.2 0 0 1 23.6 2.3 6.5 6.5 0 0 1 .1 13h-2"/>
+                <path d="M24 39V22m-7 7 7-7 7 7"/>
+              </svg>
+              <span class="upload-main"><strong>Click to upload</strong> <span>or drag &amp; drop</span></span>
+              <span class="upload-hint">DOC, XLS, PDF, JPG, and PNG up to 20MB</span>
+            </button>
+            <ul class="uploaded-file-list" id="uploadedFileList" aria-label="Selected attachments"></ul>
+          </div>
+
+          <div class="map-placeholder" role="img" aria-label="Delivery location map preview placeholder"></div>
+        </section>
+
+        <section class="request-extra-row" aria-label="Required date and justification">
+          <div class="required-date-field">
+            <label for="requiredDate">Required Date:</label>
+            <input type="date" id="requiredDate" name="requiredDate" value="2026-10-25" required>
+          </div>
+          <div class="justification-field">
+            <label for="justification">Justification:</label>
+            <textarea id="justification" name="justification" rows="3">Q4 production materials for sneaker line (Style #SN-2026).</textarea>
+          </div>
+        </section>
+      </form>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

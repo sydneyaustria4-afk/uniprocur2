@@ -1,0 +1,762 @@
+
+:root {
+  --page-gradient: linear-gradient(
+    125deg,
+    #590b0b 0%,
+    #970000 36%,
+    #dd0900 69%,
+    #f16b3f 100%
+  );
+
+  --ink: #111111;
+  --line: #bdbdbd;
+  --red: #e60000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: "Inter", Arial, sans-serif;
+
+  background:
+    url("../assets/supplierbg.png")
+    center top / cover no-repeat fixed,
+    var(--page-gradient);
+
+  overflow-x: hidden;
+}
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.success-page {
+  position: relative;
+  width: min(100% - 48px, 1440px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px 0 28px;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.request-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+
+  width: 100%;
+  min-height: 76px;
+  padding: 9px 19px;
+
+  border: 1px solid rgba(255,255,255,0.46);
+  border-radius: 25px;
+
+  background: rgba(255,255,255,0.07);
+
+  color: #fff;
+}
+
+.request-brand,
+.topbar-account {
+  display: flex;
+  align-items: center;
+}
+
+.request-brand {
+  gap: 12px;
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  flex: 0 0 54px;
+  place-items: center;
+
+  width: 54px;
+  height: 54px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255,255,255,0.72);
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.1);
+}
+
+.brand-mark img {
+  width: 25px;
+  height: 31px;
+  object-fit: contain;
+}
+
+.brand-copy,
+.account-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brand-copy span {
+  color: rgba(255,255,255,.83);
+  font: 13px/1.25 "Geist", "Inter", sans-serif;
+}
+
+.brand-copy strong {
+  color: #fff;
+  font: 700 18px/1.2 "Geist", "Inter", sans-serif;
+  letter-spacing: -.04em;
+}
+
+.topbar-account {
+  gap: 13px;
+}
+
+.notification-button {
+  display: grid;
+  flex: 0 0 54px;
+  place-items: center;
+
+  width: 54px;
+  height: 54px;
+
+  border: 1px solid rgba(0,0,0,.18);
+  border-radius: 50%;
+
+  background: #fff;
+}
+
+.notification-button img {
+  width: 33px;
+  height: 31px;
+  object-fit: contain;
+}
+
+.account-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255,255,255,.75);
+}
+
+.account-copy {
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.account-copy strong {
+  color: #fff;
+  font: 700 15px/1.2 "Geist", "Inter", sans-serif;
+}
+
+.account-copy span {
+  color: rgba(255,255,255,.83);
+  font: 10px/1.2 "Geist", "Inter", sans-serif;
+}
+
+.account-avatar {
+  width: 54px;
+  height: 54px;
+
+  border: 1px solid #726e6e;
+  border-radius: 50%;
+
+  background: #fff;
+}
+
+
+/* =========================================
+   BACKGROUND PURCHASE REQUEST FORM
+========================================= */
+
+.request-outer-card {
+  width: 100%;
+  min-height: 799px;
+
+  margin-top: 56px;
+  padding: 26px 25px;
+
+  border-radius: 10px;
+  background: #f8f7f5;
+}
+
+.request-card {
+  width: 100%;
+  min-height: 743px;
+
+  padding: 25px 41px 33px;
+
+  border: 1px solid var(--line);
+  border-radius: 10px;
+
+  background: #fff;
+}
+
+.request-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  min-height: 88px;
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #c7c7c7;
+}
+
+.request-number-block {
+  display: flex;
+  flex: 0 0 145px;
+  flex-direction: column;
+  justify-content: center;
+
+  min-height: 67px;
+  padding-right: 20px;
+
+  border-right: 1px solid #c7c7c7;
+}
+
+.request-number-block span {
+  color: #4d4d4d;
+  font-size: 12px;
+}
+
+.request-number-block strong {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.request-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.mock-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+  padding: 7px 19px;
+
+  border: 1px solid #333;
+  border-radius: 10px;
+
+  background: white;
+
+  font: 14px "Geist", "Inter", sans-serif;
+  white-space: nowrap;
+}
+
+.mock-cancel {
+  min-width: 124px;
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.mock-add-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  min-height: 57px;
+  margin: 36px 0 40px;
+
+  border: 1px solid #737373;
+  border-radius: 8px;
+
+  background: rgba(118,115,115,.25);
+
+  font: 17px "Geist", "Inter", sans-serif;
+}
+
+.mock-content-row {
+  display: grid;
+  grid-template-columns: minmax(250px, 35%) minmax(0, 1fr);
+  gap: 28px;
+
+  padding-bottom: 40px;
+
+  border-bottom: 1px solid #c7c7c7;
+}
+
+.mock-upload {
+  display: flex;
+  min-height: 254px;
+
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: 1px solid #bdbdbd;
+  border-radius: 5px;
+
+  background: #fff;
+  box-shadow: inset -1px 1px 4px rgba(0,0,0,.12);
+
+  text-align: center;
+}
+
+.mock-upload-icon {
+  color: #555;
+  font-size: 26px;
+}
+
+.mock-upload strong {
+  font-size: 14px;
+}
+
+.mock-upload strong span {
+  color: #726e6e;
+  font-weight: 400;
+}
+
+.mock-upload small {
+  color: #7b7b7b;
+  font-size: 11px;
+}
+
+.mock-map {
+  min-height: 254px;
+  background: #d9d9d9;
+}
+
+.mock-footer-row {
+  display: grid;
+  grid-template-columns: minmax(290px, 38%) minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+
+  min-height: 115px;
+  margin-top: 35px;
+  padding: 12px 16px;
+
+  border: 1px solid #bdbdbd;
+}
+
+.mock-date,
+.mock-justification {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  font-size: 14px;
+}
+
+.mock-date span,
+.mock-justification span {
+  min-width: 0;
+  padding: 10px;
+
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+
+  background: #fff;
+}
+
+.mock-justification span {
+  flex: 1;
+  min-height: 68px;
+}
+
+
+/* =========================================
+   DIMMED OVERLAY
+========================================= */
+
+.success-overlay {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: max(28px, 20.65vh) 20px 32px;
+
+  overflow-y: auto;
+
+  background: rgba(94, 90, 90, 0.46);
+
+  backdrop-filter: blur(1.2px);
+  -webkit-backdrop-filter: blur(1.2px);
+}
+
+
+/* =========================================
+   SUCCESS MODAL
+========================================= */
+
+.success-modal {
+  position: relative;
+
+  display: flex;
+  flex: 0 0 auto;
+
+  width: min(486px, 100%);
+  min-height: 390px;
+
+  flex-direction: column;
+  align-items: center;
+
+  padding: 28px 40px 30px;
+
+  overflow: hidden;
+
+  border-radius: 30px;
+
+  background: linear-gradient(
+    179.9deg,
+    #e22a2a 0.1%,
+    #fff 71.9%
+  );
+
+  box-shadow: 0 3px 4px rgba(0,0,0,.25);
+
+  text-align: center;
+}
+
+
+/* =========================================
+   JUMPING SHOE LOGO
+========================================= */
+
+.success-logo-wrap {
+  display: grid;
+  flex: 0 0 106px;
+
+  width: 108px;
+
+  place-items: center;
+  margin-top: 0;
+}
+
+.success-logo {
+  display: block;
+
+  width: 93px;
+  height: 85px;
+
+  object-fit: contain;
+
+  transform-origin: center center;
+
+  transform: rotate(var(--rotate-transform, 0rad));
+
+  animation:
+    kf_3112_2007_rotate_0 2s linear infinite,
+    kf_3112_2007_translate_0 2s linear infinite;
+
+  will-change: transform, translate;
+}
+
+
+/* Figma logo rotation animation */
+
+@property --rotate-transform {
+  syntax: '<angle>';
+  initial-value: 0rad;
+  inherits: false;
+}
+
+@keyframes kf_3112_2007_rotate_0 {
+
+  0% {
+    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+    --rotate-transform: 0rad;
+  }
+
+  15.572% {
+    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+    --rotate-transform: 0.105rad;
+  }
+
+  33.573% {
+    animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1);
+    --rotate-transform: -0.279rad;
+  }
+
+  50.067%,
+  100% {
+    --rotate-transform: 0rad;
+  }
+}
+
+
+/* Figma logo jumping animation */
+
+@keyframes kf_3112_2007_translate_0 {
+
+  0% {
+    translate: 0px 0px;
+  }
+
+  24.9% {
+    translate: 0.064px -16.517px;
+  }
+
+  50.067%,
+  100% {
+    translate: 0.064px 0.001px;
+  }
+}
+
+
+/* =========================================
+   SUCCESS TEXT
+========================================= */
+
+.success-modal h1 {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  margin: 18px 0 3px;
+
+  color: #000;
+
+  font: 800 24px/24px "Inter", Arial, sans-serif;
+
+  letter-spacing: -.04em;
+}
+
+.success-modal h1 span {
+  display: block;
+}
+
+.success-modal p {
+  width: min(326px, 100%);
+  margin: 0;
+
+  color: #363636;
+
+  font: 400 14px/15px "Inter", Arial, sans-serif;
+}
+
+
+/* =========================================
+   BACK TO DASHBOARD BUTTON
+========================================= */
+
+.back-dashboard-button {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: min(326px, 100%);
+  min-height: 42px;
+
+  margin-top: auto;
+  padding: 8px 44px 8px 20px;
+
+  border-radius: 30px;
+
+  background: #e60000;
+  color: #fff;
+
+  font: 400 12px/1 "Geist", "Inter", sans-serif;
+
+  text-decoration: none;
+
+  transition:
+    background 150ms ease,
+    transform 150ms ease;
+}
+
+.back-dashboard-button:hover {
+  background: #c90000;
+  transform: translateY(-1px);
+}
+
+.back-dashboard-button:focus-visible {
+  outline: 3px solid #111;
+  outline-offset: 3px;
+}
+
+.button-arrow {
+  position: absolute;
+
+  top: 50%;
+  right: 5px;
+
+  display: grid;
+
+  width: 28px;
+  height: 28px;
+
+  place-items: center;
+
+  transform: translateY(-50%);
+
+  border-radius: 50%;
+
+  background: #fff;
+  color: #e60000;
+
+  font-size: 17px;
+  line-height: 1;
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 760px) {
+
+  .success-page {
+    width: min(100% - 24px, 1440px);
+    padding-top: 12px;
+  }
+
+  .request-topbar {
+    min-height: 64px;
+    padding: 7px 10px;
+    border-radius: 18px;
+  }
+
+  .brand-mark,
+  .notification-button,
+  .account-avatar {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .brand-copy span {
+    font-size: 10px;
+  }
+
+  .brand-copy strong {
+    font-size: 14px;
+  }
+
+  .topbar-account {
+    gap: 7px;
+  }
+
+  .account-copy strong {
+    font-size: 12px;
+  }
+
+  .account-copy span {
+    font-size: 9px;
+  }
+
+  .request-outer-card {
+    min-height: 0;
+    margin-top: 24px;
+    padding: 12px;
+  }
+
+  .request-card {
+    min-height: 0;
+    padding: 18px 14px;
+  }
+
+  .request-meta-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .request-actions {
+    justify-content: flex-start;
+    gap: 7px;
+  }
+
+  .mock-button {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .mock-add-item {
+    margin: 22px 0;
+  }
+
+  .mock-content-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-bottom: 20px;
+  }
+
+  .mock-upload,
+  .mock-map {
+    min-height: 145px;
+  }
+
+  .mock-footer-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .mock-date,
+  .mock-justification {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mock-date span,
+  .mock-justification span {
+    width: 100%;
+  }
+
+  .success-overlay {
+    align-items: center;
+    padding: 22px 14px;
+  }
+
+  .success-modal {
+    min-height: 370px;
+    padding: 25px 22px 25px;
+  }
+
+  .success-modal h1 {
+    font-size: 22px;
+    line-height: 23px;
+  }
+}
+
+
+/* =========================================
+   REDUCED MOTION ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .success-logo {
+    animation: none;
+    transform: none;
+    translate: none;
+    will-change: auto;
+  }
+
+  .back-dashboard-button {
+    transition: none;
+  }
+}

@@ -814,11 +814,26 @@ document.querySelectorAll('.nav-item')
     });
   });
 
+
+
 document.addEventListener('click', (event) => {
   if (!(event.target instanceof Element)) return;
 
-  const button =
-    event.target.closest('[data-toast]');
+  const quickAction = event.target.closest('.quick-action');
+
+  // Open New Purchase Request page.
+  if (
+    quickAction &&
+    quickAction.getAttribute('aria-label') === 'New Purchase Request'
+  ) {
+    event.preventDefault();
+
+    window.location.href = 'new-purchase-request.html';
+    return;
+  }
+
+  // Keep the existing toast behavior for other buttons.
+  const button = event.target.closest('[data-toast]');
 
   if (button) {
     showToast(button.dataset.toast);

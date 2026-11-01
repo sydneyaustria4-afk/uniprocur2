@@ -1,0 +1,527 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+
+  <title>Confirm RFQ | UniProcur</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Leaflet Map CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  >
+
+  <!-- Confirm RFQ CSS -->
+  <link rel="stylesheet" href="confirm-rfq.css?v=3">
+
+  <!-- Leaflet Map JavaScript -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    defer
+  ></script>
+
+  <!-- Confirm RFQ JavaScript -->
+  <script src="confirm-rfq.js?v=2" defer></script>
+
+</head>
+
+
+<body>
+
+  <main class="page-shell">
+
+
+    <!-- ======================================
+         TOP HEADER
+    ======================================= -->
+
+    <header class="topbar">
+
+      <div class="workspace-title">
+
+        <span class="workspace-icon">
+          <img
+            src="../assets/Pro 4.svg"
+            alt="UniProcur logo"
+          >
+        </span>
+
+        <div class="workspace-copy">
+          <span>Confirm RFQ</span>
+          <strong id="headerPrNumber">PR-2026-01</strong>
+        </div>
+
+      </div>
+
+
+      <div class="account-actions">
+
+        <button
+          type="button"
+          class="notification-button"
+          id="notificationButton"
+          aria-label="Notifications"
+        >
+          <img
+            src="../assets/Group 50.svg"
+            alt=""
+          >
+        </button>
+
+        <span class="account-divider"></span>
+
+        <div class="account-name">
+          <strong id="buyerName">Clark Alameda</strong>
+          <small id="buyerEmail">buyer@company.com</small>
+        </div>
+
+        <span
+          class="account-avatar"
+          id="buyerAvatar"
+        >C</span>
+
+      </div>
+
+    </header>
+
+
+
+    <!-- ======================================
+         BACK BUTTON
+    ======================================= -->
+
+    <div class="back-row">
+
+      <button
+        type="button"
+        class="back-button"
+        id="backButton"
+        aria-label="Back to Edit RFQ"
+      >
+        <span class="back-chevron"></span>
+      </button>
+
+    </div>
+
+
+
+    <!-- ======================================
+         PURCHASE REQUEST DETAILS
+    ======================================= -->
+
+    <section class="page-card primary-section">
+
+      <div class="inner-card">
+
+
+        <!-- RFQ METADATA -->
+
+        <div class="metadata-row">
+
+          <div class="metadata-item">
+            <span>RFQ Number</span>
+            <strong id="rfqNumber">RFQ-0001</strong>
+          </div>
+
+          <div class="metadata-item">
+            <span>Converted from:</span>
+            <strong id="convertedPrNumber">PR-2026-01</strong>
+          </div>
+
+          <div class="metadata-item required-date-summary">
+            <span>Required Date:</span>
+            <strong id="summaryRequiredDate">
+              October 05, 2026
+            </strong>
+          </div>
+
+
+          <!-- HEADER ACTIONS -->
+
+          <div class="rfq-header-actions">
+
+            <button
+              type="button"
+              class="action-button back-edit-button"
+              id="backToEditButton"
+            >
+              <span class="small-chevron"></span>
+              Back to Edit
+            </button>
+
+
+            <button
+              type="button"
+              class="action-button send-rfq-button"
+              id="yesSendRfqButton"
+            >
+              <span class="send-arrow">➤</span>
+              Yes, Send RFQ
+            </button>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ==================================
+             PRODUCTS AND RFQ SETTINGS
+        =================================== -->
+
+        <div class="rfq-details-grid">
+
+
+          <!-- LEFT COLUMN: PRODUCTS -->
+
+          <div class="products-column">
+
+            <div
+              class="products-list"
+              id="productsList"
+            >
+
+              <!-- Products are loaded by confirm-rfq.js -->
+
+            </div>
+
+
+            <!-- JUSTIFICATION -->
+
+            <div class="justification-box">
+
+              <h3>Justification</h3>
+
+              <p id="justificationText">
+                Please submit your best pricing per item.
+                Bulk discount applies for quantities over 150 units.
+                Include delivery schedule.
+              </p>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- RIGHT COLUMN: RFQ SETTINGS -->
+
+          <aside class="settings-column">
+
+            <h2>RFQ Settings</h2>
+
+            <div class="settings-divider"></div>
+
+
+            <!-- REQUIRED DATE AND TIME -->
+
+            <div class="settings-fields">
+
+              <div class="setting-field date-field">
+
+                <label for="submissionDueDate">
+                  Required Date:
+                </label>
+
+                <input
+                  type="date"
+                  id="submissionDueDate"
+                  disabled
+                >
+
+              </div>
+
+
+              <div class="setting-field time-field">
+
+                <label for="requiredTime">
+                  Required Time:
+                </label>
+
+                <div class="time-control">
+
+                  <input
+                    type="text"
+                    id="requiredTime"
+                    value="05:00"
+                    readonly
+                  >
+
+                  <div class="ampm-toggle">
+
+                    <button
+                      type="button"
+                      class="ampm-button"
+                      data-ampm="AM"
+                      disabled
+                    >
+                      AM
+                    </button>
+
+                    <button
+                      type="button"
+                      class="ampm-button"
+                      data-ampm="PM"
+                      disabled
+                    >
+                      PM
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="settings-divider"></div>
+
+
+            <!-- WAREHOUSE LOCATION -->
+
+            <div class="location-field">
+
+              <label for="warehouseLocation">
+                Warehouse Location
+              </label>
+
+              <select
+                id="warehouseLocation"
+                disabled
+              >
+
+                <option value="main">
+                  Main Warehouse — Brgy. II-C, San Pablo City, Laguna
+                </option>
+
+                <option value="second">
+                  Second Warehouse — Palina, Nagcarlan, Laguna
+                </option>
+
+              </select>
+
+            </div>
+
+
+
+            <!-- ==================================
+                 LEAFLET MAP
+            =================================== -->
+
+            <div
+              class="map-wrapper"
+              aria-label="Selected warehouse location map"
+            >
+
+              <div
+                id="deliveryMap"
+                class="map-preview"
+              ></div>
+
+              <div
+                class="map-tag"
+                id="mapTag"
+              >
+                Main Warehouse
+              </div>
+
+            </div>
+
+          </aside>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         SELECT SUPPLIERS TO INVITE
+    ======================================= -->
+
+    <section class="page-card suppliers-section">
+
+      <div class="inner-card">
+
+        <div class="section-heading">
+          <h2>Select Suppliers to Invite</h2>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div
+          class="suppliers-grid"
+          id="supplierCards"
+        >
+
+          <!-- Selected supplier cards are loaded by JavaScript -->
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- ======================================
+         BOTTOM PANELS
+    ======================================= -->
+
+    <div class="bottom-panels">
+
+
+      <!-- ATTACHMENTS -->
+
+      <section class="page-card bottom-card attachments-panel">
+
+        <div class="inner-card">
+
+          <div class="section-heading">
+            <h2>Attachment to Send</h2>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <ul
+            class="attachment-list"
+            id="attachmentList"
+          >
+
+            <!-- Attachments are loaded by JavaScript -->
+
+          </ul>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- WHAT WILL HAPPEN -->
+
+      <section class="page-card bottom-card what-happens-panel">
+
+        <div class="inner-card">
+
+          <div class="section-heading">
+            <h2>What Will Happen?</h2>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <div id="whatWillHappenContent">
+
+            <p>
+              Your RFQ details will be sent to the selected suppliers.
+            </p>
+
+            <p>
+              Suppliers will be able to review your requested materials
+              and submit their quotations before the specified deadline.
+            </p>
+
+            <p>
+              You can review the submitted quotations in your RFQ Workspace.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+
+
+  <!-- ======================================
+       SEND RFQ CONFIRMATION DIALOG
+  ======================================= -->
+
+  <dialog
+    class="send-dialog"
+    id="sendRfqDialog"
+  >
+
+    <div class="dialog-content">
+
+      <button
+        type="button"
+        class="dialog-close"
+        id="closeSendDialog"
+        aria-label="Close dialog"
+      >
+        ×
+      </button>
+
+
+      <h2>Confirm RFQ Submission</h2>
+
+      <p>
+        Are you sure you want to send
+        <strong id="dialogRfqNumber">RFQ-0001</strong>
+        to the selected suppliers?
+      </p>
+
+
+      <div class="dialog-actions">
+
+        <button
+          type="button"
+          class="dialog-cancel"
+          id="cancelSendRfq"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="dialog-confirm"
+          id="confirmSendRfq"
+        >
+          Confirm
+        </button>
+
+      </div>
+
+    </div>
+
+  </dialog>
+
+
+
+  <!-- ======================================
+       TOAST NOTIFICATION
+  ======================================= -->
+
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+
+</body>
+
+</html>
