@@ -245,163 +245,571 @@ document.addEventListener("DOMContentLoaded", () => {
  
  
 
-      // Populate modal summary
-      const modalSuppliersCount = document.getElementById("modalSuppliersCount");
-      const modalDeadline = document.getElementById("modalDeadline");
-      const modalLocation = document.getElementById("modalLocation");
-      const modalAttachmentCount = document.getElementById("modalAttachmentCount");
+     
+  // =====================================
+  // REVIEW MODAL AND DATA HANDOFF
+  // =====================================
 
-      const dateVal = document.getElementById("submissionDate")?.value || "2026-09-30";
-      const timeVal = document.getElementById("submissionTime")?.value || "05:00";
-      const activeAmpm = document.querySelector(".ampm-btn.is-active")?.textContent || "PM";
-      const locationSelect = document.getElementById("warehouseLocation");
-      const locationText = locationSelect?.options[locationSelect.selectedIndex]?.text || "San Pedro City";
+  const modalSuppliersCount =
+    document.getElementById("modalSuppliersCount");
 
-      if (modalSuppliersCount) {
-        modalSuppliersCount.textContent = `${selectedCards.length} supplier${selectedCards.length > 1 ? "s" : ""}`;
-      }
-      if (modalDeadline) {
-        modalDeadline.textContent = `${dateVal} at ${timeVal} ${activeAmpm}`;
-      }
-      if (modalLocation) {
-        modalLocation.textContent = locationText;
-      }
-      if (modalAttachmentCount) {
-        modalAttachmentCount.textContent = attachedFiles.length > 0
-          ? `${attachedFiles.length} file(s)`
+  const modalDeadline =
+    document.getElementById("modalDeadline");
+
+  const modalLocation =
+    document.getElementById("modalLocation");
+
+  const modalAttachmentCount =
+    document.getElementById("modalAttachmentCount");
+
+
+  // Get currently selected suppliers.
+  function getSelectedSupplierCards() {
+
+    return Array.from(
+      document.querySelectorAll(
+        ".supplier-selection-card.is-selected"
+      )
+    );
+
+  }
+
+
+ if (reviewSubmitBtn) {
+  reviewSubmitBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const previewData = collectRfqPreviewData();
+
+    if (previewData.products.length === 0) {
+      showToast("No requested products found.");
+      return;
+    }
+
+    if (previewData.suppliers.length === 0) {
+      showToast("Please select at least one supplier.");
+      return;
+    }
+
+    try {
+      sessionStorage.setItem(
+        "uniprocur_rfq_preview",
+        JSON.stringify(previewData)
+      );
+
+      console.log("RFQ preview successfully saved:", previewData);
+      console.log(
+        "Selected warehouse:",
+        previewData.warehouseValue
+      );
+
+    } catch (error) {
+      console.error("Unable to save RFQ preview:", error);
+      showToast("Unable to save RFQ information.");
+      return;
+    }
+
+    // Update review modal summary.
+    if (modalSuppliersCount) {
+      modalSuppliersCount.textContent =
+        `${previewData.suppliers.length} suppliers`;
+    }
+
+    if (modalDeadline) {
+      modalDeadline.textContent =
+        `${previewData.submissionDueDate} at ${previewData.requiredTime} ${previewData.ampm}`;
+    }
+
+    if (modalLocation) {
+      modalLocation.textContent = previewData.warehouseText;
+    }
+
+    if (modalAttachmentCount) {
+      modalAttachmentCount.textContent =
+        previewData.attachments.length > 0
+          ? `${previewData.attachments.length} file(s)`
           : "None";
-      }
+    }
 
+    if (reviewModal) {
       reviewModal.showModal();
-    });
-
-    if (modalCloseBtn) {
-      modalCloseBtn.addEventListener("click", () => reviewModal.close());
-    }
-
-    if (modalCancelBtn) {
-      modalCancelBtn.addEventListener("click", () => reviewModal.close());
-    }
-
-    if (modalConfirmBtn) {
-      modalConfirmBtn.addEventListener("click", () => {
-        reviewModal.close();
-        showToast("RFQ invitation drafted successfully! Preparing confirmation...");
-      });
-    }
-  
-
-
-
-  // Review & Submit RFQ: Navigate directly to Confirm Submit RFQ (Figma node 2398-3166)
-  if (reviewSubmitBtn) {
-    reviewSubmitBtn.addEventListener("click", () => {
+    } else {
       window.location.href = "confirm-rfq.html";
+    }
+  });
+}
+
+
+  // Close review modal.
+  if (modalCloseBtn && reviewModal) {
+    modalCloseBtn.addEventListener("click", () => {
+      reviewModal.close();
+    });
+  }
+
+  if (modalCancelBtn && reviewModal) {
+    modalCancelBtn.addEventListener("click", () => {
+      reviewModal.close();
     });
   }
 
 
+  // =====================================
+  // DATE CONVERSION
+  // =====================================
 
+  function convertDateToISO(value) {
 
-
-
-/* ======================MAP===================================================
-   Delivery Map — Leaflet + OpenStreetMap
-   ========================================================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-  const mapElement = document.getElementById("deliveryMap");
-  const warehouseSelect = document.getElementById("warehouseLocation");
-  const mapTag = document.querySelector(".map-tag");
-
-  // Check whether the map element exists.
-  if (!mapElement) {
-    console.error("Delivery map element was not found.");
-    return;
-  }
-
-  // Check whether Leaflet loaded successfully.
-  if (typeof window.L === "undefined") {
-    console.error("Leaflet did not load. Check your internet connection.");
-    return;
-  }
-
-  // Prevent the same map from being initialized twice.
-  if (mapElement._leaflet_id) {
-    console.warn("The delivery map is already initialized.");
-    return;
-  }
-
-  // Warehouse locations.
-  const warehouseLocations = {
-    main: {
-      coordinates: [14.0657265, 121.3223515],
-      label: "Main Warehouse — Brgy. II-C, San Pablo City, Laguna"
-    },
-
-    second: {
-      coordinates: [14.1398816, 121.4206179],
-      label: "Second Warehouse — Palina, Nagcarlan, Laguna"
+    if (!value) {
+      return "2026-10-05";
     }
-  };
 
-  // Use the selected warehouse, or the main warehouse by default.
-  const initialLocation =
-    warehouseLocations[warehouseSelect?.value] ||
-    warehouseLocations.main;
-
-  // Initialize the map.
-  const map = window.L.map(mapElement).setView(
-    initialLocation.coordinates,
-    15
-  );
-
-  // Load OpenStreetMap tiles.
-  window.L.tileLayer(
-    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
+    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      return value;
     }
-  ).addTo(map);
 
-  // Add the warehouse marker.
-  const marker = window.L.marker(initialLocation.coordinates)
-    .addTo(map)
-    .bindPopup(initialLocation.label);
+    const date = new Date(value);
 
-  // Show the selected warehouse name.
-  if (mapTag) {
-    mapTag.textContent = initialLocation.label;
+    if (Number.isNaN(date.getTime())) {
+      return "2026-10-05";
+    }
+
+    const year = date.getFullYear();
+
+    const month = String(
+      date.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+      date.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+
   }
 
-  // Update the map when the dropdown changes.
-  if (warehouseSelect) {
-    warehouseSelect.addEventListener("change", () => {
-      const selectedLocation =
-        warehouseLocations[warehouseSelect.value];
 
-      if (!selectedLocation) return;
+  // =====================================
+  // PRODUCT DATA
+  // =====================================
 
-      map.flyTo(selectedLocation.coordinates, 15);
+  function getProductMeta(card, label) {
 
-      marker.setLatLng(selectedLocation.coordinates);
-      marker.setPopupContent(selectedLocation.label);
+    const rows = Array.from(
+      card.querySelectorAll(".meta-line")
+    );
 
-      if (mapTag) {
-        mapTag.textContent = selectedLocation.label;
+    const matchingRow = rows.find((row) => {
+
+      const rowLabel =
+        row.querySelector("span")?.textContent.trim() || "";
+
+      return rowLabel.toLowerCase().startsWith(
+        label.toLowerCase()
+      );
+
+    });
+
+    if (!matchingRow) {
+      return "";
+    }
+
+    const valueElement =
+      matchingRow.querySelector("strong, p");
+
+    return valueElement?.textContent.trim() || "";
+
+  }
+
+
+  function collectProducts() {
+
+    return Array.from(
+      document.querySelectorAll(".product-item")
+    ).map((card) => {
+
+      const name =
+        card.querySelector(
+          ".product-info h3"
+        )?.textContent.trim() || "";
+
+      const imagePath =
+        card.querySelector(
+          ".product-image"
+        )?.getAttribute("src") || "";
+
+      const imageName =
+        imagePath.split("/").pop();
+
+      return {
+
+        name: name,
+
+        category: getProductMeta(card, "Category"),
+
+        quantity: getProductMeta(card, "Qty"),
+
+        description: getProductMeta(card, "Description"),
+
+        image:
+          imageName === "mesh.svg"
+            ? "mesh.svg"
+            : "leather.svg"
+
+      };
+
+    });
+
+  }
+
+
+  // =====================================
+  // SUPPLIER DATA
+  // =====================================
+
+  function collectSuppliers() {
+
+    return getSelectedSupplierCards().map((card) => {
+
+      const metrics = Array.from(
+        card.querySelectorAll(
+          ".metrics-row .metric strong"
+        )
+      ).map((element) => {
+
+        return element.textContent.trim();
+
+      });
+
+
+      return {
+
+        key: card.dataset.supplier || "",
+
+        name:
+          card.querySelector(
+            ".supplier-card-body h3"
+          )?.textContent.trim() || "",
+
+        city:
+          card.querySelector(
+            ".supplier-city"
+          )?.textContent.trim() || "",
+
+        rating:
+          (metrics[0] || "").replace(/^★\s*/, "").trim(),
+
+        leadTime: metrics[1] || "",
+
+        paymentTerms: metrics[2] || ""
+
+      };
+
+    });
+
+  }
+
+
+  // =====================================
+  // BUILD RFQ PREVIEW DATA
+  // =====================================
+
+  function collectRfqPreviewData() {
+
+    const metadataItems = Array.from(
+      document.querySelectorAll(
+        ".metadata-row .metadata-item"
+      )
+    );
+
+    const prNumber =
+      metadataItems[0]?.querySelector("strong")
+        ?.textContent.trim() || "PR-2026-01";
+
+    const prRequiredDateText =
+      metadataItems[1]?.querySelector("strong")
+        ?.textContent.trim() || "October 05, 2026";
+
+
+    const submissionDate =
+      document.getElementById("submissionDate");
+
+    const submissionTime =
+      document.getElementById("submissionTime");
+
+    const ampmButton =
+      document.querySelector(".ampm-btn.is-active");
+
+    const warehouseSelect =
+      document.getElementById("warehouseLocation");
+
+
+    const warehouseValue =
+      warehouseSelect?.value === "second"
+        ? "second"
+        : "main";
+
+    const warehouseText =
+      warehouseSelect?.options[
+        warehouseSelect.selectedIndex
+      ]?.text.trim() ||
+      "Main Warehouse — Brgy. II-C, San Pablo City, Laguna";
+
+
+    const justification =
+      document.querySelector(
+        ".justification-box p"
+      )?.textContent.trim() || "";
+
+
+    const products = collectProducts();
+
+    const suppliers = collectSuppliers();
+
+
+    // Get buyer information when available.
+    const buyerName =
+      document.getElementById("loggedInName")
+        ?.textContent.trim() ||
+      "Clark Almeda";
+
+    const buyerEmail =
+      document.getElementById("loggedInEmail")
+        ?.textContent.trim() ||
+      "buyer@company.com";
+
+
+    // Generate a preview number from the PR number.
+    const prSuffix =
+      prNumber.match(/(\d+)$/)?.[1] || "1";
+
+    const rfqNumber =
+      `RFQ-${prSuffix.padStart(4, "0")}`;
+
+
+    // Save attachment information.
+    // Actual file contents will be uploaded to the backend later.
+    const attachments = attachedFiles.map((file) => ({
+
+      name: file.name,
+
+      size: file.size,
+
+      type: file.type
+
+    }));
+
+
+    return {
+
+      rfqNumber,
+
+      prNumber,
+
+      prRequiredDate:
+        convertDateToISO(prRequiredDateText),
+
+      submissionDueDate:
+        submissionDate?.value || "2026-09-30",
+
+      requiredTime:
+        submissionTime?.value || "05:00",
+
+      ampm:
+        ampmButton?.dataset.ampm || "PM",
+
+      // Important: preserve the selected warehouse.
+      warehouseValue,
+
+      warehouseText,
+
+      justification,
+
+      products,
+
+      suppliers,
+
+      attachments,
+
+      buyerName,
+
+      buyerEmail
+
+    };
+
+  }
+
+
+  // =====================================
+  // CONFIRM AND OPEN CONFIRM RFQ PAGE
+  // =====================================
+
+  if (modalConfirmBtn) {
+  modalConfirmBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const savedData = sessionStorage.getItem(
+      "uniprocur_rfq_preview"
+    );
+
+    if (!savedData) {
+      showToast("RFQ information was not saved. Please try again.");
+      return;
+    }
+
+    if (reviewModal) {
+      reviewModal.close();
+    }
+
+    window.location.href = "confirm-rfq.html";
+  });
+}
+
+
+
+  // =====================================
+  // LEAFLET WAREHOUSE MAP
+  // Same coordinates as edit-rfq2.
+  // This is inside the existing DOMContentLoaded.
+  // =====================================
+
+  const mapElement =
+    document.getElementById("deliveryMap");
+
+  const warehouseSelect =
+    document.getElementById("warehouseLocation");
+
+  const mapTag =
+    document.querySelector(".map-tag");
+
+
+  if (mapElement && typeof window.L === "undefined") {
+
+    console.error(
+      "Leaflet did not load. Check your internet connection."
+    );
+
+  } else if (mapElement && !mapElement._leaflet_id) {
+
+    const warehouseLocations = {
+
+      main: {
+
+        coordinates: [
+          14.0657265,
+          121.3223515
+        ],
+
+        label:
+          "Main Warehouse — Brgy. II-C, San Pablo City, Laguna"
+
+      },
+
+      second: {
+
+        coordinates: [
+          14.1398816,
+          121.4206179
+        ],
+
+        label:
+          "Second Warehouse — Palina, Nagcarlan, Laguna"
+
       }
+
+    };
+
+
+    // Get selected warehouse.
+    const selectedWarehouse =
+      warehouseLocations[warehouseSelect?.value] ||
+      warehouseLocations.main;
+
+
+    // Initialize Leaflet.
+    const map = window.L.map(
+      mapElement
+    ).setView(
+      selectedWarehouse.coordinates,
+      15
+    );
+
+
+    // OpenStreetMap tiles.
+    window.L.tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }
+    ).addTo(map);
+
+
+    // Warehouse marker.
+    const marker = window.L.marker(
+      selectedWarehouse.coordinates
+    )
+      .addTo(map)
+      .bindPopup(selectedWarehouse.label);
+
+
+    // Warehouse label.
+    if (mapTag) {
+      mapTag.textContent = selectedWarehouse.label;
+    }
+
+
+    // Update map when warehouse changes.
+    if (warehouseSelect) {
+
+      warehouseSelect.addEventListener("change", () => {
+
+        const selectedLocation =
+          warehouseLocations[warehouseSelect.value];
+
+        if (!selectedLocation) {
+          return;
+        }
+
+        map.flyTo(
+          selectedLocation.coordinates,
+          15
+        );
+
+        marker.setLatLng(
+          selectedLocation.coordinates
+        );
+
+        marker.setPopupContent(
+          selectedLocation.label
+        );
+
+        marker.setTooltipContent?.(
+          selectedLocation.label
+        );
+
+        if (mapTag) {
+          mapTag.textContent = selectedLocation.label;
+        }
+
+      });
+
+    }
+
+
+    // Refresh Leaflet dimensions.
+    requestAnimationFrame(() => {
+      map.invalidateSize(true);
     });
+
+
+    window.addEventListener("resize", () => {
+      map.invalidateSize(true);
+    });
+
+
+    console.log("Edit RFQ warehouse map initialized.");
+
   }
 
-  // Refresh map sizing after the page layout is rendered.
-  requestAnimationFrame(() => {
-    map.invalidateSize();
-  });
-
-  window.addEventListener("resize", () => {
-    map.invalidateSize();
-  });
-
-  console.log("Delivery map initialized successfully.");
 });

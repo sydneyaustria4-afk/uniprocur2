@@ -948,70 +948,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-      // Get the previously selected warehouse.
-      const initialLocation =
-        warehouseLocations[data.warehouseValue] ||
-        warehouseLocations.main;
-
-
-      // Initialize Leaflet map.
-      const map = window.L.map(
-        mapElement,
-        {
-          scrollWheelZoom: false
-        }
-      ).setView(
-        initialLocation.coordinates,
-        15
-      );
-
-
-      // OpenStreetMap tiles.
-      window.L.tileLayer(
-        "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-          maxZoom: 19,
-          attribution:
-            "&copy; OpenStreetMap contributors"
-        }
-      ).addTo(map);
-
-
-      // Create warehouse marker.
-      const marker = window.L.marker(
-        initialLocation.coordinates
-      )
-        .addTo(map)
-        .bindPopup(initialLocation.label);
-
-
-      // Warehouse label.
-      if (mapTag) {
-
-        mapTag.textContent =
-          data.warehouseText || initialLocation.label;
-
-      }
-
-
-      // Show warehouse name when marker is clicked.
-      marker.bindTooltip(
-        initialLocation.label
-      );
-
-
-      // Fix map dimensions after page layout.
-      requestAnimationFrame(() => {
-
-        map.invalidateSize();
-
-      });
-
-      window.addEventListener("resize", () => {
-
-        map.invalidateSize();
-
-      });
+      
+      
 
  
 
