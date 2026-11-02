@@ -1,66 +1,61 @@
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Check if user is logged in
-   const response = await fetch("../database/check-session.php", {
-      method: "GET",
-      credentials: "same-origin"
-    });
+    const response = await fetch(
+      "../database/get-buyer-purchase-requests.php",
+      {
+        method: "GET",
+        credentials: "same-origin",
+        headers: {
+          "Accept": "application/json"
+        }
+      }
+    );
 
     const result = await response.json();
 
- if (!result.success) {
-  console.log("No login session. Opening dashboard anyway.");
-  return;
-}
-
-    console.log("Logged-in user:", result.user);
-
-    // Show the actual logged-in user's name
-    document
-      .querySelectorAll(".profile-copy strong, .account-name strong")
-      .forEach((element) => {
-        element.textContent = result.user.full_name;
-      });
-
-    const firstName =
-      String(result.user.full_name).trim().split(/\s+/)[0];
-
-    document
-      .querySelectorAll("[data-welcome-name]")
-      .forEach((element) => {
-        element.textContent = firstName;
-      });
-
-    document
-      .querySelectorAll(".profile-copy small, .account-name small")
-      .forEach((element) => {
-        element.textContent = result.user.email;
-      });
-
-    // Get dashboard data
-    const dashboardResponse = await fetch("../database/dashboard.php", {
-      method: "GET",
-      credentials: "same-origin"
-    });
-
-    const dashboardResult = await dashboardResponse.json();
-
-    if (!dashboardResult.success) {
-      console.error(
-        "Dashboard data error:",
-        dashboardResult.message
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Unable to load Purchase Requests."
       );
-      return;
     }
 
+    // Update buyer account details.
+    if (result.buyer) {
+      document
+        .querySelectorAll(".profile-copy strong, .account-name strong")
+        .forEach((element) => {
+          element.textContent =
+            result.buyer.full_name || element.textContent;
+        });
+
+      document
+        .querySelectorAll(".profile-copy small, .account-name small")
+        .forEach((element) => {
+          element.textContent =
+            result.buyer.email || element.textContent;
+        });
+    }
+
+    // Display database records in the Pending Request Table.
+    renderDashboardRequests(result.requests || []);
+
     console.log(
-      "Dashboard data:",
-      dashboardResult.dashboard
+      "Purchase Requests loaded:",
+      result.requests
     );
 
-   } catch (error) {
-    console.error("Session check failed:", error);
-    console.log("Opening dashboard without session check.");
+  } catch (error) {
+    console.error(
+      "Dashboard Purchase Requests could not be loaded:",
+      error
+    );
+
+    renderDashboardRequests([]);
+
+    showToast(
+      "Unable to load Purchase Requests. Check the database connection."
+    );
   }
 });
 
@@ -87,7 +82,14 @@ function addCell(row, value) {
   return cell;
 }
 
-function renderTableRows(selector, records, fields, statusField, emptyMessage) {
+function renderTableRows(
+  selector,
+  records,
+  fields,
+  statusField,
+  emptyMessage,
+  includeAction = true
+) {
   const body = document.querySelector(selector);
   if (!body) return;
 
@@ -96,9 +98,11 @@ function renderTableRows(selector, records, fields, statusField, emptyMessage) {
   if (records.length === 0) {
     const row = document.createElement('tr');
     const cell = document.createElement('td');
+
     cell.className = 'table-empty-state';
-    cell.colSpan = fields.length + 1;
+    cell.colSpan = fields.length + (includeAction ? 1 : 0);
     cell.textContent = emptyMessage;
+
     row.append(cell);
     body.append(row);
     return;
@@ -123,25 +127,37 @@ function renderTableRows(selector, records, fields, statusField, emptyMessage) {
       }
     });
 
-    const actionCell = document.createElement('td');
-    const actionButton = document.createElement('button');
+    if (includeAction) {
+      const actionCell = document.createElement('td');
+      const actionButton = document.createElement('button');
 
-    actionButton.type = 'button';
-    actionButton.className = 'mini-action';
-    actionButton.textContent = 'View';
+      actionButton.type = 'button';
+      actionButton.className = 'mini-action';
 
-    const recordLabel = record.number || record.task || 'record';
+      const isDraft =
+        String(record.status).toLowerCase() === 'draft';
 
-    actionButton.setAttribute(
-      'aria-label',
-      `View ${recordLabel}`
-    );
+      actionButton.textContent = isDraft ? 'Edit' : 'View';
 
-    actionButton.dataset.toast =
-      `${record.number || record.task || 'Record'} details opened`;
+      const recordLabel = record.number || record.task || 'record';
 
-    actionCell.append(actionButton);
-    row.append(actionCell);
+      actionButton.setAttribute(
+        'aria-label',
+        `${isDraft ? 'Edit' : 'View'} ${recordLabel}`
+      );
+
+      // ADDED: Store the PR number for the Pending Request Table only.
+      if (selector === '#pending-request-rows') {
+        actionButton.dataset.prNumber = record.number || '';
+      }
+
+      actionButton.dataset.toast =
+        `${record.number || record.task || 'Record'} details opened`;
+
+      actionCell.append(actionButton);
+      row.append(actionCell);
+    }
+
     body.append(row);
   });
 }
@@ -207,6 +223,7 @@ function updateSummaryCards() {
   );
 }
 
+
 function renderDashboardRequests(requests) {
   if (!Array.isArray(requests)) {
     throw new TypeError(
@@ -217,14 +234,16 @@ function renderDashboardRequests(requests) {
   renderTableRows(
     '#pending-request-rows',
     requests,
-    ['task', 'category', 'amount', 'number', 'status'],
+    ['task', 'number', 'status'],
     'status',
-    'No purchase requests yet.'
+    'No purchase requests yet.',
+    true
   );
 
   currentPurchaseRequests = requests;
   updateSummaryCards();
 }
+
 
 function renderDashboardTasks(groups) {
   if (!Array.isArray(groups)) {
@@ -814,10 +833,23 @@ document.querySelectorAll('.nav-item')
     });
   });
 
-
-
 document.addEventListener('click', (event) => {
   if (!(event.target instanceof Element)) return;
+
+  // ADDED: Open the selected Purchase Request page.
+  // This only applies to buttons inside the Pending Request Table.
+  const prAction = event.target.closest(
+    '#pending-request-rows .mini-action'
+  );
+
+  if (prAction && prAction.dataset.prNumber) {
+    window.location.href =
+      `view-purchase-request.html?pr=${encodeURIComponent(
+        prAction.dataset.prNumber
+      )}`;
+
+    return;
+  }
 
   const quickAction = event.target.closest('.quick-action');
 

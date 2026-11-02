@@ -69,20 +69,21 @@ try {
     $prId = (int) $purchaseRequest["id"];
 
     // 2. Get the requested items.
-    $itemSql = "
-        SELECT
-            id,
-            item_name,
-            unit,
-            qty
+   $itemSql = "
+    SELECT
+        id,
+        item_code,
+        category,
+        item_name,
+        unit,
+        qty
 
-        FROM pr_items
+    FROM pr_items
 
-        WHERE pr_id = ?
+    WHERE pr_id = ?
 
-        ORDER BY id ASC
-    ";
-
+    ORDER BY id ASC
+";
     $itemStmt = $conn->prepare($itemSql);
     $itemStmt->bind_param("i", $prId);
     $itemStmt->execute();

@@ -1,3 +1,4 @@
+
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -22,10 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const WORKING_DRAFT_KEY = "uniprocur_new_pr_working";
   const SAVED_DRAFT_KEY = "uniprocur_new_pr_draft";
   const SELECTED_ITEM_KEY = "uniprocur_selected_pr_item";
+  const SAVED_DRAFT_RECORD_KEY = "uniprocur_saved_pr_record_id";
 
   let toastTimer = null;
   let selectedFiles = [];
   let itemCounter = 0;
+
+  let savedRequestId =
+    Number(localStorage.getItem(SAVED_DRAFT_RECORD_KEY)) || null;
 
   function showToast(message) {
     if (!toast) return;
@@ -195,7 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function collectFormData() {
-    const items = Array.from(itemEntryList.querySelectorAll(".item-entry")).map((row) => ({
+    const items = Array.from(
+      itemEntryList.querySelectorAll(".item-entry")
+    ).map((row) => ({
       code: row.dataset.itemCode || "",
       category: row.dataset.itemCategory || "",
       name: row.querySelector('[name="itemName[]"]').value.trim(),
@@ -204,9 +211,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }));
 
     return {
-      requestNumber: document.getElementById("requestNumber").textContent.trim(),
-      requiredDate: document.getElementById("requiredDate").value,
-      justification: document.getElementById("justification").value.trim(),
+      requestId: savedRequestId,
+      requestNumber:
+        document.getElementById("requestNumber").textContent.trim(),
+      requiredDate:
+        document.getElementById("requiredDate").value,
+      justification:
+        document.getElementById("justification").value.trim(),
       items,
       attachments: selectedFiles.map((file) => ({
         name: file.name,
@@ -219,20 +230,37 @@ document.addEventListener("DOMContentLoaded", () => {
   function restoreDraft(draft) {
     if (!draft || typeof draft !== "object") return;
 
+    if (draft.requestId) {
+      savedRequestId =
+        Number(draft.requestId) || savedRequestId;
+    }
+
+    if (draft.requestNumber) {
+      document.getElementById("requestNumber").textContent =
+        draft.requestNumber;
+    }
+
     if (draft.requiredDate) {
-      document.getElementById("requiredDate").value = draft.requiredDate;
+      document.getElementById("requiredDate").value =
+        draft.requiredDate;
     }
 
     if (typeof draft.justification === "string") {
-      document.getElementById("justification").value = draft.justification;
+      document.getElementById("justification").value =
+        draft.justification;
     }
 
     if (Array.isArray(draft.items)) {
       draft.items.forEach((item) => addItemRow(item));
     }
 
-    if (Array.isArray(draft.attachments) && draft.attachments.length > 0) {
-      showToast("Request details restored. Please re-select your attachments.");
+    if (
+      Array.isArray(draft.attachments) &&
+      draft.attachments.length > 0
+    ) {
+      showToast(
+        "Request details restored. Please re-select your attachments."
+      );
     }
   }
 
@@ -267,10 +295,147 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
+  async function savePurchaseRequest(action) {
+    const data = collectFormData();
+
+    if (!data.requiredDate) {
+      showToast("Please select a required date.");
+      document.getElementById("requiredDate").focus();
+      return;
+    }
+
+    if (
+      action === "submitted" &&
+      !validateForSubmission(data)
+    ) {
+      return;
+    }
+
+    const button =
+      action === "draft" ? saveDraftButton : submitButton;
+
+    const originalHtml = button.innerHTML;
+
+    button.disabled = true;
+    button.textContent =
+      action === "draft" ? "Saving Draft..." : "Submitting...";
+
+    try {
+      const formData = new FormData();
+
+      formData.append(
+        "request",
+        JSON.stringify({
+          action,
+          requestId: savedRequestId,
+          requiredDate: data.requiredDate,
+          justification: data.justification,
+          items: data.items
+        })
+      );
+
+      // Upload actual selected files.
+      selectedFiles.forEach((file) => {
+        formData.append("attachments[]", file, file.name);
+      });
+
+      const response = await fetch(
+        "../database/save-purchase-request.php",
+        {
+          method: "POST",
+          body: formData,
+          credentials: "same-origin",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Purchase Request could not be saved."
+        );
+      }
+
+      // Remember the database record ID.
+      savedRequestId =
+        Number(result.request_id) || savedRequestId;
+
+      if (savedRequestId) {
+        localStorage.setItem(
+          SAVED_DRAFT_RECORD_KEY,
+          String(savedRequestId)
+        );
+      }
+
+      const requestNumber =
+        result.request_number || data.requestNumber;
+
+      document.getElementById("requestNumber").textContent =
+        requestNumber;
+
+      // SAVE DRAFT
+      if (action === "draft") {
+        localStorage.setItem(
+          SAVED_DRAFT_KEY,
+          JSON.stringify({
+            ...data,
+            requestId: savedRequestId,
+            requestNumber
+          })
+        );
+
+        showToast(
+          `Draft ${requestNumber} saved to MySQL.`
+        );
+
+        return;
+      }
+
+      // SUBMIT FOR APPROVAL
+      sessionStorage.removeItem(WORKING_DRAFT_KEY);
+      sessionStorage.removeItem(SELECTED_ITEM_KEY);
+
+      localStorage.removeItem(SAVED_DRAFT_KEY);
+      localStorage.removeItem(SAVED_DRAFT_RECORD_KEY);
+
+      sessionStorage.setItem(
+        "uniprocur_submitted_request_preview",
+        JSON.stringify({
+          ...data,
+          requestId: result.request_id,
+          requestNumber,
+          status: result.status
+        })
+      );
+
+      // Open the existing success page.
+      window.location.href =
+        `purchase-request-submitted.html?pr=${encodeURIComponent(requestNumber)}`;
+
+    } catch (error) {
+      console.error("Purchase Request save error:", error);
+
+      showToast(
+        error.message || "Unable to save the Purchase Request."
+      );
+
+    } finally {
+      button.disabled = false;
+      button.innerHTML = originalHtml;
+    }
+  }
+
   // Open the catalog and preserve the current unsaved request in this tab.
   addItemButton.addEventListener("click", () => {
     try {
-      sessionStorage.setItem(WORKING_DRAFT_KEY, JSON.stringify(collectFormData()));
+      sessionStorage.setItem(
+        WORKING_DRAFT_KEY,
+        JSON.stringify(collectFormData())
+      );
+
       window.location.href = "item-catalog.html";
     } catch (error) {
       console.error("Unable to preserve request before opening catalog:", error);
@@ -279,7 +444,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   uploadButton.addEventListener("click", () => attachmentInput.click());
-  attachmentInput.addEventListener("change", (event) => addFiles(event.target.files));
+
+  attachmentInput.addEventListener("change", (event) => {
+    addFiles(event.target.files);
+  });
 
   ["dragenter", "dragover"].forEach((eventName) => {
     uploadPanel.addEventListener(eventName, (event) => {
@@ -295,121 +463,45 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  uploadPanel.addEventListener("drop", (event) => addFiles(event.dataTransfer.files));
-
-  saveDraftButton.addEventListener("click", () => {
-    const data = collectFormData();
-
-    try {
-      localStorage.setItem(SAVED_DRAFT_KEY, JSON.stringify(data));
-      showToast("Draft saved in this browser. It has not been saved to MySQL.");
-    } catch (error) {
-      console.error("Unable to save draft:", error);
-      showToast("Unable to save the draft in this browser.");
-    }
+  uploadPanel.addEventListener("drop", (event) => {
+    addFiles(event.dataTransfer.files);
   });
 
-  
-submitButton.addEventListener("click", async () => {
-  const data = collectFormData();
+  // SAVE DRAFT TO MYSQL
+  saveDraftButton.addEventListener("click", () => {
+    savePurchaseRequest("draft");
+  });
 
-  if (!validateForSubmission(data)) return;
+  // SUBMIT PURCHASE REQUEST TO MYSQL
+  submitButton.addEventListener("click", () => {
+    savePurchaseRequest("submitted");
+  });
 
-  const originalButtonHtml = submitButton.innerHTML;
-
-  submitButton.disabled = true;
-  submitButton.textContent = "Submitting...";
-
-  try {
-    // Send the request data to PHP.
-    const formData = new FormData();
-
-    formData.append("request", JSON.stringify({
-      requiredDate: data.requiredDate,
-      justification: data.justification,
-      items: data.items
-    }));
-
-    // Send actual attachment files.
-    selectedFiles.forEach((file) => {
-      formData.append("attachments[]", file, file.name);
-    });
-
-    const response = await fetch(
-      "../database/create-purchase-request.php",
-      {
-        method: "POST",
-        body: formData,
-        credentials: "same-origin",
-        headers: {
-          "Accept": "application/json"
-        }
-      }
-    );
-
-    let result;
-
-    try {
-      result = await response.json();
-    } catch (parseError) {
-      throw new Error(
-        "The server returned an unreadable response. Check the PHP endpoint and XAMPP error log."
-      );
-    }
-
-    if (!response.ok || !result.success) {
-      throw new Error(
-        result.message || "Purchase Request submission failed."
-      );
-    }
-
-    // Only continue after MySQL confirms success.
-    const submittedPreview = {
-      ...data,
-      requestNumber: result.request_number,
-      status: result.status
-    };
-
-    sessionStorage.setItem(
-      "uniprocur_submitted_request_preview",
-      JSON.stringify(submittedPreview)
-    );
-
-    sessionStorage.removeItem(WORKING_DRAFT_KEY);
-    sessionStorage.removeItem(SELECTED_ITEM_KEY);
-    localStorage.removeItem(SAVED_DRAFT_KEY);
-
-    // Open the success page with the generated PR number.
-    const destination =
-      `purchase-request-submitted.html?pr=${encodeURIComponent(result.request_number)}`;
-
-    window.location.href = destination;
-
-  } catch (error) {
-    console.error("Purchase Request submission error:", error);
-
-    showToast(
-      error.message || "Unable to submit the Purchase Request."
-    );
-
-    submitButton.disabled = false;
-    submitButton.innerHTML = originalButtonHtml;
-  }
-});
-
-
+  // CANCEL PURCHASE REQUEST
   cancelButton.addEventListener("click", () => {
-    const hasContent = itemEntryList.children.length > 0 ||
+    const hasContent =
+      itemEntryList.children.length > 0 ||
       selectedFiles.length > 0 ||
-      document.getElementById("justification").value.trim() !== "Q4 production materials for sneaker line (Style #SN-2026).";
+      document.getElementById("justification").value.trim() !==
+        "Q4 production materials for sneaker line (Style #SN-2026).";
 
-    if (hasContent && !window.confirm("Cancel this Purchase Request? Unsaved changes will be lost.")) {
+    if (
+      hasContent &&
+      !window.confirm(
+        "Leave this Purchase Request? Saved drafts will remain available."
+      )
+    ) {
       return;
     }
 
     sessionStorage.removeItem(WORKING_DRAFT_KEY);
     sessionStorage.removeItem(SELECTED_ITEM_KEY);
+
+    // Clear the local link to the draft so a new request
+    // will not accidentally update the previous database record.
     localStorage.removeItem(SAVED_DRAFT_KEY);
+    localStorage.removeItem(SAVED_DRAFT_RECORD_KEY);
+
     window.location.href = "buyer-dashboard.html";
   });
 
@@ -440,6 +532,8 @@ submitButton.addEventListener("click", async () => {
     }
   } catch (error) {
     console.warn("Request details could not be restored:", error);
-    showToast("Some request details could not be restored. Please check your items.");
+    showToast(
+      "Some request details could not be restored. Please check your items."
+    );
   }
 });
