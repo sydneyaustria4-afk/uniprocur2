@@ -1,4 +1,3 @@
-
 <?php
 header('Content-Type: application/json; charset=utf-8');
 
@@ -16,25 +15,27 @@ function sendJson(int $statusCode, array $payload): void
 }
 
 try {
+    // Use the authenticated user when available. The seeded Buyer fallback is
+    // retained for the current localhost prototype, matching PR creation.
     if (!empty($_SESSION['user_id'])) {
-        $userId = (int)$_SESSION['user_id'];
+        $userId = (int) $_SESSION['user_id'];
 
         $buyerStmt = $conn->prepare(
             "SELECT id, full_name, email, role, is_active
-             FROM users WHERE id = ? LIMIT 1"
+             FROM users
+             WHERE id = ?
+             LIMIT 1"
         );
-
         $buyerStmt->bind_param('i', $userId);
-
     } else {
-        // Same seeded-buyer fallback as the existing PR creation endpoint.
         $email = 'clark@company.com';
 
         $buyerStmt = $conn->prepare(
             "SELECT id, full_name, email, role, is_active
-             FROM users WHERE email = ? LIMIT 1"
+             FROM users
+             WHERE email = ?
+             LIMIT 1"
         );
-
         $buyerStmt->bind_param('s', $email);
     }
 
@@ -42,15 +43,17 @@ try {
     $buyer = $buyerStmt->get_result()->fetch_assoc();
     $buyerStmt->close();
 
-    if (!$buyer || $buyer['role'] !== 'buyer' || !(bool)$buyer['is_active']) {
+    if (!$buyer || $buyer['role'] !== 'buyer' || !(bool) $buyer['is_active']) {
         sendJson(401, [
             'success' => false,
             'message' => 'A valid active buyer account is required.'
         ]);
     }
 
-    $buyerId = (int)$buyer['id'];
+    $buyerId = (int) $buyer['id'];
 
+    // Include all four Buyer-visible PR states. Manager decisions update the
+    // same purchase_requisitions row, so they appear here on the next refresh.
     $sql = "
         SELECT
             pr.id,
@@ -97,6 +100,8 @@ try {
             CASE
                 WHEN LOWER(pr.status) = 'submitted' THEN 'Pending'
                 WHEN LOWER(pr.status) = 'draft' THEN 'Draft'
+                WHEN LOWER(pr.status) = 'approved' THEN 'Approved'
+                WHEN LOWER(pr.status) = 'rejected' THEN 'Rejected'
                 ELSE CONCAT(
                     UPPER(LEFT(pr.status, 1)),
                     SUBSTRING(pr.status, 2)
@@ -104,11 +109,8 @@ try {
             END AS status,
 
             DATE_FORMAT(pr.needed_by, '%Y-%m-%d') AS required_date,
-
-            DATE_FORMAT(
-                pr.created_at,
-                '%Y-%m-%d %H:%i:%s'
-            ) AS created_at
+            DATE_FORMAT(pr.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
+            DATE_FORMAT(pr.approved_at, '%Y-%m-%d %H:%i:%s') AS decision_at
 
         FROM purchase_requisitions AS pr
 
@@ -116,14 +118,15 @@ try {
             ON pi.pr_id = pr.id
 
         WHERE pr.created_by = ?
-          AND LOWER(pr.status) IN ('draft', 'submitted')
+          AND LOWER(pr.status) IN ('draft', 'submitted', 'approved', 'rejected')
 
         GROUP BY
             pr.id,
             pr.pr_number,
             pr.status,
             pr.needed_by,
-            pr.created_at
+            pr.created_at,
+            pr.approved_at
 
         ORDER BY
             pr.created_at DESC,
@@ -135,7 +138,6 @@ try {
     $stmt->execute();
 
     $result = $stmt->get_result();
-
     $requests = [];
 
     while ($row = $result->fetch_assoc()) {
@@ -155,10 +157,7 @@ try {
     ]);
 
 } catch (Throwable $error) {
-    error_log(
-        'Get Buyer Purchase Requests Error: ' .
-        $error->getMessage()
-    );
+    error_log('Get Buyer Purchase Requests Error: ' . $error->getMessage());
 
     sendJson(500, [
         'success' => false,

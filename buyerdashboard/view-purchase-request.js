@@ -77,28 +77,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     return wrapper;
   }
 
-  function getItemImage(itemName) {
-    const name = String(itemName || "").toLowerCase();
+  
+function getItemImage(itemName) {
+  const name = String(itemName || "")
+    .trim()
+    .toLowerCase();
 
-    const images = {
-      "full-grain leather": "../assets/catalog/full-grain-leather.png",
-      "metal eyelets": "../assets/catalog/metal-eyelets.png",
-      "metal buckles": "../assets/catalog/metal-buckles.png",
-      "mesh fabric": "../assets/catalog/mesh-fabric.png",
-      "nubuck leather": "../assets/catalog/nubuck-leather.png",
-      "suede leather": "../assets/catalog/suede-leather.png",
-      "canvas fabric": "../assets/catalog/canvas-fabric.png",
-      "pu leather": "../assets/catalog/pu-leather.png",
-      "eva foam": "../assets/catalog/eva-foam-sheets.png",
-      "zippers": "../assets/catalog/zippers.png",
-      "shoe boxes": "../assets/catalog/shoe-boxes.png",
-      "packaging tape": "../assets/catalog/packaging-tape.png",
-      "rubber cement": "../assets/catalog/rubber-cement.png",
-      "tpr outsoles": "../assets/catalog/tpr-outsoles.png"
-    };
+  const images = {
+    "canvas fabric": "../assets/Canvas%20Fabric.svg",
+    "eva foam": "../assets/Eva%20Foam%20Sheets.svg",
+    "eva foam sheets": "../assets/Eva%20Foam%20Sheets.svg",
+    "full-grain leather": "../assets/Full%20Grain%20Leather.svg",
+    "mesh fabric": "../assets/Mesh%20Fabric.svg",
+    "metal buckles": "../assets/Metal%20Buckles.svg",
+    "metal eyelets": "../assets/Metal%20Eyelets.svg",
+    "nubuck leather": "../assets/Nubuck%20Leather.svg",
+    "pu leather": "../assets/PU%20Leather.svg",
+    "packaging tape": "../assets/Packaging%20Tape.svg",
+    "rubber cement": "../assets/Rubber%20Cement.svg",
+    "shoe boxes": "../assets/Shoes%20Box.svg",
+    "shoes box": "../assets/Shoes%20Box.svg",
+    "suede leather": "../assets/Suede%20Leather.svg",
+    "tpr outsoles": "../assets/TPR%20Outsoles.svg",
+    "tissue paper rolls": "../assets/Tissue%20Paper%20Rolls.svg",
+    "vulcanized rubber outsoles": "../assets/Vulcanized%20Rubber%20Outsoles.svg",
+    "zippers": "../assets/Zippers.svg"
+  };
 
-    return images[name] || "";
-  }
+  return images[name] || "";
+}
+
 
   function renderItems(items, purpose) {
     itemList.replaceChildren();

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Manager Purchase Requests</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
+  <script src="manager-purchase-requests.js?v=4" defer></script>
+</head>
+<body>
+  <div class="manager-shell">
+    <aside class="sidebar">
+      <a class="brand" href="manager-purchase-requests.html" aria-label="UniProcur Manager home">
+        <img class="brand-logo" src="../assets/Pro 3.svg" alt="">
+        <span>UniProcur</span>
+      </a>
+
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav class="workspace-nav" aria-label="Manager workspace">
+          <button class="nav-item" type="button" data-coming-soon="Dashboard">
+            <span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span>
+            <span>Dashboard</span>
+          </button>
+          <a class="nav-item" href="../supplier/supplier.html">
+            <span class="nav-icon"><img src="../assets/Group 27.svg" alt=""></span>
+            <span>Suppliers</span>
+          </a>
+          <a class="nav-item is-active" href="manager-purchase-requests.html" aria-current="page">
+            <span class="nav-icon"><img src="../assets/Group 33.svg" alt=""></span>
+            <span>Purchase Request</span>
+          </a>
+          <button class="nav-item" type="button" data-coming-soon="Purchase Order">
+            <span class="nav-icon"><img src="../assets/Group 34.svg" alt=""></span>
+            <span>Purchase Order</span>
+          </button>
+          <button class="nav-item" type="button" data-coming-soon="Reports">
+            <span class="nav-icon"><img src="../assets/Group 31.svg" alt=""></span>
+            <span>Reports</span>
+          </button>
+          <button class="nav-item" type="button" data-coming-soon="Audit Trail">
+            <span class="nav-icon"><img src="../assets/Group 35.svg" alt=""></span>
+            <span>Audit Trail</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="sidebar-rule" aria-hidden="true"></div>
+
+      <div class="sidebar-bottom">
+        <button class="nav-item" type="button" data-coming-soon="Support">
+          <span class="nav-icon nav-symbol" aria-hidden="true">?</span>
+          <span>Support</span>
+        </button>
+        <button class="nav-item" type="button" data-coming-soon="Settings">
+          <span class="nav-icon nav-symbol" aria-hidden="true">⚙</span>
+          <span>Settings</span>
+        </button>
+
+        <div class="profile-mini">
+          <span class="profile-avatar" id="sidebarAvatar" aria-hidden="true">M</span>
+          <span class="profile-copy">
+            <strong id="sidebarManagerName">Manager</strong>
+            <small id="sidebarManagerEmail">manager@company.com</small>
+          </span>
+          <button class="signout-button" type="button" id="signOutButton" aria-label="Sign out" title="Sign out">↦</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <div class="workspace-title">
+          <span class="workspace-mark"><img src="../assets/Pro 4.svg" alt=""></span>
+          <span class="workspace-copy">
+            <span>UniProcur Workspace</span>
+            <strong>Welcome Manager!</strong>
+          </span>
+        </div>
+
+        <div class="topbar-account">
+          <button class="notification-button" type="button" id="notificationButton" aria-label="Notifications">
+            <img src="../assets/Group 50.svg" alt="">
+          </button>
+          <span class="topbar-divider" aria-hidden="true"></span>
+          <span class="account-copy">
+            <strong id="topbarManagerName">Manager</strong>
+            <small id="topbarManagerEmail">manager@company.com</small>
+          </span>
+          <span class="account-avatar" id="topbarAvatar" aria-hidden="true">M</span>
+        </div>
+      </header>
+
+      <section class="stats-row" aria-label="Purchase Request statistics">
+        <article class="stat-card stat-total">
+          <span class="stat-label">Total Requests</span>
+          <strong class="stat-number" id="totalRequests">—</strong>
+          <span class="stat-note">Requires manager action</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Pending Approval</span>
+          <strong class="stat-number" id="pendingRequests">—</strong>
+          <span class="stat-note">Being Evaluated</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Approved</span>
+          <strong class="stat-number" id="approvedRequests">—</strong>
+          <span class="stat-note">Successfully Approved</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-label">Rejected</span>
+          <strong class="stat-number" id="rejectedRequests">—</strong>
+          <span class="stat-note">Not Approved</span>
+        </article>
+      </section>
+
+      <section class="requests-panel" aria-labelledby="requestsHeading">
+        <h1 id="requestsHeading" class="visually-hidden">Purchase Requests</h1>
+
+        <div class="table-toolbar">
+          <form class="search-bar" id="searchForm" role="search">
+            <img class="search-icon" src="../assets/Search Textbar.svg" alt="">
+            <input id="requestSearch" type="search" placeholder="search" aria-label="Search Purchase Requests">
+            <button type="submit">Search</button>
+          </form>
+
+          <div class="filter-wrap">
+            <button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="filterMenu">
+              <span class="filter-funnel" aria-hidden="true"></span>
+              Filter
+            </button>
+            <div class="filter-menu" id="filterMenu" hidden>
+              <strong class="filter-title">Status</strong>
+              <label><input type="checkbox" value="pending" class="status-filter"> Pending</label>
+              <label><input type="checkbox" value="approved" class="status-filter"> Approved</label>
+              <label><input type="checkbox" value="rejected" class="status-filter"> Rejected</label>
+              <div class="filter-actions">
+                <button type="button" class="filter-reset" id="resetFilters">Reset</button>
+                <button type="button" class="filter-apply" id="applyFilters">Apply Filter</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-scroll" id="tableScroll">
+          <table class="requests-table">
+            <thead>
+              <tr>
+                <th scope="col">PR Number</th>
+                <th scope="col">Item/Category</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="requestRows">
+              <tr><td colspan="6" class="table-message">Loading Purchase Requests...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="table-footer">
+          <span id="resultsSummary">Loading records...</span>
+          <div class="pagination" aria-label="Table pagination">
+            <button type="button" id="previousPage" aria-label="Previous page" disabled>‹</button>
+            <span id="pageIndicator">1 / 1</span>
+            <button type="button" id="nextPage" aria-label="Next page" disabled>›</button>
+          </div>
+        </div>
+      </section>
+      <p class="page-error" id="pageError" role="alert" hidden></p>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

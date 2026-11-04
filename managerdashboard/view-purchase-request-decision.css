@@ -1,0 +1,9 @@
+/* Manager decision styling on the Buyer Purchase Request timeline. */
+.timeline-item.rejected .timeline-dot {
+  background: #cf3f26;
+  border-color: #cf3f26;
+}
+
+.timeline-item.rejected h3 {
+  color: #cf3f26;
+}
