@@ -2072,3 +2072,217 @@ img {
 .requests-panel .dashboard-table td:last-child {
   text-align: center;
 }
+
+
+/* =========================================
+   MY TASK - SCROLLABLE PANEL
+========================================= */
+
+.tasks-panel {
+  height: 560px;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+/* Keep the My Task heading visible */
+.tasks-panel .panel-heading {
+  flex-shrink: 0;
+}
+
+/* Scroll only the task content */
+.tasks-panel .task-board {
+  flex: 1;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding-right: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #bdbdbd transparent;
+}
+
+/* Chrome, Edge and Safari scrollbar */
+.tasks-panel .task-board::-webkit-scrollbar {
+  width: 7px;
+}
+
+.tasks-panel .task-board::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 10px;
+}
+
+.tasks-panel .task-board::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Mobile */
+@media (max-width: 820px) {
+  .tasks-panel {
+    height: 500px;
+    max-height: calc(100vh - 120px);
+  }
+}
+
+
+/* MY TASK ACTION BUTTONS */
+
+.task-actions {
+  position: absolute;
+  bottom: 11px;
+  left: 14px;
+  right: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.task-action-button {
+  min-width: 0;
+  padding: 5px 7px;
+  border: 0.7px solid #777;
+  border-radius: 20px;
+  background: #fff;
+  color: #111;
+
+  font-family: 'Geist', 'Inter', Arial, sans-serif;
+  font-size: 7px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.task-action-button:hover {
+  background: #eee;
+}
+
+.task-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+
+
+
+/* =====================================
+   MY TASK - THREE DOT ACTION MENU
+===================================== */
+
+.task-menu {
+  position: absolute;
+  bottom: 11px;
+  left: 14px;
+  right: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Three-dot button */
+.task-menu-toggle {
+  position: static;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Hidden until three dots are clicked */
+.task-actions[hidden] {
+  display: none;
+}
+
+/* Visible action buttons */
+.task-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.task-action-button {
+  flex-shrink: 0;
+  padding: 4px 7px;
+
+  border: 0.7px solid #777;
+  border-radius: 20px;
+
+  background: white;
+  color: #111;
+
+  font-family: 'Geist', 'Inter', Arial, sans-serif;
+  font-size: 7px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.task-action-button:hover {
+  background: #eeeeee;
+}
+
+
+/* MY TASK ACTION MENU - FIGMA MATCH */
+
+.task-menu {
+  position: absolute;
+  bottom: 11px;
+  left: 15px;
+  right: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.task-menu .task-info-badge {
+  position: static;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Black X when menu is expanded */
+.task-menu-toggle.is-open {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+  font-size: 19px;
+}
+
+/* Hidden until clicked */
+.task-actions[hidden] {
+  display: none;
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.task-action-button {
+  height: 20px;
+  padding: 3px 9px;
+
+  border: 0.7px solid #777;
+  border-radius: 20px;
+
+  background: #fff;
+  color: #111;
+
+  font-family: 'Geist', 'Inter', Arial, sans-serif;
+  font-size: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.task-action-button:hover {
+  background: #eee;
+}

@@ -63,7 +63,6 @@ const toast = document.getElementById('toast');
 let toastTimer;
 
 const dashboardRequests = [];
-
 const dashboardTaskGroups = [];
 
 const dashboardPurchaseOrders = [];
@@ -146,7 +145,7 @@ function renderTableRows(
         `${isDraft ? 'Edit' : 'View'} ${recordLabel}`
       );
 
-      // ADDED: Store the PR number for the Pending Request Table only.
+      // Store the PR number for the Pending Request Table.
       if (selector === '#pending-request-rows') {
         actionButton.dataset.prNumber = record.number || '';
       }
@@ -223,6 +222,9 @@ function updateSummaryCards() {
   );
 }
 
+// ======================================================
+// PURCHASE REQUESTS AND MY TASK
+// ======================================================
 
 function renderDashboardRequests(requests) {
   if (!Array.isArray(requests)) {
@@ -231,6 +233,7 @@ function renderDashboardRequests(requests) {
     );
   }
 
+  // STEP 1: Display records in Pending Request Table.
   renderTableRows(
     '#pending-request-rows',
     requests,
@@ -241,9 +244,73 @@ function renderDashboardRequests(requests) {
   );
 
   currentPurchaseRequests = requests;
-  updateSummaryCards();
-}
 
+  // STEP 2: Define the task categories.
+  const categories = [
+    {
+      status: 'draft',
+      title: 'Draft Purchase Request',
+      label: 'Ready to Submit',
+      tone: 'red'
+    },
+    
+    {
+      status: 'approved',
+      title: 'Approved Purchase Requests',
+      label: 'Ready for RFQ',
+      tone: 'green'
+    },
+    {
+      status: 'rejected',
+      title: 'Rejected Purchase Requests',
+      label: 'Needs Revision',
+      tone: 'red'
+    }
+  ];
+
+  // STEP 3: Organize the same PR records by status.
+  const taskGroups = categories
+    .map(category => {
+
+      const tasks = requests
+        .filter(request =>
+          String(request.status).toLowerCase() === category.status
+        )
+        .map(request => ({
+          number: request.number || 'PR',
+          priority: 'Medium',
+          name: request.task || 'Purchase Request',
+
+          tags: [
+            request.category && request.category !== '—'
+              ? request.category
+              : 'Purchase Request'
+          ],
+
+          start: request.created_at
+            ? `Created: ${request.created_at}`
+            : '',
+
+          due: request.required_date
+            ? `Needed: ${request.required_date}`
+            : ''
+        }));
+
+      return {
+        title: category.title,
+        count: tasks.length,
+        status: category.label,
+        tone: category.tone,
+        tasks: tasks
+      };
+    })
+
+    // Do not display empty task categories.
+    .filter(group => group.tasks.length > 0);
+
+  // STEP 4: Display records in My Task.
+  renderDashboardTasks(taskGroups);
+}
 
 function renderDashboardTasks(groups) {
   if (!Array.isArray(groups)) {
@@ -253,6 +320,7 @@ function renderDashboardTasks(groups) {
   }
 
   currentTaskGroups = groups;
+
   const board = document.querySelector('.task-board');
 
   if (!board) return;
@@ -280,7 +348,9 @@ function renderDashboardTasks(groups) {
 
     const count = document.createElement('span');
     count.className = 'task-counter';
-    count.textContent = String(taskGroup.count ?? taskGroup.tasks.length);
+    count.textContent = String(
+      taskGroup.count ?? taskGroup.tasks.length
+    );
 
     const title = document.createElement('h3');
     title.textContent = taskGroup.title;
@@ -288,6 +358,7 @@ function renderDashboardTasks(groups) {
     const status = document.createElement('span');
     status.className =
       `task-group-status task-group-status-${taskGroup.tone}`;
+
     status.dataset.status = taskGroup.status;
     status.textContent = taskGroup.status;
 
@@ -310,6 +381,7 @@ function renderDashboardTasks(groups) {
       const priority = document.createElement('span');
       priority.className =
         `task-priority task-priority-${task.priority.toLowerCase()}`;
+
       priority.textContent = task.priority;
 
       metadata.append(number, priority);
@@ -323,8 +395,10 @@ function renderDashboardTasks(groups) {
 
       task.tags.forEach((tagText) => {
         const tag = document.createElement('span');
+
         tag.className = 'task-detail-chip';
         tag.textContent = tagText;
+
         details.append(tag);
       });
 
@@ -342,28 +416,115 @@ function renderDashboardTasks(groups) {
       const progress = document.createElement('div');
       progress.className = 'task-progress';
       progress.setAttribute('aria-hidden', 'true');
+
       progress.append(
         document.createElement('span'),
         document.createElement('span')
       );
 
-      const button = document.createElement('button');
-      button.className = 'task-info-badge';
-      button.type = 'button';
-      button.setAttribute(
-        'aria-label',
-        `View ${task.number} details`
-      );
-      button.dataset.toast = `${task.number} details opened`;
-      button.textContent = '⋮';
+      // Container for the three-dot menu.
+      const taskMenu = document.createElement('div');
+      taskMenu.className = 'task-menu';
 
+      // Three-dot toggle button.
+      const menuToggle = document.createElement('button');
+
+      menuToggle.type = 'button';
+      menuToggle.className = 'task-info-badge task-menu-toggle';
+      menuToggle.textContent = '⋮';
+
+      menuToggle.setAttribute(
+        'aria-label',
+        'Show task actions'
+      );
+
+      menuToggle.setAttribute(
+        'aria-expanded',
+        'false'
+      );
+
+      // Actions are hidden by default.
+      const actionRow = document.createElement('div');
+
+      actionRow.className = 'task-actions';
+      actionRow.hidden = true;
+
+      // Available actions for each task category.
+      const actionsByGroup = {
+        'Draft Purchase Request': [
+          'Delete Draft',
+          'Submit for Approval',
+          'View PR'
+        ],
+
+        'Purchase Requests Awaiting Approval': [
+          'View PR'
+        ],
+
+        'Approved Purchase Requests': [
+          'Create RFQ',
+          'View PR',
+          'Print PR'
+        ],
+
+        'RFQs Awaiting Quotation': [
+          'Enter Quotation',
+          'View RFQ',
+          'Send Reminder'
+        ],
+
+        'Invoice': [
+          'Post Accounting',
+          'View Invoice',
+          'Print Invoice'
+        ],
+
+        'Rejected': [
+          'Escalate to Manager',
+          'View Task',
+          'Update Deadline'
+        ],
+
+        'Rejected Purchase Requests': [
+          'Escalate to Manager',
+          'View Task',
+          'Update Deadline'
+        ]
+      };
+
+      const actions = actionsByGroup[taskGroup.title] || [];
+
+      actions.forEach((actionName) => {
+        const actionButton = document.createElement('button');
+
+        actionButton.type = 'button';
+        actionButton.className = 'task-action-button';
+        actionButton.textContent = actionName;
+
+        // Draft PR actions are handled by the click listener.
+        if (
+          taskGroup.title !== 'Draft Purchase Request' ||
+          !['Delete Draft', 'Submit for Approval', 'View PR']
+            .includes(actionName)
+        ) {
+          actionButton.dataset.toast =
+            `${actionName} is ready for implementation.`;
+        }
+
+        actionRow.append(actionButton);
+      });
+
+      // Add menu components.
+      taskMenu.append(menuToggle, actionRow);
+
+      // Add card elements.
       card.append(
         metadata,
         name,
         details,
         dates,
         progress,
-        button
+        taskMenu
       );
 
       items.append(card);
@@ -375,6 +536,10 @@ function renderDashboardTasks(groups) {
 
   updateSummaryCards();
 }
+
+// ======================================================
+// PURCHASE ORDERS
+// ======================================================
 
 function renderDashboardPurchaseOrders(orders) {
   if (!Array.isArray(orders)) {
@@ -403,6 +568,10 @@ function renderDashboardPurchaseOrders(orders) {
   );
 }
 
+// ======================================================
+// INVOICES
+// ======================================================
+
 function renderDashboardInvoices(invoices) {
   if (!Array.isArray(invoices)) {
     throw new TypeError(
@@ -414,6 +583,10 @@ function renderDashboardInvoices(invoices) {
 
   updateSummaryCards();
 }
+
+// ======================================================
+// MONTHLY PURCHASE ACTIVITY
+// ======================================================
 
 function renderMonthlyPurchaseActivity(activity) {
   if (!Array.isArray(activity)) {
@@ -519,12 +692,16 @@ function renderMonthlyPurchaseActivity(activity) {
       const previous = plotted[index - 1];
       const beforePrevious = plotted[index - 2] || previous;
       const next = plotted[index + 1] || point;
+
       const control1X =
         previous.x + (point.x - beforePrevious.x) / 6;
+
       const control1Y =
         previous.y + (point.y - beforePrevious.y) / 6;
+
       const control2X =
         point.x - (next.x - previous.x) / 6;
+
       const control2Y =
         point.y - (next.y - previous.y) / 6;
 
@@ -551,6 +728,10 @@ function renderMonthlyPurchaseActivity(activity) {
   labels.style.gridTemplateColumns =
     `repeat(${points.length}, minmax(0, 1fr))`;
 }
+
+// ======================================================
+// BUDGET
+// ======================================================
 
 function renderDashboardBudget(budget) {
   const emptyState =
@@ -699,14 +880,12 @@ function renderDashboardBudget(budget) {
     const legend =
       document.createElement('span');
 
-    legend.className =
-      'budget-category';
+    legend.className = 'budget-category';
 
     const dot =
       document.createElement('span');
 
-    dot.className =
-      'budget-category-dot';
+    dot.className = 'budget-category-dot';
 
     dot.style.backgroundColor =
       category.color ||
@@ -715,8 +894,7 @@ function renderDashboardBudget(budget) {
     const name =
       document.createElement('span');
 
-    name.textContent =
-      category.name;
+    name.textContent = category.name;
 
     legend.append(dot, name);
 
@@ -726,16 +904,14 @@ function renderDashboardBudget(budget) {
   const remainingSegment =
     document.createElement('span');
 
-  remainingSegment.className =
-    'budget-segment';
+  remainingSegment.className = 'budget-segment';
 
   remainingSegment.style.width =
     `${total === 0
       ? 0
       : Math.max(0, (total - committed) / total * 100)}%`;
 
-  remainingSegment.style.backgroundColor =
-    '#e9e9e9';
+  remainingSegment.style.backgroundColor = '#e9e9e9';
 
   remainingSegment.setAttribute(
     'aria-label',
@@ -762,10 +938,15 @@ function renderDashboardBudget(budget) {
       document.createElement('span');
 
     remainingName.textContent = 'Not Commited';
+
     remainingLegend.append(remainingDot, remainingName);
     categoriesElement.append(remainingLegend);
   }
 }
+
+// ======================================================
+// EXPOSE DASHBOARD FUNCTIONS
+// ======================================================
 
 window.renderDashboardRequests =
   renderDashboardRequests;
@@ -785,22 +966,31 @@ window.renderMonthlyPurchaseActivity =
 window.renderDashboardBudget =
   renderDashboardBudget;
 
+// Initial dashboard rendering.
 renderDashboardRequests(dashboardRequests);
 renderDashboardTasks(dashboardTaskGroups);
+
 renderDashboardPurchaseOrders(
   dashboardPurchaseOrders
 );
+
 renderDashboardInvoices(
   dashboardInvoices
 );
+
 renderMonthlyPurchaseActivity(
   monthlyPurchaseActivity
 );
+
 renderDashboardBudget({
   remaining: 0,
   total: 0,
   categories: []
 });
+
+// ======================================================
+// TOAST NOTIFICATION
+// ======================================================
 
 function showToast(message) {
   if (!toast || !message) return;
@@ -815,6 +1005,10 @@ function showToast(message) {
     2200
   );
 }
+
+// ======================================================
+// SIDEBAR NAVIGATION
+// ======================================================
 
 document.querySelectorAll('.nav-item')
   .forEach((button) => {
@@ -833,11 +1027,133 @@ document.querySelectorAll('.nav-item')
     });
   });
 
+// ======================================================
+// DASHBOARD CLICK EVENTS
+// ======================================================
+
 document.addEventListener('click', (event) => {
   if (!(event.target instanceof Element)) return;
 
-  // ADDED: Open the selected Purchase Request page.
-  // This only applies to buttons inside the Pending Request Table.
+  // THREE-DOT MENU TOGGLE
+const menuToggle = event.target.closest('.task-menu-toggle');
+
+if (menuToggle) {
+  const menu = menuToggle.closest('.task-menu');
+  const actionRow = menu.querySelector('.task-actions');
+
+  const isOpening = actionRow.hidden;
+
+  actionRow.hidden = !isOpening;
+
+  // Change three dots into X when opened.
+  menuToggle.textContent = isOpening ? '×' : '⋮';
+
+  menuToggle.classList.toggle('is-open', isOpening);
+
+  menuToggle.setAttribute(
+    'aria-label',
+    isOpening ? 'Hide task actions' : 'Show task actions'
+  );
+
+  menuToggle.setAttribute(
+    'aria-expanded',
+    String(isOpening)
+  );
+
+  return;
+}
+
+  // MY TASK ACTION BUTTONS.
+  const taskButton = event.target.closest('.task-action-button');
+
+  if (taskButton) {
+    const actionText = taskButton.textContent
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const taskCard = taskButton.closest('.task-item');
+
+    const prNumber = taskCard
+      ?.querySelector('.task-reference')
+      ?.textContent.trim();
+
+    // VIEW PURCHASE REQUEST.
+    if (actionText === 'View PR' && prNumber) {
+      window.location.href =
+        `view-purchase-request.html?pr=${encodeURIComponent(prNumber)}`;
+
+      return;
+    }
+
+    // DELETE DRAFT / SUBMIT FOR APPROVAL.
+    if (
+      ['Delete Draft', 'Submit for Approval'].includes(actionText) &&
+      prNumber
+    ) {
+      const action =
+        actionText === 'Delete Draft' ? 'delete' : 'submit';
+
+      const confirmationMessage =
+        action === 'delete'
+          ? `Are you sure you want to permanently delete ${prNumber}?`
+          : `Submit ${prNumber} for Manager approval?`;
+
+      if (!window.confirm(confirmationMessage)) {
+        return;
+      }
+
+      taskButton.disabled = true;
+
+      (async () => {
+        try {
+          const response = await fetch(
+            '../database/buyer-draft-action.php',
+            {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({
+                action: action,
+                pr_number: prNumber
+              })
+            }
+          );
+
+          const result = await response.json();
+
+          if (!response.ok || !result.success) {
+            throw new Error(
+              result.message || 'Unable to process this action.'
+            );
+          }
+
+          showToast(result.message);
+
+          // Refresh Pending Request Table and My Task.
+          window.setTimeout(() => {
+            window.location.reload();
+          }, 700);
+
+        } catch (error) {
+          console.error(
+            'Draft Purchase Request action error:',
+            error
+          );
+
+          showToast(error.message);
+
+          taskButton.disabled = false;
+        }
+      })();
+
+      return;
+    }
+  }
+
+  // OPEN THE SELECTED PURCHASE REQUEST FROM THE TABLE.
   const prAction = event.target.closest(
     '#pending-request-rows .mini-action'
   );
@@ -851,9 +1167,9 @@ document.addEventListener('click', (event) => {
     return;
   }
 
+  // NEW PURCHASE REQUEST QUICK ACTION.
   const quickAction = event.target.closest('.quick-action');
 
-  // Open New Purchase Request page.
   if (
     quickAction &&
     quickAction.getAttribute('aria-label') === 'New Purchase Request'
@@ -864,7 +1180,7 @@ document.addEventListener('click', (event) => {
     return;
   }
 
-  // Keep the existing toast behavior for other buttons.
+  // OTHER DASHBOARD BUTTONS.
   const button = event.target.closest('[data-toast]');
 
   if (button) {
