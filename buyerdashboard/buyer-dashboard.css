@@ -1028,24 +1028,56 @@ img {
   display: grid;
   align-content: start;
   justify-items: center;
-  gap: 15px;
   padding-top: 15px;
 }
 
+.quick-actions-art {
+  position: relative;
+  width: 253px;
+  max-width: 100%;
+  aspect-ratio: 253 / 315;
+}
+
+.quick-actions-art > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .quick-action {
-  display: block;
-  width: 211px;
-  height: 58px;
+  position: absolute;
+  left: 8.3%;
+  width: 83.4%;
+  height: 18.42%;
   padding: 0;
+  border: 0;
+  border-radius: 13px;
   background: transparent;
   text-decoration: none;
   cursor: pointer;
 }
 
-.quick-action-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.quick-action:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 2px;
+}
+
+.quick-action-request {
+  top: 4.76%;
+}
+
+.quick-action-rfq {
+  top: 27.94%;
+}
+
+.quick-action-order {
+  top: 51.11%;
+}
+
+.quick-action-invoice {
+  top: 74.29%;
 }
 
 /* Empty states */
@@ -1499,12 +1531,8 @@ img {
   }
 
   .quick-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     padding-top: 0;
-  }
-
-  .quick-action {
-    width: 100%;
   }
 
   .tasks-panel {

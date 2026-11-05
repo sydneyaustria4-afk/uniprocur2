@@ -18,9 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const filesList = document.getElementById("uploadedFilesList");
   const ampmButtons = document.querySelectorAll(".ampm-btn");
+  const rfqParams = new URLSearchParams(window.location.search);
+  const requestedPrNumber = rfqParams.get("pr_number");
 
   let toastTimer;
   let attachedFiles = [];
+  let purchaseRequestReady = !requestedPrNumber;
 
   // ==========================================================================
   // Toast Helper
@@ -71,12 +74,126 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadUserSession();
 
+  function formatPurchaseRequestDate(value) {
+    if (!value) return "—";
+
+    const date = new Date(`${value}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return new Intl.DateTimeFormat("en-PH", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit"
+    }).format(date);
+  }
+
+  function renderPurchaseRequestItems(items) {
+    const productsColumn = document.querySelector(".products-column");
+    const justification = productsColumn?.querySelector(".justification-box");
+    if (!productsColumn || !justification) return;
+
+    productsColumn.querySelectorAll(".product-item").forEach((item) => item.remove());
+
+    items.forEach((item) => {
+      const card = document.createElement("article");
+      card.className = "product-item";
+
+      const thumb = document.createElement("div");
+      thumb.className = "product-thumb";
+
+      const imagePath =
+        window.resolveProcurementProductImage(item.item_name);
+      if (imagePath) {
+        const image = document.createElement("img");
+        image.className = "product-image";
+        image.src = imagePath;
+        image.alt = item.item_name || "Requested product";
+        thumb.appendChild(image);
+      }
+
+      const info = document.createElement("div");
+      info.className = "product-info";
+
+      const title = document.createElement("h3");
+      title.textContent = item.item_name || "Unnamed item";
+
+      const categoryRow = document.createElement("div");
+      categoryRow.className = "meta-line";
+      const categoryLabel = document.createElement("span");
+      categoryLabel.textContent = "Category:";
+      const categoryValue = document.createElement("strong");
+      categoryValue.textContent = item.category || "—";
+      categoryRow.append(categoryLabel, categoryValue);
+
+      const quantityRow = document.createElement("div");
+      quantityRow.className = "meta-line";
+      const quantityLabel = document.createElement("span");
+      quantityLabel.textContent = "Qty:";
+      const quantityValue = document.createElement("strong");
+      quantityValue.textContent =
+        `${item.qty ?? "—"} ${item.unit || ""}`.trim();
+      quantityRow.append(quantityLabel, quantityValue);
+
+      info.append(title, categoryRow, quantityRow);
+      card.append(thumb, info);
+      productsColumn.insertBefore(card, justification);
+    });
+  }
+
+  async function loadPurchaseRequestContext() {
+    if (!requestedPrNumber) return;
+
+    if (reviewSubmitBtn) reviewSubmitBtn.disabled = true;
+
+    try {
+      const response = await fetch(
+        `../database/get-purchase-request.php?pr_number=${encodeURIComponent(requestedPrNumber)}`,
+        {
+          method: "GET",
+          credentials: "same-origin",
+          headers: { "Accept": "application/json" }
+        }
+      );
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Unable to load the selected Purchase Request.");
+      }
+
+      const pr = result.purchase_request;
+      const metadata = document.querySelectorAll(
+        ".metadata-row .metadata-item strong"
+      );
+      if (metadata[0]) metadata[0].textContent = pr.pr_number;
+      if (metadata[1]) metadata[1].textContent = formatPurchaseRequestDate(pr.needed_by);
+
+      const requestedPrId = rfqParams.get("pr_id");
+      if (requestedPrId && String(pr.id) !== requestedPrId) {
+        throw new Error("The selected Purchase Request does not match.");
+      }
+
+      renderPurchaseRequestItems(Array.isArray(result.items) ? result.items : []);
+
+      const purpose = document.querySelector(".justification-box p");
+      if (purpose) purpose.textContent = pr.purpose || "No purpose provided.";
+
+      document.title = `Create RFQ | ${pr.pr_number}`;
+      purchaseRequestReady = true;
+      if (reviewSubmitBtn) reviewSubmitBtn.disabled = false;
+    } catch (error) {
+      console.error("Selected Purchase Request loading error:", error);
+      showToast(error.message || "Unable to load the selected Purchase Request.");
+    }
+  }
+
+  loadPurchaseRequestContext();
+
   // ==========================================================================
   // Navigation
   // ==========================================================================
   if (backButton) {
     backButton.addEventListener("click", () => {
-      window.location.href = "PR202601.html";
+      window.location.href = "../buyerdashboard/create-rfq.html";
     });
   }
 
@@ -279,6 +396,11 @@ document.addEventListener("DOMContentLoaded", () => {
   reviewSubmitBtn.addEventListener("click", (event) => {
     event.preventDefault();
 
+    if (!purchaseRequestReady) {
+      showToast("Wait for the selected Purchase Request to finish loading.");
+      return;
+    }
+
     const previewData = collectRfqPreviewData();
 
     if (previewData.products.length === 0) {
@@ -452,9 +574,9 @@ document.addEventListener("DOMContentLoaded", () => {
         description: getProductMeta(card, "Description"),
 
         image:
-          imageName === "mesh.svg"
-            ? "mesh.svg"
-            : "leather.svg"
+          window.resolveProcurementProductImage(name, imageName)
+            .split("/")
+            .pop()
 
       };
 

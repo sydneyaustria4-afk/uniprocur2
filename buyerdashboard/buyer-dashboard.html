@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="buyer-dashboard.css?v=8" />
+    <link rel="stylesheet" href="buyer-dashboard.css?v=9" />
   </head>
   <body>
     <div class="dashboard-shell">
@@ -218,61 +218,31 @@
 
           
 <aside class="quick-actions" aria-label="Quick actions">
-
-  <!-- New Purchase Request: opens the request page -->
-  <a
-    class="quick-action"
-    href="new-purchase-request.html"
-    aria-label="New Purchase Request"
-  >
-    <img
-      class="quick-action-image"
-      src="../assets/Group 381 (1).svg"
-      alt="New Purchase Request"
-    />
-  </a>
-
-  <!-- New RFQ -->
-<a
-  class="quick-action"
-  href="create-rfq.html"
-  aria-label="New RFQ"
->
-  <img
-    class="quick-action-image"
-    src="../assets/Group 381 (2).svg"
-    alt="New RFQ"
-  />
-</a>
-
-  <!-- New Purchase Order -->
-  <button
-    class="quick-action"
-    type="button"
-    aria-label="New Purchase Order"
-    data-toast="New purchase order started"
-  >
-    <img
-      class="quick-action-image"
-      src="../assets/Group 386.svg"
-      alt="New Purchase Order"
-    />
-  </button>
-
-  <!-- Post Invoice -->
-  <button
-    class="quick-action"
-    type="button"
-    aria-label="Post Invoice"
-    data-toast="Invoice posting started"
-  >
-    <img
-      class="quick-action-image"
-      src="../assets/Group 383.svg"
-      alt="Post Invoice"
-    />
-  </button>
-
+  <div class="quick-actions-art">
+    <img src="../assets/buttons.svg" alt="" aria-hidden="true" />
+    <a
+      class="quick-action quick-action-request"
+      href="new-purchase-request.html"
+      aria-label="New Purchase Request"
+    ></a>
+    <a
+      class="quick-action quick-action-rfq"
+      href="create-rfq.html"
+      aria-label="New RFQ"
+    ></a>
+    <button
+      class="quick-action quick-action-order"
+      type="button"
+      aria-label="New Purchase Order"
+      data-toast="New purchase order started"
+    ></button>
+    <button
+      class="quick-action quick-action-invoice"
+      type="button"
+      aria-label="Post Invoice"
+      data-toast="Invoice posting started"
+    ></button>
+  </div>
 </aside>
 
 

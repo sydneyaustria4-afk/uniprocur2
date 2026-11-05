@@ -3,6 +3,7 @@
 
 const toast = document.getElementById("toast");
 let toastTimer;
+let currentPurchaseRequest = null;
 
 // Toast message
 function showToast(message) {
@@ -116,6 +117,7 @@ async function loadPurchaseRequest() {
     }
 
     const pr = result.purchase_request;
+    currentPurchaseRequest = pr;
 
     // Update Purchase Request metadata.
     setText("prNumber", pr.pr_number);
@@ -169,7 +171,24 @@ const createRfqBtn = document.getElementById("createRfqBtn");
 
 if (createRfqBtn) {
   createRfqBtn.addEventListener("click", () => {
-    window.location.href = "edit-rfq2.html";
+    const prNumber =
+      currentPurchaseRequest?.pr_number ||
+      document.getElementById("prNumber")?.textContent.trim();
+
+    if (!prNumber) {
+      showToast("Unable to identify this Purchase Request.");
+      return;
+    }
+
+    const params = new URLSearchParams({
+      pr_number: prNumber
+    });
+
+    if (currentPurchaseRequest?.id) {
+      params.set("pr_id", currentPurchaseRequest.id);
+    }
+
+    window.location.href = `edit-rfq2.html?${params.toString()}`;
   });
 }
 
@@ -195,4 +214,3 @@ if (profileButton) {
 
 // Load Purchase Request
 loadPurchaseRequest();
-

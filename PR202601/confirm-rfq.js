@@ -381,29 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =====================================
 
   function getProductImage(item) {
-
-    const allowedImages = [
-      "leather.svg",
-      "mesh.svg"
-    ];
-
-    const imageName = String(
-      item.image || ""
-    ).split("/").pop();
-
-    if (allowedImages.includes(imageName)) {
-      return `../assets/${imageName}`;
-    }
-
-    const itemName = String(
-      item.name || ""
-    ).toLowerCase();
-
-    return itemName.includes("mesh") ||
-           itemName.includes("fabric")
-      ? "../assets/mesh.svg"
-      : "../assets/leather.svg";
-
+    return window.resolveProcurementProductImage(item.name, item.image);
   }
 
 
@@ -420,16 +398,14 @@ document.addEventListener("DOMContentLoaded", () => {
     imageWrap.className = "product-image-wrap";
 
 
-    const image = document.createElement("img");
-
-    image.className = "product-image";
-
-    image.src = getProductImage(item);
-
-    image.alt = item.name || "Requested product";
-
-
-    imageWrap.appendChild(image);
+    const imagePath = getProductImage(item);
+    if (imagePath) {
+      const image = document.createElement("img");
+      image.className = "product-image";
+      image.src = imagePath;
+      image.alt = item.name || "Requested product";
+      imageWrap.appendChild(image);
+    }
 
 
     // Product information.
