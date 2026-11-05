@@ -1,6 +1,12 @@
 
 document.addEventListener("DOMContentLoaded", async () => {
+
   try {
+
+    // =====================================
+    // LOAD BUYER PURCHASE REQUESTS
+    // =====================================
+
     const response = await fetch(
       "../database/get-buyer-purchase-requests.php",
       {
@@ -22,6 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Update buyer account details.
     if (result.buyer) {
+
       document
         .querySelectorAll(".profile-copy strong, .account-name strong")
         .forEach((element) => {
@@ -37,8 +44,56 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    // Display database records in the Pending Request Table.
-    renderDashboardRequests(result.requests || []);
+    // =====================================
+    // LOAD RFQ AND INVOICE TASKS
+    // =====================================
+
+    let taskData = {
+      rfqs: [],
+      rfq_pr_ids: [],
+      invoices: []
+    };
+
+    try {
+
+      const taskResponse = await fetch(
+        "../database/get-buyer-dashboard-task-data.php",
+        {
+          method: "GET",
+          credentials: "same-origin",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
+
+      const taskResult = await taskResponse.json();
+
+      if (!taskResponse.ok || !taskResult.success) {
+        throw new Error(
+          taskResult.message || "Unable to load RFQ and Invoice tasks."
+        );
+      }
+
+      taskData = taskResult;
+
+      console.log("RFQ and Invoice tasks:", taskResult);
+
+    } catch (taskError) {
+
+      console.error(
+        "Additional task data could not be loaded:",
+        taskError
+      );
+
+      showToast("Some My Task categories could not be loaded.");
+    }
+
+    // Display all Buyer dashboard data.
+    renderDashboardRequests(
+      result.requests || [],
+      taskData
+    );
 
     console.log(
       "Purchase Requests loaded:",
@@ -46,18 +101,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
 
   } catch (error) {
+
     console.error(
       "Dashboard Purchase Requests could not be loaded:",
       error
     );
 
-    renderDashboardRequests([]);
+    renderDashboardRequests([], {
+      rfqs: [],
+      rfq_pr_ids: [],
+      invoices: []
+    });
 
     showToast(
       "Unable to load Purchase Requests. Check the database connection."
     );
+
   }
+
 });
+
 
 const toast = document.getElementById('toast');
 let toastTimer;
@@ -226,14 +289,19 @@ function updateSummaryCards() {
 // PURCHASE REQUESTS AND MY TASK
 // ======================================================
 
-function renderDashboardRequests(requests) {
+
+function renderDashboardRequests(requests, taskData = {}) {
+
   if (!Array.isArray(requests)) {
     throw new TypeError(
       'Dashboard purchase requests must be provided as an array.'
     );
   }
 
-  // STEP 1: Display records in Pending Request Table.
+  // =====================================
+  // 1. PENDING REQUEST TABLE
+  // =====================================
+
   renderTableRows(
     '#pending-request-rows',
     requests,
@@ -245,72 +313,192 @@ function renderDashboardRequests(requests) {
 
   currentPurchaseRequests = requests;
 
-  // STEP 2: Define the task categories.
+  // =====================================
+  // 2. PURCHASE REQUEST CATEGORIES
+  // =====================================
+
+  const rfqPrIds = new Set(
+    (taskData.rfq_pr_ids || []).map(String)
+  );
+
   const categories = [
     {
       status: 'draft',
       title: 'Draft Purchase Request',
       label: 'Ready to Submit',
-      tone: 'red'
+      tone: 'red',
+      priority: 'High'
     },
-    
     {
       status: 'approved',
       title: 'Approved Purchase Requests',
       label: 'Ready for RFQ',
-      tone: 'green'
+      tone: 'green',
+      priority: 'Medium'
     },
     {
       status: 'rejected',
-      title: 'Rejected Purchase Requests',
+      title: 'Rejected',
       label: 'Needs Revision',
-      tone: 'red'
+      tone: 'red',
+      priority: 'High'
     }
   ];
 
-  // STEP 3: Organize the same PR records by status.
-  const taskGroups = categories
-    .map(category => {
+  const prGroups = categories.map(category => {
 
-      const tasks = requests
-        .filter(request =>
-          String(request.status).toLowerCase() === category.status
-        )
-        .map(request => ({
-          number: request.number || 'PR',
-          priority: 'Medium',
-          name: request.task || 'Purchase Request',
+    const tasks = requests
+      .filter(request => {
 
-          tags: [
-            request.category && request.category !== '—'
-              ? request.category
-              : 'Purchase Request'
-          ],
+        const matchesStatus =
+          String(request.status).toLowerCase() === category.status;
 
-          start: request.created_at
-            ? `Created: ${request.created_at}`
-            : '',
+        // Do not show an approved PR again if an RFQ exists.
+        const alreadyHasRFQ =
+          category.status === 'approved' &&
+          rfqPrIds.has(String(request.id));
 
-          due: request.required_date
-            ? `Needed: ${request.required_date}`
-            : ''
-        }));
+        return matchesStatus && !alreadyHasRFQ;
 
-      return {
-        title: category.title,
-        count: tasks.length,
-        status: category.label,
-        tone: category.tone,
-        tasks: tasks
-      };
-    })
+      })
+      .map(request => ({
 
-    // Do not display empty task categories.
-    .filter(group => group.tasks.length > 0);
+        number: request.number || 'PR',
 
-  // STEP 4: Display records in My Task.
-  renderDashboardTasks(taskGroups);
+        priority: category.priority,
+
+        name: request.task || 'Purchase Request',
+
+        tags: [
+          request.category && request.category !== '—'
+            ? request.category
+            : 'Purchase Request'
+        ],
+
+        start: request.created_at
+          ? `Created: ${request.created_at}`
+          : '',
+
+        due: request.required_date
+          ? `Needed: ${request.required_date}`
+          : ''
+
+      }));
+
+    return {
+      title: category.title,
+      count: tasks.length,
+      status: category.label,
+      tone: category.tone,
+      tasks: tasks
+    };
+
+  });
+
+  // =====================================
+  // 3. RFQs AWAITING QUOTATION
+  // =====================================
+
+  const rfqRecords = Array.isArray(taskData.rfqs)
+    ? taskData.rfqs
+    : [];
+
+  const rfqTasks = rfqRecords.map(rfq => ({
+
+    number: rfq.number || 'RFQ',
+
+    priority: 'Medium',
+
+    name: rfq.task || 'Request for Quotation',
+
+    tags: [
+      `${Number(rfq.item_count) || 0} items`
+    ],
+
+    start: rfq.created_at
+      ? `Created: ${rfq.created_at}`
+      : '',
+
+    due: rfq.required_date
+      ? `Deadline: ${rfq.required_date}`
+      : ''
+
+  }));
+
+  const rfqGroup = {
+    title: 'RFQs Awaiting Quotation',
+    count: rfqTasks.length,
+    status: 'RFQs Awaiting Quotation',
+    tone: 'gold',
+    tasks: rfqTasks
+  };
+
+  // =====================================
+  // 4. INVOICE
+  // =====================================
+
+  const invoiceRecords = Array.isArray(taskData.invoices)
+    ? taskData.invoices
+    : [];
+
+  const invoiceTasks = invoiceRecords.map(invoice => ({
+
+    number: invoice.number || 'INV',
+
+    priority: 'High',
+
+    name: invoice.task || 'Supplier Invoice',
+
+    tags: [
+      `From PO ID ${invoice.po_id}`
+    ],
+
+    start: invoice.start_date
+      ? `Invoice Date: ${invoice.start_date}`
+      : '',
+
+    due: invoice.due_date
+      ? `Due: ${invoice.due_date}`
+      : ''
+
+  }));
+
+  currentInvoices = invoiceRecords;
+
+  const invoiceGroup = {
+    title: 'Invoice',
+    count: invoiceTasks.length,
+    status: 'Ready to Post',
+    tone: 'blue',
+    tasks: invoiceTasks
+  };
+
+  // =====================================
+  // 5. FINAL FIVE MY TASK CATEGORIES
+  // =====================================
+
+  const allTaskGroups = [
+
+    prGroups[0],  // Draft Purchase Request
+
+    prGroups[1],  // Approved Purchase Requests
+
+    rfqGroup,     // RFQs Awaiting Quotation
+
+    invoiceGroup, // Invoice
+
+    prGroups[2]   // Rejected
+
+  ];
+
+  // Important: Keep all five sections visible,
+  // even when their task count is zero.
+  renderDashboardTasks(allTaskGroups);
+
+  updateSummaryCards();
+
 }
+
 
 function renderDashboardTasks(groups) {
   if (!Array.isArray(groups)) {
@@ -518,14 +706,12 @@ function renderDashboardTasks(groups) {
       taskMenu.append(menuToggle, actionRow);
 
       // Add card elements.
-      card.append(
-        metadata,
-        name,
-        details,
-        dates,
-        progress,
-        taskMenu
-      );
+     card.append(
+  metadata,
+  name,
+  details,
+  taskMenu
+);
 
       items.append(card);
     });

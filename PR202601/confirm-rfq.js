@@ -1096,20 +1096,89 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  // Final confirmation.
-  if (confirmButton) {
+// Final confirmation: SAVE RFQ TO MYSQL.
+if (confirmButton) {
 
-    confirmButton.addEventListener("click", () => {
+  confirmButton.addEventListener("click", async () => {
+
+    const preview = readPreview();
+
+    if (!preview) {
+      showToast("RFQ information is missing. Please return to Edit RFQ.");
+      return;
+    }
+
+    if (
+      !Array.isArray(preview.suppliers) ||
+      preview.suppliers.length === 0
+    ) {
+      showToast("Please select at least one supplier.");
+      return;
+    }
+
+    confirmButton.disabled = true;
+    confirmButton.textContent = "Saving...";
+
+    try {
+
+      const response = await fetch(
+        "../database/create-rfq.php",
+        {
+          method: "POST",
+          credentials: "same-origin",
+
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+
+          body: JSON.stringify({
+            rfq_number: preview.rfqNumber,
+            pr_number: preview.prNumber,
+            deadline: getLocalDateString(
+              preview.submissionDueDate
+            ),
+            suppliers: preview.suppliers
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Unable to save RFQ."
+        );
+      }
 
       closeSendDialog();
 
-      showToast(
-        "Confirmation complete. Actual RFQ sending will be connected to the backend."
-      );
+      // Remove preview only after the database confirms success.
+      sessionStorage.removeItem(PREVIEW_KEY);
 
-    });
+      showToast(result.message);
 
-  }
+      // Return to Buyer Dashboard.
+      window.setTimeout(() => {
+        window.location.href =
+          "../buyerdashboard/buyer-dashboard.html";
+      }, 1000);
+
+    } catch (error) {
+
+      console.error("RFQ submission error:", error);
+
+      showToast(error.message);
+
+      confirmButton.disabled = false;
+      confirmButton.textContent = "Confirm";
+
+    }
+
+  });
+
+}
+
 
 
 

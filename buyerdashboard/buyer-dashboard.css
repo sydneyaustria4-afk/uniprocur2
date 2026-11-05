@@ -2286,3 +2286,143 @@ img {
 .task-action-button:hover {
   background: #eee;
 }
+
+.task-actions[hidden] {
+  display: none;
+}
+
+.task-menu-toggle.is-open {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+
+
+
+
+
+/* =========================================
+   MY TASK - FINAL FIGMA ACTION MENU
+========================================= */
+
+/* Task card */
+.task-item {
+  position: relative;
+  padding-bottom: 38px;
+}
+
+/* Menu container */
+.task-menu {
+  position: absolute;
+  left: 14px;
+  right: 12px;
+  bottom: 11px;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  width: auto;
+}
+
+/* Three-dot and X button */
+.task-menu-toggle {
+  position: static !important;
+
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+  border: 1px solid #111;
+  border-radius: 50%;
+
+  background: white;
+  color: #111;
+
+  font-size: 14px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+/* Black X when opened */
+.task-menu-toggle.is-open {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+
+  font-size: 19px;
+  font-weight: 400;
+}
+
+/* Hide actions before clicking */
+.task-actions[hidden] {
+  display: none !important;
+}
+
+/* Actions appear beside the X */
+.task-actions:not([hidden]) {
+  position: static !important;
+
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+
+  gap: 4px;
+  flex-wrap: nowrap;
+
+  overflow: visible !important;
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+
+  scrollbar-width: none;
+}
+
+.task-actions::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual action buttons */
+.task-action-button {
+  position: static;
+
+  flex: 0 1 auto;
+  min-width: 0;
+  height: 21px;
+
+  padding: 3px 6px;
+
+  border: 1px solid #777;
+  border-radius: 20px;
+
+  background: #fff;
+  color: #111;
+
+  font-family: 'Geist', 'Inter', Arial, sans-serif;
+  font-size: 7px;
+  font-weight: 400;
+
+  line-height: 1;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.task-action-button:hover {
+  background: #eee;
+}
+
+.task-action-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
