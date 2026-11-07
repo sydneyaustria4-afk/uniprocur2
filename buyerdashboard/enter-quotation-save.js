@@ -1,27 +1,120 @@
+
 "use strict";
-// Keep existing Enter Quotation UI unchanged: enable Save and Compare when MySQL data loads.
+
 (() => {
- const button=document.getElementById('compareButton');
- const number=new URLSearchParams(location.search).get('rfq_number');
- if(!button||!number)return;
- async function check(){
-  try{
-   const r=await fetch(`../database/get-rfq-quotation-data.php?rfq_number=${encodeURIComponent(number)}`,{credentials:'same-origin'});
-   const d=await r.json();
-   if(r.ok&&d.success&&d.suppliers?.length){button.disabled=false;button.removeAttribute('title');}
-  }catch(e){console.error('RFQ validation:',e)}
- }
- check();
- button.addEventListener('click',async()=>{
-  if(button.disabled)return;
-  if(!window.confirm('Save the simulated supplier quotations to MySQL and open the Comparison Matrix?'))return;
-  button.disabled=true;const label=button.innerHTML;button.textContent='Saving...';
-  try{
-   const r=await fetch('../database/save-rfq-quotations.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({rfq_number:number})});
-   const d=await r.json();if(!r.ok||!d.success){
-    let details=d.missing?.slice(0,8).join('\n')||'';throw new Error((d.message||'Unable to save quotations.')+(details?'\n\nMissing:\n'+details:''));
-   }
-   location.href=`comparison-matrix.html?rfq_number=${encodeURIComponent(number)}`;
-  }catch(e){console.error(e);alert(e.message);button.disabled=false;button.innerHTML=label;}
- });
+    const button = document.getElementById("compareButton");
+    const message = document.getElementById("message");
+
+    const rfqNumber = new URLSearchParams(
+        window.location.search
+    ).get("rfq_number");
+
+    if (!button || !message || !rfqNumber) {
+        return;
+    }
+
+    const originalButtonHTML = button.innerHTML;
+
+    // Display errors on the page instead of using alerts
+    function showMessage(text, isError = false) {
+        message.replaceChildren();
+        message.classList.toggle("is-error", isError);
+
+        message.textContent = text;
+    }
+
+    // Check whether the RFQ is available
+    async function checkRFQ() {
+        try {
+            const response = await fetch(
+                `../database/get-rfq-quotation-data.php?rfq_number=${encodeURIComponent(rfqNumber)}`,
+                {
+                    credentials: "same-origin"
+                }
+            );
+
+            const data = await response.json();
+
+            if (
+                response.ok &&
+                data.success &&
+                data.suppliers?.length
+            ) {
+                button.disabled = false;
+                button.removeAttribute("title");
+            }
+
+        } catch (error) {
+            console.error("RFQ validation error:", error);
+        }
+    }
+
+    // Save and Compare button
+    button.addEventListener("click", async () => {
+
+        if (button.disabled) {
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Saving...";
+
+        showMessage("Saving supplier quotations...");
+
+        try {
+            const response = await fetch(
+                "../database/save-rfq-quotations.php",
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        rfq_number: rfqNumber
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            // Display missing products without a popup
+            if (!response.ok || !data.success) {
+
+                let errorMessage = data.message ||
+                    "Unable to save quotations.";
+
+                if (Array.isArray(data.missing) && data.missing.length) {
+                    errorMessage += "\n\nMissing products:\n";
+                    errorMessage += data.missing.join("\n");
+                }
+
+                throw new Error(errorMessage);
+            }
+
+            // Successfully saved: go directly to Comparison Matrix
+            window.location.href =
+                `comparison-matrix.html?rfq_number=${encodeURIComponent(rfqNumber)}`;
+
+        } catch (error) {
+
+            console.error("Save quotation error:", error);
+
+            showMessage(error.message, true);
+
+            button.disabled = false;
+            button.innerHTML = originalButtonHTML;
+
+            // Scroll to the error message
+            message.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }
+    });
+
+    checkRFQ();
+
 })();
+

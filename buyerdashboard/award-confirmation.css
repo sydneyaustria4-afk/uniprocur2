@@ -476,16 +476,22 @@ a {
 
 
 
-/* Awarded Successfully Popup */
+
+/* ========================================
+   AWARDED SUCCESSFULLY MODAL
+======================================== */
 
 .award-modal-overlay {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    display: grid;
-    place-items: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     padding: 20px;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(35, 30, 30, 0.46);
     backdrop-filter: blur(4px);
 }
 
@@ -494,72 +500,101 @@ a {
 }
 
 .award-success-modal {
-    width: 100%;
-    max-width: 420px;
-    padding: 35px 30px 25px;
-    border-radius: 25px;
+    width: 438px;
+    max-width: 100%;
+
+    min-height: 351px;
+    padding: 25px 30px 24px;
+    border-radius: 26px;
+
     background: linear-gradient(
-        to bottom,
-        #ee3333 0%,
-        #f8a0a0 55%,
-        #ffffff 85%
+        180deg,
+        #ed3030 0%,
+        #f48d8d 42%,
+        #ffffff 79%
     );
+
     text-align: center;
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
-.success-trophy {
-    font-size: 55px;
-    margin-bottom: 24px;
+.success-icon {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 13px;
 }
 
 .award-success-modal h2 {
+    display: flex;
+    flex-direction: column;
+
     margin: 0;
-    font-size: 23px;
+    color: #000;
+    font-size: 20px;
     font-weight: 800;
-    line-height: 1.2;
+    line-height: 1.08;
 }
 
-.award-success-modal h2 span {
-    display: block;
-}
+.success-message {
+    max-width: 340px;
+    margin: 4px auto 36px;
 
-.award-success-modal p {
-    margin: 12px 0 30px;
-    color: #555;
-    font-size: 13px;
-    line-height: 1.5;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.15;
 }
 
 .create-po-button,
 .back-dashboard-button {
-    display: block;
-    width: 220px;
-    margin: 9px auto;
-    padding: 10px;
-    border-radius: 7px;
+    width: 200px;
+    height: 33px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    border-radius: 9px;
+    font-family: Inter, Arial, sans-serif;
     font-size: 12px;
-    text-align: center;
+    text-decoration: none;
 }
 
 .create-po-button {
-    background: #050505;
-    color: white;
-    border: 1px solid #050505;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+}
+
+.create-po-button img {
+    width: 14px;
+    height: 14px;
+    filter: brightness(0) invert(1);
 }
 
 .create-po-button:disabled {
-    opacity: 0.65;
+    opacity: 1;
     cursor: not-allowed;
 }
 
 .back-dashboard-button {
-    background: white;
+    margin-top: 10px;
+    background: #fff;
     color: #777;
-    border: 1px solid #aaa;
-    text-decoration: none;
+    border: 1px solid #999;
+}
+
+.back-dashboard-button span {
+    font-size: 19px;
 }
 
 .back-dashboard-button:hover {
-    background: #f3f3f3;
+    background: #f5f5f5;
+}
+
+@media (max-width: 480px) {
+    .award-success-modal {
+        padding: 24px 18px;
+    }
 }

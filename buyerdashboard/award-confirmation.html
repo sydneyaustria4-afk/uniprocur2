@@ -77,44 +77,67 @@
     </div>
 
 
-<!-- Awarded Successfully Popup -->
+
+<!-- Awarded Successfully Modal -->
 <div id="awardSuccessModal" class="award-modal-overlay" hidden>
-    <div
-        class="award-success-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="successTitle"
-    >
-        <div class="success-trophy">🏆</div>
+    <div class="award-success-modal"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="successTitle">
+
+        <div class="success-icon">
+            <svg width="76" height="76" viewBox="0 0 76 76"
+                 fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g transform="rotate(8 38 38)">
+                    <rect x="17" y="14" width="44" height="51"
+                          rx="8" fill="white"/>
+                    <path d="M28 28H48V36C48 42 44 46 38 46
+                             C32 46 28 42 28 36V28Z"
+                          stroke="#F04444" stroke-width="3"
+                          stroke-linejoin="round"/>
+                    <path d="M28 31H23V35C23 39 26 41 30 41
+                             M48 31H53V35C53 39 50 41 46 41"
+                          stroke="#F04444" stroke-width="3"/>
+                    <path d="M38 46V52M31 54H45"
+                          stroke="#F04444" stroke-width="3"
+                          stroke-linecap="round"/>
+                </g>
+                <path d="M14 15L18 19M54 9L52 15M65 24L60 27
+                         M12 53L16 49M61 59L65 63"
+                      stroke="white" stroke-width="3"
+                      stroke-linecap="round"/>
+            </svg>
+        </div>
 
         <h2 id="successTitle">
-            <span id="successRfqNumber">RFQ</span>
-            <span>Awarded Successfully</span>
+            <span id="successRfqNumber">RFQ-0002</span>
+            Awarded Successfully
         </h2>
 
-        <p>
-            <strong id="successSupplierName">Supplier</strong>
+        <p class="success-message">
+            <span id="successSupplierName">
+                SynthHide Textile Corp.
+            </span>
             has been selected as the winner.
-            The award is recorded in UniProcur.
+            The award has been recorded in UniProcur.
         </p>
 
-        <button
-            type="button"
-            class="create-po-button"
-            disabled
-            title="Purchase Order creation is the next feature"
-        >
+        <button type="button"
+                class="create-po-button"
+                disabled>
+            <img src="../assets/4f701.svg" alt="">
             Create Purchase Order
         </button>
 
-        <a
-            href="buyer-dashboard.html"
-            class="back-dashboard-button"
-        >
-            Back to Dashboard →
+        <a href="buyer-dashboard.html"
+           class="back-dashboard-button">
+            Back to Dashboard
+            <span aria-hidden="true">→</span>
         </a>
+
     </div>
 </div>
+
 
 
 
