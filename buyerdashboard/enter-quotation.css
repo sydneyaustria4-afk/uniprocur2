@@ -68,3 +68,19 @@ button {cursor:pointer;}
 @media(max-width:760px){.page-shell{width:calc(100% - 24px);padding-top:13px;}.topbar{border-radius:15px;height:65px;padding:7px 12px;}.topbar-user{gap:7px;}.bell-circle,.user-avatar{width:34px;height:34px;}.bell-circle img{width:25px;height:25px;}.user-copy strong{font-size:11px;}.user-copy small{font-size:9px;}.back-circle{margin:18px 0;width:40px;height:40px;}.paper-shell{padding:9px;}.quotation-form{padding:13px;}.form-header{flex-direction:column;align-items:flex-start;}.header-actions{align-self:flex-end;}.supplier-row{grid-template-columns:1fr;gap:0;}.supplier-visual{min-height:280px;}.quotation-side{border-radius:0 0 6px 6px;}.supplier-list{gap:18px;}.item-grid{gap:9px;}}
 @media(max-width:500px){.item-grid{grid-template-columns:1fr;}.item-form-row{grid-template-columns:75px minmax(0,1fr) minmax(76px,.6fr);}.user-divider{display:none;}.topbar-logo{width:37px;height:37px;}.topbar-logo img{width:22px;}.topbar-title strong{font-size:12px;}.topbar-user .user-copy{display:none;}.supplier-visual{padding:15px;}.header-actions{width:100%;}.header-actions .btn{flex:1;padding:0 9px;}.side-field{grid-template-columns:minmax(85px,.65fr) 1fr;}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;}}
+
+
+
+/* Save icon from GitHub */
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-save .save-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
