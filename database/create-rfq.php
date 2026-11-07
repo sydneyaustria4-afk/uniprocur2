@@ -303,7 +303,7 @@ try {
     $insertRfq = $conn->prepare(
         "INSERT INTO rfqs
             (rfq_number, pr_id, created_by, deadline, status)
-         VALUES (?, ?, ?, ?, 'sent')"
+         VALUES (?, ?, ?, ?, 'open')"
     );
 
     $insertRfq->bind_param(
@@ -345,7 +345,7 @@ try {
             'rfq_number' => $rfqNumber,
             'pr_number' => $prNumber,
             'deadline' => $deadline,
-            'status' => 'sent',
+           'status' => 'open',
             'supplier_count' => count($supplierIds)
         ]
     ]);

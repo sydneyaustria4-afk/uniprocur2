@@ -25,7 +25,7 @@
   >
 
   <!-- Confirm RFQ CSS -->
-  <link rel="stylesheet" href="confirm-rfq.css?v=3">
+  <link rel="stylesheet" href="confirm-rfq.css?v=4">
 
   <!-- Leaflet Map JavaScript -->
   <script
@@ -33,10 +33,10 @@
     defer
   ></script>
 
-  <script src="product-images.js?v=1" defer></script>
+  <script src="product-images.js?v=2" defer></script>
 
   <!-- Confirm RFQ JavaScript -->
-  <script src="confirm-rfq.js?v=4" defer></script>
+  <script src="confirm-rfq.js?v=5" defer></script>
 
 </head>
 
@@ -456,59 +456,68 @@
 
 
 
-  <!-- ======================================
-       SEND RFQ CONFIRMATION DIALOG
-  ======================================= -->
+  
+<!-- Figma Submit for Approval Popup -->
+<dialog class="send-dialog figma-rfq-dialog" id="sendRfqDialog">
 
-  <dialog
-    class="send-dialog"
-    id="sendRfqDialog"
-  >
+  <div class="figma-dialog-content">
 
-    <div class="dialog-content">
+    <button
+      type="button"
+      class="figma-dialog-close"
+      id="closeSendDialog"
+      aria-label="Close"
+    >×</button>
 
-      <button
-        type="button"
-        class="dialog-close"
-        id="closeSendDialog"
-        aria-label="Close dialog"
-      >
-        ×
-      </button>
+    <h2>Submit for Approval</h2>
 
+    <p class="figma-dialog-description">
+      Are you sure you want to submit
+      <strong id="dialogPrNumber">PR-2026-0015</strong>
+      for approval?
+    </p>
 
-      <h2>Confirm RFQ Submission</h2>
-
-      <p>
-        Are you sure you want to send
-        <strong id="dialogRfqNumber">RFQ-0001</strong>
-        to the selected suppliers?
-      </p>
-
-
-      <div class="dialog-actions">
-
-        <button
-          type="button"
-          class="dialog-cancel"
-          id="cancelSendRfq"
-        >
-          Cancel
-        </button>
-
-        <button
-          type="button"
-          class="dialog-confirm"
-          id="confirmSendRfq"
-        >
-          Confirm
-        </button>
-
-      </div>
-
+    <div class="figma-warning">
+      <strong>Warning:</strong>
+      You will not be able to edit or delete this RFQ once submitted.
     </div>
 
-  </dialog>
+    <div class="figma-pr-summary">
+      <div class="figma-pr-heading">
+        <strong id="dialogRfqNumber">RFQ-0015</strong>
+        <span class="figma-pr-priority">Medium</span>
+      </div>
+
+      <div class="figma-pr-details">
+        <p>
+          <strong>Required by:</strong>
+          <span id="dialogRequiredDate">—</span>
+        </p>
+
+        <p>
+          <strong id="dialogItemsCount">0 Items:</strong>
+          <span id="dialogItemsNames">—</span>
+        </p>
+      </div>
+    </div>
+
+    <label class="figma-confirm-check">
+      <input type="checkbox" id="confirmRfqCheckbox">
+      I confirm all details are correct and ready for approval.
+    </label>
+
+    <div class="figma-dialog-actions">
+      <button type="button" id="cancelSendRfq" class="figma-cancel">
+        Cancel
+      </button>
+
+      <button type="button" id="confirmSendRfq" class="figma-submit" disabled>
+        Submit for Approval →
+      </button>
+    </div>
+
+  </div>
+</dialog>
 
 
 
@@ -522,6 +531,37 @@
     role="status"
     aria-live="polite"
   ></div>
+
+
+<dialog id="rfqSuccessDialog" class="rfq-success-dialog">
+  <div class="rfq-success-content">
+    
+<div class="success-icon">
+  <img src="../assets/shoes.svg" alt="Success" class="jumping-shoe">
+</div>
+
+
+    <h2>
+      <span id="successRfqNumber">RFQ-0001</span><br>
+      Submitted Successfully!
+    </h2>
+
+    <p>
+Your RFQ has been saved and the selected
+suppliers are ready for simulated quotations.
+    </p>
+
+    <button
+      type="button"
+      onclick="window.location.href='../buyerdashboard/buyer-dashboard.html'"
+    >
+      Back to Dashboard →
+    </button>
+  </div>
+</dialog>
+
+
+
 
 
 </body>

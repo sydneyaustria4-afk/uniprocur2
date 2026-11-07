@@ -313,10 +313,48 @@ function getItemImage(itemName) {
     renderApprovalHistory(request);
 
     // Show draft actions only for draft Purchase Requests.
-    const isDraft =
-      String(request.status).toLowerCase() === "draft";
+   
+// Display actions based on Purchase Request status.
+const status = String(request.status || "").toLowerCase();
 
-    document.getElementById("prActions").hidden = !isDraft;
+const isDraft = status === "draft";
+const isApproved = status === "approved";
+
+const prActions = document.getElementById("prActions");
+const deleteDraftButton = document.getElementById("deleteDraftButton");
+const editPRButton = document.getElementById("editPRButton");
+const submitPRButton = document.getElementById("submitPRButton");
+const createRFQButton = document.getElementById("createRFQButton");
+
+// Draft PR: show draft actions.
+// Approved PR: show Create RFQ.
+// Submitted / Rejected: hide these actions.
+prActions.hidden = !(isDraft || isApproved);
+
+deleteDraftButton.hidden = !isDraft;
+editPRButton.hidden = !isDraft;
+submitPRButton.hidden = !isDraft;
+createRFQButton.hidden = !isApproved;
+
+if (isApproved) {
+  createRFQButton.style.display = "inline-flex";
+} else {
+  createRFQButton.style.display = "none";
+}
+
+// Open the existing RFQ creation page.
+createRFQButton.addEventListener("click", () => {
+  if (!isApproved) return;
+
+  const query = new URLSearchParams({
+    pr_id: String(request.id),
+    pr_number: request.pr_number
+  });
+
+  window.location.href =
+    `../PR202601/edit-rfq2.html?${query.toString()}`;
+});
+
 
     // The buttons are displayed here; their database actions
     // will be connected in the next implementation step.

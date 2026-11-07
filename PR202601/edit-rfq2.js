@@ -208,46 +208,67 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
   // Supplier Selection Toggle
   // ==========================================================================
-  function updateSelectedCount() {
-    const selectedCards = document.querySelectorAll(".supplier-selection-card.is-selected");
-    const count = selectedCards.length;
-    if (selectedCountBadge) {
-      selectedCountBadge.textContent = String(count);
-    }
+ 
+
+function updateSelectedCount() {
+  const selectedCards = document.querySelectorAll(
+    ".supplier-selection-card.is-selected"
+  );
+
+  if (selectedCountBadge) {
+    selectedCountBadge.textContent = String(selectedCards.length);
+  }
+}
+
+
+
+
+document.querySelectorAll(".supplier-selection-card").forEach((card) => {
+  const toggleBtn = card.querySelector(".supplier-toggle-btn");
+  const cardBody = card.querySelector(".supplier-card-body");
+
+  if (!toggleBtn || !cardBody) return;
+
+  const cancelBtn = document.createElement("button");
+  cancelBtn.type = "button";
+  cancelBtn.className = "supplier-cancel-btn";
+  cancelBtn.textContent = "Cancel";
+  cardBody.appendChild(cancelBtn);
+
+  function updateCard() {
+    const selected = card.classList.contains("is-selected");
+
+    toggleBtn.classList.toggle("is-selected", selected);
+    toggleBtn.textContent = selected ? "Selected" : "Select";
+    cancelBtn.hidden = !selected;
+
+    updateSelectedCount();
   }
 
-  document.querySelectorAll(".supplier-selection-card").forEach((card) => {
-    const toggleBtn = card.querySelector(".supplier-toggle-btn");
+  function toggleCard() {
+    card.classList.toggle("is-selected");
+    updateCard();
+  }
 
-    function toggleCard() {
-      const isCurrentlySelected = card.classList.contains("is-selected");
-
-      if (isCurrentlySelected) {
-        card.classList.remove("is-selected");
-        toggleBtn.classList.remove("is-selected");
-        toggleBtn.innerHTML = "Select";
-      } else {
-        card.classList.add("is-selected");
-        toggleBtn.classList.add("is-selected");
-        toggleBtn.innerHTML = '<span class="check-icon" aria-hidden="true">✓</span> Selected';
-      }
-
-      updateSelectedCount();
-    }
-
-    if (toggleBtn) {
-      toggleBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        toggleCard();
-      });
-    }
-
-    card.addEventListener("click", (e) => {
-      // Avoid re-triggering if clicked directly on button
-      if (e.target.closest(".supplier-toggle-btn")) return;
-      toggleCard();
-    });
+  toggleBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleCard();
   });
+
+  cancelBtn.addEventListener("click", (event) => {
+    event.stopPropagation();
+    card.classList.remove("is-selected");
+    updateCard();
+  });
+
+  card.addEventListener("click", (event) => {
+    if (event.target.closest("button")) return;
+    toggleCard();
+  });
+
+  updateCard();
+});
+
 
   // Initial count update
   updateSelectedCount();
@@ -453,13 +474,12 @@ document.addEventListener("DOMContentLoaded", () => {
           : "None";
     }
 
-    if (reviewModal) {
-      reviewModal.showModal();
-    } else {
-      window.location.href = "confirm-rfq.html";
-    }
-  });
-}
+   
+window.location.href = "confirm-rfq.html";
+
+    });
+  }
+
 
 
   // Close review modal.

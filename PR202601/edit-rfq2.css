@@ -1122,3 +1122,70 @@ button {
 
 
 
+
+/* Figma-style supplier selection */
+
+.supplier-selection-card.is-selected {
+  border-color: #d4d4d4;
+  box-shadow: none;
+}
+
+.supplier-selection-card.is-selected:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+/* Default Select button */
+.supplier-toggle-btn {
+  width: 76px;
+  height: 27px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  background: #000;
+  color: #fff;
+  border: 1px solid #000;
+}
+
+/* Selected state */
+.supplier-toggle-btn.is-selected {
+  background: #d9ff80;
+  color: #111;
+  border: 1px solid #a5cb50;
+}
+
+.supplier-toggle-btn.is-selected .check-icon {
+  display: none;
+}
+
+/* Supplier button row */
+.supplier-card-body {
+  position: relative;
+}
+
+.supplier-toggle-btn.is-selected {
+  margin-right: auto;
+}
+
+/* Cancel button */
+.supplier-cancel-btn {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  width: 76px;
+  height: 27px;
+  border: 1px solid #ff6b6b;
+  border-radius: 20px;
+  background: white;
+  color: #ff4444;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.supplier-cancel-btn:hover {
+  background: #fff1f1;
+}
+
+
+.supplier-cancel-btn[hidden] {
+  display: none !important;
+}

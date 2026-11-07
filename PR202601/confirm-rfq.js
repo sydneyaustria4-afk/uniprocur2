@@ -1023,6 +1023,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const confirmButton = getElement("confirmSendRfq");
 
+  
+const confirmCheckbox = getElement("confirmRfqCheckbox");
+
+// Use the actual Purchase Request details.
+setText("dialogPrNumber", data.prNumber);
+setText("dialogRequiredDate", formatDate(data.prRequiredDate));
+
+const productNames = Array.isArray(data.products)
+  ? data.products.map(item => item.name).filter(Boolean)
+  : [];
+
+setText(
+  "dialogItemsCount",
+  `${productNames.length} Items:`
+);
+
+setText(
+  "dialogItemsNames",
+  productNames.join(" & ")
+);
+
+// Require checkbox confirmation before saving.
+if (confirmCheckbox && confirmButton) {
+  confirmCheckbox.addEventListener("change", () => {
+    confirmButton.disabled = !confirmCheckbox.checked;
+  });
+}
+
+
 
   setText(
     "dialogRfqNumber",
@@ -1129,16 +1158,23 @@ if (confirmButton) {
 
       closeSendDialog();
 
-      // Remove preview only after the database confirms success.
-      sessionStorage.removeItem(PREVIEW_KEY);
+// Clear preview only after successful saving.
+sessionStorage.removeItem(PREVIEW_KEY);
 
-      showToast(result.message);
+// Display success popup.
+const successDialog = document.getElementById("rfqSuccessDialog");
 
-      // Return to Buyer Dashboard.
-      window.setTimeout(() => {
-        window.location.href =
-          "../buyerdashboard/buyer-dashboard.html";
-      }, 1000);
+if (successDialog) {
+  const successNumber = document.getElementById("successRfqNumber");
+
+  if (successNumber) {
+    successNumber.textContent = preview.rfqNumber;
+  }
+
+  successDialog.showModal();
+} else {
+  showToast("RFQ submitted successfully!");
+}
 
     } catch (error) {
 
@@ -1147,7 +1183,7 @@ if (confirmButton) {
       showToast(error.message);
 
       confirmButton.disabled = false;
-      confirmButton.textContent = "Confirm";
+    confirmButton.textContent = "Submit for Approval →";
 
     }
 

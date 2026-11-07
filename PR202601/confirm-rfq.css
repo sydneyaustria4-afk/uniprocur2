@@ -1357,3 +1357,260 @@ img {
   }
 
 }
+
+
+
+/* =========================================
+   RFQ SUBMITTED SUCCESSFULLY POPUP
+   ========================================= */
+
+.rfq-success-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(400px, calc(100% - 32px));
+  padding: 0;
+  border: none;
+  border-radius: 22px;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    #f33434 0%,
+    #ff8585 33%,
+    #ffffff 76%
+  );
+  box-shadow: 0 20px 65px rgba(0, 0, 0, 0.3);
+}
+
+.rfq-success-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+}
+
+.rfq-success-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 38px 35px 30px;
+  text-align: center;
+}
+
+.rfq-success-content .success-icon {
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 30px;
+  font-size: 40px;
+  color: white;
+  transform: rotate(-12deg);
+}
+
+.rfq-success-content h2 {
+  margin-bottom: 5px;
+  color: #111;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.rfq-success-content p {
+  max-width: 290px;
+  margin-bottom: 40px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #555;
+}
+
+.rfq-success-content button {
+  width: 100%;
+  min-height: 39px;
+  border: none;
+  border-radius: 30px;
+  background: #f00000;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.rfq-success-content button:hover {
+  background: #c90000;
+}
+
+
+
+/* Figma RFQ submission confirmation */
+
+.figma-rfq-dialog {
+  width: min(575px, calc(100% - 30px));
+  max-width: 575px;
+  border: none;
+  border-radius: 7px;
+  padding: 0;
+  background: #fff;
+  margin: auto;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, .25);
+}
+
+.figma-rfq-dialog::backdrop {
+  background: rgba(0, 0, 0, .45);
+  backdrop-filter: blur(3px);
+}
+
+.figma-dialog-content {
+  position: relative;
+  padding: 20px;
+  font-family: Inter, Arial, sans-serif;
+}
+
+.figma-dialog-content h2 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: #111;
+}
+
+.figma-dialog-close {
+  position: absolute;
+  right: 15px;
+  top: 12px;
+  background: none;
+  border: 0;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.figma-dialog-description {
+  font-size: 12px;
+  color: #777;
+  margin-bottom: 13px;
+}
+
+.figma-warning {
+  background: #f8f3f3;
+  border-left: 2px solid #ff6666;
+  padding: 13px;
+  font-size: 11px;
+  color: #777;
+  margin-bottom: 13px;
+}
+
+.figma-pr-summary {
+  border: 1px solid #999;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 13px;
+}
+
+.figma-pr-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 20px;
+}
+
+.figma-pr-priority {
+  border: 1px solid #e5b96d;
+  border-radius: 20px;
+  background: #fff3d9;
+  color: #b77e23;
+  padding: 2px 10px;
+  font-size: 10px;
+}
+
+.figma-pr-details {
+  padding-left: 18px;
+  font-size: 11px;
+  color: #666;
+}
+
+.figma-pr-details p {
+  margin: 5px 0;
+}
+
+.figma-pr-details strong {
+  display: inline-block;
+  min-width: 78px;
+}
+
+.figma-confirm-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  color: #777;
+  cursor: pointer;
+}
+
+.figma-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 23px;
+}
+
+.figma-cancel,
+.figma-submit {
+  padding: 9px 15px;
+  border-radius: 7px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.figma-cancel {
+  background: #fff;
+  color: #f44;
+  border: 1px solid #f66;
+}
+
+.figma-submit {
+  background: #111;
+  color: white;
+  border: 1px solid #111;
+}
+
+.figma-submit:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+
+
+/* Existing UniProcur shoe success animation */
+
+.rfq-success-content .success-icon {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  transform: none;
+}
+
+.jumping-shoe {
+  display: block;
+  width: 100px;
+  height: 94px;
+  object-fit: contain;
+  animation: shoeBounce 1.2s ease-in-out infinite;
+}
+
+@keyframes shoeBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translateY(-18px) rotate(5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jumping-shoe {
+    animation: none;
+  }
+}
