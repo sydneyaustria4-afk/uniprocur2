@@ -1263,6 +1263,26 @@ if (menuToggle) {
       ?.querySelector('.task-reference')
       ?.textContent.trim();
 
+      
+    // OPEN ENTER QUOTATION PAGE
+    if (actionText === 'Enter Quotation' && prNumber) {
+      window.location.href =
+        `enter-quotation.html?rfq_number=${encodeURIComponent(prNumber)}`;
+
+      return;
+    }
+
+
+      
+    // OPEN ENTER QUOTATION PAGE
+    if (actionText === 'Enter Quotation' && prNumber) {
+      window.location.href =
+        `enter-quotation.html?rfq_number=${encodeURIComponent(prNumber)}`;
+
+      return;
+    }
+
+
     // VIEW PURCHASE REQUEST.
     if (actionText === 'View PR' && prNumber) {
       window.location.href =
