@@ -23,15 +23,34 @@
   // Read-only catalog price preview. Values mirror the static fallback prices
   // currently displayed by supplier/catalog.js when its PHP catalog is unavailable.
   // They are NOT actual quotations and are NOT saved by this preview page.
-  const catalogProducts = [
-    "full-grain leather", "suede leather", "nubuck leather", "mesh fabric",
-    "canvas fabric", "pu leather", "vulcanized rubber outsoles", "eva foam sheets",
-    "tpr outsoles", "metal eyelets", "metal buckles", "zippers",
-    "shoe boxes (eco friendly)", "tissue paper rolls", "packaging tape", "rubber cement"
-  ];
+  
+const catalogProducts = [
+    "full-grain leather",
+    "black leather",
+    "nubuck leather",
+    "mesh fabric",
+    "canvas fabric",
+    "pu leather",
+    "rubber sole",
+    "eva foam sheets",
+    "foam insole",
+    "metal eyelets",
+    "metal buckles",
+    "shoelaces",
+    "shoe boxes (eco friendly)",
+    "tissue paper rolls",
+    "packaging tape",
+    "shoes adhesiv"
+];
+
   const catalogRates = {
     marikina:   [240,235,260,128,97,148,510,128,318,82,35,26,12.5,0.86,46,152],
-    cordillera: [240,235,260,128,97,148,510,128,318,82,35,26,12.5,0.86,46,152],
+    cordillera: [
+    235, 250, 252, 130,
+    98, 152, 515, 130,
+    322, 85, 36, 27,
+    13, 0.88, 48, 155
+],
     synthhide:  [245,240,258,125,95,145,508,126,316,81,34.5,25.5,12.3,0.85,45.5,151],
     soletech:   [242,238,262,127,96,149,505,125,320,83,35.5,26.5,12.4,0.86,46.5,150],
     metalcraft: [244,245,264,129,97,147,512,128,315,80,34.5,25.5,12.6,0.86,46,152],

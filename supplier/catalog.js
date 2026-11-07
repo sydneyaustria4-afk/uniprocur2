@@ -4,10 +4,17 @@ const fallbackSuppliers = {
     name: "Marikina Hide and Leather Co",
     prices: [240, 235, 260, 128, 97, 148, 510, 128, 318, 82, 35, 26, 12.5, 0.86, 46, 152]
   },
-  cordillera: {
+  
+cordillera: {
     name: "Cordillera Leather Works",
-    prices: [240, 235, 260, 128, 97, 148, 510, 128, 318, 82, 35, 26, 12.5, 0.86, 46, 152]
-  },
+    prices: [
+        235, 250, 252, 130,
+        98, 152, 515, 130,
+        322, 85, 36, 27,
+        13, 0.88, 48, 155
+    ]
+},
+
   synthhide: {
     name: "SynthHide Textile Corp.",
     prices: [245, 240, 258, 125, 95, 145, 508, 126, 316, 81, 34.5, 25.5, 12.3, 0.85, 45.5, 151]
@@ -26,24 +33,26 @@ const fallbackSuppliers = {
   }
 };
 
+
 const fallbackProducts = [
-  { name: "Full-Grain Leather", image: "full-grain-leather.png", swatches: [1, 2, 3] },
-  { name: "Suede Leather", image: "suede-leather.png", swatches: [4, 5, 6] },
-  { name: "Nubuck Leather", image: "nubuck-leather.png", swatches: [7, 8, 9, 10, 11, 12] },
-  { name: "Mesh Fabric", image: "mesh-fabric.png", swatches: [13, 14, 15] },
-  { name: "Canvas Fabric", image: "canvas-fabric.png", swatches: [16, 17, 18, 19, 20] },
-  { name: "PU Leather", image: "pu-leather.png", swatches: [21, 22, 23, 24, 25] },
-  { name: "Vulcanized Rubber Outsoles", image: "vulcanized-rubber-outsoles.png", swatches: [1, 2, 3] },
-  { name: "EVA Foam Sheets", image: "eva-foam-sheets.png", swatches: [] },
-  { name: "TPR Outsoles", image: "tpr-outsoles.png", swatches: [] },
-  { name: "Metal Eyelets", image: "metal-eyelets.png", swatches: [26, 27, 28] },
-  { name: "Metal Buckles", image: "metal-buckles.png", swatches: [16, 17, 18, 19, 20] },
-  { name: "Zippers", image: "zippers.png", swatches: [] },
-  { name: "Shoe Boxes (Eco Friendly)", image: "shoe-boxes.png", swatches: [] },
-  { name: "Tissue Paper Rolls", image: "tissue-paper-rolls.png", swatches: [] },
-  { name: "Packaging Tape", image: "packaging-tape.png", swatches: [] },
-  { name: "Rubber Cement", image: "rubber-cement.png", swatches: [] }
+    { name: "Full-Grain Leather", image: "full-grain-leather.png", swatches: [1, 2, 3] },
+    { name: "Black Leather", image: "../assets/black leather.svg", swatches: [4, 5, 6] },
+    { name: "Nubuck Leather", image: "nubuck-leather.png", swatches: [7, 8, 9, 10, 11, 12] },
+    { name: "Mesh Fabric", image: "mesh-fabric.png", swatches: [13, 14, 15] },
+    { name: "Canvas Fabric", image: "canvas-fabric.png", swatches: [16, 17, 18, 19, 20] },
+    { name: "PU Leather", image: "pu-leather.png", swatches: [21, 22, 23, 24, 25] },
+    { name: "Rubber Sole", image: "vulcanized-rubber-outsoles.png", swatches: [1, 2, 3] },
+    { name: "EVA Foam Sheets", image: "eva-foam-sheets.png", swatches: [] },
+    { name: "Foam Insole", image: "../assets/foam insole.svg", swatches: [] },
+    { name: "Metal Eyelets", image: "metal-eyelets.png", swatches: [26, 27, 28] },
+    { name: "Metal Buckles", image: "metal-buckles.png", swatches: [16, 17, 18, 19, 20] },
+    { name: "Shoelaces", image: "../assets/shoelaces.svg", swatches: [] },
+    { name: "Shoe Boxes (Eco Friendly)", image: "shoe-boxes.png", swatches: [] },
+    { name: "Tissue Paper Rolls", image: "tissue-paper-rolls.png", swatches: [] },
+    { name: "Packaging Tape", image: "packaging-tape.png", swatches: [] },
+    { name: "Shoes Adhesiv", image: "rubber-cement.png", swatches: [] }
 ];
+
 
 const grid = document.querySelector("#products-grid");
 const stage = document.querySelector(".catalog-stage");
@@ -124,9 +133,9 @@ function renderProducts(supplierData, productsList) {
     if (product.item_code) card.dataset.itemCode = product.item_code;
 
     image.className = "product-image";
-    image.src = (imageName.startsWith("cordillera ") || imageName === "cordillera.svg")
-      ? `../assets/${imageName}`
-      : `../assets/catalog/${imageName}`;
+  image.src = imageName.startsWith("../assets/")
+    ? imageName
+    : `../assets/catalog/${imageName}`;
     image.alt = product.name;
     visual.className = `product-visual product-visual--${imageNumber}`;
     visual.append(image);
