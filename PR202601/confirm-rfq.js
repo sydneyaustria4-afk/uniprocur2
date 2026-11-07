@@ -1137,14 +1137,17 @@ if (confirmButton) {
             "Accept": "application/json"
           },
 
-          body: JSON.stringify({
-            rfq_number: preview.rfqNumber,
-            pr_number: preview.prNumber,
-            deadline: getLocalDateString(
-              preview.submissionDueDate
-            ),
-            suppliers: preview.suppliers
-          })
+          
+body: JSON.stringify({
+    rfq_number: preview.rfqNumber,
+    pr_number: preview.prNumber,
+    deadline: getLocalDateString(
+        preview.submissionDueDate
+    ),
+    warehouse_value: preview.warehouseValue,
+    suppliers: preview.suppliers
+})
+
         }
       );
 

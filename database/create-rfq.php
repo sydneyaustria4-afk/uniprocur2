@@ -80,6 +80,18 @@ try {
     $rfqNumber = trim((string) ($input['rfq_number'] ?? ''));
     $prNumber = trim((string) ($input['pr_number'] ?? ''));
     $deadline = trim((string) ($input['deadline'] ?? ''));
+    
+$warehouseValue = trim(
+    (string) ($input['warehouse_value'] ?? '')
+);
+
+if (!in_array($warehouseValue, ['main', 'second'], true)) {
+    sendJson(422, [
+        'success' => false,
+        'message' => 'Please select a valid warehouse.'
+    ]);
+}
+
     $suppliers = $input['suppliers'] ?? [];
 
     if ($rfqNumber === '' || strlen($rfqNumber) > 30) {
@@ -300,19 +312,23 @@ try {
     }
 
     // 5. Save RFQ.
-    $insertRfq = $conn->prepare(
-        "INSERT INTO rfqs
-            (rfq_number, pr_id, created_by, deadline, status)
-         VALUES (?, ?, ?, ?, 'open')"
-    );
+   
+$insertRfq = $conn->prepare(
+    "INSERT INTO rfqs
+        (rfq_number, pr_id, created_by,
+         deadline, warehouse_value, status)
+     VALUES (?, ?, ?, ?, ?, 'open')"
+);
 
-    $insertRfq->bind_param(
-        'siis',
-        $rfqNumber,
-        $prId,
-        $buyerId,
-        $deadline
-    );
+$insertRfq->bind_param(
+    'siiss',
+    $rfqNumber,
+    $prId,
+    $buyerId,
+    $deadline,
+    $warehouseValue
+);
+
 
     $insertRfq->execute();
 

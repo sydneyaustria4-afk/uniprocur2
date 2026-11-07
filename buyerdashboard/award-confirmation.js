@@ -319,16 +319,7 @@
             return;
         }
 
-        // Confirm awarding the selected supplier
-        const confirmed = confirm(
-            `Award ${rfqNumber} to ${selected.name} for ` +
-            `${currency(selected.total_amount)}? ` +
-            "This will record the winning supplier."
-        );
-
-        if (!confirmed) {
-            return;
-        }
+       
 
         const btn = byId("awardButton");
 
@@ -403,6 +394,7 @@
                 byId("successSupplierName").textContent = selected.name;
 
                 successModal.hidden = false;
+                byId("createPOButton").disabled = false;
 
                 // Prevent scrolling while popup is open
                 document.body.style.overflow = "hidden";
@@ -435,6 +427,26 @@
     // ========================================
     // 11. INITIALIZE PAGE
     // ========================================
+
+
+
+const createPOButton = byId("createPOButton");
+
+if (createPOButton) {
+    createPOButton.addEventListener("click", () => {
+        if (!selected || !rfqNumber) return;
+
+        window.location.href =
+            `create-purchase-order.html?rfq_number=${encodeURIComponent(rfqNumber)}&quote_id=${encodeURIComponent(selectedId)}`;
+    });
+}
+
+
+
+
+
+
+
 
     load();
 

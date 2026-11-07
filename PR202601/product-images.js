@@ -23,7 +23,11 @@
     { file: "Zippers.svg", names: ["zipper", "zippers"] },
     { file: "leather.svg", names: ["leather"] },
     { file: "mesh.svg", names: ["mesh"] },
-    { file: "shoes.svg", names: ["shoes"] }
+    { file: "shoes.svg", names: ["shoes"] },
+    { file: "black leather.svg", names: ["black leather"] },
+{ file: "foam insole.svg", names: ["foam insole"] },
+{ file: "shoe laces.svg", names: ["shoelaces"] },
+{ file: "shoe adhesive.svg", names: ["shoe adhesive"] },
   ];
 
   const normalize = (value) =>
