@@ -23,7 +23,7 @@ const items = [
     { code: "PKG-0002", name: "Tissue Paper Rolls", category: "Packaging", unit: "pieces" },
     { code: "PKG-0003", name: "Packaging Tape", category: "Packaging", unit: "rolls" },
 
-    { code: "ADH-0001", name: "Shoes Adhesive", category: "Adhesive", unit: "liters" }
+    { code: "ADH-0001", name: "Shoe Adhesive", category: "Adhesive", unit: "liters" }
 ];
 
 

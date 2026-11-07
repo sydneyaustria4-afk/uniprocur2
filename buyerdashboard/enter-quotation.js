@@ -40,7 +40,7 @@ const catalogProducts = [
     "shoe boxes (eco friendly)",
     "tissue paper rolls",
     "packaging tape",
-    "shoes adhesiv"
+    "shoes adhesive"
 ];
 
   const catalogRates = {

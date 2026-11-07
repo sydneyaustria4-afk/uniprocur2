@@ -98,21 +98,17 @@ function getItemImage(itemName) {
     "shoe boxes": "../assets/Shoes%20Box.svg",
     "shoes box": "../assets/Shoes%20Box.svg",
     "suede leather": "../assets/Suede%20Leather.svg",
-    "tpr outsoles": "../assets/TPR%20Outsoles.svg",
-    "tissue paper rolls": "../assets/Tissue%20Paper%20Rolls.svg",
-    "vulcanized rubber outsoles": "../assets/Vulcanized%20Rubber%20Outsoles.svg",
-    "zippers": "../assets/Zippers.svg",
-    
+   
+"tpr outsoles": "../assets/catalog/tpr-outsoles.png",
+
 "black leather": "../assets/black%20leather.svg",
 "foam insole": "../assets/foam%20insole.svg",
 "shoelaces": "../assets/shoe%20laces.svg",
-"rubber sole": "../assets/Vulcanized%20Rubber%20Outsoles.svg",
-"shoes adhesiv": "../assets/Rubber%20Cement.svg",
+"rubber sole": "../assets/catalog/vulcanized-rubber-outsoles.png",
+"shoes adhesive": "../assets/catalog/rubber-cement.png",
+"shoes adhesive": "../assets/catalog/rubber-cement.png"
+};
 
-    
-
-
-  };
 
   return images[name] || "";
 }

@@ -30,7 +30,10 @@
         'nubuck leather': 'nubuck-leather.png',
         'full-grain leather': 'full-grain-leather.png',
         'mesh fabric': 'mesh-fabric.png',
-        'suede leather': 'suede-leather.png'
+        'suede leather': 'suede-leather.png',
+        
+'metal buckles': 'metal-buckles.png',
+
     };
 
 

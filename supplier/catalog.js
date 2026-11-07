@@ -52,7 +52,7 @@ const fallbackProducts = [
     { name: "Shoe Boxes (Eco Friendly)", image: "shoe-boxes.png", swatches: [] },
     { name: "Tissue Paper Rolls", image: "tissue-paper-rolls.png", swatches: [] },
     { name: "Packaging Tape", image: "packaging-tape.png", swatches: [] },
-    { name: "Shoes Adhesiv", image: "rubber-cement.png", swatches: [] }
+    { name: "Shoes Adhesive", image: "rubber-cement.png", swatches: [] }
 ];
 
 

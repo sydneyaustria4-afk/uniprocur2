@@ -6,7 +6,9 @@
  const currency = n => new Intl.NumberFormat('en-PH',{style:'currency',currency:'PHP'}).format(Number(n)||0);
  const assets = {
   'canvas fabric':'canvas-fabric.png','pu leather':'pu-leather.png','nubuck leather':'nubuck-leather.png',
-  'full-grain leather':'full-grain-leather.png','mesh fabric':'mesh-fabric.png','suede leather':'suede-leather.png'
+  'full-grain leather':'full-grain-leather.png','mesh fabric':'mesh-fabric.png','suede leather':'suede-leather.png',
+  'metal buckles': 'metal-buckles.png',
+
  };
  
 const assetFor = name => {
@@ -17,7 +19,7 @@ const assetFor = name => {
         "foam insole": "../assets/foam%20insole.svg",
         "shoelaces": "../assets/shoe%20laces.svg",
         "rubber sole": "../assets/catalog/vulcanized-rubber-outsoles.png",
-        "shoes adhesiv": "../assets/catalog/rubber-cement.png",
+        "shoes adhesive": "../assets/catalog/rubber-cement.png",
         "shoe boxes": "../assets/catalog/shoe-boxes.png",
         "shoe boxes (eco friendly)": "../assets/catalog/shoe-boxes.png"
     };
