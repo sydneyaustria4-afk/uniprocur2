@@ -83,31 +83,61 @@ function getItemImage(itemName) {
     .trim()
     .toLowerCase();
 
-  const images = {
+ 
+const images = {
+    // ========================================
+    // LEATHER
+    // ========================================
+    "full-grain leather": "../assets/Full%20Grain%20Leather.svg",
+    "black leather": "../assets/black%20leather.svg",
+    "nubuck leather": "../assets/Nubuck%20Leather.svg",
+
+    // ========================================
+    // TEXTILE AND SYNTHETIC
+    // ========================================
+    "mesh fabric": "../assets/Mesh%20Fabric.svg",
     "canvas fabric": "../assets/Canvas%20Fabric.svg",
+    "pu leather": "../assets/PU%20Leather.svg",
+
+    // ========================================
+    // COMPONENTS
+    // ========================================
+    "rubber sole": "../assets/catalog/vulcanized-rubber-outsoles.png",
     "eva foam": "../assets/Eva%20Foam%20Sheets.svg",
     "eva foam sheets": "../assets/Eva%20Foam%20Sheets.svg",
-    "full-grain leather": "../assets/Full%20Grain%20Leather.svg",
-    "mesh fabric": "../assets/Mesh%20Fabric.svg",
-    "metal buckles": "../assets/Metal%20Buckles.svg",
+    "foam insole": "../assets/foam%20insole.svg",
+
+    // ========================================
+    // HARDWARE
+    // ========================================
     "metal eyelets": "../assets/Metal%20Eyelets.svg",
-    "nubuck leather": "../assets/Nubuck%20Leather.svg",
-    "pu leather": "../assets/PU%20Leather.svg",
-    "packaging tape": "../assets/Packaging%20Tape.svg",
-    "rubber cement": "../assets/Rubber%20Cement.svg",
+    "metal buckles": "../assets/Metal%20Buckles.svg",
+    "shoelaces": "../assets/shoe%20laces.svg",
+
+    // ========================================
+    // PACKAGING
+    // ========================================
     "shoe boxes": "../assets/Shoes%20Box.svg",
     "shoes box": "../assets/Shoes%20Box.svg",
-    "suede leather": "../assets/Suede%20Leather.svg",
-   
-"tpr outsoles": "../assets/catalog/tpr-outsoles.png",
+    "shoe boxes (eco friendly)": "../assets/Shoes%20Box.svg",
+    "tissue paper rolls": "../assets/Tissue%20Paper%20Rolls.svg",
+    "packaging tape": "../assets/Packaging%20Tape.svg",
 
-"black leather": "../assets/black%20leather.svg",
-"foam insole": "../assets/foam%20insole.svg",
-"shoelaces": "../assets/shoe%20laces.svg",
-"rubber sole": "../assets/catalog/vulcanized-rubber-outsoles.png",
-"shoes adhesive": "../assets/catalog/rubber-cement.png",
-"shoes adhesive": "../assets/catalog/rubber-cement.png"
+    // ========================================
+    // ADHESIVE
+    // ========================================
+    "shoe adhesive": "../assets/shoe%20adhesive.svg",
+
+    // ========================================
+    // OLD MATERIALS - HISTORICAL PRs
+    // ========================================
+    "suede leather": "../assets/Suede%20Leather.svg",
+    "tpr outsoles": "../assets/catalog/tpr-outsoles.png",
+    "zippers": "../assets/Zippers.svg",
+    "vulcanized rubber outsoles": "../assets/Vulcanized%20Rubber%20Outsoles.svg",
+    "rubber cement": "../assets/Rubber%20Cement.svg"
 };
+
 
 
   return images[name] || "";
