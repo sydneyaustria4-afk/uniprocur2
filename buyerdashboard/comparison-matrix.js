@@ -8,7 +8,27 @@
   'canvas fabric':'canvas-fabric.png','pu leather':'pu-leather.png','nubuck leather':'nubuck-leather.png',
   'full-grain leather':'full-grain-leather.png','mesh fabric':'mesh-fabric.png','suede leather':'suede-leather.png'
  };
- const assetFor = name => `../assets/catalog/${assets[(name||'').toLowerCase()]||'canvas-fabric.png'}`;
+ 
+const assetFor = name => {
+    const key = String(name || "").trim().toLowerCase();
+
+    const newImages = {
+        "black leather": "../assets/black%20leather.svg",
+        "foam insole": "../assets/foam%20insole.svg",
+        "shoelaces": "../assets/shoe%20laces.svg",
+        "rubber sole": "../assets/catalog/vulcanized-rubber-outsoles.png",
+        "shoes adhesiv": "../assets/catalog/rubber-cement.png",
+        "shoe boxes": "../assets/catalog/shoe-boxes.png",
+        "shoe boxes (eco friendly)": "../assets/catalog/shoe-boxes.png"
+    };
+
+    if (newImages[key]) {
+        return newImages[key];
+    }
+
+    return `../assets/catalog/${assets[key] || "canvas-fabric.png"}`;
+};
+
  const bgFor = name => {let k=(name||'').toLowerCase(); return k.includes('synthhide')?'synthide.svg':k.includes('cordillera')?'cordillera.svg':k.includes('marikina')?'marikina.svg':k.includes('soletech')?'soletech.svg':k.includes('metalcraft')?'metalcraft.svg':'ecobox.svg'};
  const make=(tag,cls,txt)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n;};
 

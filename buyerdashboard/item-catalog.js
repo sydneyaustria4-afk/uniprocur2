@@ -1,24 +1,31 @@
 "use strict";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const items = [
+  
+const items = [
     { code: "LEA-0001", name: "Full-Grain Leather", category: "Leather", unit: "square feet" },
-    { code: "LEA-0002", name: "Suede Leather", category: "Leather", unit: "square feet" },
+    { code: "LEA-0004", name: "Black Leather", category: "Leather", unit: "square feet" },
     { code: "LEA-0003", name: "Nubuck Leather", category: "Leather", unit: "square feet" },
+
     { code: "TEX-0001", name: "Mesh Fabric", category: "Textile", unit: "meters" },
     { code: "TEX-0003", name: "Canvas Fabric", category: "Textile", unit: "meters" },
     { code: "TEX-0004", name: "PU Leather", category: "Synthetic", unit: "meters" },
-    { code: "COM-0001", name: "Vulcanized Rubber Outsoles", category: "Components", unit: "pairs" },
+
+    { code: "COM-0001", name: "Rubber Sole", category: "Components", unit: "pairs" },
     { code: "COM-0002", name: "EVA Foam Sheets", category: "Components", unit: "pairs" },
-    { code: "COM-0003", name: "TPR Outsoles", category: "Components", unit: "pairs" },
+    { code: "COM-0004", name: "Foam Insole", category: "Components", unit: "pairs" },
+
     { code: "HAR-0001", name: "Metal Eyelets", category: "Hardware", unit: "gross" },
     { code: "HAR-0002", name: "Metal Buckles", category: "Hardware", unit: "pieces" },
-    { code: "HAR-0003", name: "Zippers", category: "Hardware", unit: "pieces" },
+    { code: "HAR-0004", name: "Shoelaces", category: "Hardware", unit: "pieces" },
+
     { code: "PKG-0001", name: "Shoe Boxes", category: "Packaging", unit: "pieces" },
     { code: "PKG-0002", name: "Tissue Paper Rolls", category: "Packaging", unit: "pieces" },
     { code: "PKG-0003", name: "Packaging Tape", category: "Packaging", unit: "rolls" },
-    { code: "ADH-0001", name: "Rubber Cement / Shoe Adhesive", category: "Adhesive", unit: "liters" }
-  ];
+
+    { code: "ADH-0001", name: "Shoes Adhesive", category: "Adhesive", unit: "liters" }
+];
+
 
   const tableBody = document.getElementById("itemTableBody");
   const searchForm = document.getElementById("itemSearchForm");

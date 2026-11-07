@@ -46,7 +46,9 @@ const fallbackProducts = [
     { name: "Foam Insole", image: "../assets/foam insole.svg", swatches: [] },
     { name: "Metal Eyelets", image: "metal-eyelets.png", swatches: [26, 27, 28] },
     { name: "Metal Buckles", image: "metal-buckles.png", swatches: [16, 17, 18, 19, 20] },
-    { name: "Shoelaces", image: "../assets/shoelaces.svg", swatches: [] },
+    
+{ name: "Shoelaces", image: "../assets/shoe laces.svg", swatches: [] },
+
     { name: "Shoe Boxes (Eco Friendly)", image: "shoe-boxes.png", swatches: [] },
     { name: "Tissue Paper Rolls", image: "tissue-paper-rolls.png", swatches: [] },
     { name: "Packaging Tape", image: "packaging-tape.png", swatches: [] },

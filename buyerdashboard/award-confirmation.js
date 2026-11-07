@@ -34,6 +34,20 @@
     };
 
 
+
+    
+const newProductImages = {
+    "black leather": "../assets/black%20leather.svg",
+    "foam insole": "../assets/foam%20insole.svg",
+    "shoelaces": "../assets/shoe%20laces.svg",
+    "rubber sole": "../assets/catalog/vulcanized-rubber-outsoles.png",
+    "shoes adhesiv": "../assets/catalog/rubber-cement.png",
+    "shoe boxes": "../assets/catalog/shoe-boxes.png",
+    "shoe boxes (eco friendly)": "../assets/catalog/shoe-boxes.png"
+};
+
+
+
     // ========================================
     // 3. SUPPLIER IMAGES AND LOCATIONS
     // ========================================
@@ -121,8 +135,13 @@
         const image = mk('div', 'product-image');
         const img = mk('img');
 
-        img.src = '../assets/catalog/' +
-            (fileMap[String(item.item_name).toLowerCase()] || 'canvas-fabric.png');
+        
+const itemKey = String(item.item_name || "").trim().toLowerCase();
+
+img.src = newProductImages[itemKey] ||
+    "../assets/catalog/" +
+    (fileMap[itemKey] || "canvas-fabric.png");
+
 
         img.alt = item.item_name;
 

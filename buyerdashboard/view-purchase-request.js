@@ -101,7 +101,17 @@ function getItemImage(itemName) {
     "tpr outsoles": "../assets/TPR%20Outsoles.svg",
     "tissue paper rolls": "../assets/Tissue%20Paper%20Rolls.svg",
     "vulcanized rubber outsoles": "../assets/Vulcanized%20Rubber%20Outsoles.svg",
-    "zippers": "../assets/Zippers.svg"
+    "zippers": "../assets/Zippers.svg",
+    
+"black leather": "../assets/black%20leather.svg",
+"foam insole": "../assets/foam%20insole.svg",
+"shoelaces": "../assets/shoe%20laces.svg",
+"rubber sole": "../assets/Vulcanized%20Rubber%20Outsoles.svg",
+"shoes adhesiv": "../assets/Rubber%20Cement.svg",
+
+    
+
+
   };
 
   return images[name] || "";
