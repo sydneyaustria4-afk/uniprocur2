@@ -306,14 +306,37 @@ function renderDashboardRequests(requests, taskData = {}) {
   // 1. PENDING REQUEST TABLE
   // =====================================
 
+ 
+  // =====================================
+  // HIDE APPROVED PRs ALREADY CONVERTED
+  // INTO RFQs
+  // =====================================
+
+  const prIdsWithRFQs = new Set(
+    (taskData.rfq_pr_ids || []).map(String)
+  );
+
+  const requestsToShow = requests.filter(pr => {
+    const isApproved =
+      String(pr.status).toLowerCase() === "approved";
+
+    const hasRFQ =
+      prIdsWithRFQs.has(String(pr.id));
+
+    // Hide the approved PR if an RFQ
+    // has already been created for it.
+    return !(isApproved && hasRFQ);
+  });
+
   renderTableRows(
-    '#pending-request-rows',
-    requests,
-    ['task', 'number', 'status'],
-    'status',
-    'No purchase requests yet.',
+    "#pending-request-rows",
+    requestsToShow,
+    ["task", "number", "status"],
+    "status",
+    "No pending requests yet.",
     true
   );
+
 
 
   // =====================================
@@ -348,14 +371,17 @@ function renderDashboardRequests(requests, taskData = {}) {
       const statusCell = document.createElement("td");
       const actionCell = document.createElement("td");
 
-      taskCell.textContent =
-        `RFQ — ${rfq.task || "Request for Quotation"}`;
+     
+taskCell.textContent =
+  rfq.task || "Request for Quotation";
 
-      numberCell.textContent = rfq.number;
+numberCell.textContent = rfq.number;
 
-      const statusBadge = document.createElement("span");
-      statusBadge.className = "status pending";
-      statusBadge.textContent = "Open RFQ";
+const statusBadge = document.createElement("span");
+
+statusBadge.className = "status rfq-in-progress";
+statusBadge.textContent = "In Progress";
+
 
       statusCell.appendChild(statusBadge);
 
@@ -365,7 +391,7 @@ actionLink.className = "mini-action rfq-action";
 actionLink.textContent = "View";
 
 actionLink.href =
-  `enter-quotation.html?rfq_number=${encodeURIComponent(rfq.number)}`;
+  `view-rfq.html?rfq_number=${encodeURIComponent(rfq.number)}`;
 
       actionCell.appendChild(actionLink);
 
