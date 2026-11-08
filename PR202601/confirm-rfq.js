@@ -1138,15 +1138,24 @@ if (confirmButton) {
           },
 
           
+
 body: JSON.stringify({
     rfq_number: preview.rfqNumber,
     pr_number: preview.prNumber,
+
     deadline: getLocalDateString(
         preview.submissionDueDate
     ),
-    warehouse_value: preview.warehouseValue,
+
+    // Read the warehouse currently displayed
+    // on the Confirm RFQ page
+    warehouse_value: document.getElementById(
+        "warehouseLocation"
+    ).value,
+
     suppliers: preview.suppliers
 })
+
 
         }
       );

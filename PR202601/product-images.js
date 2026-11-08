@@ -27,8 +27,13 @@
     { file: "black leather.svg", names: ["black leather"] },
 { file: "foam insole.svg", names: ["foam insole"] },
 { file: "shoe laces.svg", names: ["shoelaces"] },
-{ file: "shoe adhesive.svg", names: ["shoe adhesive"] },
-  ];
+{ file: "shoe adhesive.svg", names: ["shoe adhesive"] },{
+  file: "shoe adhesive.svg",
+  names: [
+    "shoe adhesive",
+    "rubber cement / shoe adhesive"
+  ]
+},  ];
 
   const normalize = (value) =>
     String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");

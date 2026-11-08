@@ -95,6 +95,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       taskData
     );
 
+    await window.loadBuyerPODrafts();
+
     console.log(
       "Purchase Requests loaded:",
       result.requests
@@ -112,6 +114,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       rfq_pr_ids: [],
       invoices: []
     });
+
+    await window.loadBuyerPODrafts();
 
     showToast(
       "Unable to load Purchase Requests. Check the database connection."
@@ -310,6 +314,77 @@ function renderDashboardRequests(requests, taskData = {}) {
     'No purchase requests yet.',
     true
   );
+
+
+  // =====================================
+  // SHOW SUBMITTED RFQs IN PENDING TABLE
+  // =====================================
+
+  const pendingRFQs = Array.isArray(taskData.rfqs)
+    ? taskData.rfqs
+    : [];
+
+  const pendingTable = document.getElementById(
+    "pending-request-rows"
+  );
+
+  if (pendingTable && pendingRFQs.length > 0) {
+
+    // Remove the empty placeholder if there are RFQs.
+    pendingTable
+      .querySelector(".table-empty-state")
+      ?.closest("tr")
+      ?.remove();
+
+    pendingRFQs.forEach(rfq => {
+
+      if (!rfq.number) return;
+
+      const row = document.createElement("tr");
+      row.className = "rfq-request-row";
+
+      const taskCell = document.createElement("td");
+      const numberCell = document.createElement("td");
+      const statusCell = document.createElement("td");
+      const actionCell = document.createElement("td");
+
+      taskCell.textContent =
+        `RFQ — ${rfq.task || "Request for Quotation"}`;
+
+      numberCell.textContent = rfq.number;
+
+      const statusBadge = document.createElement("span");
+      statusBadge.className = "status pending";
+      statusBadge.textContent = "Open RFQ";
+
+      statusCell.appendChild(statusBadge);
+
+     const actionLink = document.createElement("a");
+
+actionLink.className = "mini-action rfq-action";
+actionLink.textContent = "View";
+
+actionLink.href =
+  `enter-quotation.html?rfq_number=${encodeURIComponent(rfq.number)}`;
+
+      actionCell.appendChild(actionLink);
+
+      row.append(
+        taskCell,
+        numberCell,
+        statusCell,
+        actionCell
+      );
+
+      pendingTable.appendChild(row);
+    });
+  }
+
+
+
+
+
+
 
   currentPurchaseRequests = requests;
 

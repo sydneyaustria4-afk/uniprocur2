@@ -2711,3 +2711,174 @@ body {
 .sidebar .profile-exit {
   margin-left: auto;
 }
+
+
+
+
+
+
+
+/* ========================================
+   PENDING REQUEST TABLE - PO DRAFT FIX
+======================================== */
+
+/* Give table columns enough space */
+.requests-panel .dashboard-table {
+    width: 100%;
+    min-width: 760px;
+    table-layout: fixed;
+}
+
+/* Column widths */
+.requests-panel .dashboard-table th:nth-child(1) {
+    width: 35%;
+}
+
+.requests-panel .dashboard-table th:nth-child(2) {
+    width: 19%;
+}
+
+.requests-panel .dashboard-table th:nth-child(3) {
+    width: 13%;
+}
+
+.requests-panel .dashboard-table th:nth-child(4) {
+    width: 33%;
+}
+
+/* Allow PO rows to grow */
+.requests-panel .po-draft-row td {
+    height: auto;
+    min-height: 43px;
+    vertical-align: middle;
+}
+
+/* Long supplier names wrap to another line */
+.requests-panel .po-draft-row td:first-child {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
+}
+
+/* PO number should stay readable */
+.requests-panel .po-draft-row td:nth-child(2) {
+    white-space: nowrap;
+}
+
+/* Prevent buttons from overlapping */
+.requests-panel .po-draft-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+/* Better button sizes */
+.requests-panel .po-draft-actions .mini-action {
+    width: auto;
+    min-width: 75px;
+    min-height: 28px;
+    padding: 6px 10px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+/* Allow horizontal scrolling on small screens */
+.requests-panel .table-scroll {
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+
+
+
+
+/* Submitted RFQs in Pending Request Table */
+
+.requests-panel .rfq-request-row td {
+    height: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    vertical-align: middle;
+}
+
+.requests-panel .rfq-request-row td:first-child {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
+}
+
+.requests-panel .rfq-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 105px;
+    min-height: 28px;
+    padding: 6px 10px;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+
+
+
+.pending-table .mini-action,
+.pending-table .rfq-action,
+.pending-table .po-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  height: 32px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #2b2b2b;
+  border-radius: 999px;
+  background: #fff;
+  color: #2b2b2b;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+.pending-table .mini-action:hover,
+.pending-table .rfq-action:hover,
+.pending-table .po-action:hover {
+  background: #f7f7f7;
+}
+
+
+
+
+/* RFQ View button - match existing PR View buttons */
+
+.requests-panel .dashboard-table .rfq-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 49px;
+    min-width: 49px;
+    height: 22px;
+    min-height: 22px;
+
+    padding: 4px 10px;
+    border: 0.5px solid #111;
+    border-radius: 10px;
+
+    background: #f3f4f6;
+    color: #374151;
+
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1;
+
+    text-decoration: none;
+    white-space: nowrap;
+    box-sizing: border-box;
+}

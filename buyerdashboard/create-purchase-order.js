@@ -7,6 +7,7 @@
     const params = new URLSearchParams(location.search);
     const rfqNumber = params.get("rfq_number");
     const requestedQuoteId = Number(params.get("quote_id"));
+    const draftPoNumber = params.get("po_number");
 
     const money = value =>
         new Intl.NumberFormat("en-PH", {
@@ -19,6 +20,7 @@
     };
 
     const status = $("status");
+    const saveDraftButton = $("saveDraft");
 
     // Back to the selected Award Confirmation
     const previousUrl =
@@ -182,10 +184,102 @@ $("deliveryAddress").readOnly = true;
             set("subtotal", money(subtotal));
             set("vat", money(vat));
             set("grandTotal", money(subtotal + vat));
+            
+// ========================================
+// LOAD EXISTING SAVED PO DRAFT
+// ========================================
 
-            status.textContent =
-                "Awarded supplier and RFQ items loaded. " +
-                "This is a preview; no Purchase Order has been saved.";
+if (draftPoNumber) {
+
+    const draftResponse = await fetch(
+        `../database/buyer-po-drafts.php?po_number=${encodeURIComponent(draftPoNumber)}`,
+        {
+            credentials: "same-origin",
+            headers: {
+                Accept: "application/json"
+            }
+        }
+    );
+
+    const draftResult = await draftResponse.json();
+
+    if (!draftResponse.ok || !draftResult.success) {
+        throw new Error(
+            draftResult.message || "Unable to load saved PO."
+        );
+    }
+
+    const draft = draftResult.draft;
+
+    // Verify this is the same RFQ and awarded quotation.
+    if (
+        draft.rfq_number !== rfqNumber ||
+        Number(draft.rfq_quote_id) !== requestedQuoteId
+    ) {
+        throw new Error(
+            "Saved PO does not match the selected RFQ."
+        );
+    }
+
+    set("poNumber", draft.po_number);
+
+    const createdDate = new Date(
+        `${draft.order_date}T00:00:00`
+    );
+
+    set(
+        "poDate",
+        Number.isNaN(createdDate.getTime())
+            ? draft.order_date
+            : createdDate.toLocaleDateString("en-PH", {
+                year: "numeric",
+                month: "long",
+                day: "2-digit"
+            })
+    );
+
+    $("expectedDelivery").value =
+        draft.expected_delivery || "";
+
+    $("deliveryAddress").value =
+        draft.delivery_address || "";
+
+    $("notes").value =
+        draft.notes_to_supplier || "";
+
+    $("saveDraft").disabled = true;
+    $("saveDraft").textContent = "Draft Saved ✓";
+
+    status.classList.remove("error");
+    status.textContent =
+        `${draft.po_number} loaded successfully from MySQL. ` +
+        "This Purchase Order is still a draft.";
+
+    return;
+}
+
+
+          
+if (
+    !$("expectedDelivery").value ||
+    !$("deliveryAddress").value
+) {
+    throw new Error(
+        "RFQ deadline or warehouse is missing. Cannot save a PO draft yet."
+    );
+}
+
+status.classList.remove("error");
+
+status.textContent =
+    "Awarded RFQ loaded. Ready to save as Draft. " +
+    "The saved PO amount will exclude the unconfirmed VAT estimate.";
+
+saveDraftButton.disabled = false;
+
+saveDraftButton.title =
+    "Save this awarded RFQ as a Purchase Order draft";
+
 
         } catch (error) {
             status.classList.add("error");
@@ -194,6 +288,103 @@ $("deliveryAddress").readOnly = true;
             console.error("Create PO preview error:", error);
         }
     }
+
+
+saveDraftButton.addEventListener("click", async () => {
+
+    if (saveDraftButton.disabled) {
+        return;
+    }
+
+    saveDraftButton.disabled = true;
+    saveDraftButton.textContent = "Saving...";
+
+    try {
+        const response = await fetch(
+            "../database/save-po-draft.php",
+            {
+                method: "POST",
+                credentials: "same-origin",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+
+                body: JSON.stringify({
+                    rfq_number: rfqNumber,
+                    quote_id: requestedQuoteId,
+                    notes: $("notes").value.trim()
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(
+                data.message || "Unable to save PO draft."
+            );
+        }
+
+        // Display assigned Purchase Order number
+        set("poNumber", data.po_number);
+
+        // Display actual creation date
+        const date = new Date(
+            `${data.order_date}T00:00:00`
+        );
+
+        set(
+            "poDate",
+            Number.isNaN(date.getTime())
+                ? data.order_date
+                : date.toLocaleDateString("en-PH", {
+                    year: "numeric",
+                    month: "long",
+                    day: "2-digit"
+                })
+        );
+
+        // Success
+        saveDraftButton.textContent = "Draft Saved ✓";
+
+        status.classList.remove("error");
+
+        status.textContent =
+            `${data.po_number} was saved as Draft in MySQL. ` +
+            `Saved PO amount: ${money(data.total_amount)} ` +
+            `(VAT estimate not applied).`;
+
+        const info = document.querySelector(
+            ".implementation-note"
+        );
+
+        if (info) {
+            info.textContent =
+                "Draft saved successfully. " +
+                "Submit for Approval will be connected next.";
+        }
+
+    } catch (error) {
+        saveDraftButton.disabled = false;
+
+        saveDraftButton.textContent =
+            "✎ Save as Draft";
+
+        status.classList.add("error");
+        status.textContent = error.message;
+
+        console.error("Save PO draft error:", error);
+    }
+});
+
+
+
+
+
+
+
 
     load();
 })();
