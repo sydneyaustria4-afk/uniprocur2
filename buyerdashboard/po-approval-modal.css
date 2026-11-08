@@ -1,0 +1,54 @@
+/* UniProcur - PO submission confirmation, based on the Figma reference */
+body.po-modal-open { overflow: hidden; }
+.po-approval-overlay[hidden] { display: none !important; }
+.po-approval-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, .48);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+.po-confirm-dialog {
+  width: 100%;
+  max-width: 690px;
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+  position: relative;
+  background: #fff;
+  border-radius: 9px;
+  padding: 25px;
+  color: #1b1b1b;
+  font-family: Inter, Arial, sans-serif;
+  box-shadow: 0 12px 34px rgba(0,0,0,.27);
+}
+.po-confirm-dialog h2 { font-size: 21px; font-weight: 750; margin: 0 36px 20px 0; }
+.po-confirm-close { position: absolute; top: 15px; right: 17px; width: 33px; height: 33px; border: 0; background: none; font-size: 28px; cursor: pointer; color: #222; }
+.po-confirm-prompt { font-size: 13px; color: #777; margin: 0 0 16px; line-height: 1.5; }
+.po-confirm-prompt strong { font-weight: 700; }
+.po-confirm-warning { padding: 13px 17px; margin-bottom: 14px; border-left: 3px solid #ff6b61; background: #fbf4f4; color: #777; font-size: 12px; line-height: 1.6; }
+.po-confirm-warning strong { color: #444; }
+.po-confirm-summary { border: 1px solid #bbb; border-radius: 6px; padding: 17px 16px; font-size: 13px; min-height: 125px; }
+.po-confirm-summary-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.po-confirm-summary-top > strong { font-size: 14px; overflow-wrap: anywhere; }
+.po-confirm-priority { flex: none; border: 1px solid #ffca6a; background: #fff7dc; color: #b37b20; border-radius: 20px; padding: 2px 16px; font-size: 11px; }
+.po-confirm-summary-line { display: grid; grid-template-columns: 125px minmax(0, 1fr); gap: 10px; margin: 5px 0 5px 20px; line-height: 1.4; }
+.po-confirm-summary-line > strong { color: #666; }
+.po-confirm-summary-line > span { overflow-wrap: anywhere; color: #555; }
+.po-confirm-checkbox-row { margin-top: 15px; display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 13px; color: #707070; }
+.po-confirm-checkbox-row input { width: 15px; height: 15px; margin: 0; accent-color: #111; flex: none; }
+.po-confirm-error { color: #b91c1c; font-size: 12px; margin: 12px 0; }
+.po-confirm-footer { display: flex; gap: 12px; align-items: center; justify-content: flex-end; margin-top: 28px; }
+.po-confirm-cancel, .po-confirm-send { padding: 10px 17px; font-size: 12px; font-weight: 600; border-radius: 7px; cursor: pointer; }
+.po-confirm-cancel { color: #e21b1b; background: white; border: 1px solid #fa6060; }
+.po-confirm-send { color: white; background: #101010; border: 1px solid #101010; }
+.po-confirm-send:disabled, .po-confirm-cancel:disabled { opacity: .45; cursor: not-allowed; }
+@media(max-width: 550px) {
+  .po-confirm-dialog { padding: 18px; }
+  .po-confirm-dialog h2 { font-size: 18px; }
+  .po-confirm-summary-line { grid-template-columns: 1fr; gap: 1px; margin-left: 0; }
+  .po-confirm-footer { gap: 6px; }
+}
