@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Buyer Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-settings.css?v=1">
+  <script src="buyer-settings.js?v=1" defer></script>
+</head>
+<body>
+<div class="settings-shell">
+  <aside class="sidebar" aria-label="Buyer workspace navigation">
+    <a class="brand" href="buyer-dashboard.html"><img src="../assets/Pro%203.svg" alt=""><span>UniProcur</span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="nav-group" aria-label="Workspace">
+      <a class="nav-link" href="buyer-dashboard.html"><img src="../assets/Vector.svg" alt="">Dashboard</a>
+      <a class="nav-link" href="../supplier/supplier.html"><img src="../assets/Group%2027.svg" alt="">Suppliers</a>
+      <a class="nav-link" href="purchase-requests.html"><img src="../assets/Group%2033.svg" alt="">Purchase Request</a>
+      <a class="nav-link" href="rfq-workspace.html"><img src="../assets/Group.svg" alt="">RFQ Workspace</a>
+      <a class="nav-link" href="purchase-orders.html"><img src="../assets/Group%2034.svg" alt="">Purchase Order</a>
+      <span class="nav-link disabled"><span class="icon-sym">▤</span>Invoice</span>
+      <span class="nav-link disabled"><img src="../assets/Group%2031.svg" alt="">Reports</span>
+      <span class="nav-link disabled"><span class="icon-sym">▢</span>Material Request</span>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-rule"></div>
+      <button type="button" class="nav-link" id="supportButton"><span class="icon-sym">?</span>Support</button>
+      <a class="nav-link active" href="buyer-settings.html" aria-current="page"><span class="icon-sym">⚙</span>Settings</a>
+      <div class="sidebar-rule bottom-rule"></div>
+      <div class="sidebar-profile"><span class="sidebar-avatar" id="sideInitial">B</span><div><strong id="sideName">Buyer</strong><small id="sideEmail">Loading account…</small></div><a class="side-arrow" href="buyer-dashboard.html" title="Back to Dashboard" aria-label="Back to Dashboard">→</a></div>
+    </div>
+  </aside>
+  <main class="main-panel">
+    <div class="main-inner">
+      <header class="topbar">
+        <div class="top-title"><span class="top-logo"><img src="../assets/Pro%204.svg" alt=""></span><div><small>UniProcur Workspace</small><strong>Settings</strong></div></div>
+        <div class="top-user"><span class="bell-circle"><img src="../assets/Group%2050.svg" alt=""></span><span class="top-divider"></span><div><strong id="topName">Buyer</strong><small id="topEmail">Loading account…</small></div><span class="top-avatar" id="topInitial">B</span></div>
+      </header>
+      <h1>Settings</h1>
+      <p class="alert" role="alert" id="errorMessage" hidden></p>
+      <p class="notice" role="status" id="statusMessage" hidden></p>
+      <div class="tabs" role="tablist" aria-label="Settings sections">
+        <button type="button" id="tabProfile" role="tab" aria-selected="true" aria-controls="panelProfile" data-tab="profile" class="tab selected">Profile</button>
+        <button type="button" id="tabSecurity" role="tab" aria-selected="false" aria-controls="panelSecurity" data-tab="security" class="tab">Security</button>
+        <button type="button" id="tabNotifications" role="tab" aria-selected="false" aria-controls="panelNotifications" data-tab="notifications" class="tab">Notifications</button>
+      </div>
+      <section class="panel" id="panelProfile" role="tabpanel" aria-labelledby="tabProfile">
+        <div class="profile-header">
+          <span class="large-avatar" id="profileInitial">B</span>
+          <div class="profile-intro"><strong id="profileName">Loading…</strong><small id="profileEmail">—</small><span class="accent-note">Profile photo updates will be available when HR account integration is ready.</span></div>
+          <button type="button" class="outline-action" id="editButton" disabled title="Needs an authenticated HR-provided session">Edit Profile</button>
+        </div>
+        <div class="profile-fields">
+          <label>Full name<input id="fullName" readonly value="Loading…" autocomplete="name"></label>
+          <label>Email Address<input id="email" readonly value="Loading…" autocomplete="email"></label>
+          <label>Company / Department<input id="company" readonly value="—"></label>
+          <label>Role<input id="role" readonly class="locked-input" value="Buyer"></label>
+          <label>Contact Number<input id="contact" type="tel" readonly placeholder="Not recorded" autocomplete="tel" maxlength="32"><small class="field-hint">This field can be saved separately from HR credentials after HR login is connected.</small></label>
+        </div>
+        <div class="edit-actions" id="editActions" hidden><button type="button" id="cancelButton" class="outline-action">Cancel</button><button type="button" id="saveButton" class="primary-action">Save Contact Number</button></div>
+      </section>
+      <section class="panel" id="panelSecurity" role="tabpanel" aria-labelledby="tabSecurity" hidden>
+        <div class="section-copy"><h2>Account Security</h2><p>Your employee email, password, and access role are managed by the HR team. They are not editable in Procurement.</p></div>
+        <div class="security-details"><div><span>Email Address</span><strong id="securityEmail">—</strong><small>Managed by HR</small></div><div><span>Account Role</span><strong id="securityRole">Buyer</strong><small>Assigned through employee access</small></div><div><span>Password</span><strong>Managed by HR</strong><small>Contact HR for reset or account recovery</small></div></div>
+      </section>
+      <section class="panel" id="panelNotifications" role="tabpanel" aria-labelledby="tabNotifications" hidden>
+        <div class="section-copy"><h2>Notification Preferences</h2><p>Choose which Buyer workspace updates should appear once notification delivery is connected to the integrated ERP.</p></div>
+        <div class="settings-options">
+          <label class="option"><span><strong>Purchase Request updates</strong><small>Approvals, rejections and request changes</small></span><input type="checkbox" id="notifyPr" checked disabled></label>
+          <label class="option"><span><strong>RFQ and supplier quotation updates</strong><small>Quotation readiness and awarded suppliers</small></span><input type="checkbox" id="notifyRfq" checked disabled></label>
+          <label class="option"><span><strong>Purchase Order updates</strong><small>Manager approval and delivery status changes</small></span><input type="checkbox" id="notifyPo" checked disabled></label>
+        </div>
+        <p class="field-hint">Preferences can be saved to MySQL once an authenticated HR-provided session is active. This page does not send emails or notifications by itself.</p>
+        <button type="button" class="primary-action" id="saveNotifications" disabled>Save Preferences</button>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
