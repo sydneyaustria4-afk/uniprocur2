@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | RFQ Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="rfq-workspace.css?v=1">
+  <script src="rfq-workspace.js?v=1" defer></script>
+</head>
+<body>
+<div class="rfq-shell">
+  <aside class="rfq-sidebar">
+    <a class="rfq-brand" href="buyer-dashboard.html">
+      <img src="../assets/Pro%203.svg" alt="" width="23" height="28">
+      <strong>UniProcur</strong>
+    </a>
+    <div class="nav-area">
+      <p class="nav-label">Workspace</p>
+      <nav aria-label="Buyer workspace">
+        <a class="nav-item" href="buyer-dashboard.html"><img src="../assets/Vector.svg" alt="">Dashboard</a>
+        <a class="nav-item" href="../supplier/supplier.html"><img src="../assets/Group%2027.svg" alt="">Suppliers</a>
+        <a class="nav-item" href="purchase-requests.html"><img src="../assets/Group%2033.svg" alt="">Purchase Request</a>
+        <a class="nav-item active" href="rfq-workspace.html" aria-current="page"><img src="../assets/Group.svg" alt="">RFQ Workspace</a>
+        <a class="nav-item" href="purchase-orders.html"><img src="../assets/Group%2034.svg" alt="">Purchase Order</a>
+        <button class="nav-item" type="button" data-toast="Invoice workspace is not connected here yet."><img src="../assets/Group%2035.svg" alt="">Invoice</button>
+        <button class="nav-item" type="button" data-toast="Reports workspace is not connected here yet."><img src="../assets/Group%2031.svg" alt="">Reports</button>
+        <button class="nav-item" type="button" data-toast="Material Request navigation is not connected in this module yet."><span class="nav-symbol" aria-hidden="true">▤</span>Material Request</button>
+      </nav>
+    </div>
+    <div class="sidebar-bottom">
+      <div class="side-rule"></div>
+      <button class="nav-item" type="button" data-toast="Support is not connected yet."><span class="nav-symbol" aria-hidden="true">ⓘ</span>Support</button>
+      <button class="nav-item" type="button" data-toast="Settings are not connected yet."><span class="nav-symbol" aria-hidden="true">⚙</span>Settings</button>
+      <div class="side-rule"></div>
+      <div class="side-user">
+        <span class="side-avatar" id="sidebarInitial">B</span>
+        <div class="side-user-copy"><strong id="sidebarName">Buyer</strong><small id="sidebarEmail">—</small></div>
+        <a class="side-arrow" href="buyer-dashboard.html" aria-label="Go to dashboard">→</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="rfq-main">
+    <div class="rfq-content">
+      <header class="topbar">
+        <div class="topbar-brand">
+          <span class="topbar-icon"><img src="../assets/Pro%204.svg" alt=""></span>
+          <div><small>UniProcur Workspace</small><strong>Request for Quotation</strong></div>
+        </div>
+        <div class="account-tools">
+          <button class="bell-button" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button>
+          <div class="topbar-divider"></div>
+          <div class="account-copy"><strong id="topName">Buyer</strong><small id="topEmail">—</small></div>
+          <span class="account-avatar" id="topInitial" aria-hidden="true">B</span>
+        </div>
+      </header>
+
+      <section class="stats-grid" aria-label="RFQ counts and status filters">
+        <button type="button" class="stat-card selected" data-stat-filter="draft" aria-pressed="true">
+          <span class="stat-title">Draft</span><span class="stat-arrow" aria-hidden="true">↗</span>
+          <strong class="stat-count" id="countDraft">0</strong><small>Not Yet Sent</small>
+        </button>
+        <button type="button" class="stat-card" data-stat-filter="awaiting" aria-pressed="false">
+          <span class="stat-title">Awaiting Quote</span><span class="stat-arrow" aria-hidden="true">↗</span>
+          <strong class="stat-count" id="countAwaiting">0</strong><small>Waiting for Replies</small>
+        </button>
+        <button type="button" class="stat-card" data-stat-filter="awarded" aria-pressed="false">
+          <span class="stat-title">Awarded</span><span class="stat-arrow" aria-hidden="true">↗</span>
+          <strong class="stat-count" id="countAwarded">0</strong><small>Winner Selected</small>
+        </button>
+        <button type="button" class="stat-card" data-stat-filter="cancelled" aria-pressed="false">
+          <span class="stat-title">Cancelled</span><span class="stat-arrow" aria-hidden="true">↗</span>
+          <strong class="stat-count" id="countCancelled">0</strong><small>Withdrawn</small>
+        </button>
+      </section>
+
+      <section class="rfq-toolbar" aria-label="Search and filter Request for Quotations">
+        <form id="searchForm" class="search-box">
+          <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg></span>
+          <input id="rfqSearch" type="search" placeholder="search" aria-label="Search RFQs" autocomplete="off">
+          <button type="submit">Search</button>
+        </form>
+        <div class="filter-wrap">
+          <button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="filterMenu"><img src="../assets/filter.svg" alt="">Filter</button>
+          <div class="filter-menu" id="filterMenu" hidden>
+            <p>Filter by status</p>
+            <button type="button" data-filter="all">All Request for Quotation</button>
+            <button type="button" data-filter="draft">Draft</button>
+            <button type="button" data-filter="awaiting">Awaiting Quote</button>
+            <button type="button" data-filter="awarded">Awarded</button>
+            <button type="button" data-filter="cancelled">Cancelled</button>
+          </div>
+        </div>
+        <a class="new-rfq" href="create-rfq.html">+ New RFQ</a>
+      </section>
+
+      <section class="showing-line" aria-label="Active filter">
+        <strong>Showing:</strong><span class="filter-label" id="filterLabel">All Request for Quotation</span>
+        <small class="result-count" id="resultCount" aria-live="polite"></small>
+      </section>
+      <div class="message error" id="pageError" role="alert" hidden></div>
+      <section class="rfq-card-grid" id="rfqCards" aria-label="Request for Quotation records" aria-live="polite">
+        <p class="message">Loading RFQs from your database...</p>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

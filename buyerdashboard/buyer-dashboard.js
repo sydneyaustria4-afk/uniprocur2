@@ -1299,6 +1299,7 @@ function showToast(message) {
 
 document.querySelectorAll('.nav-item')
   .forEach((button) => {
+    if (button.matches('a[href]')) return;
     button.addEventListener('click', () => {
       document
         .querySelectorAll('.nav-item')

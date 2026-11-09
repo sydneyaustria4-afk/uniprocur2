@@ -37,7 +37,10 @@ document.querySelectorAll('[data-toast]').forEach((button) => {
   });
 });
 
+
 document.querySelectorAll('.nav-item').forEach((button) => {
+  if (button.matches('a[href]')) return;
+
   button.addEventListener('click', () => {
     document.querySelectorAll('.nav-item').forEach((item) => {
       item.classList.remove('is-active');
@@ -48,6 +51,7 @@ document.querySelectorAll('.nav-item').forEach((button) => {
     showToast(`${button.dataset.view} workspace selected.`);
   });
 });
+
 
 document.querySelectorAll('.filters select').forEach((select) => {
   select.addEventListener('change', () => {
