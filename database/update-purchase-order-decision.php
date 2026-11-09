@@ -77,6 +77,20 @@ try {
         throw new RuntimeException('PO decision update did not change a row.');
     }
 
+    // Record the real Manager confirmation time for the local tracking demo.
+    // Kept in the same transaction as the PO approval to prevent partial writes.
+    if ($newStatus === 'approved') {
+        $trackStmt = $conn->prepare(
+            "INSERT INTO po_demo_tracking (po_id, issued_at, confirmed_at)
+             SELECT id, created_at, NOW()
+               FROM purchase_orders WHERE id = ?
+             ON DUPLICATE KEY UPDATE confirmed_at = VALUES(confirmed_at)"
+        );
+        $trackStmt->bind_param('i', $poId);
+        $trackStmt->execute();
+        $trackStmt->close();
+    }
+
     $conn->commit();
     $started = false;
     managerSendJson(200, [
@@ -94,6 +108,6 @@ try {
     error_log('Manager PO Decision Error: ' . $error->getMessage());
     managerSendJson(500, [
         'success' => false,
-        'message' => 'Unable to save the PO decision. Check the status CHECK constraint and PHP log.'
+        'message' => 'Unable to save the PO decision. Check the status CHECK constraint, po_demo_tracking migration, and PHP log.'
     ]);
 }

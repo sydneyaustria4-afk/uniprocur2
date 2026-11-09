@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Buyer Purchase Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="purchase-orders.css?v=1">
+  <script src="purchase-orders.js?v=6" defer></script>
+</head>
+<body>
+<div class="po-shell">
+  <aside class="po-sidebar">
+    <a class="po-brand" href="buyer-dashboard.html"><img src="../assets/Pro%203.svg" alt=""><strong>UniProcur</strong></a>
+    <div class="po-nav-group">
+      <p class="po-nav-label">Workspace</p>
+      <nav aria-label="Workspace">
+        <a class="po-nav-item" href="buyer-dashboard.html"><img src="../assets/Vector.svg" alt="">Dashboard</a>
+        <a class="po-nav-item" href="../supplier/supplier.html"><img src="../assets/Group%2027.svg" alt="">Suppliers</a>
+        <a class="po-nav-item" href="purchase-requests.html"><img src="../assets/Group%2033.svg" alt="">Purchase Request</a>
+        <button class="po-nav-item" type="button" data-coming-soon="RFQ Workspace"><img src="../assets/Group.svg" alt="">RFQ Workspace</button>
+        <a class="po-nav-item is-active" href="purchase-orders.html" aria-current="page"><img src="../assets/Group%2034.svg" alt="">Purchase Order</a>
+        <button class="po-nav-item" type="button" data-coming-soon="Invoice"><img src="../assets/Group%2035.svg" alt="">Invoice</button>
+        <button class="po-nav-item" type="button" data-coming-soon="Reports"><img src="../assets/Group%2031.svg" alt="">Reports</button>
+      </nav>
+    </div>
+    <div class="po-sidebar-bottom">
+      <div class="sidebar-separator"></div>
+      <button class="po-nav-item" type="button" data-coming-soon="Support"><span class="icon-fallback">?</span>Support</button>
+      <button class="po-nav-item" type="button" data-coming-soon="Settings"><span class="icon-fallback">⚙</span>Settings</button>
+      <div class="side-profile"><span class="side-avatar" id="sidebarInitial">B</span><div class="side-profile-copy"><strong id="sidebarName">Buyer</strong><small id="sidebarEmail">—</small></div><a href="buyer-dashboard.html" class="side-profile-arrow" aria-label="Return to dashboard">→</a></div>
+    </div>
+  </aside>
+
+  <main class="po-main">
+    <div class="po-content">
+      <header class="po-topbar">
+        <div class="workspace-brand"><span class="workspace-logo"><img src="../assets/Pro%204.svg" alt=""></span><div><span>UniProcur Workspace</span><strong>Purchase Order</strong></div></div>
+        <div class="account-row"><button class="bell" type="button" id="notificationButton" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button><span class="topbar-divider"></span><div class="account-copy"><strong id="topName">Buyer</strong><small id="topEmail">—</small></div><span class="account-avatar" id="topInitial">B</span></div>
+      </header>
+
+      <section class="stat-grid" aria-label="Purchase Order overview">
+        <button type="button" class="stat-card stat-all selected" data-filter="all" aria-pressed="true"><div class="stat-top"><span>All PO</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countAll">0</strong><small>Total Orders</small></button>
+        <button type="button" class="stat-card" data-filter="pending" aria-pressed="false"><div class="stat-top"><span>Awaiting Approval</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countPending">0</strong><small>Needs Manager Signature</small></button>
+        <button type="button" class="stat-card" data-filter="arriving" aria-pressed="false"><div class="stat-top"><span>Arriving Next</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countArriving">0</strong><small>In Production / In Transit</small></button>
+        <button type="button" class="stat-card" data-filter="draft" aria-pressed="false"><div class="stat-top"><span>Drafts</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countDraft">0</strong><small>Unsubmitted</small></button>
+      </section>
+
+      <section class="po-toolbar" aria-label="Find Purchase Orders">
+        <form class="po-search" id="searchForm"><span class="po-search-icon" aria-hidden="true"></span><input type="search" id="poSearch" placeholder="search" aria-label="Search Purchase Orders"><button type="submit">Search</button></form>
+        <div class="filter-wrap"><button class="filter-button" id="filterButton" type="button" aria-controls="filterMenu" aria-expanded="false"><img src="../assets/filter.svg" alt="">Filter</button><div class="filter-menu" id="filterMenu" hidden><p>Filter by status</p><button type="button" data-filter-value="all">All PO</button><button type="button" data-filter-value="pending">Awaiting Approval</button><button type="button" data-filter-value="approved">In Production</button><button type="button" data-filter-value="arriving">Arriving Next</button><button type="button" data-filter-value="draft">Drafts</button><button type="button" data-filter-value="rejected">Rejected</button><button type="button" data-filter-value="received">Received / Closed</button></div></div>
+        <button class="new-po" type="button" id="newPoButton"><span>＋</span> New PO</button>
+      </section>
+
+      <section class="showing-row" aria-label="Current search and filter"><strong>Showing:</strong><span id="filterName" class="filter-name">All PO</span><small id="resultsCount" aria-live="polite">Loading orders...</small></section>
+      <div class="page-error" id="pageError" role="alert" hidden></div>
+      <section class="po-cards" id="poCards" aria-label="Purchase Order cards" aria-live="polite"><p class="loading-message">Loading your Purchase Orders...</p></section>
+    </div>
+  </main>
+</div>
+
+<dialog class="new-po-dialog" id="newPoDialog" aria-labelledby="newPoTitle"><div class="dialog-top"><div><small>Purchase Order</small><h2 id="newPoTitle">Create New PO</h2></div><button type="button" id="closeNewPo" class="dialog-x" aria-label="Close">×</button></div><p class="dialog-desc">Choose an awarded RFQ. A Purchase Order can only be created from a winning quotation.</p><div class="rfq-picker" id="rfqPicker"><p>Loading awarded RFQs...</p></div><div class="dialog-bottom"><button type="button" id="cancelNewPo">Close</button></div></dialog>
+<div class="toast" id="poToast" role="status" aria-live="polite"></div>
+</body>
+</html>
