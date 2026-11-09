@@ -10,6 +10,14 @@
     const node = error ? $("errorMessage") : $("statusMessage");
     node.textContent = text;
     node.hidden = false;
+    
+if (!error) {
+  node.classList.toggle(
+    "demo-notice",
+    text.startsWith("Local demo mode:")
+  );
+}
+
     if (error) $("statusMessage").hidden = true;
     else $("errorMessage").hidden = true;
   }
@@ -109,6 +117,28 @@
     } catch (error) { notify(error.message, true); }
     finally { $("saveNotifications").disabled = !canSave; }
   });
+
+
+  // SECURITY - REPORT INCIDENT BUTTON
+  const securityReportButton = document.getElementById(
+    "securityReportButton"
+  );
+
+  if (securityReportButton) {
+    securityReportButton.addEventListener("click", () => {
+      alert(
+        "Incident reporting is not connected yet.\n\n" +
+        "Please contact your HR or IT team immediately " +
+        "using their verified contact information.\n\n" +
+        "No report has been submitted."
+      );
+    });
+  }
+
+
+
+
+
   const initial = location.hash.replace(/^#/, "").toLowerCase();
   showTab(["profile", "security", "notifications"].includes(initial) ? initial : "profile");
   load();

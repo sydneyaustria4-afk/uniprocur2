@@ -1,0 +1,314 @@
+
+/*
+  UNIPROCUR — CONSISTENT BUYER SIDEBAR
+  Matches the Buyer Dashboard sidebar.
+
+  Load AFTER the page's original CSS.
+  Desktop only: 901px and above.
+*/
+
+@media (min-width: 901px) {
+
+  /* SIDEBAR SIZE */
+  :is(
+    .dashboard-shell > .sidebar,
+    .suppliers-layout > .sidebar,
+    .pr-shell > .pr-sidebar,
+    .po-shell > .po-sidebar,
+    .rfq-shell > .rfq-sidebar,
+    .settings-shell > .sidebar
+  ) {
+    box-sizing: border-box;
+    flex: 0 0 260px;
+    width: 260px;
+    min-width: 260px;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 38px 20px 18px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+    border-right: 1px solid rgba(0, 0, 0, .08);
+    z-index: 10;
+  }
+
+  /* UNIPROCUR LOGO */
+  :is(
+    .dashboard-shell .brand,
+    .suppliers-layout .brand,
+    .pr-shell .pr-brand,
+    .po-shell .po-brand,
+    .rfq-shell .rfq-brand,
+    .settings-shell .brand
+  ) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    min-height: 28px;
+    margin: 0 0 30px;
+    padding: 0;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 28px;
+    letter-spacing: -.04em;
+    color: #d71920;
+    text-decoration: none;
+  }
+
+  :is(
+    .dashboard-shell .brand,
+    .suppliers-layout .brand,
+    .pr-shell .pr-brand,
+    .po-shell .po-brand,
+    .rfq-shell .rfq-brand,
+    .settings-shell .brand
+  ) img {
+    width: 23px;
+    height: 28px;
+    flex: 0 0 23px;
+    object-fit: contain;
+  }
+
+  /* WORKSPACE LABEL */
+  :is(
+    .dashboard-shell .nav-label,
+    .suppliers-layout .nav-label,
+    .pr-shell .pr-nav-label,
+    .po-shell .po-nav-label,
+    .rfq-shell .nav-label,
+    .settings-shell .nav-label
+  ) {
+    display: block;
+    margin: 0 0 4px;
+    padding: 0;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 700;
+    letter-spacing: -.04em;
+    color: #7b7b7b;
+  }
+
+  /* WORKSPACE MENU LAYOUT */
+  :is(
+    .dashboard-shell .nav-group nav,
+    .suppliers-layout .nav-group nav,
+    .pr-shell .pr-nav-group nav,
+    .po-shell .po-nav-group nav,
+    .rfq-shell .nav-area nav,
+    .settings-shell nav.nav-group
+  ) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+    overflow: visible;
+  }
+
+  /* ALL SIDEBAR BUTTONS */
+  :is(
+    .dashboard-shell .nav-item,
+    .suppliers-layout .nav-item,
+    .pr-shell .pr-nav-item,
+    .po-shell .po-nav-item,
+    .rfq-shell .nav-item,
+    .settings-shell .nav-link
+  ) {
+    box-sizing: border-box;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    width: 100%;
+    min-height: 35px;
+    padding: 7px 10px;
+    margin: 0;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: #1d1d1d;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    text-align: left;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* SELECTED MENU AND HOVER */
+  :is(
+    .dashboard-shell .nav-item,
+    .suppliers-layout .nav-item,
+    .pr-shell .pr-nav-item,
+    .po-shell .po-nav-item,
+    .rfq-shell .nav-item,
+    .settings-shell .nav-link
+  ):is(.is-active, .active, [aria-current="page"]),
+  :is(
+    .dashboard-shell .nav-item,
+    .suppliers-layout .nav-item,
+    .pr-shell .pr-nav-item,
+    .po-shell .po-nav-item,
+    .rfq-shell .nav-item,
+    .settings-shell .nav-link
+  ):hover:not(:disabled) {
+    background: #bdbdbd;
+    color: #1d1d1d;
+  }
+
+  /* ICON CONTAINERS */
+  :is(
+    .dashboard-shell .nav-icon,
+    .suppliers-layout .nav-icon,
+    .pr-shell .pr-nav-icon,
+    .rfq-shell .nav-icon,
+    .rfq-shell .nav-symbol,
+    .settings-shell .icon-sym
+  ) {
+    box-sizing: border-box;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 19px;
+    width: 19px;
+    height: 21px;
+    min-width: 19px;
+    font-size: 18px;
+  }
+
+  /* ALL SIDEBAR SVG ICONS */
+  :is(
+    .dashboard-shell .nav-item,
+    .suppliers-layout .nav-item,
+    .pr-shell .pr-nav-item,
+    .po-shell .po-nav-item,
+    .rfq-shell .nav-item,
+    .settings-shell .nav-link
+  ) img {
+    display: block;
+    flex: 0 0 19px;
+    width: 19px;
+    height: 21px;
+    max-width: 19px;
+    max-height: 21px;
+    object-fit: contain;
+  }
+
+  /* UNFINISHED MODULES */
+  :is(
+    .dashboard-shell .nav-item,
+    .suppliers-layout .nav-item,
+    .pr-shell .pr-nav-item,
+    .po-shell .po-nav-item,
+    .rfq-shell .nav-item,
+    .settings-shell .nav-link
+  ):disabled {
+    opacity: 1;
+    cursor: not-allowed;
+  }
+
+  /* SUPPORT, SETTINGS, PROFILE AT BOTTOM */
+  :is(
+    .dashboard-shell .sidebar-bottom,
+    .suppliers-layout .sidebar-bottom,
+    .pr-shell .pr-sidebar-bottom,
+    .po-shell .po-sidebar-bottom,
+    .rfq-shell .sidebar-bottom,
+    .settings-shell .sidebar-bottom
+  ) {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 5px;
+    margin-top: auto;
+    padding: 0;
+    border: 0;
+  }
+
+  /* SIDEBAR DIVIDERS */
+  .dashboard-shell .sidebar-bottom::before,
+  .suppliers-layout .sidebar-bottom::before {
+    content: "";
+    display: block;
+    flex: 0 0 1px;
+    align-self: center;
+    width: 85%;
+    height: 1px;
+    margin: 0 0 8px;
+    background: #aaa;
+  }
+
+  :is(
+    .pr-shell .pr-sidebar-divider,
+    .po-shell .sidebar-separator,
+    .rfq-shell .side-rule:first-child,
+    .settings-shell .sidebar-rule:first-child
+  ) {
+    display: block;
+    flex: 0 0 1px;
+    align-self: center;
+    width: 85%;
+    height: 1px;
+    margin: 0 0 8px;
+    border: 0;
+    background: #aaa;
+  }
+
+  /* USER PROFILE AT BOTTOM */
+  :is(
+    .pr-shell .pr-profile,
+    .po-shell .side-profile,
+    .rfq-shell .side-user,
+    .settings-shell .sidebar-profile,
+    .dashboard-shell .profile-mini,
+    .suppliers-layout .profile-mini
+  ) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-width: 0;
+    margin: 8px 0 0;
+    padding: 10px 0 0;
+    border-top: 1px solid rgba(0, 0, 0, .24);
+  }
+
+  /* USER NAME SIZE */
+  :is(
+    .pr-shell .pr-profile-copy strong,
+    .po-shell .side-profile-copy strong,
+    .rfq-shell .side-user-copy strong,
+    .settings-shell .sidebar-profile strong,
+    .dashboard-shell .profile-copy strong,
+    .suppliers-layout .profile-copy strong
+  ) {
+    font-size: 13px;
+  }
+
+  /* USER EMAIL SIZE */
+  :is(
+    .pr-shell .pr-profile-copy small,
+    .po-shell .side-profile-copy small,
+    .rfq-shell .side-user-copy small,
+    .settings-shell .sidebar-profile small,
+    .dashboard-shell .profile-copy small,
+    .suppliers-layout .profile-copy small
+  ) {
+    font-size: 10px;
+  }
+
+}

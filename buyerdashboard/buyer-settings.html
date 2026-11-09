@@ -10,6 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="buyer-settings.css?v=1">
+  
+<link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
+  
   <script src="buyer-settings.js?v=1" defer></script>
 </head>
 <body>
@@ -93,10 +96,55 @@
         </div>
         <div class="edit-actions" id="editActions" hidden><button type="button" id="cancelButton" class="outline-action">Cancel</button><button type="button" id="saveButton" class="primary-action">Save Contact Number</button></div>
       </section>
-      <section class="panel" id="panelSecurity" role="tabpanel" aria-labelledby="tabSecurity" hidden>
-        <div class="section-copy"><h2>Account Security</h2><p>Your employee email, password, and access role are managed by the HR team. They are not editable in Procurement.</p></div>
-        <div class="security-details"><div><span>Email Address</span><strong id="securityEmail">—</strong><small>Managed by HR</small></div><div><span>Account Role</span><strong id="securityRole">Buyer</strong><small>Assigned through employee access</small></div><div><span>Password</span><strong>Managed by HR</strong><small>Contact HR for reset or account recovery</small></div></div>
-      </section>
+     
+<!-- SECURITY TAB -->
+<section
+  class="panel"
+  id="panelSecurity"
+  role="tabpanel"
+  aria-labelledby="tabSecurity"
+  hidden
+>
+
+  <div class="security-content">
+
+    <h2>Need Security Help?</h2>
+
+    <p class="security-description">
+      Your account security (Passwords, 2FA, Active Sessions)
+      is managed by the HR Department.
+    </p>
+
+    <div class="security-contact-grid">
+
+      <!-- HR SUPPORT -->
+      <div class="security-contact-card">
+        <strong>Email HR Support</strong>
+        <span>hr@footwear@company.com</span>
+      </div>
+
+      <!-- IT SUPPORT -->
+      <div class="security-contact-card">
+        <strong>Call IT Expert</strong>
+        <span>Local 101 / +63-2-8123-4000</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- REPORT BUTTON -->
+  <button
+    type="button"
+    class="security-report-button"
+    id="securityReportButton"
+  >
+    Report Lost Device / Suspicious Login
+  </button>
+
+</section>
+<!-- END SECURITY TAB -->
+
       <section class="panel" id="panelNotifications" role="tabpanel" aria-labelledby="tabNotifications" hidden>
         <div class="section-copy"><h2>Notification Preferences</h2><p>Choose which Buyer workspace updates should appear once notification delivery is connected to the integrated ERP.</p></div>
         <div class="settings-options">
