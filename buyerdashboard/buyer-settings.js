@@ -112,4 +112,19 @@
   const initial = location.hash.replace(/^#/, "").toLowerCase();
   showTab(["profile", "security", "notifications"].includes(initial) ? initial : "profile");
   load();
+
+
+document.querySelectorAll("[data-settings-placeholder]")
+  .forEach((button) => {
+    button.addEventListener("click", () => {
+      const page = button.dataset.settingsPlaceholder;
+
+      notify(`${page} page is not connected yet.`);
+    });
+  });
+
+
+
+
+
 })();

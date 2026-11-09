@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,14 +23,43 @@
       <a class="nav-link" href="purchase-requests.html"><img src="../assets/Group%2033.svg" alt="">Purchase Request</a>
       <a class="nav-link" href="rfq-workspace.html"><img src="../assets/Group.svg" alt="">RFQ Workspace</a>
       <a class="nav-link" href="purchase-orders.html"><img src="../assets/Group%2034.svg" alt="">Purchase Order</a>
-      <span class="nav-link disabled"><span class="icon-sym">▤</span>Invoice</span>
-      <span class="nav-link disabled"><img src="../assets/Group%2031.svg" alt="">Reports</span>
-      <span class="nav-link disabled"><span class="icon-sym">▢</span>Material Request</span>
+
+      <button class="nav-link" type="button"
+              data-settings-placeholder="Invoice">
+        <img src="../assets/Group 35.svg" alt="">
+        Invoice
+      </button>
+
+      <button class="nav-link" type="button"
+              data-settings-placeholder="Reports">
+        <img src="../assets/Group 31.svg" alt="">
+        Reports
+      </button>
+
+      <button class="nav-link" type="button"
+              data-settings-placeholder="Material Request">
+        <img src="../assets/material-request.svg" alt="">
+        Material Request
+      </button>
+
     </nav>
+
     <div class="sidebar-bottom">
+
       <div class="sidebar-rule"></div>
-      <button type="button" class="nav-link" id="supportButton"><span class="icon-sym">?</span>Support</button>
-      <a class="nav-link active" href="buyer-settings.html" aria-current="page"><span class="icon-sym">⚙</span>Settings</a>
+
+      <button type="button" class="nav-link" id="supportButton">
+        <img src="../assets/support.svg" alt="">
+        Support
+      </button>
+
+      <a class="nav-link active"
+         href="buyer-settings.html"
+         aria-current="page">
+        <img src="../assets/settings.svg" alt="">
+        Settings
+      </a>
+
       <div class="sidebar-rule bottom-rule"></div>
       <div class="sidebar-profile"><span class="sidebar-avatar" id="sideInitial">B</span><div><strong id="sideName">Buyer</strong><small id="sideEmail">Loading account…</small></div><a class="side-arrow" href="buyer-dashboard.html" title="Back to Dashboard" aria-label="Back to Dashboard">→</a></div>
     </div>
