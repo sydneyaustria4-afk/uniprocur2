@@ -9,9 +9,12 @@ try {
                    DATE_FORMAT(i.invoice_date,'%Y-%m-%d') AS invoice_date,
                    DATE_FORMAT(i.due_date,'%Y-%m-%d') AS due_date,
                    DATE_FORMAT(i.created_at,'%Y-%m-%d %H:%i:%s') AS created_at,
+                   po.po_number, s.name AS supplier_name, s.payment_terms,
                    COALESCE(items.item_summary,'') AS item_summary,
                    COALESCE(items.item_count,0) AS item_count
             FROM invoices AS i
+            LEFT JOIN purchase_orders AS po ON po.id=i.po_id
+            LEFT JOIN suppliers AS s ON s.id=po.supplier_id
             LEFT JOIN (
               SELECT invoice_id, COUNT(*) AS item_count,
                      GROUP_CONCAT(DISTINCT item_name ORDER BY item_name SEPARATOR ', ') AS item_summary
@@ -25,7 +28,6 @@ try {
     $stmt->execute();
     $invoices=$stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
-    // PO number/supplier are optional metadata and intentionally not required for the listing.
     // Do not infer 3-way match from invoice status or data presence.
     buyerPoJson(200,[
       'success'=>true,

@@ -5,8 +5,8 @@
 <title>UniProcur | Buyer Invoices</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="buyer-invoices.css?v=1"><link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
-<script src="buyer-invoices.js?v=1" defer></script>
+<link rel="stylesheet" href="buyer-invoices.css?v=2"><link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
+<script src="buyer-invoices.js?v=2" defer></script>
 </head>
 <body>
 <div class="invoice-shell">
@@ -31,13 +31,17 @@
 </aside>
 <main class="invoice-main"><div class="invoice-content">
 <header class="topbar"><div class="topbar-brand"><span class="top-icon"><img src="../assets/Pro%204.svg" alt=""></span><div><small>UniProcur Workspace</small><strong>Invoice</strong></div></div><div class="account-area"><button type="button" class="bell" id="bellButton" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button><span class="top-divider"></span><div class="account-copy"><strong id="topName">Buyer</strong><small id="topEmail">—</small></div><span class="top-avatar" id="topInitial">B</span></div></header>
+<p id="invoiceDemoNotice" class="invoice-demo-notice" role="status" hidden>
+  <span id="invoiceDemoText">Figma sample preview only — not saved in MySQL and cannot be posted to Finance.</span>
+  <button id="toggleDemoPreview" type="button">Show actual 0 records</button>
+</p>
 <section class="stats" aria-label="Invoice status filters">
-<button type="button" class="stat selected" data-status="pending"><span class="stat-title">Pending Match</span><span class="stat-arrow">↗</span><strong class="stat-value" id="countPending">0</strong><small>Needs 3-Way Match</small></button>
-<button type="button" class="stat" data-status="ready"><span class="stat-title">Ready to Post</span><span class="stat-arrow">↗</span><strong class="stat-value" id="countReady">0</strong><small>Matched, ready</small></button>
-<button type="button" class="stat" data-status="posted"><span class="stat-title">Posted</span><span class="stat-arrow">↗</span><strong class="stat-value" id="countPosted">0</strong><small>Sent to Accounting</small></button>
-<button type="button" class="stat" data-status="discrepancy"><span class="stat-title">Discrepancy</span><span class="stat-arrow">↗</span><strong class="stat-value" id="countDiscrepancy">0</strong><small>Needs Review</small></button>
+<button type="button" class="stat selected" data-status="pending"><span class="stat-title">Pending Match</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countPending">0</strong><small>Needs 3-Way Match</small></button>
+<button type="button" class="stat" data-status="ready"><span class="stat-title">Ready to Post</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countReady">0</strong><small>Matched, ready</small></button>
+<button type="button" class="stat" data-status="posted"><span class="stat-title">Posted</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countPosted">0</strong><small>Sent to Accounting</small></button>
+<button type="button" class="stat" data-status="discrepancy"><span class="stat-title">Discrepancy</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countDiscrepancy">0</strong><small>Needs Review</small></button>
 </section>
-<div class="toolbar"><form id="searchForm" class="search-box"><span class="search-symbol" aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="search" aria-label="Search invoices"><button type="submit">Search</button></form>
+<div class="toolbar"><form id="searchForm" class="search-box"><span class="search-symbol" aria-hidden="true"><img src="../assets/invoice-search.svg" alt=""></span><input id="searchInput" type="search" placeholder="search" aria-label="Search invoices"><button type="submit">Search</button></form>
 <div class="filter-container"><button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="filterMenu"><img src="../assets/filter.svg" alt="">Filter</button><div class="filter-menu" id="filterMenu" hidden><button data-status-choice="all" type="button">All Invoices</button><button data-status-choice="pending" type="button">Pending Match</button><button data-status-choice="ready" type="button">Ready to Post</button><button data-status-choice="posted" type="button">Posted</button><button data-status-choice="discrepancy" type="button">Discrepancy</button></div></div>
 <a class="new-po" href="purchase-orders.html">+ New PO</a></div>
 <div class="showing"><strong>Showing:</strong><span id="filterLabel">All Invoices</span><small id="resultsCount">Loading invoices...</small></div>
