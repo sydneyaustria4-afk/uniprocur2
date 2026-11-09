@@ -28,6 +28,98 @@
   };
   const read = value => value == null || String(value).trim() === "" ? "Not provided" : String(value);
   const set = (id, value) => { const node = $(id); if (node) node.textContent = String(value ?? "—"); };
+  
+  // Supplier profile images from UniProcur assets
+  const getSupplierLogo = (supplierName) => {
+    const name = String(supplierName || "").toLowerCase();
+
+    if (name.includes("marikina")) {
+      return "../assets/Ellipse%208.svg";
+    }
+    if (name.includes("cordillera")) {
+      return "../assets/Ellipse%202.svg";
+    }
+    if (name.includes("synthhide")) {
+      return "../assets/Ellipse%203.svg";
+    }
+    if (name.includes("soletech")) {
+      return "../assets/Ellipse%204.svg";
+    }
+    if (name.includes("metalcraft")) {
+      return "../assets/Ellipse%205.svg";
+    }
+    if (name.includes("ecobox")) {
+      return "../assets/Ellipse%206.svg";
+    }
+
+    return "../assets/catalog/avatar-outline.svg";
+  };
+
+
+  const supplierProfiles = {
+    marikina: {
+      contact: "Ramon Villanueva",
+      email: "ramon@marikinahide.ph",
+      phone: "+63-2-8123-4567",
+      location: "Marikina City, Metro Manila"
+    },
+    cordillera: {
+      contact: "Elena Bautista",
+      email: "elena@cordilleraleather.ph",
+      phone: "+63-2-8123-4568",
+      location: "Baguio City, Benguet"
+    },
+    synthhide: {
+      contact: "Michael Tan",
+      email: "sales@synthhide.ph",
+      phone: "+63-2-8123-4569",
+      location: "Cavite Economic Zone, Cavite"
+    },
+    soletech: {
+      contact: "Mario Lim",
+      email: "mario@soletech.ph",
+      phone: "+63-2-8123-4570",
+      location: "Valenzuela City, Metro Manila"
+    },
+    metalcraft: {
+      contact: "Victor Reyes",
+      email: "victor@metalcraft.ph",
+      phone: "+63-2-8123-4571",
+      location: "Caloocan City, Metro Manila"
+    },
+    ecobox: {
+      contact: "Rodel Mercado",
+      email: "rodel@ecobox.ph",
+      phone: "+63-2-8123-4572",
+      location: "Laguna Technopark, Laguna"
+    }
+  };
+
+  const getSupplierProfile = supplierName => {
+    const name = String(supplierName || "").toLowerCase();
+    const key = Object.keys(supplierProfiles)
+      .find(key => name.includes(key));
+
+    return key ? supplierProfiles[key] : {};
+  };
+
+  const preferDetail = (databaseValue, fallbackValue) => {
+    const value = String(databaseValue ?? "").trim();
+
+    return !value ||
+      ["not provided", "—", "n/a", "null"].includes(value.toLowerCase())
+      ? (fallbackValue || "Not provided")
+      : value;
+  };
+
+
+
+
+
+
+
+
+
   const statusText = status => ({
     pending_approval: "Pending Approval", approved: "Approved", rejected: "Rejected",
     issued: "Issued", partial: "Partially Received", received: "Received", closed: "Closed"
@@ -62,28 +154,55 @@
       `This Purchase Order is ${statusText(status).toLowerCase()}. Approval actions are no longer available.`);
   }
 
-  function showProfile() {
-    if (!currentPo) return;
-    const fields = [
-      ["Supplier", read(currentPo.supplier_name)],
-      ["Contact", read(currentPo.supplier_contact)],
-      ["Email", read(currentPo.supplier_email)],
-      ["Phone", read(currentPo.supplier_phone)],
-      ["Location", read(currentPo.supplier_location)],
-      ["Payment Terms", read(currentPo.payment_terms)]
-    ];
-    const root = $("profileContent");
-    root.replaceChildren();
-    fields.forEach(([label, value]) => {
-      const row = document.createElement("div");
-      row.className = "profile-row";
-      const name = document.createElement("span"); name.textContent = label;
-      const detail = document.createElement("strong"); detail.textContent = value;
-      row.append(name, detail);
-      root.append(row);
-    });
-    $("supplierDialog").showModal();
-  }
+ 
+function showProfile() {
+  if (!currentPo) return;
+
+  // Get the supplier information
+  const supplier = getSupplierProfile(currentPo.supplier_name);
+
+  const fields = [
+    ["Supplier", read(currentPo.supplier_name)],
+
+    ["Contact", preferDetail(
+      currentPo.supplier_contact, supplier.contact
+    )],
+
+    ["Email", preferDetail(
+      currentPo.supplier_email, supplier.email
+    )],
+
+    ["Phone", preferDetail(
+      currentPo.supplier_phone, supplier.phone
+    )],
+
+    ["Location", preferDetail(
+      currentPo.supplier_location, supplier.location
+    )],
+
+    ["Payment Terms", read(currentPo.payment_terms)]
+  ];
+
+  const root = $("profileContent");
+  root.replaceChildren();
+
+  fields.forEach(([label, value]) => {
+    const row = document.createElement("div");
+    row.className = "profile-row";
+
+    const name = document.createElement("span");
+    name.textContent = label;
+
+    const detail = document.createElement("strong");
+    detail.textContent = value;
+
+    row.append(name, detail);
+    root.append(row);
+  });
+
+  $("supplierDialog").showModal();
+}
+
 
   function render(data) {
     const po = data.po;
@@ -106,12 +225,16 @@
     set("expectedDelivery", date(po.expected_delivery));
     set("paymentTerms", po.payment_terms || "—");
     set("supplierName", po.supplier_name || "—");
-    set("supplierAvatar", (po.supplier_name || "S").trim().split(/\s+/).slice(0, 2)
-      .map(x => x.charAt(0).toUpperCase()).join(""));
-    set("supplierContact", read(po.supplier_contact));
-    set("supplierEmail", read(po.supplier_email));
-    set("supplierPhone", read(po.supplier_phone));
-    set("supplierLocation", read(po.supplier_location));
+    $("supplierAvatar").src = getSupplierLogo(po.supplier_name);
+$("supplierAvatar").alt = `${po.supplier_name || "Supplier"} logo`;
+  
+    const supplier = getSupplierProfile(po.supplier_name);
+
+    set("supplierContact", preferDetail(po.supplier_contact, supplier.contact));
+    set("supplierEmail", preferDetail(po.supplier_email, supplier.email));
+    set("supplierPhone", preferDetail(po.supplier_phone, supplier.phone));
+    set("supplierLocation", preferDetail(po.supplier_location, supplier.location));
+
 
     statusBadge(po.status);
     updateActions(po.status);

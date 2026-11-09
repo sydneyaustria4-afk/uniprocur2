@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="manager-view-purchase-order.css?v=1">
-  <script src="manager-view-purchase-order.js?v=1" defer></script>
+  <link rel="stylesheet" href="manager-view-purchase-order.css?v=2">
+  <script src="manager-view-purchase-order.js?v=4" defer></script>
 </head>
 <body>
   <main class="review-page">
@@ -47,14 +47,25 @@
             </div>
           </div>
           <div class="document-actions no-print">
-            <button id="printPo" type="button" class="document-button"><span aria-hidden="true">♧</span> Print PO</button>
-            <button id="downloadPo" type="button" class="document-button" title="Choose Save as PDF in the browser print dialog"><span aria-hidden="true">⇩</span> Download PDF</button>
+           <button id="printPo" type="button" class="document-button">
+  <img class="po-action-icon" src="../assets/print.svg" alt="">
+  Print PO
+</button>
+
+<button id="downloadPo" type="button" class="document-button"
+  title="Choose Save as PDF in the browser print dialog">
+  <img class="po-action-icon" src="../assets/download.svg" alt="">
+  Download PDF
+</button>
           </div>
         </section>
 
         <div class="info-wrapper">
           <section class="detail-box" aria-labelledby="poSummaryHeading">
-            <h2 id="poSummaryHeading"><span class="section-icon" aria-hidden="true">♧</span> PO Summary</h2>
+            <h2 id="poSummaryHeading">
+  <img class="po-section-icon" src="../assets/summary.svg" alt="">
+  PO Summary
+</h2>
             <dl class="info-list">
               <div><dt>PO Number</dt><dd id="summaryPo">—</dd></div>
               <div><dt>Delivery Address</dt><dd id="deliveryAddress">—</dd></div>
@@ -65,8 +76,16 @@
           </section>
 
           <section class="detail-box" aria-labelledby="supplierHeading">
-            <h2 id="supplierHeading"><span class="section-icon" aria-hidden="true">♧</span> Supplier Information</h2>
-            <div class="supplier-brand"><span class="supplier-avatar" id="supplierAvatar" aria-hidden="true">S</span>
+            <h2 id="supplierHeading">
+  <img class="po-section-icon" src="../assets/supplier%20info.svg" alt="">
+  Supplier Information
+</h2>
+            <div class="supplier-brand"><img
+  class="supplier-avatar"
+  id="supplierAvatar"
+  src="../assets/catalog/avatar-outline.svg"
+  alt="Supplier logo"
+>
               <div><strong id="supplierName">—</strong><small>Supplier</small></div>
             </div>
             <dl class="info-list supplier-info">
@@ -80,7 +99,10 @@
         </div>
 
         <section class="ordered-section" aria-labelledby="orderedHeading">
-          <h2 id="orderedHeading"><span class="section-icon" aria-hidden="true">⌗</span> Ordered Items</h2>
+          <h2 id="orderedHeading">
+  <img class="po-section-icon" src="../assets/ordered%20items.svg" alt="">
+  Ordered Items
+</h2>
           <div class="table-scroll">
             <table class="items-table">
               <thead><tr><th scope="col">#</th><th scope="col">Item Name</th><th scope="col">Qty</th><th scope="col">UOM</th><th scope="col">Unit Price</th><th scope="col">Line Total</th></tr></thead>
