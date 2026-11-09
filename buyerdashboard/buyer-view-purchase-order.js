@@ -273,7 +273,13 @@
     }
   }
 
-  $("printButton").addEventListener("click", () => window.print());
+  
+$("printButton").addEventListener("click", () => {
+  window.location.href =
+    "buyer-print-purchase-order.html?po_number=" +
+    encodeURIComponent(poNumber);
+});
+
   $("contactSupplier").addEventListener("click", openSupplierContact);
   $("closeSupplierContact").addEventListener("click", () => $("supplierContactDialog").close());
   $("supplierContactDialog").addEventListener("click", event => {

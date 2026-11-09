@@ -1,0 +1,28 @@
+/* Keep the existing assets/print.svg file: its icon stroke is black,
+   so invert only its display color on the black Print button. */
+.print-button img {
+  display: block;
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+/* Leaflet map fits the existing Figma delivery-address card. */
+.map-frame .po-leaflet-map {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: #e9eef0;
+  z-index: 0;
+}
+.map-frame .po-leaflet-map[hidden] { display: none !important; }
+.map-frame .leaflet-control-attribution { font-size: 8px; }
+.map-frame .leaflet-popup-content { font: 12px/1.4 Inter, Arial, sans-serif; }
+
+@media print {
+  /* Retain OpenStreetMap attribution; hide only interactive zoom controls. */
+  .map-frame .leaflet-control-zoom { display: none !important; }
+  .map-frame .po-leaflet-map { height: 100%; }
+  .map-frame .leaflet-container { background: #edf1f2 !important; }
+}

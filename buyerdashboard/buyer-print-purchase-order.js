@@ -167,11 +167,11 @@
     location.href = `buyer-view-purchase-order.html?po_number=${encodeURIComponent(poNumber)}`;
   });
  
+
 $("printButton").addEventListener("click", () => {
-  window.location.href =
-    "buyer-print-purchase-order.html?po_number=" +
-    encodeURIComponent(poNumber);
+  window.print();
 });
+
 
   load();
 })();
