@@ -837,3 +837,203 @@ body:has(#panelSecurity:not([hidden]))
   }
 }
 
+
+
+
+
+
+/* =====================================
+   NOTIFICATIONS - FIGMA DESIGN
+===================================== */
+
+#panelNotifications:not([hidden]) {
+  display: block;
+  min-height: 453px;
+  padding: 26px 32px 35px;
+  background: #ffffff;
+  border: 1px solid #e3e7ed;
+  border-radius: 15px;
+}
+
+/* Title and description */
+
+#panelNotifications .notification-header h2 {
+  margin: 0 0 5px;
+  color: #111111;
+  font-family: Inter, Arial, sans-serif;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+#panelNotifications .notification-header p {
+  margin: 0;
+  color: #222222;
+  font-size: 15px;
+  line-height: 22px;
+}
+
+/* Two columns */
+
+#panelNotifications .notification-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 85px;
+  margin-top: 27px;
+}
+
+/* Category groups */
+
+#panelNotifications .notification-column {
+  display: flex;
+  flex-direction: column;
+  gap: 29px;
+}
+
+#panelNotifications .notification-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+#panelNotifications .notification-group h3 {
+  margin: 0 0 1px;
+  font-size: 13px;
+  line-height: 17px;
+  font-weight: 400;
+  color: #333333;
+}
+
+/* Each notification option */
+
+#panelNotifications .notification-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 51px;
+  align-items: stretch;
+  gap: 14px;
+  min-width: 0;
+  cursor: pointer;
+}
+
+/* White description card */
+
+#panelNotifications .notification-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 52px;
+  padding: 7px 16px;
+  background: #ffffff;
+  border: 1px solid #d8dfea;
+  border-radius: 10px;
+}
+
+#panelNotifications .notification-info strong {
+  display: block;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 18px;
+}
+
+#panelNotifications .notification-info small {
+  display: block;
+  color: #333333;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+/* On / Off button */
+
+#panelNotifications .notification-switch {
+  position: relative;
+  display: block;
+  width: 51px;
+  min-height: 52px;
+}
+
+#panelNotifications .notification-switch input {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+#panelNotifications .notification-switch-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  color: #111111;
+  border: 1px solid #d8dfea;
+  border-radius: 11px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* OFF state */
+
+#panelNotifications
+.notification-switch-face::after {
+  content: "Off";
+}
+
+/* ON state */
+
+#panelNotifications
+.notification-switch input:checked
++ .notification-switch-face {
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+#panelNotifications
+.notification-switch input:checked
++ .notification-switch-face::after {
+  content: "On";
+}
+
+/* Keyboard accessibility */
+
+#panelNotifications
+.notification-switch input:focus-visible
++ .notification-switch-face {
+  outline: 3px solid #f04438;
+  outline-offset: 3px;
+}
+
+/* Hide the existing demo banner on
+   Notifications, as in the Figma */
+
+body:has(#panelNotifications:not([hidden]))
+#statusMessage.demo-notice {
+  display: none;
+}
+
+/* Responsive layout */
+
+@media (max-width: 1100px) {
+  #panelNotifications .notification-columns {
+    column-gap: 25px;
+  }
+}
+
+@media (max-width: 760px) {
+  #panelNotifications:not([hidden]) {
+    min-height: auto;
+    padding: 24px 20px;
+  }
+
+  #panelNotifications .notification-columns {
+    grid-template-columns: 1fr;
+    row-gap: 29px;
+  }
+}
+

@@ -80,8 +80,19 @@ if (!error) {
       canSave = data.authenticated === true && data.schema_ready === true && !!csrfToken;
       $("editButton").disabled = !canSave;
       $("editButton").title = canSave ? "Edit Buyer contact number" : "Saving requires HR-provided login and the Buyer Settings SQL table";
-      $("saveNotifications").disabled = !canSave;
-      for (const id of ["notifyPr", "notifyRfq", "notifyPo"]) $(id).disabled = !canSave;
+      
+$("saveNotifications").disabled = !canSave;
+
+for (const id of [
+  "notifyPr",
+  "notifyRfq",
+  "notifyPo",
+  "notifyDeadline",
+  "notifyDaily"
+]) {
+  $(id).disabled = false;
+}
+
       if (!data.authenticated) {
         notify("Local demo mode: account information can be viewed, but saving is disabled until the HR login integration sets the Buyer session.");
       } else if (!data.schema_ready) {
@@ -134,6 +145,49 @@ if (!error) {
       );
     });
   }
+
+
+  // NOTIFICATION TOGGLES
+  const savedNotificationIds = new Set([
+    "notifyPr",
+    "notifyRfq",
+    "notifyPo"
+  ]);
+
+  document
+    .querySelectorAll(
+      "#panelNotifications input[type='checkbox']"
+    )
+    .forEach((toggle) => {
+
+      toggle.addEventListener("change", () => {
+
+        // Options not yet supported by MySQL
+        if (!savedNotificationIds.has(toggle.id)) {
+          notify(
+            "Preview only: this option is not yet " +
+            "connected to MySQL or email alerts."
+          );
+          return;
+        }
+
+        // Local demo mode
+        if (!canSave) {
+          notify(
+            "Demo preview only. Changes will not " +
+            "be saved until HR login is connected."
+          );
+          return;
+        }
+
+        // Save existing supported settings
+        $("saveNotifications").click();
+
+      });
+
+    });
+
+
 
 
 

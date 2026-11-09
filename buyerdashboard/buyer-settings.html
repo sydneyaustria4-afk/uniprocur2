@@ -51,10 +51,13 @@
 
       <div class="sidebar-rule"></div>
 
-      <button type="button" class="nav-link" id="supportButton">
-        <img src="../assets/support.svg" alt="">
-        Support
-      </button>
+      
+<a class="nav-link" id="supportButton"
+   href="buyer-support.html">
+  <img src="../assets/support.svg" alt="">
+  Support
+</a>
+
 
       <a class="nav-link active"
          href="buyer-settings.html"
@@ -145,16 +148,145 @@
 </section>
 <!-- END SECURITY TAB -->
 
-      <section class="panel" id="panelNotifications" role="tabpanel" aria-labelledby="tabNotifications" hidden>
-        <div class="section-copy"><h2>Notification Preferences</h2><p>Choose which Buyer workspace updates should appear once notification delivery is connected to the integrated ERP.</p></div>
-        <div class="settings-options">
-          <label class="option"><span><strong>Purchase Request updates</strong><small>Approvals, rejections and request changes</small></span><input type="checkbox" id="notifyPr" checked disabled></label>
-          <label class="option"><span><strong>RFQ and supplier quotation updates</strong><small>Quotation readiness and awarded suppliers</small></span><input type="checkbox" id="notifyRfq" checked disabled></label>
-          <label class="option"><span><strong>Purchase Order updates</strong><small>Manager approval and delivery status changes</small></span><input type="checkbox" id="notifyPo" checked disabled></label>
-        </div>
-        <p class="field-hint">Preferences can be saved to MySQL once an authenticated HR-provided session is active. This page does not send emails or notifications by itself.</p>
-        <button type="button" class="primary-action" id="saveNotifications" disabled>Save Preferences</button>
-      </section>
+      
+<!-- NOTIFICATIONS TAB -->
+<section
+  class="panel"
+  id="panelNotifications"
+  role="tabpanel"
+  aria-labelledby="tabNotifications"
+  hidden
+>
+  <div class="notification-header">
+    <h2>Notification</h2>
+    <p>Choose which email alerts you want to receive.</p>
+  </div>
+
+  <div class="notification-columns">
+
+    <!-- LEFT COLUMN -->
+    <div class="notification-column">
+
+      <!-- PURCHASE REQUEST -->
+      <div class="notification-group">
+        <h3>Purchase Request</h3>
+
+        <label class="notification-row">
+          <span class="notification-info">
+            <strong>PR is Approved / Rejected</strong>
+            <small>Sent to Manager or returned to Draft</small>
+          </span>
+
+          <span class="notification-switch">
+            <input
+              type="checkbox"
+              id="notifyPr"
+              checked
+            >
+            <span class="notification-switch-face"></span>
+          </span>
+        </label>
+      </div>
+
+      <!-- RFQs AND QUOTATIONS -->
+      <div class="notification-group">
+        <h3>RFQs &amp; Quotations</h3>
+
+        <label class="notification-row">
+          <span class="notification-info">
+            <strong>New Quotation Received</strong>
+            <small>When a supplier submits a quote</small>
+          </span>
+
+          <span class="notification-switch">
+            <input
+              type="checkbox"
+              id="notifyRfq"
+              checked
+            >
+            <span class="notification-switch-face"></span>
+          </span>
+        </label>
+
+        <label class="notification-row">
+          <span class="notification-info">
+            <strong>RFQ Deadline Approaching</strong>
+            <small>2 days before the submission deadline</small>
+          </span>
+
+          <span class="notification-switch">
+            <input
+              type="checkbox"
+              id="notifyDeadline"
+            >
+            <span class="notification-switch-face"></span>
+          </span>
+        </label>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="notification-column">
+
+      <!-- PURCHASE ORDERS -->
+      <div class="notification-group">
+        <h3>Purchase Orders and Receiving</h3>
+
+        <label class="notification-row">
+          <span class="notification-info">
+            <strong>PO is Approved by Manager</strong>
+            <small>Ready to be sent to the supplier</small>
+          </span>
+
+          <span class="notification-switch">
+            <input
+              type="checkbox"
+              id="notifyPo"
+              checked
+            >
+            <span class="notification-switch-face"></span>
+          </span>
+        </label>
+      </div>
+
+      <!-- SYSTEM UPDATES -->
+      <div class="notification-group">
+        <h3>System Updates</h3>
+
+        <label class="notification-row">
+          <span class="notification-info">
+            <strong>Daily Task Summary</strong>
+            <small>A daily 8:00 AM email of your pending work</small>
+          </span>
+
+          <span class="notification-switch">
+            <input
+              type="checkbox"
+              id="notifyDaily"
+            >
+            <span class="notification-switch-face"></span>
+          </span>
+        </label>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Hidden compatibility button for existing JS -->
+  <button
+    type="button"
+    id="saveNotifications"
+    hidden
+    disabled
+  >
+    Save Preferences
+  </button>
+
+</section>
+<!-- END NOTIFICATIONS TAB -->
+
     </div>
   </main>
 </div>
