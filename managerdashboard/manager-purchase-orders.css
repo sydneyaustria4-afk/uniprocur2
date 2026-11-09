@@ -1,0 +1,341 @@
+/* UniProcur Manager PO page — Figma layout, built on existing manager PR shell. */
+.po-main { padding-bottom: 58px; }
+.po-main .topbar { background: rgba(255, 255, 255, .105); }
+.po-main .sidebar-rule { margin-top: 40px; }
+.nav-fallback-icon { font-size: 21px; line-height: 1; }
+.po-panel {
+  margin-top: 32px;
+  padding: 16px 12px 14px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 11px;
+  background: #f8f7f5;
+  box-shadow: 0 3px 6px rgba(0,0,0,.16);
+}
+.po-toolbar { display: flex; align-items: center; gap: 14px; margin: 0 4px 18px; }
+.po-toolbar .search-bar { flex: 1 1 auto; height: 49px; }
+.po-filter-wrap .filter-button { min-width: 122px; height: 49px; border-radius: 13px; }
+.po-export-button {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  flex: 0 0 auto; min-width: 127px; height: 49px; padding: 0 17px;
+  border: 1px solid #171717; border-radius: 12px; background: #fff;
+  color: #171717; font-size: 16px; box-shadow: 0 3px 4px rgba(0,0,0,.19);
+}
+.po-export-button:hover, .po-toolbar .filter-button:hover { background: #faf2f0; }
+.po-export-button span { font-size: 24px; line-height: .7; }
+.po-table-scroll { width: 100%; overflow-x: auto; }
+.po-table { width: 100%; min-width: 850px; table-layout: fixed; border-collapse: collapse; }
+.po-table th {
+  height: 49px; padding: 12px 9px; background: #f2f5f9;
+  color: #63728a; font-size: 12px; font-weight: 600; text-align: left;
+  white-space: nowrap;
+}
+/* Seven columns: removed Progress / fulfillment indicator */
+.po-table th:nth-child(1) { width: 14%; }
+.po-table th:nth-child(2) { width: 21%; }
+.po-table th:nth-child(3) { width: 12%; }
+.po-table th:nth-child(4) { width: 16%; }
+.po-table th:nth-child(5) { width: 14%; }
+.po-table th:nth-child(6) { width: 13%; }
+.po-table th:nth-child(7) { width: 10%; }
+.po-table td { height: 70px; padding: 10px 9px; border-bottom: 1px solid #d9e0e8; font-size: 12px; vertical-align: middle; }
+.po-table tbody tr:nth-child(even) { background: #f3f2f0; }
+.po-table tbody tr:hover { background: #fff4f0; }
+.po-id { font-weight: 700; white-space: nowrap; }
+.po-supplier strong { display: block; overflow: hidden; max-width: 100%; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.po-supplier small { display: block; margin-top: 2px; overflow: hidden; color: #73839a; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.po-date, .po-amount { white-space: nowrap; }
+.po-amount { font-weight: 700; }
+.po-status { display: inline-flex; align-items: center; justify-content: center; min-width: 78px; max-width: 100%; padding: 5px 10px; border-radius: 999px; font-size: 10px; white-space: nowrap; }
+.po-status.pending { background: #fff3c1; color: #6d5700; }
+.po-status.approved { background: #cbf6e3; color: #22875c; }
+.po-status.in-progress, .po-status.partial, .po-status.issued { background: #e7f1ff; color: #2b6ec3; }
+.po-status.rejected { background: #fee1e1; color: #b52525; }
+.po-status.received, .po-status.closed { background: #d9f5e3; color: #157145; }
+.po-view {
+  min-width: 48px; min-height: 32px; padding: 5px 9px;
+  border: 1px solid #dbe4ed; border-radius: 9px;
+  background: #faf9f7; color: #dc4a37; font-size: 12px; font-weight: 700;
+}
+.po-view:hover { border-color: #e45a3d; background: #fff; }
+.po-empty { height: 140px !important; text-align: center; color: #748092; font-size: 13px !important; }
+.po-table-footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 18px 12px 2px; font-size: 11px; color: #708097; }
+.po-pages { display: flex; align-items: center; gap: 7px; }
+.po-page-btn {
+  min-width: 27px; height: 29px; padding: 0 6px; border: 1px solid #9e9e9e;
+  border-radius: 5px; background: #fff; color: #222; font-size: 12px; font-weight: 600;
+}
+.po-page-btn.arrow { font-size: 21px; line-height: 1; }
+.po-page-btn.active { border-color: #b83529; background: #c23e30; color: #fff; }
+.po-page-btn:disabled { opacity: .38; cursor: default; }
+.po-recent {
+  margin-top: 20px; padding: 20px 18px 21px;
+  border-radius: 12px; background: #f8f7f5; box-shadow: 0 2px 4px rgba(0,0,0,.14);
+}
+.po-recent h2 { margin: 0; color: #111; font-size: 20px; line-height: 1.2; font-weight: 700; letter-spacing: -.05em; }
+.po-recent-subtitle { margin: 2px 0 15px; color: #999; font-size: 12px; }
+.po-recent-list { display: grid; gap: 10px; }
+.po-recent-card {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  min-height: 93px; width: 100%; padding: 14px 26px;
+  border: 2px solid #cecece; border-radius: 13px; background: #fff;
+  color: #181818; text-align: left;
+}
+.po-recent-card:hover { border-color: #cb4835; background: #fffdfb; }
+.po-recent-info { display: flex; flex-direction: column; min-width: 0; gap: 1px; }
+.po-recent-info strong { font-size: 16px; }
+.po-recent-info span { overflow: hidden; font-size: 12px; color: #5f5f5f; text-overflow: ellipsis; white-space: nowrap; }
+.po-recent-empty { margin: 18px 0; padding: 16px; color: #63728a; text-align: center; font-size: 13px; }
+/* Functional read-only PO preview (until dedicated Manager PO approval design). */
+.po-detail-dialog { width: min(850px, calc(100vw - 28px)); max-height: calc(100vh - 40px); padding: 0; overflow: auto; border: 0; border-radius: 16px; box-shadow: 0 16px 65px rgba(0,0,0,.28); }
+.po-detail-dialog::backdrop { background: rgba(13,11,9,.57); backdrop-filter: blur(3px); }
+.po-detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 20px 24px; border-bottom: 1px solid #e5e5e5; }
+.po-detail-header small { color: #666; font-size: 12px; }
+.po-detail-header h2 { margin: 2px 0 0; font-size: 23px; }
+.po-detail-close { width: 34px; height: 34px; border: 0; border-radius: 50%; background: #f5f5f5; font-size: 25px; }
+#poDetailContent { padding: 20px 24px; }
+.po-detail-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.po-detail-box { display: grid; gap: 4px; }
+.po-detail-box small { color: #777; font-size: 11px; }
+.po-detail-box strong { font-size: 13px; overflow-wrap: anywhere; }
+.po-detail-subheading { margin: 22px 0 10px; font-size: 15px; }
+.po-detail-items { overflow-x: auto; }
+.po-detail-items table { width: 100%; min-width: 570px; border-collapse: collapse; font-size: 12px; }
+.po-detail-items td, .po-detail-items th { padding: 10px 9px; border-bottom: 1px solid #e0e0e0; text-align: left; }
+.po-detail-items th { background: #f5f6f8; color: #63728a; }
+.po-detail-notes { padding: 12px; border: 1px solid #ddd; border-radius: 7px; font-size: 12px; overflow-wrap: anywhere; white-space: pre-wrap; }
+.po-dialog-footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 15px 24px; border-top: 1px solid #eee; font-size: 11px; color: #666; }
+.po-close-button { padding: 9px 19px; border: 0; border-radius: 8px; background: #171717; color: #fff; }
+@media (max-width: 1170px) {
+  .po-toolbar { gap: 9px; }
+  .po-filter-wrap .filter-button, .po-export-button { min-width: 100px; }
+}
+@media (max-width: 780px) {
+  .po-panel { margin-top: 18px; }
+  .po-toolbar { flex-wrap: wrap; }
+  .po-toolbar .search-bar { flex-basis: 100%; }
+  .po-table { min-width: 850px; }
+  .po-detail-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 480px) {
+  .po-recent-card { padding: 12px 14px; }
+  .po-recent h2 { font-size: 17px; }
+  .po-detail-grid { grid-template-columns: 1fr; }
+  .po-dialog-footer { align-items: stretch; flex-direction: column; }
+}
+
+/* ==========================================================
+   MANAGER PO SEARCH — copied from supplier.html / supplier.css
+   Supplier's magnifying glass is a CSS-drawn icon, NOT an image.
+   ========================================================== */
+.po-toolbar .search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  height: 56px;
+  padding: 0 9px 0 12px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 999px;
+  background: #ddd7d7;
+  box-shadow: 0 2px 5px rgba(55,0,0,.25);
+}
+.po-toolbar .search-bar .search-icon {
+  position: relative;
+  display: block;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fff;
+}
+.po-toolbar .search-bar .search-icon::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid #111;
+  border-radius: 50%;
+}
+.po-toolbar .search-bar .search-icon::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 23px;
+  width: 7px;
+  height: 1.5px;
+  background: #111;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+.po-toolbar .search-bar input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #111;
+  font-size: 16px;
+}
+.po-toolbar .search-bar input::placeholder { color: #111; opacity: 1; }
+.po-toolbar .search-bar button[type="submit"] {
+  flex: 0 0 auto;
+  min-width: 84px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid #b8b8b8;
+  border-radius: 999px;
+  background: rgba(255,255,255,.95);
+  color: #1e1e1e;
+  font-size: 14px;
+  font-weight: 400;
+  box-shadow: none;
+}
+
+/* Status badge and View button centered under their headings. */
+.po-table th:nth-child(6),
+.po-table td:nth-child(6),
+.po-table th:nth-child(7),
+.po-table td:nth-child(7) { text-align: center; }
+.po-table td:nth-child(6) { vertical-align: middle; }
+.po-table td:nth-child(6) .po-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 23px;
+  padding: 5px 8px;
+  line-height: 1;
+}
+
+/* Keep the Actions column visible on ordinary desktop screens. */
+.po-table { min-width: 760px; }
+.po-table th:nth-child(1) { width: 14%; }
+.po-table th:nth-child(2) { width: 21%; }
+.po-table th:nth-child(3) { width: 13%; }
+.po-table th:nth-child(4) { width: 17%; }
+.po-table th:nth-child(5) { width: 14%; }
+.po-table th:nth-child(6) { width: 12%; }
+.po-table th:nth-child(7) { width: 9%; }
+@media (max-width: 780px) {
+  .po-toolbar .search-bar { flex-basis: 100%; }
+  .po-table { min-width: 760px; }
+}
+
+
+
+
+
+
+/* SEARCH BAR - MATCH SUPPLIERS PAGE */
+
+.po-toolbar .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 56px;
+    padding: 0 9px 0 12px;
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 999px;
+    background: #ddd7d7;
+    box-shadow: 0 2px 5px rgba(55,0,0,0.25);
+}
+
+.po-toolbar .search-bar .search-icon {
+    position: relative;
+    display: block;
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: white;
+}
+
+/* Magnifying glass circle */
+.po-toolbar .search-bar .search-icon::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid #111;
+    border-radius: 50%;
+}
+
+/* Magnifying glass handle */
+.po-toolbar .search-bar .search-icon::after {
+    content: "";
+    position: absolute;
+    top: 22px;
+    left: 23px;
+    width: 7px;
+    height: 1.5px;
+    background: #111;
+    transform: rotate(45deg);
+    transform-origin: left center;
+}
+
+.po-toolbar .search-bar input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 16px;
+}
+
+.po-toolbar .search-bar button[type="submit"] {
+    min-width: 84px;
+    height: 36px;
+    padding: 0 14px;
+    border: 1px solid #b8b8b8;
+    border-radius: 999px;
+    background: white;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+/* CENTER STATUS AND ACTIONS */
+
+.po-table th:nth-child(6),
+.po-table td:nth-child(6),
+.po-table th:nth-child(7),
+.po-table td:nth-child(7) {
+    text-align: center;
+}
+
+.po-table td:nth-child(6) .po-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 72px;
+    min-height: 23px;
+    line-height: 1;
+}
+
+/* KEEP ACTIONS COLUMN VISIBLE */
+
+.po-table {
+    min-width: 760px;
+}
+
+.po-table th:nth-child(1) { width: 14%; }
+.po-table th:nth-child(2) { width: 21%; }
+.po-table th:nth-child(3) { width: 13%; }
+.po-table th:nth-child(4) { width: 17%; }
+.po-table th:nth-child(5) { width: 14%; }
+.po-table th:nth-child(6) { width: 12%; }
+.po-table th:nth-child(7) { width: 9%; }
+
+@media (max-width: 780px) {
+    .po-table {
+        min-width: 760px;
+    }
+}
