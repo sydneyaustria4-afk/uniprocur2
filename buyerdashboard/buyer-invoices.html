@@ -1,69 +1,466 @@
+
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#bd1715">
-<title>UniProcur | Buyer Invoices</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="buyer-invoices.css?v=2"><link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
 
-<!-- Shared Buyer Header - Purchase Order Design -->
-<link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
+  <title>UniProcur | Buyer Invoices</title>
 
-<!-- Consistent Buyer Profile and Arrow -->
-<link rel="stylesheet" href="../assets/uniprocur-buyer-profile.css?v=2">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
 
-<script src="buyer-invoices.js?v=6" defer></script>
+  <link rel="stylesheet" href="buyer-invoices.css?v=2">
+  <link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
+
+  <!-- Shared Buyer Header - Purchase Order Design -->
+  <link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
+
+  <!-- Consistent Buyer Profile and Arrow -->
+  <link rel="stylesheet" href="../assets/uniprocur-buyer-profile.css?v=2">
+
+  <script src="buyer-invoices.js?v=6" defer></script>
 </head>
+
 <body>
-<div class="invoice-shell">
-<aside class="invoice-sidebar" aria-label="Buyer workspace navigation">
- <a class="invoice-brand" href="buyer-dashboard.html"><img src="../assets/Pro%203.svg" alt=""><strong>UniProcur</strong></a>
- <div class="nav-area"><p class="nav-label">Workspace</p><nav aria-label="Buyer workspace">
-  <a class="nav-item" href="buyer-dashboard.html"><img src="../assets/Vector.svg" alt="">Dashboard</a>
-  <a class="nav-item" href="../supplier/supplier.html"><img src="../assets/Group%2027.svg" alt="">Suppliers</a>
-  <a class="nav-item" href="purchase-requests.html"><img src="../assets/Group%2033.svg" alt="">Purchase Request</a>
-  <a class="nav-item" href="rfq-workspace.html"><img src="../assets/Group.svg" alt="">RFQ Workspace</a>
-  <a class="nav-item" href="purchase-orders.html"><img src="../assets/Group%2034.svg" alt="">Purchase Order</a>
-  <a class="nav-item active" href="buyer-invoices.html" aria-current="page"><img src="../assets/Group%2035.svg" alt="">Invoice</a>
-  
 
-<a class="nav-item" href="buyer-reports.html">
-  <img src="../assets/Group 31.svg" alt="">
-  Reports
-</a>
+  <div class="invoice-shell">
 
-  <a class="nav-item" href="buyer-material-requests.html">
-  <img src="../assets/material-request.svg" alt="">
-  Material Request
-</a>
- </nav></div>
- <div class="sidebar-bottom"><div class="side-rule"></div>
- <a class="nav-item" href="buyer-support.html"><img src="../assets/support.svg" alt="">Support</a>
- <a class="nav-item" href="buyer-settings.html"><img src="../assets/settings.svg" alt="">Settings</a>
- <div class="side-rule"></div>
- <div class="side-user"><span class="side-avatar" id="sideInitial">B</span><span class="side-copy"><strong id="sideName">Buyer</strong><small id="sideEmail">Loading...</small></span><a class="side-arrow" href="buyer-dashboard.html" aria-label="Back to dashboard">→</a></div>
- </div>
-</aside>
-<main class="invoice-main"><div class="invoice-content">
-<header class="topbar"><div class="topbar-brand"><span class="top-icon"><img src="../assets/Pro%204.svg" alt=""></span><div><small>UniProcur Workspace</small><strong>Invoice</strong></div></div><div class="account-area"><button type="button" class="bell" id="bellButton" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button><span class="top-divider"></span><div class="account-copy"><strong id="topName">Buyer</strong><small id="topEmail">—</small></div><span class="top-avatar" id="topInitial">B</span></div></header>
-<p id="invoiceDemoNotice" class="invoice-demo-notice" role="status" hidden>
-  <span id="invoiceDemoText">Figma sample preview only — not saved in MySQL and cannot be posted to Finance.</span>
-  <button id="toggleDemoPreview" type="button">Show actual 0 records</button>
-</p>
-<section class="stats" aria-label="Invoice status filters">
-<button type="button" class="stat selected" data-status="pending"><span class="stat-title">Pending Match</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countPending">0</strong><small>Needs 3-Way Match</small></button>
-<button type="button" class="stat" data-status="ready"><span class="stat-title">Ready to Post</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countReady">0</strong><small>Matched, ready</small></button>
-<button type="button" class="stat" data-status="posted"><span class="stat-title">Posted</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countPosted">0</strong><small>Sent to Accounting</small></button>
-<button type="button" class="stat" data-status="discrepancy"><span class="stat-title">Discrepancy</span><span class="stat-arrow"><img src="../assets/invoice-arrow.svg" alt="" aria-hidden="true"></span><strong class="stat-value" id="countDiscrepancy">0</strong><small>Needs Review</small></button>
-</section>
-<div class="toolbar"><form id="searchForm" class="search-box"><span class="search-symbol" aria-hidden="true"><img src="../assets/invoice-search.svg" alt=""></span><input id="searchInput" type="search" placeholder="search" aria-label="Search invoices"><button type="submit">Search</button></form>
-<div class="filter-container"><button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="filterMenu"><img src="../assets/filter.svg" alt="">Filter</button><div class="filter-menu" id="filterMenu" hidden><button data-status-choice="all" type="button">All Invoices</button><button data-status-choice="pending" type="button">Pending Match</button><button data-status-choice="ready" type="button">Ready to Post</button><button data-status-choice="posted" type="button">Posted</button><button data-status-choice="discrepancy" type="button">Discrepancy</button></div></div>
-<a class="new-po" href="purchase-orders.html">+ New PO</a></div>
-<div class="showing"><strong>Showing:</strong><span id="filterLabel">All Invoices</span><small id="resultsCount">Loading invoices...</small></div>
-<p class="error" id="errorMessage" role="alert" hidden></p><div class="cards" id="invoiceCards"><p class="empty-state">Loading invoices from MySQL...</p></div>
-</div></main></div>
-<dialog id="invoiceDialog" class="invoice-dialog" aria-labelledby="dialogTitle"><div class="dialog-head"><div><small>Invoice Preview</small><h2 id="dialogTitle">Invoice</h2></div><button type="button" id="closeDialog" aria-label="Close invoice preview">×</button></div><p class="dialog-note">Preview uses saved Procurement invoice records. Actual PO–GR–Invoice matching is not verified on this screen.</p><dl class="invoice-details" id="dialogDetails"></dl><div class="dialog-actions"><button type="button" id="printInvoice">Print Preview</button><button type="button" id="closeInvoice">Close</button></div></dialog>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-</body></html>
+    <!-- ==========================================
+         SIDEBAR
+    =========================================== -->
+    <aside class="invoice-sidebar" aria-label="Buyer workspace navigation">
+
+      <!-- Brand -->
+      <a class="invoice-brand" href="buyer-dashboard.html">
+        <img src="../assets/Pro%203.svg" alt="">
+        <strong>UniProcur</strong>
+      </a>
+
+      <!-- Workspace Navigation -->
+      <div class="nav-area">
+
+        <p class="nav-label">Workspace</p>
+
+        <nav aria-label="Buyer workspace">
+
+          <a class="nav-item" href="buyer-dashboard.html">
+            <img src="../assets/Vector.svg" alt="">
+            Dashboard
+          </a>
+
+          <a class="nav-item" href="../supplier/supplier.html">
+            <img src="../assets/Group%2027.svg" alt="">
+            Suppliers
+          </a>
+
+          <a class="nav-item" href="purchase-requests.html">
+            <img src="../assets/Group%2033.svg" alt="">
+            Purchase Request
+          </a>
+
+          <a class="nav-item" href="rfq-workspace.html">
+            <img src="../assets/Group.svg" alt="">
+            RFQ Workspace
+          </a>
+
+          <a class="nav-item" href="purchase-orders.html">
+            <img src="../assets/Group%2034.svg" alt="">
+            Purchase Order
+          </a>
+
+          <a
+            class="nav-item active"
+            href="buyer-invoices.html"
+            aria-current="page"
+          >
+            <img src="../assets/Group%2035.svg" alt="">
+            Invoice
+          </a>
+
+          <a class="nav-item" href="buyer-reports.html">
+            <img src="../assets/Group 31.svg" alt="">
+            Reports
+          </a>
+
+          <a class="nav-item" href="buyer-material-requests.html">
+            <img src="../assets/material-request.svg" alt="">
+            Material Request
+          </a>
+
+        </nav>
+      </div>
+
+      <!-- ==========================================
+           SIDEBAR BOTTOM - FIXED
+      =========================================== -->
+      <div class="sidebar-bottom">
+
+        <!-- Divider above Support -->
+        <div class="side-rule"></div>
+
+        <!-- Support -->
+        <a class="nav-item" href="buyer-support.html">
+          <img src="../assets/support.svg" alt="">
+          Support
+        </a>
+
+        <!-- Settings -->
+        <a class="nav-item" href="buyer-settings.html">
+          <img src="../assets/settings.svg" alt="">
+          Settings
+        </a>
+
+        <!-- Buyer Profile -->
+        <div class="side-user">
+
+          <span class="side-avatar" id="sideInitial">B</span>
+
+          <span class="side-copy">
+            <strong id="sideName">Buyer</strong>
+            <small id="sideEmail">Loading...</small>
+          </span>
+
+          <a
+            class="side-arrow"
+            href="buyer-dashboard.html"
+            aria-label="Back to dashboard"
+          >
+            →
+          </a>
+
+        </div>
+
+      </div>
+      <!-- END SIDEBAR BOTTOM -->
+
+    </aside>
+
+    <!-- ==========================================
+         MAIN CONTENT
+    =========================================== -->
+    <main class="invoice-main">
+
+      <div class="invoice-content">
+
+        <!-- Header -->
+        <header class="topbar">
+
+          <div class="topbar-brand">
+
+            <span class="top-icon">
+              <img src="../assets/Pro%204.svg" alt="">
+            </span>
+
+            <div>
+              <small>UniProcur Workspace</small>
+              <strong>Invoice</strong>
+            </div>
+
+          </div>
+
+          <div class="account-area">
+
+            <button
+              type="button"
+              class="bell"
+              id="bellButton"
+              aria-label="Notifications"
+            >
+              <img src="../assets/Group%2050.svg" alt="">
+            </button>
+
+            <span class="top-divider"></span>
+
+            <div class="account-copy">
+              <strong id="topName">Buyer</strong>
+              <small id="topEmail">—</small>
+            </div>
+
+            <span class="top-avatar" id="topInitial">B</span>
+
+          </div>
+
+        </header>
+
+        <!-- ==========================================
+             FIGMA SAMPLE NOTICE
+        =========================================== -->
+        <p
+          id="invoiceDemoNotice"
+          class="invoice-demo-notice"
+          role="status"
+          hidden
+        >
+          <span id="invoiceDemoText">
+            Figma sample preview only — not saved in MySQL and cannot be posted to Finance.
+          </span>
+
+          <button id="toggleDemoPreview" type="button">
+            Show actual 0 records
+          </button>
+        </p>
+
+        <!-- ==========================================
+             INVOICE STATISTICS
+        =========================================== -->
+        <section class="stats" aria-label="Invoice status filters">
+
+          <!-- Pending Match -->
+          <button
+            type="button"
+            class="stat selected"
+            data-status="pending"
+          >
+            <span class="stat-title">Pending Match</span>
+
+            <span class="stat-arrow">
+              <img
+                src="../assets/invoice-arrow.svg"
+                alt=""
+                aria-hidden="true"
+              >
+            </span>
+
+            <strong class="stat-value" id="countPending">0</strong>
+            <small>Needs 3-Way Match</small>
+          </button>
+
+          <!-- Ready to Post -->
+          <button
+            type="button"
+            class="stat"
+            data-status="ready"
+          >
+            <span class="stat-title">Ready to Post</span>
+
+            <span class="stat-arrow">
+              <img
+                src="../assets/invoice-arrow.svg"
+                alt=""
+                aria-hidden="true"
+              >
+            </span>
+
+            <strong class="stat-value" id="countReady">0</strong>
+            <small>Matched, ready</small>
+          </button>
+
+          <!-- Posted -->
+          <button
+            type="button"
+            class="stat"
+            data-status="posted"
+          >
+            <span class="stat-title">Posted</span>
+
+            <span class="stat-arrow">
+              <img
+                src="../assets/invoice-arrow.svg"
+                alt=""
+                aria-hidden="true"
+              >
+            </span>
+
+            <strong class="stat-value" id="countPosted">0</strong>
+            <small>Sent to Accounting</small>
+          </button>
+
+          <!-- Discrepancy -->
+          <button
+            type="button"
+            class="stat"
+            data-status="discrepancy"
+          >
+            <span class="stat-title">Discrepancy</span>
+
+            <span class="stat-arrow">
+              <img
+                src="../assets/invoice-arrow.svg"
+                alt=""
+                aria-hidden="true"
+              >
+            </span>
+
+            <strong class="stat-value" id="countDiscrepancy">0</strong>
+            <small>Needs Review</small>
+          </button>
+
+        </section>
+
+        <!-- ==========================================
+             SEARCH AND FILTER
+        =========================================== -->
+        <div class="toolbar">
+
+          <!-- Search -->
+          <form id="searchForm" class="search-box">
+
+            <span class="search-symbol" aria-hidden="true">
+              <img src="../assets/invoice-search.svg" alt="">
+            </span>
+
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="search"
+              aria-label="Search invoices"
+            >
+
+            <button type="submit">Search</button>
+
+          </form>
+
+          <!-- Filter -->
+          <div class="filter-container">
+
+            <button
+              class="filter-button"
+              id="filterButton"
+              type="button"
+              aria-expanded="false"
+              aria-controls="filterMenu"
+            >
+              <img src="../assets/filter.svg" alt="">
+              Filter
+            </button>
+
+            <div class="filter-menu" id="filterMenu" hidden>
+
+              <button data-status-choice="all" type="button">
+                All Invoices
+              </button>
+
+              <button data-status-choice="pending" type="button">
+                Pending Match
+              </button>
+
+              <button data-status-choice="ready" type="button">
+                Ready to Post
+              </button>
+
+              <button data-status-choice="posted" type="button">
+                Posted
+              </button>
+
+              <button data-status-choice="discrepancy" type="button">
+                Discrepancy
+              </button>
+
+            </div>
+
+          </div>
+
+          <!-- New PO -->
+          <a class="new-po" href="purchase-orders.html">
+            + New PO
+          </a>
+
+        </div>
+
+        <!-- ==========================================
+             SHOWING FILTER
+        =========================================== -->
+        <div class="showing">
+
+          <strong>Showing:</strong>
+
+          <span id="filterLabel">
+            All Invoices
+          </span>
+
+          <small id="resultsCount">
+            Loading invoices...
+          </small>
+
+        </div>
+
+        <!-- Error Message -->
+        <p
+          class="error"
+          id="errorMessage"
+          role="alert"
+          hidden
+        ></p>
+
+        <!-- ==========================================
+             INVOICE CARDS
+        =========================================== -->
+        <div class="cards" id="invoiceCards">
+
+          <p class="empty-state">
+            Loading invoices from MySQL...
+          </p>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ==========================================
+       INVOICE DETAILS DIALOG
+  =========================================== -->
+  <dialog
+    id="invoiceDialog"
+    class="invoice-dialog"
+    aria-labelledby="dialogTitle"
+  >
+
+    <div class="dialog-head">
+
+      <div>
+        <small>Invoice Preview</small>
+        <h2 id="dialogTitle">Invoice</h2>
+      </div>
+
+      <button
+        type="button"
+        id="closeDialog"
+        aria-label="Close invoice preview"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <p class="dialog-note">
+      Preview uses saved Procurement invoice records.
+      Actual PO–GR–Invoice matching is not verified on this screen.
+    </p>
+
+    <dl class="invoice-details" id="dialogDetails"></dl>
+
+    <div class="dialog-actions">
+
+      <button type="button" id="printInvoice">
+        Print Preview
+      </button>
+
+      <button type="button" id="closeInvoice">
+        Close
+      </button>
+
+    </div>
+
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div
+    class="toast"
+    id="toast"
+    role="status"
+    aria-live="polite"
+  ></div>
+
+</body>
+</html>
