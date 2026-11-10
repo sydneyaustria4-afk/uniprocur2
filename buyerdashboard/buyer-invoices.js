@@ -67,7 +67,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const amount=el("strong","amount",`Total Amount: ${peso(invoice.total_amount)}`),due=el("div","due",`Due Date: ${formatDate(invoice.due_date)}`);
     const match=el("p","match-label",invoice.__figma_demo?"3-Way Match: Figma illustration only (not verified)":g==="ready"?"Stored status: Ready to Post (GR match not reverified here)":g==="posted"?"Stored status: Posted to Accounting":g==="discrepancy"?"Needs review before posting":"Awaiting verified PO–GR–Invoice match");
     const actions=el("div","card-actions"),print=el("button","", "Print"),view=el("button","","View Invoice");print.type="button";view.type="button";
-    print.addEventListener("click",()=>{openPreview(invoice);window.print()});view.addEventListener("click",()=>openPreview(invoice));actions.append(print,view);
+    
+    const detailUrl = invoice.__figma_demo
+      ? "buyer-view-invoice.html?demo=1"
+      : "buyer-view-invoice.html?invoice_number=" +
+        encodeURIComponent(invoice.invoice_number || "");
+
+    print.addEventListener("click", () => {
+      window.location.href = detailUrl + "&print=1";
+    });
+
+    view.addEventListener("click", () => {
+      window.location.href = detailUrl;
+    });
+
+    actions.append(print, view);
+
     if (invoice.__figma_demo) {
       const sampleBadge=el("span","sample-notice","SAMPLE DATA · Not a real invoice");
       card.append(sampleBadge);

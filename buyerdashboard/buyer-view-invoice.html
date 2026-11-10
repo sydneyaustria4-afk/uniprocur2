@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | View Invoice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-view-invoice.css?v=1">
+  <script src="buyer-view-invoice.js?v=1" defer></script>
+</head>
+<body>
+  <main class="invoice-view">
+    <div class="content-wrap">
+      <header class="view-topbar no-print">
+        <div class="view-identity"><span class="workspace-icon"><img src="../assets/Pro%204.svg" alt=""></span><div><small>Invoice</small><strong id="headerNumber">Loading...</strong></div></div>
+        <div class="account"><button class="bell" type="button" id="bellButton" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button><span class="account-divider"></span><div class="account-copy"><strong id="buyerName">Buyer</strong><small id="buyerEmail">—</small></div><span class="avatar" id="buyerInitial">B</span></div>
+      </header>
+      <a class="back-link no-print" href="buyer-invoices.html" aria-label="Back to Invoice Dashboard">‹</a>
+      <p class="banner demo" id="demoBanner" role="status" hidden>FIGMA SAMPLE ONLY — Not saved in MySQL. Values and 3-way match result shown here are illustrative. No financial transaction has occurred.</p>
+      <p class="banner info" id="dataBanner" role="status" hidden>The invoice below is read from MySQL. An Inventory Goods Receipt has not been independently verified; buttons that change records are unavailable.</p>
+      <p class="banner error" id="errorBanner" role="alert" hidden></p>
+      <p class="loading" id="loading">Loading Invoice Details...</p>
+      <article class="invoice-outer" id="invoiceSheet" hidden>
+        <div class="invoice-inner">
+          <section class="summary" aria-label="Invoice status and actions">
+            <div class="status-wrap"><small>Status</small><span class="status-badge" id="statusBadge">—</span></div>
+            <div class="summary-actions no-print">
+              <button class="outline-action" type="button" id="printButton"><img src="../assets/print.svg" alt=""> Print Invoice</button>
+              <button class="outline-action" type="button" id="discrepancyButton"><span class="warning-icon" aria-hidden="true">⚠</span> Flag Discrepancy</button>
+              <button class="dark-action" type="button" id="postButton"><span aria-hidden="true">⊞</span> Post to Accounting</button>
+            </div>
+          </section>
+          <div class="rule"></div>
+          <section class="details-section" aria-label="Invoice Details">
+            <h2>Invoice Details</h2>
+            <div class="detail-grid">
+              <dl class="detail-card">
+                <div><dt>Invoice Number:</dt><dd id="invoiceNumber">—</dd></div>
+                <div><dt>Supplier Invoice No:</dt><dd id="supplierInvoiceNumber">—</dd></div>
+                <div><dt>Invoice Date:</dt><dd id="invoiceDate">—</dd></div>
+                <div><dt>Due Date:</dt><dd id="dueDate">—</dd></div>
+              </dl>
+              <dl class="detail-card">
+                <div><dt>PO Reference:</dt><dd id="poReference">—</dd></div>
+                <div><dt>GR Reference:</dt><dd id="grReference">Not verified</dd></div>
+                <div><dt>Supplier:</dt><dd id="supplier">—</dd></div>
+                <div><dt>Payment Terms:</dt><dd id="paymentTerms">—</dd></div>
+              </dl>
+            </div>
+          </section>
+          <div class="rule details-rule"></div>
+          <section class="verification" aria-label="3-Way Match Verification">
+            <div class="verify-heading"><h2>3-Way Match Verification</h2><p class="match-result" id="matchResult">Awaiting verified PO–GR–Invoice match</p></div>
+            <div class="table-scroll"><table class="line-items"><thead><tr><th>No.</th><th>Item Name</th><th>Ordered (PO)</th><th>Received (GR)</th><th>Invoice</th><th>Unit Price</th><th>Line Total</th></tr></thead><tbody id="itemRows"></tbody></table></div>
+            <div class="totals"><div><strong>Subtotal:</strong><span id="subtotal">—</span></div><div><strong>VAT (12%):</strong><span id="vat">—</span></div><div class="grand-total"><strong>Total:</strong><span id="totalAmount">—</span></div></div>
+            <p class="source-hint" id="sourceHint">Received (GR) quantities must come from the Inventory Goods Receipt module and cannot be inferred from a Purchase Order.</p>
+          </section>
+        </div>
+      </article>
+    </div>
+  </main>
+  <div class="toast no-print" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
