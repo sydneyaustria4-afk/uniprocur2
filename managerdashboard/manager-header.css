@@ -1,0 +1,210 @@
+/*
+ * UniProcur Manager — Shared Header
+ * Reference: manager-purchase-requests.css + its <header class="topbar">.
+ * Install in: managerdashboard/manager-header.css
+ * Load LAST, after all other stylesheets on EVERY manager page.
+ * Does not affect the sidebar, PR/PO logic, PHP, or MySQL.
+ */
+
+/* Equal horizontal header alignment across all Manager workspaces. */
+@media (min-width: 1101px) {
+  body .manager-shell > .main-panel {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    padding: 24px 39px 25px 49px;
+  }
+}
+@media (min-width: 781px) and (max-width: 1100px) {
+  body .manager-shell > .main-panel {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    padding: 20px 24px;
+  }
+}
+@media (max-width: 780px) {
+  body .manager-shell > .main-panel {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 16px;
+  }
+}
+
+/* Some pages add extra max-width wrappers, shrinking or centering the topbar. */
+body .manager-shell > .main-panel > :is(
+  .dashboard-inner, .reports-inner, .audit-inner,
+  .support-content, .settings-shell-inner
+) {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Purchase Request header shape and typography — used on every page. */
+body .manager-shell .topbar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  min-height: 68px;
+  height: auto;
+  padding: 8px 18px;
+  border: 1px solid rgba(255, 255, 255, .48);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, .075);
+  color: #fff;
+  font-family: Geist, Inter, Arial, sans-serif;
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+body .manager-shell .topbar .workspace-title,
+body .manager-shell .topbar .topbar-account {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+body .manager-shell .topbar .workspace-title { gap: 10px; }
+body .manager-shell .topbar .workspace-mark {
+  box-sizing: border-box;
+  display: grid;
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  overflow: hidden;
+}
+body .manager-shell .topbar .workspace-mark img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+body .manager-shell .topbar .workspace-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+body .manager-shell .topbar .workspace-copy > span {
+  color: rgba(255,255,255,.84);
+  font-size: 13px;
+}
+body .manager-shell .topbar .workspace-copy > strong {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.035em;
+}
+body .manager-shell .topbar .topbar-account {
+  gap: 13px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+body .manager-shell .topbar .notification-button {
+  box-sizing: border-box;
+  display: grid;
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 50%;
+  background: #fff;
+}
+body .manager-shell .topbar .notification-button img {
+  width: 27px;
+  height: 27px;
+  object-fit: contain;
+}
+body .manager-shell .topbar .topbar-divider {
+  width: 1px;
+  height: 42px;
+  flex: 0 0 1px;
+  background: rgba(255,255,255,.75);
+}
+body .manager-shell .topbar .account-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 0;
+  gap: 1px;
+}
+body .manager-shell .topbar .account-copy strong {
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.05;
+}
+body .manager-shell .topbar .account-copy small {
+  color: rgba(255,255,255,.84);
+  font-size: 10px;
+}
+body .manager-shell .topbar .account-avatar {
+  box-sizing: border-box;
+  display: grid;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 50%;
+  background: #fff;
+  color: #a70d10;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+/* Same smaller version as Manager Purchase Requests on phones. */
+@media (max-width: 780px) {
+  body .manager-shell .topbar {
+    min-height: 62px;
+    padding: 6px 10px;
+    border-radius: 16px;
+    gap: 9px;
+  }
+  body .manager-shell .topbar .workspace-mark {
+    flex-basis: 42px;
+    width: 42px;
+    height: 42px;
+  }
+  body .manager-shell .topbar .workspace-copy > span { font-size: 10px; }
+  body .manager-shell .topbar .workspace-copy > strong { font-size: 13px; }
+  body .manager-shell .topbar .notification-button {
+    flex-basis: 38px;
+    min-width: 38px;
+    width: 38px;
+    height: 38px;
+  }
+  body .manager-shell .topbar .notification-button img {
+    width: 22px;
+    height: 22px;
+  }
+  body .manager-shell .topbar .topbar-divider { height: 32px; }
+  body .manager-shell .topbar .account-copy strong { font-size: 12px; }
+  body .manager-shell .topbar .account-copy small { font-size: 8px; }
+  body .manager-shell .topbar .account-avatar {
+    flex-basis: 38px;
+    width: 38px;
+    height: 38px;
+  }
+  body .manager-shell .topbar .topbar-account { gap: 7px; }
+}
+@media (max-width: 440px) {
+  body .manager-shell .topbar .account-copy { display: none; }
+  body .manager-shell .topbar .topbar-divider { display: none; }
+}

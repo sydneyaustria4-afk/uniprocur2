@@ -12,7 +12,11 @@
   <link rel="stylesheet" href="manager-audit-trail.css?v=1">
   <!-- Keep the shared Manager sidebar LAST for consistent size and alignment. -->
   <link rel="stylesheet" href="../assets/uniprocur-manager-sidebar.css?v=1">
-  <script src="manager-audit-trail.js?v=1" defer></script>
+
+<!-- Shared Manager Header: Purchase Request design -->
+<link rel="stylesheet" href="manager-header.css?v=1">
+
+  <script src="manager-audit-trail.js?v=2" defer></script>
 </head>
 <body class="manager-audit-page">
   <div class="manager-shell">
@@ -40,12 +44,14 @@
   <span>Support</span>
 </a>
 
-        <button class="nav-item" type="button" data-soon="Manager Settings">
+        
+<a class="nav-item" href="manager-settings.html">
   <span class="nav-icon">
     <img src="../assets/settings.svg" alt="">
   </span>
   <span>Settings</span>
-</button>
+</a>
+
         <div class="profile-mini">
           <span class="profile-avatar" id="sidebarAvatar">M</span>
           <span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small id="sidebarManagerEmail">Loading…</small></span>

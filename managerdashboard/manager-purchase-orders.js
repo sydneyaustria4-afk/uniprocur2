@@ -53,7 +53,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ["sidebarManagerName", "topbarManagerName"].forEach(id => { $(id).textContent = name; });
     ["sidebarManagerEmail", "topbarManagerEmail"].forEach(id => { $(id).textContent = email; });
     ["sidebarAvatar", "topbarAvatar"].forEach(id => { $(id).textContent = initial; });
-    $("welcomeText").textContent = `Welcome ${name.trim().split(/\s+/)[0] || "Manager"}!`;
+   
+$("welcomeText").textContent = "Welcome Manager!";
+
   }
 
   function makeRow(order) {

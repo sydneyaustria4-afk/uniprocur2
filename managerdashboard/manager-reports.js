@@ -29,7 +29,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const first = full.trim().split(/\s+/)[0] || "Manager";
     const initial = first.charAt(0).toUpperCase() || "M";
     const email = String(manager?.email || "—");
-    $("welcomeText").textContent = `Welcome ${first === "Manager" ? "Manager" : first}!`;
+   
+$("welcomeText").textContent = "Welcome Manager!";
+
     for (const id of ["sidebarManagerName", "topbarManagerName"]) $(id).textContent = full;
     for (const id of ["sidebarManagerEmail", "topbarManagerEmail"]) $(id).textContent = email;
     for (const id of ["sidebarAvatar", "topbarAvatar"]) $(id).textContent = initial;
