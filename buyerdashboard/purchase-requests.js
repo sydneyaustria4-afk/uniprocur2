@@ -127,8 +127,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateBuyer(result) {
     if (!result || !result.buyer) return;
 
-    const name = result.buyer.full_name || "Buyer";
-    const email = result.buyer.email || "";
+    
+const name = "Buyer";
+const email = "buyer@gmail.com";
+
 
     document.getElementById(
       "buyerSidebarName"

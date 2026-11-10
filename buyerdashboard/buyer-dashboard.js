@@ -33,14 +33,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         .querySelectorAll(".profile-copy strong, .account-name strong")
         .forEach((element) => {
           element.textContent =
-            result.buyer.full_name || element.textContent;
+            "Buyer";
         });
 
       document
         .querySelectorAll(".profile-copy small, .account-name small")
         .forEach((element) => {
           element.textContent =
-            result.buyer.email || element.textContent;
+            "buyer@gmail.com";
         });
     }
 

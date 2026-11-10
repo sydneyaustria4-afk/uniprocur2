@@ -52,8 +52,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateBuyer(buyer) {
-    const name = String(buyer?.full_name || "Buyer");
-    const email = String(buyer?.email || "");
+    
+const name = "Buyer";
+const email = "buyer@gmail.com";
+
     for (const id of ["sidebarName", "topName"]) setText(id, name);
     for (const id of ["sidebarEmail", "topEmail"]) setText(id, email || "—");
     for (const id of ["sidebarInitial", "topInitial"]) setText(id, name.trim().charAt(0).toUpperCase() || "B");

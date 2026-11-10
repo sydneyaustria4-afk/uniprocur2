@@ -1,0 +1,384 @@
+/*
+ * UniProcur / BUYER SHARED HEADER v1
+ * Design reference: buyerdashboard/purchase-orders.css -> .po-topbar
+ * Installation: assets/uniprocur-buyer-header.css
+ * Load LAST (after page CSS and uniprocur-sidebar.css) on Buyer and Supplier pages.
+ * Visual-only: doesn't change user data, JavaScript, authentication, or database.
+ */
+
+/* 1. The same Purchase Order header outline on all Buyer pages. */
+body :is(
+  header.po-topbar,
+  header.pr-topbar,
+  header.topbar,
+  header.br-topbar,
+  header.mr-topbar,
+  header.support-topbar
+) {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 20px !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  min-height: 76px !important;
+  height: auto !important;
+  padding: 10px 19px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  border: 1px solid rgba(255, 255, 255, .5) !important;
+  border-radius: 23px !important;
+  background: rgba(255, 255, 255, .08) !important;
+  color: #fff !important;
+  font-family: Inter, Arial, sans-serif !important;
+}
+
+/* 2. Left: logo circle + 'UniProcur Workspace' + current page title. */
+body :is(
+  header.po-topbar .workspace-brand,
+  header.pr-topbar .pr-workspace-title,
+  header.topbar .workspace-title,
+  header.topbar .topbar-brand,
+  header.topbar .top-title,
+  header.br-topbar .br-workspace,
+  header.mr-topbar .mr-workspace,
+  header.support-topbar .support-heading
+) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+  flex: 0 1 auto !important;
+}
+
+body :is(
+  header.po-topbar .workspace-logo,
+  header.pr-topbar .pr-workspace-icon,
+  header.topbar .workspace-icon,
+  header.topbar .topbar-icon,
+  header.topbar .top-icon,
+  header.topbar .top-logo,
+  header.br-topbar .br-workspace-icon,
+  header.mr-topbar .mr-workspace-logo,
+  header.support-topbar .support-workspace-logo
+) {
+  box-sizing: border-box !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 53px !important;
+  width: 53px !important;
+  min-width: 53px !important;
+  height: 53px !important;
+  border: 1px solid rgba(255, 255, 255, .7) !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.06) !important;
+  overflow: hidden !important;
+}
+
+body :is(
+  header.po-topbar .workspace-logo img,
+  header.pr-topbar .pr-workspace-icon img,
+  header.topbar .workspace-icon img,
+  header.topbar .topbar-icon img,
+  header.topbar .top-icon img,
+  header.topbar .top-logo img,
+  header.br-topbar .br-workspace-icon img,
+  header.mr-topbar .mr-workspace-logo img,
+  header.support-topbar .support-workspace-logo img
+) {
+  display: block !important;
+  width: 28px !important;
+  height: 33px !important;
+  max-width: 28px !important;
+  max-height: 33px !important;
+  object-fit: contain !important;
+}
+
+body :is(
+  header.po-topbar .workspace-brand > div,
+  header.pr-topbar .pr-workspace-copy,
+  header.topbar .workspace-copy,
+  header.topbar .topbar-brand > div,
+  header.topbar .top-title > div,
+  header.br-topbar .br-workspace-title,
+  header.mr-topbar .mr-workspace-name,
+  header.support-topbar .support-heading > div
+) {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  line-height: 1.15 !important;
+}
+
+body :is(
+  header.po-topbar .workspace-brand > div > span,
+  header.pr-topbar .pr-workspace-copy > span,
+  header.topbar .workspace-copy > span,
+  header.topbar .workspace-copy > large,
+  header.topbar .topbar-brand > div > small,
+  header.topbar .top-title > div > small,
+  header.br-topbar .br-workspace-title > small,
+  header.mr-topbar .mr-workspace-name > small,
+  header.support-topbar .support-heading > div > small
+) {
+  display: block !important;
+  font-size: 13px !important;
+  line-height: 1.1 !important;
+  font-weight: 400 !important;
+  color: #eee !important;
+  letter-spacing: 0 !important;
+}
+
+body :is(
+  header.po-topbar .workspace-brand > div > strong,
+  header.pr-topbar .pr-workspace-copy > strong,
+  header.topbar .workspace-copy > strong,
+  header.topbar .topbar-brand > div > strong,
+  header.topbar .top-title > div > strong,
+  header.br-topbar .br-workspace-title > strong,
+  header.mr-topbar .mr-workspace-name > strong,
+  header.support-topbar .support-heading > div > strong
+) {
+  display: block !important;
+  font-size: 17px !important;
+  line-height: 1.1 !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  letter-spacing: 0 !important;
+}
+
+/* 3. Right: bell, vertical divider, account information and white avatar. */
+body :is(
+  header.po-topbar .account-row,
+  header.pr-topbar .pr-account-actions,
+  header.topbar .account-tools,
+  header.topbar .account-area,
+  header.topbar .top-user,
+  header.topbar .account-actions,
+  header.br-topbar .br-account,
+  header.mr-topbar .mr-user,
+  header.support-topbar .support-account
+) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 15px !important;
+  min-width: 0 !important;
+  margin-left: auto !important;
+  flex-shrink: 0 !important;
+}
+
+body :is(
+  header.po-topbar .bell,
+  header.pr-topbar .pr-notification-button,
+  header.topbar .bell,
+  header.topbar .bell-button,
+  header.topbar .bell-circle,
+  header.topbar .icon-button.notification-button,
+  header.br-topbar .br-bell,
+  header.mr-topbar .mr-bell,
+  header.support-topbar .support-bell
+) {
+  box-sizing: border-box !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 50px !important;
+  width: 50px !important;
+  min-width: 50px !important;
+  height: 50px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  color: #222 !important;
+}
+
+body :is(
+  header.po-topbar .bell img,
+  header.pr-topbar .pr-notification-button img,
+  header.topbar .bell img,
+  header.topbar .bell-button img,
+  header.topbar .bell-circle img,
+  header.topbar .icon-button.notification-button img,
+  header.br-topbar .br-bell img,
+  header.mr-topbar .mr-bell img,
+  header.support-topbar .support-bell img
+) {
+  display: block !important;
+  width: 29px !important;
+  height: 29px !important;
+  max-width: 29px !important;
+  max-height: 29px !important;
+  object-fit: contain !important;
+}
+
+body :is(
+  header.po-topbar .topbar-divider,
+  header.pr-topbar .pr-account-divider,
+  header.topbar .topbar-divider,
+  header.topbar .top-divider,
+  header.topbar .account-divider,
+  header.br-topbar .br-divider,
+  header.mr-topbar .mr-account-rule,
+  header.support-topbar .support-account-rule
+) {
+  display: block !important;
+  box-sizing: border-box !important;
+  flex: 0 0 1px !important;
+  width: 1px !important;
+  height: 39px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: rgba(255, 255, 255, .8) !important;
+}
+
+/* Supplier page does not have a divider element: draw it on the account label. */
+body .suppliers-layout header.topbar .account-name {
+  padding-left: 15px !important;
+  border-left: 1px solid rgba(255,255,255,.8) !important;
+}
+
+body :is(
+  header.po-topbar .account-copy,
+  header.pr-topbar .pr-account-name,
+  header.topbar .account-copy,
+  header.topbar .account-name,
+  header.topbar .top-user > div,
+  header.br-topbar .br-account-copy,
+  header.mr-topbar .mr-user-label,
+  header.support-topbar .support-account > div
+) {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  gap: 3px !important;
+  text-align: right !important;
+  min-width: 0 !important;
+  max-width: 220px !important;
+}
+
+body :is(
+  header.po-topbar .account-copy strong,
+  header.pr-topbar .pr-account-name strong,
+  header.topbar .account-copy strong,
+  header.topbar .account-name strong,
+  header.topbar .top-user > div strong,
+  header.br-topbar .br-account-copy strong,
+  header.mr-topbar .mr-user-label strong,
+  header.support-topbar .support-account > div strong
+) {
+  font-size: 15px !important;
+  line-height: 1.15 !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+}
+body :is(
+  header.po-topbar .account-copy small,
+  header.pr-topbar .pr-account-name small,
+  header.topbar .account-copy small,
+  header.topbar .account-name small,
+  header.topbar .top-user > div small,
+  header.br-topbar .br-account-copy small,
+  header.mr-topbar .mr-user-label small,
+  header.support-topbar .support-account > div small
+) {
+  display: block !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+  font-weight: 400 !important;
+  color: #eee !important;
+}
+
+body :is(
+  header.po-topbar .account-avatar,
+  header.pr-topbar .pr-avatar-white,
+  header.topbar .account-avatar,
+  header.topbar .top-avatar,
+  header.topbar .avatar-white,
+  header.br-topbar .br-avatar,
+  header.mr-topbar .mr-user-avatar,
+  header.support-topbar .support-user-initial
+) {
+  box-sizing: border-box !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 49px !important;
+  width: 49px !important;
+  min-width: 49px !important;
+  height: 49px !important;
+  padding: 0 !important;
+  border: 1px solid #ddd !important;
+  border-radius: 50% !important;
+  background: #fff !important;
+  color: #c01e14 !important;
+  font-size: 19px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+}
+
+/* Dashboard header has a direct child bell wrapper and later profile siblings. */
+body .dashboard-shell .topbar.suppliers-topbar > .account-actions { margin-left: auto !important; }
+body .dashboard-shell .topbar.suppliers-topbar > .account-name { margin-left: 0 !important; }
+
+/* 4. Mobile: match the PO header shape, hide only space-hungry profile text. */
+@media (max-width: 760px) {
+  body :is(header.po-topbar,header.pr-topbar,header.topbar,header.br-topbar,header.mr-topbar,header.support-topbar) {
+    min-height: 64px !important;
+    padding: 8px 10px !important;
+    gap: 8px !important;
+    border-radius: 16px !important;
+  }
+  body :is(
+    header.po-topbar .workspace-logo,header.pr-topbar .pr-workspace-icon,
+    header.topbar .workspace-icon,header.topbar .topbar-icon,header.topbar .top-icon,header.topbar .top-logo,
+    header.br-topbar .br-workspace-icon,header.mr-topbar .mr-workspace-logo,header.support-topbar .support-workspace-logo
+  ) {
+    flex-basis: 40px !important; width: 40px !important; min-width: 40px !important; height: 40px !important;
+  }
+  body :is(
+    header.po-topbar .workspace-brand > div > span,header.pr-topbar .pr-workspace-copy > span,
+    header.topbar .workspace-copy > span,header.topbar .workspace-copy > large,
+    header.topbar .topbar-brand > div > small,header.topbar .top-title > div > small,
+    header.br-topbar .br-workspace-title > small,header.mr-topbar .mr-workspace-name > small,
+    header.support-topbar .support-heading > div > small
+  ) { font-size: 10px !important; }
+  body :is(
+    header.po-topbar .workspace-brand > div > strong,header.pr-topbar .pr-workspace-copy > strong,
+    header.topbar .workspace-copy > strong,header.topbar .topbar-brand > div > strong,
+    header.topbar .top-title > div > strong,header.br-topbar .br-workspace-title > strong,
+    header.mr-topbar .mr-workspace-name > strong,header.support-topbar .support-heading > div > strong
+  ) { font-size: 14px !important; }
+  body :is(
+    header.po-topbar .account-copy,header.pr-topbar .pr-account-name,header.topbar .account-copy,
+    header.topbar .account-name,header.topbar .top-user > div,header.br-topbar .br-account-copy,
+    header.mr-topbar .mr-user-label,header.support-topbar .support-account > div,
+    header.po-topbar .topbar-divider,header.pr-topbar .pr-account-divider,
+    header.topbar .topbar-divider,header.topbar .top-divider,header.topbar .account-divider,
+    header.br-topbar .br-divider,header.mr-topbar .mr-account-rule,header.support-topbar .support-account-rule
+  ) { display: none !important; }
+  body .suppliers-layout header.topbar .account-name { display: none !important; }
+  body :is(
+    header.po-topbar .bell,header.pr-topbar .pr-notification-button,header.topbar .bell,
+    header.topbar .bell-button,header.topbar .bell-circle,header.topbar .icon-button.notification-button,
+    header.br-topbar .br-bell,header.mr-topbar .mr-bell,header.support-topbar .support-bell,
+    header.po-topbar .account-avatar,header.pr-topbar .pr-avatar-white,header.topbar .account-avatar,
+    header.topbar .top-avatar,header.topbar .avatar-white,header.br-topbar .br-avatar,
+    header.mr-topbar .mr-user-avatar,header.support-topbar .support-user-initial
+  ) { width: 38px !important; min-width: 38px !important; height: 38px !important; flex-basis: 38px !important; }
+  body :is(
+    header.po-topbar .account-row,header.pr-topbar .pr-account-actions,header.topbar .account-tools,
+    header.topbar .account-area,header.topbar .top-user,header.topbar .account-actions,
+    header.br-topbar .br-account,header.mr-topbar .mr-user,header.support-topbar .support-account
+  ) { gap: 7px !important; }
+}
+
+@media print {
+  /* Preserve existing report/invoice print rules: do not force the header to print. */
+  body.buyer-reports-page header.br-topbar { display: none !important; }
+}

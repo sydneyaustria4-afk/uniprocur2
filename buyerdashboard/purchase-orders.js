@@ -35,8 +35,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const toast = msg => { $("poToast").textContent = msg; $("poToast").classList.add("show"); clearTimeout(toastTimeout); toastTimeout = setTimeout(() => $("poToast").classList.remove("show"), 3300); };
   const setText = (id, value) => { $(id).textContent = value ?? "—"; };
   function updateIdentity(user) {
-    const name = user?.full_name || "Buyer";
-    const email = user?.email || "";
+    
+const name = "Buyer";
+const email = "buyer@gmail.com";
+
     const initial = name.charAt(0).toUpperCase() || "B";
     setText("sidebarName", name); setText("sidebarEmail", email);
     setText("topName", name); setText("topEmail", email);

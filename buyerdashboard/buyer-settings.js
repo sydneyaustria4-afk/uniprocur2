@@ -40,9 +40,25 @@ if (!error) {
     const name = user.full_name || "Buyer";
     const email = user.email || "—";
     const initial = (name.trim().charAt(0) || "B").toUpperCase();
-    for (const id of ["sideName", "topName", "profileName"]) fill(id, name);
-    for (const id of ["sideEmail", "topEmail", "profileEmail", "securityEmail"]) fill(id, email);
-    for (const id of ["sideInitial", "topInitial", "profileInitial"]) fill(id, initial);
+    
+for (const id of ["sideName", "topName"]) {
+  fill(id, "Buyer");
+}
+
+for (const id of ["sideEmail", "topEmail"]) {
+  fill(id, "buyer@gmail.com");
+}
+
+for (const id of ["sideInitial", "topInitial"]) {
+  fill(id, "B");
+}
+
+// Actual HR-managed account details in Profile
+fill("profileName", name);
+fill("profileEmail", email);
+fill("securityEmail", email);
+fill("profileInitial", initial);
+
     $("fullName").value = name;
     $("email").value = email;
     $("company").value = user.department || "Procurement";

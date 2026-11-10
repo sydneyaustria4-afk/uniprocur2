@@ -104,8 +104,10 @@
     .then(r => r.ok ? r.json() : null)
     .then(data => {
       if (!data?.success || !data.user) return;
-      const name = data.user.full_name || "Buyer";
-      const email = data.user.email || "—";
+      
+const name = "Buyer";
+const email = "buyer@gmail.com";
+
       for (const id of ["topName", "sideName"]) byId(id).textContent = name;
       for (const id of ["topEmail", "sideEmail"]) byId(id).textContent = email;
       for (const id of ["topInitial", "sideInitial"]) byId(id).textContent = (name.trim().charAt(0) || "B").toUpperCase();
