@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Manager Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Existing Manager layout and shared sidebar: load shared sidebar last -->
+  <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
+  <link rel="stylesheet" href="manager-settings.css?v=2">
+  <link rel="stylesheet" href="../assets/uniprocur-manager-sidebar.css?v=1">
+  <script src="manager-settings.js?v=2" defer></script>
+</head>
+<body class="manager-settings-page">
+  <div class="manager-shell">
+    <aside class="sidebar" aria-label="Manager workspace navigation">
+      <a class="brand" href="manager-dashboard.html" aria-label="UniProcur Manager Dashboard">
+        <img class="brand-logo" src="../assets/Pro%203.svg" alt=""><span>UniProcur</span>
+      </a>
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav class="workspace-nav" aria-label="Manager workspace">
+          <a class="nav-item" href="manager-dashboard.html"><span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span><span>Dashboard</span></a>
+          <a class="nav-item" href="manager-purchase-requests.html"><span class="nav-icon"><img src="../assets/Group%2033.svg" alt=""></span><span>Purchase Request</span></a>
+          <a class="nav-item" href="manager-purchase-orders.html"><span class="nav-icon"><img src="../assets/Group%2034.svg" alt=""></span><span>Purchase Order</span></a>
+          <a class="nav-item" href="manager-reports.html"><span class="nav-icon"><img src="../assets/Group%2031.svg" alt=""></span><span>Reports</span></a>
+          <a class="nav-item" href="manager-audit-trail.html"><span class="nav-icon"><img src="../assets/Group%2035.svg" alt=""></span><span>Audit Trail</span></a>
+        </nav>
+      </div>
+      <div class="sidebar-rule" aria-hidden="true"></div>
+      <div class="sidebar-bottom">
+        <a class="nav-item" href="manager-support.html"><span class="nav-icon"><img src="../assets/support.svg" alt=""></span><span>Support</span></a>
+        <a class="nav-item is-active" href="manager-settings.html" aria-current="page"><span class="nav-icon"><img src="../assets/settings.svg" alt=""></span><span>Settings</span></a>
+        <div class="profile-mini">
+          <span class="profile-avatar" id="sidebarAvatar" aria-hidden="true">M</span>
+          <span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small id="sidebarManagerEmail">Loading…</small></span>
+          <button class="signout-button" type="button" id="signOutButton" aria-label="Sign out (managed by HR)" title="Sign out managed by HR">↦</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-panel manager-settings-main">
+      <div class="settings-shell-inner">
+        <header class="topbar">
+          <div class="workspace-title">
+            <span class="workspace-mark"><img src="../assets/Pro%204.svg" alt=""></span>
+            <span class="workspace-copy"><span>UniProcur Workspace</span><strong id="welcomeText">Welcome Manager!</strong></span>
+          </div>
+          <div class="topbar-account">
+            <button class="notification-button" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button>
+            <span class="topbar-divider" aria-hidden="true"></span>
+            <span class="account-copy"><strong id="topbarManagerName">Manager</strong><small id="topbarManagerEmail">Loading…</small></span>
+            <span class="account-avatar" id="topbarAvatar">M</span>
+          </div>
+        </header>
+
+        <div class="settings-page">
+          <h1 class="settings-title">Settings</h1>
+          <div id="settingsNotice" class="settings-notice" role="status" aria-live="polite" hidden></div>
+          <div id="settingsError" class="settings-error" role="alert" hidden></div>
+
+          <div class="settings-tabs" role="tablist" aria-label="Settings sections">
+            <button class="settings-tab is-active" id="settings-tab-profile" type="button" role="tab" aria-selected="true" aria-controls="settings-panel-profile" tabindex="0" data-settings-tab="profile">Profile</button>
+            <button class="settings-tab" id="settings-tab-security" type="button" role="tab" aria-selected="false" aria-controls="settings-panel-security" tabindex="-1" data-settings-tab="security">Security</button>
+            <button class="settings-tab" id="settings-tab-notifications" type="button" role="tab" aria-selected="false" aria-controls="settings-panel-notifications" tabindex="-1" data-settings-tab="notifications">Notifications</button>
+          </div>
+
+          <section class="settings-panel settings-profile-panel" id="settings-panel-profile" role="tabpanel" aria-labelledby="settings-tab-profile" data-settings-panel="profile">
+            <div class="settings-profile-header">
+              <span class="settings-profile-photo" id="profileAvatar" aria-label="Manager initials">M</span>
+              <div class="settings-profile-summary">
+                <h2 id="profileName">Loading…</h2>
+                <p id="profileEmail">—</p>
+                <span class="settings-photo-action" title="Managed by HR; no photo upload is available">Profile picture managed by HR</span>
+              </div>
+            </div>
+            <form id="profileForm" class="settings-profile-form">
+              <div class="settings-profile-fields">
+                <label class="settings-field"><span>Full name</span><input id="settingsFullName" type="text" readonly value="Loading…" autocomplete="name"></label>
+                <label class="settings-field"><span>Email Address</span><input id="settingsEmail" type="email" readonly value="Loading…" autocomplete="email"></label>
+                <label class="settings-field"><span>Company / Department</span><input id="settingsDepartment" type="text" value="Procurement" readonly></label>
+                <label class="settings-field"><span>Role</span><input class="settings-role-field" type="text" value="Manager" readonly></label>
+                <label class="settings-field settings-contact-field"><span>Contact Number</span><input id="settingsContact" type="tel" placeholder="Not recorded" autocomplete="tel" maxlength="32" disabled><small>Only your contact number is editable here. HR manages your account credentials.</small></label>
+              </div>
+              <div class="settings-profile-footer"><button class="settings-save" id="saveProfile" type="submit" disabled>Save Changes</button></div>
+            </form>
+          </section>
+
+          <section class="settings-panel settings-security-panel" id="settings-panel-security" role="tabpanel" aria-labelledby="settings-tab-security" data-settings-panel="security" hidden>
+            <h2 class="settings-section-title">Need Security Help?</h2>
+            <p class="settings-section-description">Your account security (Passwords, 2FA, Active Sessions) is managed by the HR Department.</p>
+            <div class="settings-security-cards">
+              <article class="settings-security-card"><h3>Email HR Support</h3><p>Request the verified HR helpdesk address from your school/company.</p></article>
+              <article class="settings-security-card"><h3>Call IT Expert</h3><p>Use your organization's official IT support number.</p></article>
+            </div>
+            <div class="settings-security-footer">
+              <a class="settings-security-action" href="manager-support.html">Report Lost Device / Suspicious Login</a>
+              <p>Opens the Support Center. For urgent account access issues, contact HR directly. No security report is sent by this link alone.</p>
+            </div>
+          </section>
+
+          <section class="settings-panel settings-notifications-panel" id="settings-panel-notifications" role="tabpanel" aria-labelledby="settings-tab-notifications" data-settings-panel="notifications" hidden>
+            <h2 class="settings-section-title">Notification</h2>
+            <p class="settings-section-description">Choose which email alerts you want to receive.</p>
+            <p class="settings-notification-note">These switches save preferences in Procurement MySQL. Sending email alerts requires a separate notification service.</p>
+            <div class="settings-notification-columns">
+              <div class="settings-notification-column">
+                <section class="settings-notification-group" aria-labelledby="noti-pr">
+                  <h3 id="noti-pr">Purchase Request</h3>
+                  <div class="settings-notification-item">
+                    <article class="settings-notification-card">
+                      <h4>Purchase Requests</h4>
+                      <p>Receive email alerts for newly submitted purchase requests.</p>
+                    </article>
+                    <button class="settings-notification-toggle is-on" type="button" role="switch" aria-checked="true" aria-label="New purchase request alerts" data-pref="notify_pr" disabled>On</button>
+                  </div>
+                </section>
+              </div>
+              <div class="settings-notification-column">
+                <section class="settings-notification-group" aria-labelledby="noti-po">
+                  <h3 id="noti-po">Purchase Orders</h3>
+                  <div class="settings-notification-item">
+                    <article class="settings-notification-card">
+                      <h4>Purchase Orders</h4>
+                      <p>Receive email alerts for newly submitted purchase orders.</p>
+                    </article>
+                    <button class="settings-notification-toggle is-on" type="button" role="switch" aria-checked="true" aria-label="New purchase order alerts" data-pref="notify_po" disabled>On</button>
+                  </div>
+                </section>
+                <section class="settings-notification-group" aria-labelledby="noti-system">
+                  <h3 id="noti-system">System Updates</h3>
+                  <div class="settings-notification-item">
+                    <article class="settings-notification-card">
+                      <h4>Daily Task Summary</h4>
+                      <p>A daily 8:00 AM email of your pending work.</p>
+                    </article>
+                    <button class="settings-notification-toggle" type="button" role="switch" aria-checked="false" aria-label="Daily task summary preference" data-pref="notify_daily" disabled>Off</button>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="manager-settings-toast" id="settingsToast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
