@@ -38,18 +38,22 @@ try {
     if (!empty($_SESSION['user_id'])) {
         $userId = (int) $_SESSION['user_id'];
 
-        $stmt = $conn->prepare(
-            SELECT id, full_name, role, is_active
-             FROM users WHERE id = ? LIMIT 1"
-        );
+        
+$stmt = $conn->prepare(
+    "SELECT id, full_name, role, is_active
+     FROM users WHERE id = ? LIMIT 1"
+);
+
         $stmt->bind_param('i', $userId);
     } else {
         $email = 'clark@company.com';
 
-        $stmt = $conn->prepare(
-            SELECT id, full_name, role, is_active
-             FROM users WHERE email = ? LIMIT 1"
-        );
+       
+$stmt = $conn->prepare(
+    "SELECT id, full_name, role, is_active
+     FROM users WHERE email = ? LIMIT 1"
+);
+
         $stmt->bind_param('s', $email);
     }
 
