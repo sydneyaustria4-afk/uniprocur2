@@ -40,9 +40,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setIdentity(buyer) {
-    const name = String(buyer.full_name || "Buyer");
-    const email = String(buyer.email || "Account not connected");
-    const initial = name.trim().charAt(0).toUpperCase() || "B";
+    
+const name = "Buyer";
+const email = "buyer@gmail.com";
+const initial = "B";
+
     for (const id of ["sidebarBuyerName", "topbarBuyerName"]) $(id).textContent = name;
     for (const id of ["sidebarBuyerEmail", "topbarBuyerEmail"]) $(id).textContent = email;
     for (const id of ["sidebarAvatar", "topbarAvatar"]) $(id).textContent = initial;

@@ -18,9 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let toastTimeout;
   function toast(text) {const n=$("reportToast");n.textContent=String(text);n.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>n.hidden=true,3500);}
   function identity(buyer) {
-    const name=String(buyer?.full_name||"Buyer");
-    const email=String(buyer?.email||"—");
-    const initial=(name.trim().charAt(0)||"B").toUpperCase();
+    
+const name = "Buyer";
+const email = "buyer@gmail.com";
+const initial = "B";
+
     for(const id of ["sideName","topName"])$(id).textContent=name;
     for(const id of ["sideEmail","topEmail"])$(id).textContent=email;
     for(const id of ["sideInitial","topInitial"])$(id).textContent=initial;

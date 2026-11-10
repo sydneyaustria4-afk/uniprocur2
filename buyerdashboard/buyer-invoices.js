@@ -56,12 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   function toast(message){const t=$("toast");t.textContent=message;t.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove("show"),3200)}
   
-function updateIdentity(buyer) {
-  
-const name = "Buyer";
-const email = "buyer@gmail.com";
-const initial = "B";
 
+function updateIdentity(buyer) {
+  const name = "Buyer";
+  const email = "buyer@gmail.com";
+  const letter = "B";
 
   for (const id of ["topName", "sideName"]) {
     $(id).textContent = name;
@@ -75,6 +74,8 @@ const initial = "B";
     $(id).textContent = letter;
   }
 }
+
+
 function updateIdentity(buyer){const name=buyer?.full_name||"Buyer",email=buyer?.email||"—",letter=name.trim().charAt(0).toUpperCase()||"B";for(const id of ["topName","sideName"])$(id).textContent=name;for(const id of ["topEmail","sideEmail"])$(id).textContent=email;for(const id of ["topInitial","sideInitial"])$(id).textContent=letter;}
   function counts(){for(const g of ["pending","ready","posted","discrepancy"]){const elCount=$("count"+g[0].toUpperCase()+g.slice(1));elCount.textContent=state.invoices.filter(i=>group(i)===g).length;}}
   function makeCard(invoice){const g=group(invoice),card=el("article","invoice-card");
