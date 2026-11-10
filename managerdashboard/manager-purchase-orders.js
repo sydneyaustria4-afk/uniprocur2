@@ -46,17 +46,27 @@ document.addEventListener("DOMContentLoaded", () => {
     toastHandle = setTimeout(() => el.classList.remove("is-visible"), 3000);
   }
 
-  function updateManager(manager) {
-    const name = manager.full_name || "Manager";
-    const email = manager.email || "";
-    const initial = name.trim().charAt(0).toUpperCase() || "M";
-    ["sidebarManagerName", "topbarManagerName"].forEach(id => { $(id).textContent = name; });
-    ["sidebarManagerEmail", "topbarManagerEmail"].forEach(id => { $(id).textContent = email; });
-    ["sidebarAvatar", "topbarAvatar"].forEach(id => { $(id).textContent = initial; });
-   
-$("welcomeText").textContent = "Welcome Manager!";
+  
+function updateManager(manager) {
+  const name = "Manager";
+  const email = "manager@gmail.com";
+  const initial = "M";
 
-  }
+  ["sidebarManagerName", "topbarManagerName"].forEach(id => {
+    $(id).textContent = name;
+  });
+
+  ["sidebarManagerEmail", "topbarManagerEmail"].forEach(id => {
+    $(id).textContent = email;
+  });
+
+  ["sidebarAvatar", "topbarAvatar"].forEach(id => {
+    $(id).textContent = initial;
+  });
+
+  $("welcomeText").textContent = "Welcome Manager!";
+}
+
 
   function makeRow(order) {
     const tr = document.createElement("tr");

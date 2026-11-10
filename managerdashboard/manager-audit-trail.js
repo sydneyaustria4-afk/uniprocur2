@@ -16,16 +16,27 @@ document.addEventListener("DOMContentLoaded", () => {
     el.textContent = message; el.hidden = false;
     clearTimeout(timer);timer = setTimeout(() => {el.hidden = true;}, 3500);
   }
-  function identity(manager) {
-    const name = String(manager?.full_name||"Manager");
-    const email = String(manager?.email||"—");
-    const first = name.trim().split(/\s+/)[0] || "Manager";
-    const initial = first.charAt(0).toUpperCase() || "M";
-    $("welcomeText").textContent
-    for(const id of ["sidebarManagerName", "topbarManagerName"]) $(id).textContent = name;
-    for(const id of ["sidebarManagerEmail", "topbarManagerEmail"]) $(id).textContent = email;
-    for(const id of ["sidebarAvatar", "topbarAvatar"]) $(id).textContent = initial;
+ 
+function identity(manager) {
+  const name = "Manager";
+  const email = "manager@gmail.com";
+  const initial = "M";
+
+  $("welcomeText").textContent = "Welcome Manager!";
+
+  for (const id of ["sidebarManagerName", "topbarManagerName"]) {
+    $(id).textContent = name;
   }
+
+  for (const id of ["sidebarManagerEmail", "topbarManagerEmail"]) {
+    $(id).textContent = email;
+  }
+
+  for (const id of ["sidebarAvatar", "topbarAvatar"]) {
+    $(id).textContent = initial;
+  }
+}
+
   function filters() {
     return new URLSearchParams({search:state.search,role:state.role,action:state.action,period:state.period,page:String(state.page)});
   }

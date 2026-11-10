@@ -61,18 +61,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return status ? status.charAt(0).toUpperCase() + status.slice(1) : "—";
   }
 
-  function updateManagerIdentity(manager) {
-    const name = manager?.full_name || "Manager";
-    const email = manager?.email || "";
-    const initial = name.trim().charAt(0).toUpperCase() || "M";
+function updateManagerIdentity(manager) {
+  const name = "Manager";
+  const email = "manager@gmail.com";
+  const initial = "M";
 
-    setText("sidebarManagerName", name);
-    setText("sidebarManagerEmail", email);
-    setText("topbarManagerName", name);
-    setText("topbarManagerEmail", email);
-    setText("sidebarAvatar", initial);
-    setText("topbarAvatar", initial);
-  }
+  setText("sidebarManagerName", name);
+  setText("sidebarManagerEmail", email);
+
+  setText("topbarManagerName", name);
+  setText("topbarManagerEmail", email);
+
+  setText("sidebarAvatar", initial);
+  setText("topbarAvatar", initial);
+}
+
 
   function updateSummary(summary) {
     setText("totalRequests", summary?.total ?? 0);

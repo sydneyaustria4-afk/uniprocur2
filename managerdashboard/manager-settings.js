@@ -49,10 +49,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function setIdentity(manager = {}) {
-    const name = String(manager.full_name || "Manager");
-    const email = String(manager.email || "—");
-    const initial = (name.trim().charAt(0) || "M").toUpperCase();
-    const firstName = name.trim().split(/\s+/)[0] || "Manager";
+   
+const name = "Manager";
+const email = "manager@gmail.com";
+const letter = "M";
+const first = "Manager";
+
   
 $("welcomeText").textContent = "Welcome Manager!";
 

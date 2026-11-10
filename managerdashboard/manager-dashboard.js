@@ -24,11 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
     toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
   };
   function renderIdentity(manager) {
-    const name = String(manager?.full_name || "Manager");
-    const email = String(manager?.email || "—");
-    const letter = name.trim().charAt(0).toUpperCase() || "M";
-    const first = name.split(/\s+/)[0];
-   
+    
+const name = "Manager";
+const email = "manager@gmail.com";
+const letter = "M";
+const first = "Manager";
+
 $("welcomeText").textContent = "Welcome Manager!";
 
     for (const id of ["sidebarManagerName", "topbarManagerName"]) $(id).textContent = name;

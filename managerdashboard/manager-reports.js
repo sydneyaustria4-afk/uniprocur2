@@ -24,18 +24,27 @@ document.addEventListener("DOMContentLoaded", () => {
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => {t.hidden = true;}, 3400);
   }
-  function identity(manager) {
-    const full = String(manager?.full_name || "Manager");
-    const first = full.trim().split(/\s+/)[0] || "Manager";
-    const initial = first.charAt(0).toUpperCase() || "M";
-    const email = String(manager?.email || "—");
-   
-$("welcomeText").textContent = "Welcome Manager!";
+  
+function identity(manager) {
+  const name = "Manager";
+  const email = "manager@gmail.com";
+  const initial = "M";
 
-    for (const id of ["sidebarManagerName", "topbarManagerName"]) $(id).textContent = full;
-    for (const id of ["sidebarManagerEmail", "topbarManagerEmail"]) $(id).textContent = email;
-    for (const id of ["sidebarAvatar", "topbarAvatar"]) $(id).textContent = initial;
+  $("welcomeText").textContent = "Welcome Manager!";
+
+  for (const id of ["sidebarManagerName", "topbarManagerName"]) {
+    $(id).textContent = name;
   }
+
+  for (const id of ["sidebarManagerEmail", "topbarManagerEmail"]) {
+    $(id).textContent = email;
+  }
+
+  for (const id of ["sidebarAvatar", "topbarAvatar"]) {
+    $(id).textContent = initial;
+  }
+}
+
   function niceCeiling(max) {
     if (!Number.isFinite(max) || max <= 0) return 100000;
     const stepRaw = max / 4;

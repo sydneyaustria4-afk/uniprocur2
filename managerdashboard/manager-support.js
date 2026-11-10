@@ -42,10 +42,12 @@ document.addEventListener("DOMContentLoaded", () => {
   $("supportSearch").addEventListener("submit", event => {event.preventDefault();filterFaqs();});
   searchInput.addEventListener("input", filterFaqs);
   function identity(manager) {
-    const name = String(manager?.full_name || "Manager");
-    const email = String(manager?.email || "—");
-    const first = name.trim().split(/\s+/)[0] || "Manager";
-    const initial = name.trim().charAt(0).toUpperCase() || "M";
+   
+const name = "Manager";
+const email = "manager@gmail.com";
+const letter = "M";
+const first = "Manager";
+
     
 $("welcomeText").textContent = "Welcome Manager!";
 
