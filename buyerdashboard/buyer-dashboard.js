@@ -1269,11 +1269,13 @@ renderMonthlyPurchaseActivity(
   monthlyPurchaseActivity
 );
 
+
 renderDashboardBudget({
-  remaining: 0,
-  total: 0,
+  remaining: 500000,
+  total: 500000,
   categories: []
 });
+
 
 // ======================================================
 // TOAST NOTIFICATION
