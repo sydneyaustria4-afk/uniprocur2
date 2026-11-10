@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -7,38 +8,56 @@
   <title>UniProcur | Manager Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <!-- Reuse EXACT current manager navigation/topbar styling. -->
   <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
   <link rel="stylesheet" href="manager-dashboard.css?v=1">
 
-<!-- Shared Manager Sidebar -->
-<link rel="stylesheet"
-      href="../assets/uniprocur-manager-sidebar.css?v=1">
+  <!-- Shared Manager Sidebar -->
+  <link rel="stylesheet" href="../assets/uniprocur-manager-sidebar.css?v=1">
 
   <script src="manager-dashboard.js?v=1" defer></script>
 </head>
+
 <body class="manager-dashboard-page">
   <div class="manager-shell">
     <aside class="sidebar" aria-label="Manager workspace navigation">
-      <a class="brand" href="manager-dashboard.html" aria-label="UniProcur Manager Dashboard"><img class="brand-logo" src="../assets/Pro%203.svg" alt=""><span>UniProcur</span></a>
-      <div class="nav-group"><p class="nav-label">Workspace</p>
+      <a class="brand" href="manager-dashboard.html" aria-label="UniProcur Manager Dashboard"><img class="brand-logo"
+          src="../assets/Pro%203.svg" alt=""><span>UniProcur</span></a>
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
         <nav class="workspace-nav" aria-label="Manager workspace">
-          <a class="nav-item is-active" href="manager-dashboard.html" aria-current="page"><span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span><span>Dashboard</span></a>
-          <a class="nav-item" href="manager-purchase-requests.html"><span class="nav-icon"><img src="../assets/Group%2033.svg" alt=""></span><span>Purchase Request</span></a>
-          <a class="nav-item" href="manager-purchase-orders.html"><span class="nav-icon"><img src="../assets/Group%2034.svg" alt=""></span><span>Purchase Order</span></a>
-          <button class="nav-item" type="button" data-soon="Reports"><span class="nav-icon"><img src="../assets/Group%2031.svg" alt=""></span><span>Reports</span></button>
-          <button class="nav-item" type="button" data-soon="Audit Trail"><span class="nav-icon"><img src="../assets/Group%2035.svg" alt=""></span><span>Audit Trail</span></button>
+          <a class="nav-item is-active" href="manager-dashboard.html" aria-current="page"><span class="nav-icon"><img
+                src="../assets/Vector.svg" alt=""></span><span>Dashboard</span></a>
+          <a class="nav-item" href="manager-purchase-requests.html"><span class="nav-icon"><img
+                src="../assets/Group%2033.svg" alt=""></span><span>Purchase Request</span></a>
+          <a class="nav-item" href="manager-purchase-orders.html"><span class="nav-icon"><img
+                src="../assets/Group%2034.svg" alt=""></span><span>Purchase Order</span></a>
+          
+<a class="nav-item" href="manager-reports.html">
+  <span class="nav-icon">
+    <img src="../assets/Group 31.svg" alt="">
+  </span>
+  <span>Reports</span>
+</a>
+          <button class="nav-item" type="button" data-soon="Audit Trail"><span class="nav-icon"><img
+                src="../assets/Group%2035.svg" alt=""></span><span>Audit Trail</span></button>
         </nav>
       </div>
       <div class="sidebar-rule" aria-hidden="true"></div>
       <div class="sidebar-bottom">
-        <button class="nav-item" type="button" data-soon="Manager Support"><span class="nav-icon"><img src="../assets/support.svg" alt=""></span><span>Support</span></button>
-        <button class="nav-item" type="button" data-soon="Manager Settings"><span class="nav-icon"><img src="../assets/settings.svg" alt=""></span><span>Settings</span></button>
+        <button class="nav-item" type="button" data-soon="Manager Support"><span class="nav-icon"><img
+              src="../assets/support.svg" alt=""></span><span>Support</span></button>
+        <button class="nav-item" type="button" data-soon="Manager Settings"><span class="nav-icon"><img
+              src="../assets/settings.svg" alt=""></span><span>Settings</span></button>
         <div class="profile-mini">
           <span class="profile-avatar" id="sidebarAvatar">M</span>
-          <span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small id="sidebarManagerEmail">Loading...</small></span>
-          <button class="signout-button" type="button" id="signOutButton" title="Sign out managed by HR" aria-label="Sign out">↦</button>
+          <span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small
+              id="sidebarManagerEmail">Loading...</small></span>
+          <button class="signout-button" type="button" id="signOutButton" title="Sign out managed by HR"
+            aria-label="Sign out">↦</button>
         </div>
       </div>
     </aside>
@@ -46,47 +65,96 @@
     <main class="main-panel manager-dashboard-main">
       <div class="dashboard-inner">
         <header class="topbar">
-          <div class="workspace-title"><span class="workspace-mark"><img src="../assets/Pro%204.svg" alt=""></span><span class="workspace-copy"><span>UniProcur Workspace</span><strong id="welcomeText">Welcome Manager!</strong></span></div>
+          <div class="workspace-title"><span class="workspace-mark"><img src="../assets/Pro%204.svg" alt=""></span><span
+              class="workspace-copy"><span>UniProcur Workspace</span><strong id="welcomeText">Welcome
+                Manager!</strong></span></div>
           <div class="topbar-account">
-            <button class="notification-button" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button>
+            <button class="notification-button" id="notificationButton" type="button" aria-label="Notifications"><img
+                src="../assets/Group%2050.svg" alt=""></button>
             <span class="topbar-divider" aria-hidden="true"></span>
-            <span class="account-copy"><strong id="topbarManagerName">Manager</strong><small id="topbarManagerEmail">Loading...</small></span>
+            <span class="account-copy"><strong id="topbarManagerName">Manager</strong><small
+                id="topbarManagerEmail">Loading...</small></span>
             <span class="account-avatar" id="topbarAvatar">M</span>
           </div>
         </header>
         <div id="dashboardError" class="dash-error" role="alert" hidden></div>
 
         <section class="manager-kpis" aria-label="Procurement summary">
-          <div class="manager-kpi kpi-primary" aria-label="Total Suppliers"><span class="kpi-title">Total Suppliers</span><strong id="totalSuppliers">—</strong><small>Registered suppliers</small></div>
-          <a class="manager-kpi" href="manager-purchase-requests.html"><span class="kpi-title">Requests This Month</span><strong id="requestsThisMonth">—</strong><small>Submitted this month</small></a>
-          <a class="manager-kpi" href="manager-purchase-requests.html"><span class="kpi-title">Purchase Requests</span><strong id="pendingPrs">—</strong><small>Awaiting manager review</small></a>
-          <a class="manager-kpi" href="manager-purchase-orders.html"><span class="kpi-title">Purchase Orders</span><strong id="purchaseOrders">—</strong><small id="poStatusNote">Submitted orders</small></a>
+          <div class="manager-kpi kpi-primary" aria-label="Total Suppliers"><span class="kpi-title">Total
+              Suppliers</span><strong id="totalSuppliers">—</strong><small>Registered suppliers</small></div>
+          <a class="manager-kpi" href="manager-purchase-requests.html"><span class="kpi-title">Requests This
+              Month</span><strong id="requestsThisMonth">—</strong><small>Submitted this month</small></a>
+          <a class="manager-kpi" href="manager-purchase-requests.html"><span class="kpi-title">Purchase
+              Requests</span><strong id="pendingPrs">—</strong><small>Awaiting manager review</small></a>
+          <a class="manager-kpi" href="manager-purchase-orders.html"><span class="kpi-title">Purchase
+              Orders</span><strong id="purchaseOrders">—</strong><small id="poStatusNote">Submitted orders</small></a>
         </section>
 
         <section class="spending-panel" aria-labelledby="spendingTitle">
           <div class="spending-heading">
-            <div><h1 id="spendingTitle">Monthly Procurement Spending</h1>
-              <div class="spending-metric"><strong id="monthlyAmount">—</strong><span id="monthlyChange" class="monthly-change">—</span></div>
+            <div>
+              <h1 id="spendingTitle">Monthly Procurement Spending</h1>
+              <div class="spending-metric"><strong id="monthlyAmount">—</strong><span id="monthlyChange"
+                  class="monthly-change">—</span></div>
               <p class="metric-caption" id="monthlyBasis">Approved PO commitments · not Finance-confirmed expense</p>
             </div>
             <span class="chart-year" id="chartYear">2026</span>
           </div>
-          <div class="chart-layout"><div id="chartYAxis" class="chart-yaxis" aria-hidden="true"></div>
-            <div class="chart-visual"><svg id="spendingChart" role="img" aria-label="Monthly approved purchase order values for the current year" viewBox="0 0 1000 250" preserveAspectRatio="none">
-              <defs><linearGradient id="spendingGradient" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff1010" stop-opacity=".92"/><stop offset="1" stop-color="#ff1717" stop-opacity=".12"/></linearGradient></defs>
-              <g id="chartGrid"></g><path id="chartArea" fill="url(#spendingGradient)"></path><path id="chartLine" fill="none" stroke="#ff0909" stroke-width="3.8" stroke-linecap="round"></path><g id="chartPoints"></g>
-            </svg><div id="chartMonths" class="chart-months" aria-hidden="true"></div></div></div>
+          <div class="chart-layout">
+            <div id="chartYAxis" class="chart-yaxis" aria-hidden="true"></div>
+            <div class="chart-visual"><svg id="spendingChart" role="img"
+                aria-label="Monthly approved purchase order values for the current year" viewBox="0 0 1000 250"
+                preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="spendingGradient" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#ff1010" stop-opacity=".92" />
+                    <stop offset="1" stop-color="#ff1717" stop-opacity=".12" />
+                  </linearGradient>
+                </defs>
+                <g id="chartGrid"></g>
+                <path id="chartArea" fill="url(#spendingGradient)"></path>
+                <path id="chartLine" fill="none" stroke="#ff0909" stroke-width="3.8" stroke-linecap="round"></path>
+                <g id="chartPoints"></g>
+              </svg>
+              <div id="chartMonths" class="chart-months" aria-hidden="true"></div>
+            </div>
+          </div>
           <p class="chart-hint" id="chartNote">Chart will load from saved approved Purchase Orders.</p>
         </section>
 
         <section class="recent-section" aria-labelledby="recentPrTitle">
-          <div class="section-head"><h2 id="recentPrTitle">Recent Purchase Requests</h2><a href="manager-purchase-requests.html">View All <span aria-hidden="true">↗</span></a></div>
-          <div class="section-body table-wrap"><table class="manager-table"><thead><tr><th>PR Number</th><th>Date Created</th><th>Required Date</th><th>Status</th><th>Action</th></tr></thead><tbody id="recentPrRows"><tr><td colspan="5" class="empty-row">Loading Purchase Requests...</td></tr></tbody></table></div>
+          <div class="section-head">
+            <h2 id="recentPrTitle">Recent Purchase Requests</h2><a href="manager-purchase-requests.html">View All <span
+                aria-hidden="true">↗</span></a>
+          </div>
+          <div class="section-body table-wrap">
+            <table class="manager-table">
+              <thead>
+                <tr>
+                  <th>PR Number</th>
+                  <th>Date Created</th>
+                  <th>Required Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentPrRows">
+                <tr>
+                  <td colspan="5" class="empty-row">Loading Purchase Requests...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <section class="recent-section" aria-labelledby="recentPoTitle">
-          <div class="section-head"><h2 id="recentPoTitle">Recent Purchase Orders</h2><a href="manager-purchase-orders.html">View All <span aria-hidden="true">↗</span></a></div>
-          <div id="recentPoCards" class="po-recent-grid"><p class="loading-note">Loading Purchase Orders...</p></div>
+          <div class="section-head">
+            <h2 id="recentPoTitle">Recent Purchase Orders</h2><a href="manager-purchase-orders.html">View All <span
+                aria-hidden="true">↗</span></a>
+          </div>
+          <div id="recentPoCards" class="po-recent-grid">
+            <p class="loading-note">Loading Purchase Orders...</p>
+          </div>
         </section>
 
       </div>
@@ -94,4 +162,5 @@
   </div>
   <div id="dashboardToast" class="manager-toast" role="status" aria-live="polite"></div>
 </body>
+
 </html>

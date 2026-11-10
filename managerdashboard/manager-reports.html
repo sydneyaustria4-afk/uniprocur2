@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#c6140a">
+  <title>UniProcur | Manager Reports</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
+  <link rel="stylesheet" href="manager-reports.css?v=1">
+  <link rel="stylesheet" href="../assets/uniprocur-manager-sidebar.css?v=1">
+  <script src="manager-reports.js?v=1" defer></script>
+</head>
+<body class="manager-reports-page">
+  <div class="manager-shell">
+    <aside class="sidebar" aria-label="Manager workspace navigation">
+      <a class="brand" href="manager-dashboard.html" aria-label="UniProcur Manager Dashboard">
+        <img class="brand-logo" src="../assets/Pro%203.svg" alt=""><span>UniProcur</span>
+      </a>
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav class="workspace-nav" aria-label="Manager workspace">
+          <a class="nav-item" href="manager-dashboard.html"><span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span><span>Dashboard</span></a>
+          <a class="nav-item" href="manager-purchase-requests.html"><span class="nav-icon"><img src="../assets/Group%2033.svg" alt=""></span><span>Purchase Request</span></a>
+          <a class="nav-item" href="manager-purchase-orders.html"><span class="nav-icon"><img src="../assets/Group%2034.svg" alt=""></span><span>Purchase Order</span></a>
+          <a class="nav-item is-active" href="manager-reports.html" aria-current="page"><span class="nav-icon"><img src="../assets/Group%2031.svg" alt=""></span><span>Reports</span></a>
+          <button class="nav-item" type="button" data-soon="Audit Trail"><span class="nav-icon"><img src="../assets/Group%2035.svg" alt=""></span><span>Audit Trail</span></button>
+        </nav>
+      </div>
+      <div class="sidebar-rule" aria-hidden="true"></div>
+      <div class="sidebar-bottom">
+        <button class="nav-item" type="button" data-soon="Manager Support"><span class="nav-icon"><img src="../assets/support.svg" alt=""></span><span>Support</span></button>
+        <button class="nav-item" type="button" data-soon="Manager Settings"><span class="nav-icon"><img src="../assets/settings.svg" alt=""></span><span>Settings</span></button>
+        <div class="profile-mini">
+          <span class="profile-avatar" id="sidebarAvatar" aria-hidden="true">M</span>
+          <span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small id="sidebarManagerEmail">Loading…</small></span>
+          <button class="signout-button" type="button" id="signOutButton" title="Sign out managed by HR" aria-label="Sign out managed by HR">↦</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-panel reports-main">
+      <div class="reports-inner">
+        <header class="topbar">
+          <div class="workspace-title">
+            <span class="workspace-mark"><img src="../assets/Pro%204.svg" alt=""></span>
+            <span class="workspace-copy"><span>UniProcur Workspace</span><strong id="welcomeText">Welcome Manager!</strong></span>
+          </div>
+          <div class="topbar-account">
+            <button class="notification-button" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button>
+            <span class="topbar-divider" aria-hidden="true"></span>
+            <span class="account-copy"><strong id="topbarManagerName">Manager</strong><small id="topbarManagerEmail">Loading…</small></span>
+            <span class="account-avatar" id="topbarAvatar" aria-hidden="true">M</span>
+          </div>
+        </header>
+
+        <div class="reports-errors" id="reportError" role="alert" hidden></div>
+        <section class="reports-kpis" aria-label="Manager procurement report summary">
+          <article class="reports-kpi reports-kpi-primary">
+            <span>Total Procurement Spend</span><strong id="totalSpend">—</strong><small>Approved PO commitments</small>
+          </article>
+          <article class="reports-kpi">
+            <span>Top Supplier</span><strong class="top-supplier-name" id="topSupplier">—</strong><small id="topSupplierShare">By approved PO value</small>
+          </article>
+          <article class="reports-kpi">
+            <span>Avg. Spend / Month</span><strong class="avg-spend" id="avgSpend">—</strong><small id="averageNote">Approved PO value per month</small>
+          </article>
+          <article class="reports-kpi">
+            <span>Suppliers</span><strong id="supplierCount">—</strong><small>Registered suppliers</small>
+          </article>
+        </section>
+
+        <section class="reports-toolbar" aria-label="Report filters and exports">
+          <div class="filter-holder">
+            <button type="button" id="filterButton" class="report-filter" aria-haspopup="true" aria-expanded="false" aria-controls="filterPopup"><span class="filter-symbol" aria-hidden="true"><img src="../assets/filter.svg" alt=""></span>Filter</button>
+            <form id="filterPopup" class="filter-popup" hidden>
+              <label>Year
+                <select id="yearFilter" name="year" aria-label="Report year"></select>
+              </label>
+              <label>Period
+                <select id="quarterFilter" name="quarter" aria-label="Report quarter">
+                  <option value="0">Full year</option><option value="1">January–March</option><option value="2">April–June</option><option value="3">July–September</option><option value="4">October–December</option>
+                </select>
+              </label>
+              <div class="filter-popup-actions"><button type="button" id="resetFilter">Reset</button><button type="submit">Apply</button></div>
+            </form>
+          </div>
+          <span class="current-filter" id="filterSummary">Current year · Full year</span>
+          <div class="reports-export-actions">
+            <button type="button" id="exportPdf" class="export-pdf">Export PDF</button>
+            <button type="button" id="exportExcel" class="export-excel">Excel</button>
+          </div>
+        </section>
+
+        <section class="report-panel monthly-panel" aria-labelledby="monthlyHeading">
+          <div class="report-panel-heading"><h1 id="monthlyHeading"><span class="trend-icon" aria-hidden="true">↗</span> Monthly Procurement Spending</h1><span id="monthlyYear" class="year-tag"></span></div>
+          <div class="month-chart" role="group" aria-label="Monthly approved purchase order commitments">
+            <div class="monthly-axis" id="barAxis"></div>
+            <div class="bar-grid" id="barGrid"></div>
+          </div>
+          <p class="data-caption" id="spendBasis">Amounts are approved Purchase Order commitments; not Finance-posted expenses.</p>
+        </section>
+
+        <section class="report-panel suppliers-panel" aria-labelledby="supplierHeading">
+          <h2 id="supplierHeading">Supplier Performance</h2>
+          <div class="report-table-scroll">
+            <table class="supplier-table"><thead><tr><th scope="col">Supplier</th><th scope="col">Total Orders</th><th scope="col">On-Time Delivery</th><th scope="col">Rating</th><th scope="col">Status</th><th scope="col">Top Spend</th></tr></thead><tbody id="supplierRows"><tr><td colspan="6">Loading supplier records…</td></tr></tbody></table>
+          </div>
+          <p class="data-caption">Verified Inventory receiving dates and database-backed supplier ratings are not connected yet, so those fields show as unavailable.</p>
+        </section>
+
+        <section class="status-panel-grid" aria-label="Purchase status breakdowns">
+          <article class="report-panel status-card">
+            <h2>Purchase Request Status</h2>
+            <div class="pie-row"><div class="status-pie" id="prPie" role="img" aria-label="Purchase Request status chart"></div><div class="status-legend" id="prLegend"></div></div>
+          </article>
+          <article class="report-panel status-card">
+            <h2>Purchase Order Status</h2>
+            <div class="pie-row"><div class="status-pie" id="poPie" role="img" aria-label="Purchase Order status chart"></div><div class="status-legend" id="poLegend"></div></div>
+          </article>
+        </section>
+
+        <section class="report-panel category-panel" aria-labelledby="categoryHeading">
+          <h2 id="categoryHeading">Spend by category</h2>
+          <div class="pie-row"><div class="status-pie" id="categoryPie" role="img" aria-label="Approved Purchase Order values by material category"></div><div class="status-legend" id="categoryLegend"></div></div>
+          <p class="data-caption">Item categories match PR material names when available; otherwise shown as Uncategorized.</p>
+        </section>
+        <p class="reports-footnote">Report basis: Purchase Orders saved in Procurement. A sent or approved PO is not the same as a Finance-posted payment. All amounts shown are taken from MySQL, not the Figma sample.</p>
+      </div>
+    </main>
+  </div>
+  <div id="reportToast" class="report-toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
