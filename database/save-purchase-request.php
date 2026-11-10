@@ -8,6 +8,9 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 date_default_timezone_set('Asia/Manila');
 require_once __DIR__ . '/procurement_db_connection.php';
 
+require_once __DIR__ . '/procurement-audit-log.php';
+
+
 function sendJson(int $statusCode, array $payload): void
 {
     http_response_code($statusCode);
@@ -354,8 +357,23 @@ try {
         $insertAttachment->close();
     }
 
+   
+    // Record a real PR submission in the Audit Trail.
+    // Keep this inside the same transaction as the PR.
+    if ($status === 'submitted') {
+        procurementAuditLog(
+            $conn,
+            $buyer,
+            'Purchase Request',
+            'Submitted',
+            $requestNumber,
+            "Purchase Request {$requestNumber} submitted."
+        );
+    }
+
     $conn->commit();
     $transactionStarted = false;
+
 
     sendJson(200, [
         'success' => true,
