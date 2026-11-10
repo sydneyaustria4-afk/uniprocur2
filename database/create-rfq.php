@@ -8,6 +8,9 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 require_once __DIR__ . '/procurement_db_connection.php';
 
+require_once __DIR__ . '/procurement-audit-log.php';
+
+
 function sendJson(int $status, array $data): void
 {
     http_response_code($status);
@@ -36,7 +39,7 @@ try {
         $userId = (int) $_SESSION['user_id'];
 
         $stmt = $conn->prepare(
-            "SELECT id, role, is_active
+            SELECT id, full_name, role, is_active
              FROM users WHERE id = ? LIMIT 1"
         );
         $stmt->bind_param('i', $userId);
@@ -44,7 +47,7 @@ try {
         $email = 'clark@company.com';
 
         $stmt = $conn->prepare(
-            "SELECT id, role, is_active
+            SELECT id, full_name, role, is_active
              FROM users WHERE email = ? LIMIT 1"
         );
         $stmt->bind_param('s', $email);
@@ -348,9 +351,20 @@ $insertRfq->bind_param(
         $insertQuote->execute();
     }
 
-    $insertQuote->close();
+    
+$insertQuote->close();
 
-    $conn->commit();
+procurementAuditLog(
+    $conn,
+    $buyer,
+    'RFQ',
+    'Submitted',
+    $rfqNumber,
+    "RFQ {$rfqNumber} created for {$prNumber}."
+);
+
+$conn->commit();
+
     $transactionStarted = false;
 
     sendJson(201, [
