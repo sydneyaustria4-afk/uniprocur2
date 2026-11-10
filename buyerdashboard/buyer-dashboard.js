@@ -1265,9 +1265,77 @@ renderDashboardInvoices(
   dashboardInvoices
 );
 
-renderMonthlyPurchaseActivity(
-  monthlyPurchaseActivity
-);
+
+/* LOAD REAL MONTHLY PURCHASE ACTIVITY FROM MYSQL */
+(async function loadMonthlyPurchaseActivity() {
+  const emptyMessage =
+    document.querySelector(".chart-empty-state");
+
+  if (emptyMessage) {
+    emptyMessage.textContent =
+      "Loading monthly purchase activity...";
+  }
+
+  try {
+    const response = await fetch(
+      "../database/get-buyer-reports.php?quarter=0",
+      {
+        method: "GET",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {
+          Accept: "application/json"
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "Unable to load monthly activity."
+      );
+    }
+
+    if (!Array.isArray(data.monthly) ||
+        data.monthly.length !== 12) {
+      throw new Error("Invalid monthly activity data.");
+    }
+
+    const months = [
+      "Jan", "Feb", "Mar", "Apr",
+      "May", "Jun", "Jul", "Aug",
+      "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const activity = data.monthly.map((amount, index) => ({
+      month: months[index],
+      value: Number(amount) || 0
+    }));
+
+    if (activity.some(item => item.value > 0)) {
+      renderMonthlyPurchaseActivity(activity);
+    } else {
+      if (emptyMessage) {
+        emptyMessage.textContent =
+          "No approved Purchase Order activity yet.";
+      }
+
+      renderMonthlyPurchaseActivity([]);
+    }
+
+  } catch (error) {
+    console.error("Monthly Activity Error:", error);
+
+    renderMonthlyPurchaseActivity([]);
+
+    if (emptyMessage) {
+      emptyMessage.textContent =
+        "Unable to load monthly purchase activity.";
+    }
+  }
+})();
+
 
 
 renderDashboardBudget({

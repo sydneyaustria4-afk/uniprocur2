@@ -1,0 +1,161 @@
+/* UniProcur Buyer Budget Transactions — read-only DEMO preview.
+   Standalone page matching the Figma Budget Transaction screen.
+   Existing Buyer Dashboard, database, and Accounting records are unchanged. */
+:root { color-scheme: light; font-family: Inter, Arial, sans-serif; }
+*, *::before, *::after { box-sizing: border-box; }
+html { min-height: 100%; }
+body { margin: 0; min-width: 320px; font-family: Inter, Arial, sans-serif; }
+button, a { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid #ffbf47; outline-offset: 3px; }
+[hidden] { display: none !important; }
+
+.budget-transactions-page .bt-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background:
+    radial-gradient(ellipse at 97% 97%, rgba(255, 176, 104, .96) 0%, rgba(237, 83, 35, .75) 26%, transparent 57%),
+    linear-gradient(138deg, #310b0b 0%, #790a08 24%, #c00804 51%, #ed1304 74%, #e95723 100%);
+  padding: 24px 32px 64px;
+}
+.budget-transactions-page .bt-content { width: min(100%, 1320px); margin: 0 auto; }
+
+/* Header: same shape/dimensions as Buyer Purchase Orders. */
+.budget-transactions-page .po-topbar {
+  min-height: 76px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 20px;
+  color: #fff;
+  background: rgba(255, 255, 255, .10);
+  border: 1px solid rgba(255, 255, 255, .48);
+  border-radius: 23px;
+}
+.budget-transactions-page .workspace-brand,
+.budget-transactions-page .account-row { display: flex; align-items: center; min-width: 0; gap: 12px; }
+.budget-transactions-page .workspace-logo {
+  width: 53px; height: 53px; flex: 0 0 53px;
+  display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,.75); border-radius: 50%;
+}
+.budget-transactions-page .workspace-logo img { width: 31px; height: 31px; object-fit: contain; }
+.budget-transactions-page .bt-workspace-copy,
+.budget-transactions-page .account-copy { display: flex; flex-direction: column; min-width: 0; }
+.budget-transactions-page .bt-workspace-copy span { font-size: 12px; color: #ffffffdf; }
+.budget-transactions-page .bt-workspace-copy strong { font-size: 17px; font-weight: 700; line-height: 1.2; }
+.budget-transactions-page .account-row { margin-left: auto; }
+.budget-transactions-page .bell {
+  width: 50px; height: 50px; flex: 0 0 50px;
+  background: #fff; border: 0; border-radius: 50%;
+  display: grid; place-items: center; padding: 0;
+}
+.budget-transactions-page .bell img { width: 31px; height: 31px; object-fit: contain; }
+.budget-transactions-page .topbar-divider { height: 39px; border-left: 1px solid #ffffffa0; }
+.budget-transactions-page .account-copy { text-align: right; gap: 1px; }
+.budget-transactions-page .account-copy strong { font-size: 15px; white-space: nowrap; }
+.budget-transactions-page .account-copy small { font-size: 11px; white-space: nowrap; }
+.budget-transactions-page .account-avatar {
+  flex: 0 0 49px; width: 49px; height: 49px;
+  border-radius: 50%; background: white; color: #bd1715;
+  display: grid; place-items: center; font-size: 18px; font-weight: 700;
+}
+
+.budget-transactions-page .bt-back {
+  width: 46px; height: 46px; margin: 36px 0 22px;
+  display: grid; place-items: center; color: #111; text-decoration: none;
+  background: #fff; border-radius: 50%; box-shadow: 0 2px 5px #0002;
+}
+.budget-transactions-page .bt-back:hover { background: #f1f1f1; }
+
+/* Figma-like panel with light outer layer and white inner card. */
+.budget-transactions-page .bt-panel {
+  background: #f7f7f5;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+}
+.budget-transactions-page .bt-card {
+  background: #fff;
+  border: 1px solid #d5d6d8;
+  border-radius: 9px;
+  min-height: 400px;
+  padding: 25px 28px 18px;
+}
+.budget-transactions-page .bt-stats {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 850px; gap: 0; align-items: center;
+}
+.budget-transactions-page .bt-stat { display: flex; flex-direction: column; min-width: 0; padding: 9px 28px 9px 0; }
+.budget-transactions-page .bt-stat + .bt-stat { border-left: 1px solid #cfd0d2; padding-left: 30px; }
+.budget-transactions-page .bt-stat span { font-size: 12px; color: #6a6b70; }
+.budget-transactions-page .bt-stat strong {
+  margin-top: 3px; font-size: clamp(16px, 1.45vw, 21px);
+  color: #181818; letter-spacing: -.025em; overflow-wrap: anywhere;
+}
+.budget-transactions-page .bt-rule { border-top: 1px solid #d3d3d3; margin: 25px 0 18px; }
+.budget-transactions-page .bt-demo-notice {
+  margin: 0 0 17px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  font-size: 12px; color: #5d4721; line-height: 1.5;
+}
+.budget-transactions-page .bt-demo-tag {
+  background: #fff0d1; color: #874d04; border: 1px solid #e9c77d;
+  border-radius: 5px; padding: 3px 7px; font-size: 10px; font-weight: 700; letter-spacing: .02em;
+}
+.budget-transactions-page .bt-filters { display: flex; flex-wrap: wrap; gap: 14px; margin: 0 0 24px; }
+.budget-transactions-page .bt-filter {
+  min-width: 168px; min-height: 39px; padding: 8px 17px;
+  border: 1px solid #707070; border-radius: 8px;
+  color: #121212; background: #fff; font-size: 13px;
+}
+.budget-transactions-page .bt-filter:hover { background: #f1f1f1; }
+.budget-transactions-page .bt-filter.is-active { color: #fff; background: #050505; border-color: #050505; }
+
+.budget-transactions-page .bt-table-wrap { width: 100%; overflow-x: auto; border: 1px solid #d6d6d6; border-radius: 8px; }
+.budget-transactions-page .bt-table { width: 100%; border-collapse: collapse; color: #222; font-size: 13px; }
+.budget-transactions-page .bt-table thead { background: #fbfbfb; }
+.budget-transactions-page .bt-table th,
+.budget-transactions-page .bt-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid #e0e0e0; }
+.budget-transactions-page .bt-table th { font-size: 12px; font-weight: 700; white-space: nowrap; }
+.budget-transactions-page .bt-table tbody tr:last-child td { border-bottom: 0; }
+.budget-transactions-page .bt-table tbody tr:hover { background: #fff9f7; }
+.budget-transactions-page .bt-table .bt-amount { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.budget-transactions-page .bt-table .bt-empty { text-align: center; padding: 26px 15px; color: #656565; }
+.budget-transactions-page .bt-footer { margin: 12px 0 0; font-size: 11px; color: #717171; text-align: right; }
+.budget-transactions-page .bt-toast {
+  position: fixed; bottom: 24px; right: 24px; padding: 12px 18px;
+  border-radius: 10px; background: #1f1f1f; color: white; box-shadow: 0 8px 30px #0004;
+  z-index: 20; font-size: 13px;
+}
+@media (max-width: 760px) {
+  .budget-transactions-page .bt-shell { padding: 16px 14px 36px; }
+  .budget-transactions-page .po-topbar { padding: 9px 13px; }
+  .budget-transactions-page .workspace-logo { width: 42px; height: 42px; flex-basis: 42px; }
+  .budget-transactions-page .account-row { gap: 7px; }
+  .budget-transactions-page .bell { width: 38px; height: 38px; flex-basis: 38px; }
+  .budget-transactions-page .bell img { width: 24px; height: 24px; }
+  .budget-transactions-page .account-avatar { width: 37px; height: 37px; flex-basis: 37px; }
+  .budget-transactions-page .bt-panel { padding: 12px; }
+  .budget-transactions-page .bt-card { padding: 19px 14px; }
+  .budget-transactions-page .bt-stats { grid-template-columns: minmax(0,1fr); gap: 9px; }
+  .budget-transactions-page .bt-stat { padding: 0 !important; border: 0 !important; }
+  .budget-transactions-page .bt-stat + .bt-stat { border-top: 1px solid #ececec !important; padding-top: 10px !important; }
+  .budget-transactions-page .bt-back { margin: 24px 0 14px; }
+  .budget-transactions-page .bt-filter { min-width: 0; flex: 1 1 140px; }
+  .budget-transactions-page .bt-table { min-width: 660px; }
+}
+@media (max-width: 480px) {
+  .budget-transactions-page .account-copy small { display: none; }
+  .budget-transactions-page .account-copy strong { font-size: 12px; }
+  .budget-transactions-page .bt-workspace-copy strong { font-size: 14px; }
+  .budget-transactions-page .bt-workspace-copy span { font-size: 10px; }
+  .budget-transactions-page .topbar-divider { display: none; }
+}
+@media print {
+  .budget-transactions-page .bt-shell { background: #fff; padding: 0; }
+  .budget-transactions-page .po-topbar { background: #7b1616; print-color-adjust: exact; }
+  .budget-transactions-page .bt-back, .budget-transactions-page .bt-demo-notice, .budget-transactions-page .bt-toast { display: none !important; }
+  .budget-transactions-page .bt-panel { box-shadow: none; padding: 0; }
+}
