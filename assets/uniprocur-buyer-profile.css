@@ -1,0 +1,179 @@
+/*
+  UniProcur — consistent Buyer sidebar footer profile
+  Reference: Buyer Purchase Order (buyerdashboard/purchase-orders.html).
+  Scope: desktop Buyer/Supplier workspace pages only.
+  Load AFTER each page's styles, uniprocur-sidebar.css and buyer header CSS.
+  Visual only: this file does not change the action behind existing buttons/links.
+*/
+@media (min-width: 901px) {
+  /* Same profile row geometry on every Buyer page. */
+  :is(
+    .dashboard-shell .profile-mini,
+    .suppliers-layout .profile-mini,
+    .pr-shell .pr-profile,
+    .po-shell .side-profile,
+    .rfq-shell .side-user,
+    .invoice-shell .side-user,
+    .settings-shell .sidebar-profile
+  ) {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 9px;
+    width: 100%;
+    min-width: 0;
+    margin: 8px 0 0;
+    padding: 10px 0 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.24);
+  }
+
+  /* Align all gray B avatars. */
+  :is(
+    .dashboard-shell .profile-mini .avatar,
+    .suppliers-layout .profile-mini .avatar,
+    .pr-shell .pr-profile .pr-avatar,
+    .po-shell .side-profile .side-avatar,
+    .rfq-shell .side-user .side-avatar,
+    .invoice-shell .side-user .side-avatar,
+    .settings-shell .sidebar-profile .sidebar-avatar
+  ) {
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    min-width: 34px;
+    min-height: 34px;
+    padding: 0;
+    border-radius: 50%;
+    background: #dedede;
+    color: #555;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 700;
+  }
+
+  /* Allow the name/email to shrink without pushing the arrow off the edge. */
+  :is(
+    .dashboard-shell .profile-copy,
+    .suppliers-layout .profile-copy,
+    .pr-shell .pr-profile-copy,
+    .po-shell .side-profile-copy,
+    .rfq-shell .side-user-copy,
+    .invoice-shell .side-copy,
+    .settings-shell .sidebar-profile > div
+  ) {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+    margin: 0;
+  }
+
+  :is(
+    .dashboard-shell .profile-copy,
+    .suppliers-layout .profile-copy,
+    .pr-shell .pr-profile-copy,
+    .po-shell .side-profile-copy,
+    .rfq-shell .side-user-copy,
+    .invoice-shell .side-copy,
+    .settings-shell .sidebar-profile > div
+  ) :is(strong, small) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.25;
+  }
+
+  :is(
+    .dashboard-shell .profile-copy,
+    .suppliers-layout .profile-copy,
+    .pr-shell .pr-profile-copy,
+    .po-shell .side-profile-copy,
+    .rfq-shell .side-user-copy,
+    .invoice-shell .side-copy,
+    .settings-shell .sidebar-profile > div
+  ) strong { font-size: 12px; font-weight: 700; color: #171717; }
+
+  :is(
+    .dashboard-shell .profile-copy,
+    .suppliers-layout .profile-copy,
+    .pr-shell .pr-profile-copy,
+    .po-shell .side-profile-copy,
+    .rfq-shell .side-user-copy,
+    .invoice-shell .side-copy,
+    .settings-shell .sidebar-profile > div
+  ) small { font-size: 10px; font-weight: 400; color: #666; }
+
+  /* One consistent vertical divider + arrow position. */
+  :is(
+    .dashboard-shell .profile-exit,
+    .suppliers-layout .profile-exit,
+    .pr-shell .pr-profile-exit,
+    .po-shell .side-profile-arrow,
+    .rfq-shell .side-arrow,
+    .invoice-shell .side-arrow,
+    .settings-shell .sidebar-profile .side-arrow
+  ) {
+    box-sizing: border-box;
+    appearance: none;
+    display: inline-flex;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 30px;
+    min-width: 34px;
+    min-height: 30px;
+    margin: 0 0 0 auto;
+    padding: 0 0 0 8px;
+    border: 0;
+    border-left: 1px solid #555;
+    border-radius: 0;
+    outline-offset: 2px;
+    background: transparent;
+    box-shadow: none;
+    text-decoration: none;
+    color: #111;
+    cursor: pointer;
+    white-space: nowrap;
+    line-height: 1;
+    /* Replace differently shaped arrow characters visually without changing actions. */
+    font-size: 0;
+  }
+
+  :is(
+    .dashboard-shell .profile-exit,
+    .suppliers-layout .profile-exit,
+    .pr-shell .pr-profile-exit,
+    .po-shell .side-profile-arrow,
+    .rfq-shell .side-arrow,
+    .invoice-shell .side-arrow,
+    .settings-shell .sidebar-profile .side-arrow
+  )::after {
+    content: "\2192";
+    display: block;
+    font-family: Arial, sans-serif;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  :is(
+    .dashboard-shell .profile-exit,
+    .suppliers-layout .profile-exit,
+    .pr-shell .pr-profile-exit,
+    .po-shell .side-profile-arrow,
+    .rfq-shell .side-arrow,
+    .invoice-shell .side-arrow,
+    .settings-shell .sidebar-profile .side-arrow
+  ):hover { color: #be1215; }
+}
