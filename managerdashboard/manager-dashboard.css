@@ -1,0 +1,97 @@
+/* UniProcur Manager HOME. Scoped overrides on top of existing Manager PR shell. */
+.manager-dashboard-page .manager-shell {
+  background:radial-gradient(ellipse at 100% 100%,#eea05e 0%,#f05221 26%,transparent 55%),linear-gradient(145deg,#32100e 0%,#8e0b08 24%,#da0903 51%,#f00801 76%,#ef481c 100%);
+}
+.manager-dashboard-page .sidebar{position:sticky;top:0;align-self:flex-start;height:100dvh;min-height:100dvh;overflow:hidden;padding:38px 20px 18px}
+.manager-dashboard-page .sidebar-rule{margin:18px 10px 0;background:#aaa}
+.manager-dashboard-page .sidebar-bottom{display:grid;gap:5px;margin-top:auto}
+.manager-dashboard-page .profile-mini{border-top:1px solid #aaa;margin-top:3px}
+.manager-dashboard-page .manager-dashboard-main{padding:26px 38px 65px 46px;min-width:0}
+.dashboard-inner{width:100%;max-width:1230px;margin:0 auto}
+.manager-dashboard-page .topbar{min-height:76px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.44)}
+.manager-dashboard-page .notification-button{display:grid;place-items:center;background:#fff;border:0;border-radius:50%;width:44px;height:44px;min-width:44px;padding:5px}
+.manager-dashboard-page .notification-button img{width:31px;height:31px;object-fit:contain}
+.manager-dashboard-page .account-avatar{background:#fff}
+.manager-dashboard-page .account-copy strong{font-size:15px}
+.manager-dashboard-page .account-copy small{font-size:11px}
+.manager-dashboard-page .sidebar .nav-item:focus-visible,.manager-dashboard-page a:focus-visible,.manager-dashboard-page button:focus-visible{outline:3px solid #ff9f89;outline-offset:2px}
+.manager-dashboard-page [hidden]{display:none!important}
+.dash-error{margin-top:24px;background:#fff0ee;border:1px solid #e18b7c;color:#882114;padding:14px 17px;border-radius:9px;font-size:14px}
+.manager-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:53px}
+.manager-kpi{display:flex;flex-direction:column;justify-content:flex-start;min-width:0;height:164px;overflow:hidden;background:#fff;border-radius:16px;box-shadow:0 4px 5px #0003;text-decoration:none;padding:18px 19px 13px;color:#131313;transition:transform .16s}
+.manager-kpi:hover{transform:translateY(-2px)}
+.manager-kpi.kpi-primary{background:linear-gradient(40deg,#060606 0%,#3b3b3b 43%,#dedede 91%);color:#fff}
+.kpi-title{font-size:17px;line-height:1.2;font-weight:400}
+.manager-kpi strong{font-size:65px;font-weight:400;line-height:1.11;letter-spacing:-.05em;margin-top:10px}
+.manager-kpi small{font-size:11px;margin-top:auto;font-weight:400;color:inherit}
+.spending-panel{background:#fff;border-radius:15px;margin-top:24px;padding:25px 28px 20px;min-height:340px;box-shadow:0 3px 6px #0002}
+.spending-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.spending-heading h1{font-size:20px;line-height:1.25;font-weight:700;color:#262626;letter-spacing:-.04em;margin:0}
+.spending-metric{display:flex;align-items:center;gap:12px;margin-top:3px}
+.spending-metric strong{font-size:23px;font-weight:700;line-height:1.15}
+.monthly-change{background:#f5efdc;color:#7c632c;padding:4px 8px;border-radius:50px;font-size:11px;white-space:nowrap}
+.monthly-change.positive{background:#e9f4ed;color:#24804b}.monthly-change.negative{background:#ffebeb;color:#ac3030}
+.metric-caption{font-size:11px;color:#666;margin:5px 0 0}
+.chart-year{font-size:12px;color:#777;padding:3px 9px;border:1px solid #ddd;border-radius:8px}
+.chart-layout{display:flex;align-items:stretch;gap:12px;margin:16px 0 0}
+.chart-yaxis{width:54px;flex:0 0 54px;height:230px;display:flex;flex-direction:column;justify-content:space-between;text-align:right;padding:0 0 26px;color:#7a7a7a;font-size:12px}
+.chart-visual{flex:1;min-width:0;height:237px;display:flex;flex-direction:column}
+#spendingChart{width:100%;height:211px;display:block;overflow:visible}
+.chart-months{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-items:center;font-size:11px;color:#737373;text-align:center;height:24px}
+.chart-hint{margin:9px 0 0;color:#787878;font-size:10px;text-align:right}
+.recent-section{margin-top:22px;background:#fff;border-radius:11px;box-shadow:0 3px 6px #0002;overflow:hidden}
+.section-head{background:#b80805;color:#fff;padding:14px 21px;display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px}
+.section-head h2,.supplier-head h2{font-size:16px;margin:0;font-weight:700;letter-spacing:-.025em}
+.section-head a{color:#fff;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap}
+.section-head a:hover{text-decoration:underline}
+.section-body{padding:11px 13px 14px}
+.table-wrap{overflow-x:auto}
+.manager-table{width:100%;border-collapse:collapse;font-size:13px;color:#313131;text-align:left}
+.manager-table thead{background:#f0f1f3;color:#222}
+.manager-table th{padding:12px 12px;font-weight:700;font-size:12px;white-space:nowrap}
+.manager-table td{padding:11px 12px;border-bottom:1px solid #e7e7e7}
+.manager-table tbody tr:last-child td{border-bottom:0}
+.empty-row{text-align:center;color:#777;padding:21px!important}
+.review-button{display:inline-flex;align-items:center;justify-content:center;background:#dd1006;color:#fff;border-radius:9px;text-decoration:none;border:0;padding:8px 12px;min-width:66px;font-size:12px;font-weight:600}
+.review-button:hover{background:#ad0d07}
+.status-pill{font-size:11px;border-radius:20px;padding:4px 8px;display:inline-block;font-weight:600;white-space:nowrap;background:#f2f2f2;color:#666}
+.status-pill.pending,.status-pill.pending_approval{border:1px solid #f2aa55;background:#fff5e9;color:#c46b00}
+.status-pill.approved,.status-pill.issued,.status-pill.received,.status-pill.closed{background:#e7f7ed;color:#17804b}
+.status-pill.rejected{background:#ffecec;color:#b52828}
+.status-pill.partial{background:#eff4ff;color:#3554a2}
+.po-recent-grid{padding:15px 21px 21px;display:grid;grid-template-columns:1fr;gap:16px}
+.po-mini-card{min-width:0;border:1px solid #bdbdbd;background:#fff;border-radius:13px;box-shadow:0 3px 3px #0003;overflow:hidden;display:flex;flex-direction:column}
+.po-mini-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 16px 10px;border-bottom:1px solid #dedede}
+.po-mini-head strong{display:block;color:#dd3c2c;font-size:17px;margin-bottom:3px}
+.po-mini-head b{display:block;color:#1b1b1b;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:330px}
+.po-mini-body{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;flex:1}
+.po-mini-body div{min-width:0}
+.po-mini-body small{display:block;color:#777;font-size:12px;margin-bottom:3px}
+.po-mini-body strong{font-size:14px;color:#191919;overflow-wrap:anywhere}
+.po-mini-footer{display:flex;justify-content:flex-end;padding:0 16px 14px}
+.po-mini-footer .review-button{background:#d73d2a;min-width:112px}
+.loading-note{grid-column:1/-1;color:#777;padding:16px}
+.dashboard-bottom-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(238px,.72fr);gap:14px;margin-top:24px;align-items:stretch}
+.suppliers-panel,.quick-actions{background:#fff;border-radius:13px;padding:14px 16px;box-shadow:0 3px 6px #0002;min-width:0}
+.supplier-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.supplier-head h2{font-size:16px}
+.supplier-head button{border:0;background:transparent;color:#d51307;font-weight:600;font-size:12px;white-space:nowrap;cursor:pointer}
+.supplier-head button:hover{text-decoration:underline}
+.supplier-table{font-size:12px}
+.supplier-table th{font-size:11px;padding:10px}
+.supplier-table td{padding:9px 10px}
+.supplier-note{font-size:10px;color:#767676;margin:13px 0 0;line-height:1.45}
+.quick-actions{display:flex;flex-direction:column;gap:10px;padding:12px}
+.quick-actions a,.quick-actions button{display:flex;align-items:center;gap:9px;flex:1;min-height:66px;width:100%;border:1px solid #d9adad;border-radius:10px;background:#fff;color:#111;text-decoration:none;text-align:left;padding:10px 11px;box-shadow:0 3px 4px #0002;cursor:pointer}
+.quick-actions a:hover,.quick-actions button:hover{background:#fff7f7}
+.quick-actions a>img,.quick-actions button>img{width:24px;height:26px;object-fit:contain;padding:4px;border:1px solid #e44a45;border-radius:5px;flex:0 0 24px}
+.quick-actions a>span:nth-of-type(1),.quick-actions button>span:nth-of-type(1){display:flex;flex-direction:column;min-width:0;flex:1;gap:3px}
+.quick-actions strong{font-size:12px;line-height:1.1;font-weight:700}
+.quick-actions small{font-size:9px;line-height:1.15;color:#666}
+.quick-actions a>span:last-child,.quick-actions button>span:last-child{font-size:27px;color:#d83b2c;line-height:1}
+.manager-toast{position:fixed;right:20px;bottom:20px;z-index:20;opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .2s,transform .2s;background:#111;color:white;padding:12px 16px;border-radius:8px;font-size:13px;max-width:360px;box-shadow:0 3px 10px #0004}
+.manager-toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:1160px){.dashboard-bottom-grid{grid-template-columns:1fr}.quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.manager-dashboard-page .manager-dashboard-main{padding:24px 24px 60px}.po-recent-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:950px){.manager-dashboard-page .sidebar{flex-basis:225px;width:225px}.manager-kpis{gap:10px}.manager-kpi{padding:14px}.kpi-title{font-size:14px}.manager-kpi strong{font-size:51px}}
+@media(max-width:780px){.manager-dashboard-page .manager-shell{display:block}.manager-dashboard-page .sidebar{position:relative;min-height:0;height:auto;overflow:visible;width:100%;padding:14px 16px;flex-basis:auto}.manager-dashboard-page .sidebar-rule,.manager-dashboard-page .sidebar-bottom{display:none}.manager-dashboard-page .main-panel{padding:18px 15px 45px}.manager-kpis{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:24px}.manager-kpi{height:134px}.manager-kpi strong{font-size:47px}.spending-panel{padding:20px 15px;min-height:300px}.chart-yaxis{width:39px;flex-basis:39px;font-size:10px}.chart-months{font-size:9px}.po-recent-grid{grid-template-columns:1fr}.dashboard-bottom-grid{grid-template-columns:1fr}.quick-actions{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.manager-kpi{height:126px}.kpi-title{font-size:13px}.manager-kpi strong{font-size:42px}.section-head h2{font-size:13px}.manager-table{font-size:11px}.manager-table th,.manager-table td{padding:8px}.chart-year{display:none}.spending-heading h1{font-size:17px}.quick-actions{grid-template-columns:1fr}.manager-dashboard-page .account-copy{display:none}.manager-dashboard-page .topbar{min-height:68px}.manager-dashboard-page .main-panel{padding:12px}}
