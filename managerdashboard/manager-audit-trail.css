@@ -1,0 +1,66 @@
+/* Manager Audit Trail — matches the Figma layout without touching other Manager pages. */
+.manager-audit-page{font-family:Inter,Arial,sans-serif;color:#181818}
+.manager-audit-page *{box-sizing:border-box}
+.manager-audit-page [hidden]{display:none!important}
+.manager-audit-page .manager-shell{background:radial-gradient(ellipse at 101% 101%,#eba05a 0%,#ee6b32 25%,transparent 57%),linear-gradient(146deg,#350d0b 0%,#8d0906 22%,#d80b04 52%,#f00c03 74%,#e94418 100%)}
+.manager-audit-page .audit-main{min-width:0;padding:27px 39px 56px 46px}
+.audit-inner{max-width:1230px;margin:0 auto}
+.manager-audit-page .topbar{min-height:76px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.46)}
+.manager-audit-page .notification-button{flex:0 0 45px;display:grid;place-items:center;width:45px;height:45px;border:0;border-radius:50%;background:#fff;padding:5px}
+.manager-audit-page .notification-button img{width:31px;height:31px;object-fit:contain}
+.manager-audit-page .account-avatar{background:#fff}
+.manager-audit-page .sidebar-rule{margin-top:20px;background:#aaa}
+.manager-audit-page .sidebar-bottom{margin-top:auto}
+.manager-audit-page button,.manager-audit-page select,.manager-audit-page input{font:inherit}
+.manager-audit-page button{cursor:pointer}
+.manager-audit-page button:focus-visible,.manager-audit-page a:focus-visible,.manager-audit-page select:focus-visible,.manager-audit-page input:focus-visible{outline:3px solid #ffab8b;outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.audit-error{margin-top:19px;padding:13px 16px;border-radius:10px;background:#fff2ef;border:1px solid #df7667;color:#801b10}
+.audit-controls{margin-top:45px}
+.audit-first-row{display:flex;align-items:center;gap:16px}
+.audit-search{flex:0 1 620px;min-width:0;height:50px;display:flex;gap:8px;align-items:center;padding:5px 7px 5px 8px;background:rgba(242,213,215,.65);border:2px solid rgba(255,255,255,.78);box-shadow:0 3px 6px rgba(0,0,0,.22);border-radius:40px}
+.audit-search .search-icon{flex:0 0 39px;display:grid;place-items:center;width:39px;height:39px;background:#fff;border-radius:50%;color:#333}
+.audit-search input{flex:1 1 auto;min-width:0;height:100%;background:transparent;border:0;outline:none!important;font-size:16px;color:#171717;padding-left:2px}
+.audit-search input::placeholder{color:#292929;opacity:1}
+.audit-search button{flex:0 0 85px;height:32px;border:0;border-radius:30px;background:#fff;color:#262626;font-size:12px}
+.audit-filter-wrap{position:relative;z-index:5}
+.audit-filter-button{height:50px;min-width:116px;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;border:1px solid #111;background:#fff;color:#181818;box-shadow:0 3px 5px rgba(0,0,0,.26);font-size:15px}
+.audit-filter-button img{height:19px;width:19px;object-fit:contain}
+.audit-filter-menu{position:absolute;left:0;top:calc(100% + 9px);min-width:240px;z-index:12;padding:14px;display:grid;gap:11px;border-radius:12px;border:1px solid #ddd;background:white;box-shadow:0 10px 25px rgba(0,0,0,.2)}
+.audit-filter-menu label{display:grid;gap:5px;font-size:13px;font-weight:600}
+.audit-filter-menu select{width:100%;height:38px;padding:0 10px;border:1px solid #cfcfcf;border-radius:6px;background:#fff;color:#333}
+.filter-reset{border:1px solid #bb1a15;border-radius:7px;padding:9px;background:#fff;color:#ab0f0a;font-size:13px}
+.audit-second-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:27px}
+.role-select{height:41px;width:120px;padding:0 12px;border-radius:3px;border:1px solid #2a2a2a;background:#fff;color:#242424;font-size:14px}
+.export-row{display:flex;gap:15px;align-items:center}
+.export-row button{min-width:112px;height:42px;border-radius:12px;box-shadow:0 3px 5px rgba(0,0,0,.26);border:1px solid #111;font-size:14px}
+.pdf-button{color:#181818;background:#fff}.excel-button{min-width:96px!important;color:#fff;background:#050505}
+.audit-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:34px}
+.audit-stat{display:flex;min-width:0;min-height:145px;flex-direction:column;padding:18px 19px 13px;border-radius:14px;background:#fff;box-shadow:0 4px 5px rgba(0,0,0,.25)}
+.audit-stat-primary{background:linear-gradient(120deg,#151515 0%,#454545 59%,#b4b4b4 100%);color:#fff}
+.audit-stat>span{font-size:15px;line-height:21px;white-space:normal}
+.audit-stat>strong{font-size:clamp(32px,3.9vw,58px);letter-spacing:-.05em;line-height:1.1;font-weight:500;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.audit-stat>small{font-size:10px;margin-top:auto;line-height:1.4;color:#505050}
+.audit-stat-primary>small{color:#f0f0f0}
+.audit-panel{background:#fff;border-radius:11px;box-shadow:0 4px 5px rgba(0,0,0,.15);margin-top:22px;padding:15px 15px 17px}
+.audit-table-scroll{overflow-x:auto}
+.audit-table{width:100%;min-width:930px;border-collapse:collapse;table-layout:fixed;font-size:12.5px}
+.audit-table th{background:#f1f1f5;color:#647089;text-align:left;height:53px;font-weight:700;padding:13px 10px;white-space:nowrap}
+.audit-table td{padding:18px 10px;border-bottom:1px solid #e6e6e8;vertical-align:middle;color:#333;overflow-wrap:anywhere}
+.audit-table th:nth-child(1){width:15%}.audit-table th:nth-child(2){width:15%}.audit-table th:nth-child(3){width:9%}.audit-table th:nth-child(4){width:16%}.audit-table th:nth-child(5){width:12%}.audit-table th:nth-child(6){width:21%}.audit-table th:nth-child(7){width:12%}
+.audit-table tr:last-child td{border-bottom:none}
+.audit-table .user-name{font-weight:700;color:#171717}
+.audit-table .audit-empty{height:125px;text-align:center;font-size:14px;color:#5b5b5b}
+.action-pill{display:inline-flex;align-items:center;justify-content:center;max-width:100%;padding:5px 12px;border-radius:22px;background:#f1eff1;color:#343434;font-size:11.5px;font-weight:600}
+.action-pill.submitted{color:#d91d15;background:#fff0ee}.action-pill.approved{color:#107955;background:#d8f6e9}.action-pill.rejected{color:#bb2224;background:#ffe3e1}
+.audit-table-footer{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:14px;color:#677488;font-size:12px}
+.audit-pagination{display:flex;align-items:center;gap:6px}
+.audit-pagination button{display:grid;place-items:center;min-width:29px;height:29px;padding:0 7px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#555;font-size:12px}
+.audit-pagination button[aria-current="page"]{background:#d94331;color:#fff;border-color:#d94331}
+.audit-pagination button:disabled{opacity:.48;cursor:not-allowed}
+.audit-history-note{margin:12px 4px 0;color:#fff8f4;font-size:11px;line-height:1.55}
+.audit-toast{position:fixed;bottom:26px;right:25px;padding:12px 17px;max-width:380px;border-radius:8px;background:#161616;color:#fff;box-shadow:0 4px 15px rgba(0,0,0,.24);z-index:50;font-size:13px}
+@media(max-width:1080px){.manager-audit-page .audit-main{padding:22px 24px 45px}.audit-stats{gap:9px}.audit-stat{padding:15px 12px}.audit-search{flex-basis:570px}}
+@media(max-width:780px){.manager-audit-page .audit-main{padding:16px 14px 34px}.audit-controls{margin-top:24px}.audit-first-row{align-items:stretch;flex-wrap:wrap}.audit-search{flex:1 1 100%}.audit-second-row{margin-top:18px}.audit-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:22px}.audit-stat{min-height:120px}.audit-panel{margin-top:17px}.audit-filter-menu{right:auto;left:0}.audit-table-footer{flex-wrap:wrap}.audit-history-note{color:#fff}}
+@media(max-width:450px){.audit-second-row{align-items:stretch}.export-row{gap:8px}.export-row button{min-width:85px;height:40px}.role-select{width:105px}.audit-stat>span{font-size:12px}}
+@media print{body.manager-audit-page{background:#fff!important}.manager-audit-page .manager-shell{background:#fff!important;display:block!important}.manager-audit-page .sidebar,.manager-audit-page .topbar,.audit-controls,.audit-pagination,.audit-toast,.audit-history-note,.audit-error{display:none!important}.manager-audit-page .audit-main{padding:0!important}.audit-stats{margin-top:0;grid-template-columns:repeat(4,1fr);gap:8px}.audit-stat{min-height:110px;border:1px solid #ddd;box-shadow:none}.audit-stat-primary{background:#eee!important;color:#111!important}.audit-stat-primary>small{color:#555}.audit-panel{box-shadow:none;padding:0;margin-top:18px}.audit-table{min-width:0;font-size:9px}.audit-table td{padding:10px 5px}.audit-table th{padding:7px 5px}.audit-table-footer{display:none}.audit-inner:before{content:"UniProcur · Manager Audit Trail (current filtered page)";display:block;font-size:18px;font-weight:700;margin-bottom:16px}*{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
