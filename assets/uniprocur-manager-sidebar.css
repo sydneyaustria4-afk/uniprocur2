@@ -1,0 +1,235 @@
+/*
+ * UniProcur — Shared Manager Sidebar (Dashboard / Purchase Requests / Purchase Orders)
+ * Matches the Buyer sidebar rhythm: 260px, 17px logo, 16px links, 8px item gap.
+ * Add this AFTER each page's existing stylesheets.
+ * Only manager-shell sidebars are affected; content and approval logic are untouched.
+ */
+@media (min-width: 781px) {
+  .manager-shell > .sidebar {
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    display: flex;
+    flex: 0 0 260px;
+    flex-direction: column;
+    width: 260px;
+    min-width: 260px;
+    height: 100vh;
+    height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 38px 20px 18px;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    background: #fff;
+    border-right: 1px solid rgba(0, 0, 0, .08);
+    z-index: 10;
+  }
+
+  .manager-shell > .sidebar .brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    flex: 0 0 auto;
+    width: 100%;
+    min-height: 28px;
+    margin: 0 0 30px;
+    padding: 0;
+    color: #d71920;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 28px;
+    letter-spacing: -.04em;
+    text-decoration: none;
+  }
+  .manager-shell > .sidebar .brand-logo {
+    flex: 0 0 23px;
+    width: 23px;
+    height: 28px;
+    object-fit: contain;
+  }
+
+  .manager-shell > .sidebar .nav-group {
+    display: block;
+    width: 100%;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0;
+  }
+  .manager-shell > .sidebar .nav-label {
+    margin: 0 0 4px;
+    padding: 0;
+    color: #7b7b7b;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -.04em;
+  }
+  .manager-shell > .sidebar .workspace-nav {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    width: 100%;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .manager-shell > .sidebar .nav-item {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 0 0 auto;
+    gap: 14px;
+    width: 100%;
+    min-height: 35px;
+    margin: 0;
+    padding: 7px 10px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: #1d1d1d;
+    box-shadow: none;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 21px;
+    text-align: left;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .manager-shell > .sidebar .nav-item:is(.is-active, .active, [aria-current="page"]),
+  .manager-shell > .sidebar .nav-item:hover:not(:disabled) {
+    background: #bdbdbd;
+    color: #1d1d1d;
+  }
+  .manager-shell > .sidebar .nav-item:focus-visible,
+  .manager-shell > .sidebar .brand:focus-visible {
+    outline: 2px solid #e03124;
+    outline-offset: 2px;
+  }
+  .manager-shell > .sidebar .nav-icon {
+    box-sizing: border-box;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 19px;
+    width: 19px;
+    min-width: 19px;
+    height: 21px;
+    line-height: 1;
+  }
+  .manager-shell > .sidebar .nav-icon img {
+    display: block;
+    width: 19px;
+    height: 21px;
+    max-width: 19px;
+    max-height: 21px;
+    object-fit: contain;
+  }
+  .manager-shell > .sidebar .nav-symbol {
+    font-size: 18px;
+  }
+
+  /* Workspace divider remains under the last workspace item. */
+  .manager-shell > .sidebar > .sidebar-rule {
+    flex: 0 0 auto;
+    width: calc(100% - 20px);
+    height: 1px;
+    margin: 18px 10px 0;
+    padding: 0;
+    background: #a7a7a7;
+    border: 0;
+  }
+  .manager-shell > .sidebar .sidebar-bottom {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 16px;
+  }
+  .manager-shell > .sidebar .profile-mini {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-width: 0;
+    margin: 4px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px solid #bdbdbd;
+  }
+  .manager-shell > .sidebar .profile-avatar {
+    display: grid;
+    place-items: center;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    font-size: 12px;
+  }
+  .manager-shell > .sidebar .profile-copy {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 1px;
+  }
+  .manager-shell > .sidebar .profile-copy strong,
+  .manager-shell > .sidebar .profile-copy small {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .manager-shell > .sidebar .profile-copy strong {
+    font-size: 11px;
+    line-height: 14px;
+  }
+  .manager-shell > .sidebar .profile-copy small {
+    font-size: 9px;
+    line-height: 12px;
+  }
+  .manager-shell > .sidebar .signout-button {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 32px;
+    margin: 0 0 0 auto;
+    padding: 0;
+    border: 0;
+    border-left: 1px solid #333;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: #111;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 24px;
+    cursor: pointer;
+  }
+}
+
+/* Preserve the individual pages' existing mobile sidebar/navigation mode. */
+@media (max-width: 780px) {
+  .manager-shell > .sidebar {
+    position: relative;
+    top: auto;
+    align-self: stretch;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    min-height: 0;
+  }
+}
