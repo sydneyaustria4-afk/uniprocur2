@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#c61810">
+  <meta name="description" content="UniProcur Buyer Material Request demo — Inventory integration preview only.">
+  <title>UniProcur | Buyer Material Requests (Demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Reuse exactly the same sidebar base as Buyer Dashboard and Buyer Reports. -->
+  <link rel="stylesheet" href="buyer-dashboard.css?v=14">
+  <link rel="stylesheet" href="buyer-material-requests.css?v=1">
+  <link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
+  <script src="buyer-material-requests.js?v=1" defer></script>
+</head>
+<body class="buyer-material-page">
+  <div class="dashboard-shell">
+    <aside class="sidebar" aria-label="Buyer workspace navigation">
+      <a class="brand" href="buyer-dashboard.html" aria-label="UniProcur Buyer Dashboard">
+        <img class="brand-logo" src="../assets/Pro%203.svg" alt=""><span>UniProcur</span>
+      </a>
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav aria-label="Buyer workspace">
+          <a class="nav-item" href="buyer-dashboard.html"><span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span>Dashboard</a>
+          <a class="nav-item" href="../supplier/supplier.html"><span class="nav-icon"><img src="../assets/Group%2027.svg" alt=""></span>Suppliers</a>
+          <a class="nav-item" href="purchase-requests.html"><span class="nav-icon"><img src="../assets/Group%2033.svg" alt=""></span>Purchase Request</a>
+          <a class="nav-item" href="rfq-workspace.html"><span class="nav-icon"><img src="../assets/Group.svg" alt=""></span>RFQ Workspace</a>
+          <a class="nav-item" href="purchase-orders.html"><span class="nav-icon"><img src="../assets/Group%2034.svg" alt=""></span>Purchase Order</a>
+          <a class="nav-item" href="buyer-invoices.html"><span class="nav-icon"><img src="../assets/Group%2035.svg" alt=""></span>Invoice</a>
+          <a class="nav-item" href="buyer-reports.html"><span class="nav-icon"><img src="../assets/Group%2031.svg" alt=""></span>Reports</a>
+          <a class="nav-item is-active" href="buyer-material-requests.html" aria-current="page"><span class="nav-icon mr-menu-icon"><img src="../assets/material-request.svg" alt=""></span>Material Request</a>
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+        <a class="nav-item" href="buyer-support.html"><span class="nav-icon"><img src="../assets/support.svg" alt=""></span>Support</a>
+        <a class="nav-item" href="buyer-settings.html"><span class="nav-icon"><img src="../assets/settings.svg" alt=""></span>Settings</a>
+        <div class="profile-mini">
+          <span class="avatar avatar-gray" id="sidebarAvatar" aria-hidden="true">B</span>
+          <span class="profile-copy"><strong id="sidebarBuyerName">Buyer</strong><small id="sidebarBuyerEmail">Loading account…</small></span>
+          <a class="profile-exit" href="buyer-dashboard.html" aria-label="Back to Buyer Dashboard" title="Back to Buyer Dashboard">→</a>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-panel mr-main" id="mainContent">
+      <div class="mr-inner">
+        <header class="mr-topbar">
+          <div class="mr-workspace">
+            <span class="mr-workspace-logo"><img src="../assets/Pro%204.svg" alt=""></span>
+            <span class="mr-workspace-name"><small>UniProcur Workspace</small><strong>Materials Request</strong></span>
+          </div>
+          <div class="mr-user">
+            <button class="mr-bell" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button>
+            <span class="mr-account-rule" aria-hidden="true"></span>
+            <span class="mr-user-label"><strong id="topbarBuyerName">Buyer</strong><small id="topbarBuyerEmail">Loading account…</small></span>
+            <span class="mr-user-avatar" id="topbarAvatar" aria-hidden="true">B</span>
+          </div>
+        </header>
+
+        <div class="mr-demo-banner" role="status">
+          <span class="mr-demo-indicator" aria-hidden="true"></span>
+          <span><strong>Preview only.</strong> This Inventory request is sample data. Reject and Convert actions do not save to MySQL or send anything to Inventory.</span>
+          <button class="mr-reset" id="resetPreview" type="button" title="Restore the sample request">Reset preview</button>
+        </div>
+
+        <div class="mr-controls">
+          <form class="mr-search" id="materialSearchForm" role="search">
+            <span class="mr-search-mark" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10.7" cy="10.7" r="6.4"/><path d="m15.5 15.5 5 5"/></svg></span>
+            <input type="search" id="materialSearch" placeholder="search" aria-label="Search material requests" autocomplete="off">
+            <button type="submit">Search</button>
+          </form>
+          <div class="mr-filter-wrap">
+            <button class="mr-filter-button" id="materialFilterButton" type="button" aria-expanded="false" aria-controls="materialFilterPanel">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              Filter
+            </button>
+            <div class="mr-filter-panel" id="materialFilterPanel" hidden>
+              <label for="materialStatusFilter">Status</label>
+              <select id="materialStatusFilter"><option value="all">All statuses</option><option value="pending">Awaiting PR Creation</option><option value="rejected">Rejected (preview)</option><option value="converted">Converted (preview)</option></select>
+              <label for="materialPriorityFilter">Priority</label>
+              <select id="materialPriorityFilter"><option value="all">All priorities</option><option value="high">High</option><option value="normal">Normal</option></select>
+              <div class="mr-filter-actions"><button type="button" id="clearMaterialFilters">Reset</button><button type="button" id="applyMaterialFilters">Apply</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mr-showing">
+          <strong>Showing:</strong>
+          <span class="mr-showing-label" id="materialShowingLabel">Pending Material Request</span>
+          <span class="mr-showing-count" id="materialCount">1 demo request</span>
+        </div>
+
+        <div class="mr-cards" id="materialCards" aria-label="Inventory material requests">
+          <p class="mr-loading">Loading sample request…</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <dialog class="mr-modal" id="rejectDialog" aria-labelledby="rejectDialogTitle">
+    <form id="rejectForm">
+      <div class="mr-modal-head"><div><small>Inventory Request • Demo</small><h2 id="rejectDialogTitle">Reject Material Request</h2></div><button type="button" class="mr-close" data-close-dialog="rejectDialog" aria-label="Close">×</button></div>
+      <p id="rejectTarget" class="mr-modal-note"></p>
+      <label class="mr-field" for="rejectReason">Reason for rejection <span aria-hidden="true">*</span></label>
+      <textarea id="rejectReason" maxlength="400" required minlength="5" placeholder="For example: Insufficient request details or incorrect quantities"></textarea>
+      <p class="mr-modal-disclaimer">Preview only: rejection will appear on this page until refresh. No update is sent to Inventory.</p>
+      <div class="mr-modal-actions"><button type="button" class="mr-secondary" data-close-dialog="rejectDialog">Cancel</button><button class="mr-danger" type="submit">Reject (Preview)</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="mr-modal" id="convertDialog" aria-labelledby="convertDialogTitle">
+    <div class="mr-modal-head"><div><small>Inventory → Procurement • Demo</small><h2 id="convertDialogTitle">Convert to Purchase Request</h2></div><button type="button" class="mr-close" data-close-dialog="convertDialog" aria-label="Close">×</button></div>
+    <p class="mr-modal-note">This is what the Inventory request could look like as a Buyer Purchase Request.</p>
+    <dl class="mr-convert-summary"><div><dt>Request reference</dt><dd id="convertRequestNumber">—</dd></div><div><dt>Requested by</dt><dd id="convertRequester">—</dd></div><div><dt>New PR status</dt><dd>Draft preview only</dd></div></dl>
+    <h3 class="mr-modal-subtitle">Material lines</h3>
+    <div id="convertMaterials"></div>
+    <p class="mr-modal-disclaimer">No PR number is generated and nothing is saved to the Procurement database. Actual conversion will be connected after the Inventory API and field mapping are agreed.</p>
+    <div class="mr-modal-actions"><button type="button" class="mr-secondary" data-close-dialog="convertDialog">Cancel</button><button type="button" class="mr-primary" id="confirmConvert">Mark Converted (Preview)</button></div>
+  </dialog>
+
+  <div class="mr-toast" id="materialToast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>
