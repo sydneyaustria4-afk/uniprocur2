@@ -828,31 +828,190 @@ function renderDashboardTasks(groups) {
 // PURCHASE ORDERS
 // ======================================================
 
+
 function renderDashboardPurchaseOrders(orders) {
   if (!Array.isArray(orders)) {
-    throw new TypeError(
-      'Purchase orders must be provided as an array.'
-    );
+    throw new TypeError("Purchase Orders must be an array.");
   }
 
-  currentPurchaseOrders = orders;
-
-  updateSummaryCards();
-
-  renderTableRows(
-    '#arriving-next-rows',
-    orders,
-    [
-      'task',
-      'category',
-      'quantity',
-      'amount',
-      'number',
-      'supplier'
-    ],
-    null,
-    'No purchase orders yet.'
+  // Update the My Sent POs dashboard card.
+  currentPurchaseOrders = orders.filter(po =>
+    !["draft", "rejected", "cancelled", "canceled"].includes(
+      String(po.status || "").toLowerCase()
+    )
   );
+
+  updateSummaryCard(
+    "purchaseOrders",
+    currentPurchaseOrders.length,
+    "No purchase orders yet.",
+    "In Progress"
+  );
+
+  const tbody = document.getElementById("arriving-next-rows");
+  if (!tbody) return;
+
+  tbody.replaceChildren();
+
+  // Display only active Purchase Orders awaiting delivery.
+  const arrivingOrders = orders.filter(po => {
+    const status = String(po.status || "").toLowerCase();
+
+    return ["approved", "issued", "partial"].includes(status)
+      && !po.tracking_inventory_accepted_at;
+  });
+
+  // Earliest expected deliveries first.
+  arrivingOrders.sort((a, b) =>
+    String(a.expected_delivery || "9999-12-31")
+      .localeCompare(String(b.expected_delivery || "9999-12-31"))
+  );
+
+  if (!arrivingOrders.length) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+
+    cell.colSpan = 7;
+    cell.className = "table-empty-state";
+    cell.textContent = "No active Purchase Orders arriving yet.";
+
+    row.append(cell);
+    tbody.append(row);
+    return;
+  }
+
+  const money = value =>
+    new Intl.NumberFormat("en-PH", {
+      style: "currency",
+      currency: "PHP"
+    }).format(Number(value) || 0);
+
+  const formatDate = value => {
+    if (!value) return "Not set";
+
+    const date = new Date(
+      String(value).slice(0, 10) + "T00:00:00"
+    );
+
+    if (Number.isNaN(date.getTime())) return "Not set";
+
+    return date.toLocaleDateString("en-PH", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric"
+    });
+  };
+
+  arrivingOrders.forEach(po => {
+    const row = document.createElement("tr");
+
+    // 1. PO Number
+    addCell(row, po.po_number || "—");
+
+    // 2. Category (Figma displays supplier names here)
+    addCell(row, po.supplier_name || "—");
+
+    // 3. Items
+    const itemsCell = addCell(
+      row,
+      po.item_summary || "No items listed"
+    );
+    itemsCell.className = "arrival-items";
+
+    // 4. Total
+    addCell(row, money(po.total_amount));
+
+    // 5. Delivery
+    addCell(row, formatDate(po.expected_delivery));
+
+    // 6. Status
+    const statusCell = document.createElement("td");
+    const statusPill = document.createElement("span");
+
+    statusPill.className = "arrival-status";
+
+    const status = String(po.status || "").toLowerCase();
+    const elapsed = Number(po.tracking_elapsed_seconds) || 0;
+
+    if (status === "partial") {
+      statusPill.textContent = "Partially Received";
+    } else if (po.tracking_confirmed_at && elapsed >= 120) {
+      statusPill.textContent = "Out for Delivery (Demo)";
+    } else if (po.tracking_confirmed_at && elapsed >= 60) {
+      statusPill.textContent = "In Transit (Demo)";
+    } else if (po.tracking_confirmed_at) {
+      statusPill.textContent = "Supplier Confirmed (Demo)";
+    } else if (status === "issued") {
+      statusPill.textContent = "Issued";
+    } else {
+      statusPill.textContent = "Approved";
+    }
+
+    statusCell.append(statusPill);
+    row.append(statusCell);
+
+    // 7. View Purchase Order
+    const actionCell = document.createElement("td");
+    const viewLink = document.createElement("a");
+
+    viewLink.className = "mini-action";
+    viewLink.textContent = "View";
+
+    viewLink.href =
+      "buyer-view-purchase-order.html?po_number=" +
+      encodeURIComponent(po.po_number);
+
+    actionCell.append(viewLink);
+    row.append(actionCell);
+
+    tbody.append(row);
+  });
+}
+
+// Load real Purchase Orders from MySQL.
+async function loadBuyerDashboardPurchaseOrders() {
+  const tbody = document.getElementById("arriving-next-rows");
+
+  try {
+    const response = await fetch(
+      "../database/get-buyer-purchase-orders.php",
+      {
+        method: "GET",
+        credentials: "same-origin",
+        cache: "no-store",
+        headers: {
+          Accept: "application/json"
+        }
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Unable to load Purchase Orders."
+      );
+    }
+
+    renderDashboardPurchaseOrders(result.orders || []);
+
+  } catch (error) {
+    console.error("Arriving Next:", error);
+
+    if (tbody) {
+      tbody.replaceChildren();
+
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+
+      cell.colSpan = 7;
+      cell.className = "table-empty-state";
+      cell.textContent = "Unable to load Purchase Orders.";
+
+      row.append(cell);
+      tbody.append(row);
+    }
+  }
 }
 
 // ======================================================
@@ -1257,9 +1416,10 @@ window.renderDashboardBudget =
 renderDashboardRequests(dashboardRequests);
 renderDashboardTasks(dashboardTaskGroups);
 
-renderDashboardPurchaseOrders(
-  dashboardPurchaseOrders
-);
+
+renderDashboardPurchaseOrders([]);
+loadBuyerDashboardPurchaseOrders();
+
 
 renderDashboardInvoices(
   dashboardInvoices

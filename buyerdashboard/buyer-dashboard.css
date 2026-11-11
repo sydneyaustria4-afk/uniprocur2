@@ -2910,3 +2910,75 @@ body {
     padding: 4px 10px;
     min-height: 22px;
 }
+
+
+
+
+
+/* ==========================================
+   ARRIVING NEXT - FIGMA ALIGNMENT FIX
+========================================== */
+
+.bottom-row {
+  align-items: start;
+}
+
+/* Arriving Next */
+.bottom-row .arriving-panel {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.bottom-row .arriving-panel .table-scroll {
+  max-height: 230px;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.arriving-table {
+  width: 100%;
+  min-width: 700px;
+}
+
+.arriving-table th,
+.arriving-table td {
+  vertical-align: middle;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.arriving-table td:nth-child(1),
+.arriving-table td:nth-child(4),
+.arriving-table td:nth-child(5),
+.arriving-table td:nth-child(7) {
+  white-space: nowrap;
+}
+
+.arrival-items {
+  min-width: 125px;
+  line-height: 1.35;
+}
+
+.arrival-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border: 1px solid #cfd2d7;
+  border-radius: 12px;
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.arriving-table a.mini-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Quick Actions aligned to Arriving Next */
+.bottom-row .quick-actions {
+  padding-top: 0;
+}

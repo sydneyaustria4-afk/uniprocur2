@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="buyer-dashboard.css?v=14" />
+    <link rel="stylesheet" href="buyer-dashboard.css?v=15" />
 
 <!-- Shared Buyer Header - Purchase Order Design -->
 <link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
@@ -281,7 +281,17 @@
             <div class="table-scroll">
               <table class="dashboard-table arriving-table">
                 <thead>
-                  <tr><th>Task Name</th><th>Category</th><th>Quantity</th><th>Amount</th><th>PO Number</th><th>Supplier</th><th>Action</th></tr>
+                  
+<tr>
+  <th>PO Number</th>
+  <th>Category</th>
+  <th>Items</th>
+  <th>Total</th>
+  <th>Delivery</th>
+  <th>Status</th>
+  <th>Action</th>
+</tr>
+
                 </thead>
                 <tbody id="arriving-next-rows"></tbody>
               </table>
@@ -332,7 +342,7 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     
-<script src="buyer-dashboard.js?v=17" defer></script>
+<script src="buyer-dashboard.js?v=18" defer></script>
 <script src="buyer-po-drafts.js?v2" defer></script>
 
   </body>
