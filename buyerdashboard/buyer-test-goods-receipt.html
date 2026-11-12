@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>UniProcur | TEST Goods Receipt Verification</title>
+<style>
+:root{font-family:Inter,Arial,sans-serif;color:#1e2430;background:#f5f5f7}
+*{box-sizing:border-box}body{margin:0;min-height:100vh}header{background:linear-gradient(107deg,#810a13,#c90013 62%,#f57b3a);color:#fff;padding:28px max(24px,calc((100vw - 1080px)/2))}
+nav{display:flex;align-items:center;justify-content:space-between;gap:20px}nav a{color:#fff;text-decoration:none;font-size:14px}h1{font-size:clamp(22px,3vw,30px);margin:25px 0 6px}header p{margin:0;color:#fff9;font-size:14px}
+main{max-width:1080px;margin:30px auto;padding:0 20px}.warning{background:#fff5e9;border-left:4px solid #e58716;color:#725014;padding:18px;border-radius:7px;line-height:1.55;font-size:14px}.card{background:#fff;border:1px solid #e5e5e9;border-radius:12px;padding:24px;margin-top:20px;box-shadow:0 4px 20px #00000008}.bar{display:flex;gap:12px;flex-wrap:wrap;align-items:center}label{font-size:13px;font-weight:650}input{padding:11px 13px;font-size:15px;border:1px solid #cfd0d6;border-radius:8px;min-width:210px;max-width:100%}button{border:0;border-radius:8px;background:#ba0018;color:white;padding:12px 22px;cursor:pointer;font-weight:700}button:disabled{opacity:.55;cursor:wait}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:20px 0}.meta>div{padding:14px;border-radius:8px;background:#f6f6f8}.k{display:block;color:#767b86;font-size:12px;margin-bottom:7px}.v{font-size:14px;font-weight:650;overflow-wrap:anywhere}.notice{font-size:14px;color:#556172;margin:12px 0}.error{color:#b81a1a;background:#fff0f0;padding:13px;border-radius:8px}.hidden{display:none}.receipt{color:#0a7452}table{border-collapse:collapse;width:100%;min-width:700px}th,td{text-align:left;padding:13px 11px;border-bottom:1px solid #e7e7ea;font-size:13px}th{color:#58616f;font-weight:650;background:#f7f7f8}.table-wrap{overflow:auto}.pill{background:#e6faed;color:#167a44;border-radius:25px;padding:5px 10px;font-size:12px;font-weight:700;display:inline-block}footer{max-width:1080px;margin:30px auto;padding:0 20px 30px;color:#727784;font-size:12px}
+</style>
+<script src="buyer-test-goods-receipt.js?v=1" defer></script>
+</head>
+<body>
+<header>
+<nav><strong>◩ UniProcur — Procurement</strong><a href="buyer-purchase-orders.html">Back to Purchase Orders</a></nav>
+<h1>Inventory Goods Receipt Verification</h1>
+<p>Read-only check of locally saved GR-TEST records linked to your Purchase Orders</p>
+</header>
+<main>
+<div class="warning"><strong>LOCAL TEST ONLY — NOT A REAL GOODS RECEIPT.</strong> This page only reads isolated Inventory test tables. It does not update stock, Procurement received quantities, PO status, Invoice, or Finance. Do not use a GR-TEST number as evidence for payment.</div>
+<section class="card">
+<form class="bar" id="searchForm">
+<label for="poNumber">Purchase Order</label>
+<input id="poNumber" name="po_number" value="PO-2026-0004" required maxlength="30" pattern="PO-[A-Za-z0-9-]+" autocomplete="off" spellcheck="false">
+<button id="loadBtn" type="submit">Verify test receipt</button>
+</form>
+<p class="notice" id="statusMsg" aria-live="polite">Enter a PO number to load its Inventory test receipt.</p>
+</section>
+<section class="card hidden" id="resultCard">
+<div class="bar" style="justify-content:space-between"><h2 id="title" style="margin:0;font-size:21px">Purchase Order</h2><span class="pill" id="poStatus">—</span></div>
+<div class="meta">
+<div><span class="k">Procurement PR</span><span class="v" id="pr">—</span></div>
+<div><span class="k">Inventory Request</span><span class="v" id="request">—</span></div>
+<div><span class="k">Supplier</span><span class="v" id="supplier">—</span></div>
+<div><span class="k">Test Goods Receipt</span><span class="v receipt" id="gr">—</span></div>
+<div><span class="k">Test Receipt Date</span><span class="v" id="date">—</span></div>
+</div>
+<div class="table-wrap"><table><thead><tr><th>Item</th><th>Ordered</th><th>Unit</th><th>Test Delivered</th><th>Test Accepted</th><th>Test Rejected</th><th>Procurement Received</th></tr></thead><tbody id="items"></tbody></table></div>
+<p class="notice" id="matchNote">—</p>
+</section>
+</main>
+<footer>Local integration test page. Exclude these test files from public deployments.</footer>
+</body>
+</html>
