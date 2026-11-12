@@ -542,3 +542,25 @@ button {
 .pr-actions button[hidden] {
   display: none !important;
 }
+
+
+
+
+/* Purchase Request action icons */
+.pr-actions button:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pr-actions button img {
+  width: 16px;
+  height: 17px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.pr-actions button[hidden] {
+  display: none;
+}

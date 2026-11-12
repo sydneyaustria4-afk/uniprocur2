@@ -410,10 +410,51 @@ createRFQButton.addEventListener("click", () => {
           `new-purchase-request.html?pr=${encodeURIComponent(request.pr_number)}`;
       });
 
-    document.getElementById("submitPRButton")
-      .addEventListener("click", () => {
-        showToast("Submit PR action will be connected next.");
-      });
+    
+document.getElementById("submitPRButton")
+  .addEventListener("click", async () => {
+   
+    
+
+    const button = document.getElementById("submitPRButton");
+    button.disabled = true;
+
+    try {
+      const response = await fetch(
+        "../database/buyer-draft-action.php",
+        {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            action: "submit",
+            pr_number: request.pr_number
+          })
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Unable to submit PR."
+        );
+      }
+
+     window.location.reload();
+
+      window.location.reload();
+
+    } catch (error) {
+      console.error("Submit PR error:", error);
+      showToast(error.message);
+      button.disabled = false;
+    }
+  });
+
 
     loadingMessage.hidden = true;
     prViewCard.hidden = false;
