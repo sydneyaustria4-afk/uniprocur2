@@ -1,0 +1,112 @@
+<?php
+/** Buyer submits a compared quotation to Finance for review. NOT Finance approval. */
+declare(strict_types=1);
+require_once __DIR__ . '/buyer-po-common.php';
+header('Cache-Control: no-store, max-age=0');
+header('X-Content-Type-Options: nosniff');
+
+function fqReply(int $code, array $body): void { buyerPoJson($code, $body); }
+function fqLoadRfq(mysqli $db, string $rfqNumber, int $buyerId, bool $lock = false): ?array {
+    $sql = 'SELECT r.id, r.rfq_number, r.status FROM rfqs r
+            JOIN purchase_requisitions pr ON pr.id = r.pr_id
+            WHERE r.rfq_number = ? AND r.created_by = ? AND pr.created_by = ? LIMIT 1'
+         . ($lock ? ' FOR UPDATE' : '');
+    $stmt = $db->prepare($sql);
+    $stmt->bind_param('sii', $rfqNumber, $buyerId, $buyerId);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc() ?: null;
+    $stmt->close();
+    return $row;
+}
+function fqExisting(mysqli $db, int $rfqId, bool $lock = false): ?array {
+    $stmt = $db->prepare('SELECT quote_id, review_status, submitted_at, reviewed_at, review_note
+                          FROM procurement_finance_quotes WHERE rfq_id = ?'
+                        . ($lock ? ' FOR UPDATE' : ''));
+    $stmt->bind_param('i', $rfqId);
+    $stmt->execute();
+    $row = $stmt->get_result()->fetch_assoc() ?: null;
+    $stmt->close();
+    return $row;
+}
+$started = false;
+try {
+    $method = $_SERVER['REQUEST_METHOD'] ?? '';
+    if (!in_array($method, ['GET', 'POST'], true)) {
+        header('Allow: GET, POST');
+        fqReply(405, ['success'=>false,'message'=>'GET or POST required.']);
+    }
+    $buyer = buyerPoIdentity($conn);
+    $buyerId = (int) $buyer['id'];
+    if ($method === 'GET') {
+        $number = trim((string) ($_GET['rfq_number'] ?? ''));
+        if ($number === '' || strlen($number) > 30) fqReply(422, ['success'=>false,'message'=>'Invalid RFQ number.']);
+        $rfq = fqLoadRfq($conn, $number, $buyerId);
+        if (!$rfq) fqReply(404, ['success'=>false,'message'=>'RFQ not found for this Buyer.']);
+        if (empty($_SESSION['finance_quote_csrf'])) {
+            $_SESSION['finance_quote_csrf'] = bin2hex(random_bytes(24));
+        }
+        fqReply(200, [
+            'success'=>true, 'rfq_status'=>$rfq['status'],
+            'finance_review'=>fqExisting($conn, (int)$rfq['id']),
+            'csrf_token'=>$_SESSION['finance_quote_csrf'],
+            'note'=>'A submitted quotation waits for Finance. This does not approve or award an RFQ.'
+        ]);
+    }
+    if (!str_starts_with(strtolower(trim(explode(';', (string)($_SERVER['CONTENT_TYPE'] ?? ''))[0])), 'application/json')) {
+        fqReply(415, ['success'=>false,'message'=>'JSON content required.']);
+    }
+    $token = (string) ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+    if ($token === '' || !hash_equals((string) ($_SESSION['finance_quote_csrf'] ?? ''), $token)) {
+        fqReply(419, ['success'=>false,'message'=>'Session expired. Reload the page and retry.']);
+    }
+    $body = json_decode(file_get_contents('php://input'), true);
+    if (!is_array($body)) fqReply(400, ['success'=>false,'message'=>'Invalid JSON.']);
+    $number = trim((string) ($body['rfq_number'] ?? ''));
+    $quoteId = filter_var($body['quote_id'] ?? null, FILTER_VALIDATE_INT);
+    if ($number === '' || strlen($number) > 30 || !$quoteId || $quoteId < 1) {
+        fqReply(422, ['success'=>false,'message'=>'RFQ and selected quotation required.']);
+    }
+    $conn->begin_transaction(); $started = true;
+    $rfq = fqLoadRfq($conn, $number, $buyerId, true);
+    if (!$rfq) { $conn->rollback(); $started=false; fqReply(404, ['success'=>false,'message'=>'RFQ not found.']); }
+    if (strtolower((string)$rfq['status']) !== 'compared') {
+        $conn->rollback(); $started=false;
+        fqReply(409, ['success'=>false,'message'=>'Compare and save quotations before Finance submission.']);
+    }
+    $rfqId = (int) $rfq['id'];
+    $stmt = $conn->prepare('SELECT id, total_amount FROM rfq_quotes WHERE id = ? AND rfq_id = ? FOR UPDATE');
+    $stmt->bind_param('ii',$quoteId,$rfqId); $stmt->execute(); $quote=$stmt->get_result()->fetch_assoc(); $stmt->close();
+    if (!$quote || $quote['total_amount'] === null) {
+        $conn->rollback(); $started=false;
+        fqReply(422, ['success'=>false,'message'=>'Selected supplier quotation is incomplete.']);
+    }
+    $stmt=$conn->prepare('SELECT COUNT(*) AS line_count, COALESCE(SUM(subtotal),0) AS amount FROM rfq_quote_items WHERE rfq_quote_id=?');
+    $stmt->bind_param('i',$quoteId);$stmt->execute();$t=$stmt->get_result()->fetch_assoc();$stmt->close();
+    $stmt=$conn->prepare('SELECT COUNT(*) AS line_count FROM pr_items pi JOIN rfqs r ON r.pr_id=pi.pr_id WHERE r.id=?');
+    $stmt->bind_param('i',$rfqId);$stmt->execute();$needed=$stmt->get_result()->fetch_assoc();$stmt->close();
+    if ((int)$t['line_count'] === 0 || (int)$t['line_count'] !== (int)$needed['line_count'] || abs((float)$t['amount'] - (float)$quote['total_amount']) > 0.01) {
+        $conn->rollback(); $started=false;
+        fqReply(422, ['success'=>false,'message'=>'Quotation items or totals do not match the Purchase Request.']);
+    }
+    $existing = fqExisting($conn, $rfqId, true);
+    if ($existing && $existing['review_status'] !== 'rejected') {
+        $conn->rollback(); $started=false;
+        fqReply(409, ['success'=>false,'message'=>'Already sent to Finance, or reviewed. Cannot submit again unless rejected.']);
+    }
+    if ($existing) {
+        $stmt=$conn->prepare("UPDATE procurement_finance_quotes SET quote_id=?, review_status='pending', submitted_at=NOW(),reviewed_at=NULL,reviewed_by=NULL,review_note=NULL WHERE rfq_id=? AND buyer_id=? AND review_status='rejected'");
+        $stmt->bind_param('iii',$quoteId,$rfqId,$buyerId);$stmt->execute();$stmt->close();
+    } else {
+        $stmt=$conn->prepare("INSERT INTO procurement_finance_quotes(rfq_id,quote_id,buyer_id,review_status) VALUES(?,?,?,'pending')");
+        $stmt->bind_param('iii',$rfqId,$quoteId,$buyerId);$stmt->execute();$stmt->close();
+    }
+    $conn->commit(); $started=false;
+    fqReply(200, [
+        'success'=>true,'rfq_number'=>$number,'quote_id'=>$quoteId,
+        'status'=>'pending','message'=>'Quotation submitted for Finance review. Not approved; PO creation is not unlocked.'
+    ]);
+} catch(Throwable $e) {
+    if($started) { try{$conn->rollback();} catch(Throwable $ignored) {} }
+    error_log('Submit quotation Finance: '.$e->getMessage());
+    fqReply(500, ['success'=>false,'message'=>'Unable to save Finance submission. Check database migration and PHP log.']);
+}

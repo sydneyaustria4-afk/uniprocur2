@@ -87,6 +87,11 @@ $stmt = $conn->prepare(
     $rfqNumber = trim((string) ($input['rfq_number'] ?? ''));
     $prNumber = trim((string) ($input['pr_number'] ?? ''));
     $deadline = trim((string) ($input['deadline'] ?? ''));
+    $deadlineTime = trim((string) ($input['deadline_time'] ?? ''));
+    if ($deadlineTime !== '' && !preg_match('/\A(?:[01]\d|2[0-3]):[0-5]\d\z/D', $deadlineTime)) {
+        sendJson(422, ['success' => false, 'message' => 'Invalid RFQ required time.']);
+    }
+    $deadlineTime = $deadlineTime === '' ? null : $deadlineTime;
     
 $warehouseValue = trim(
     (string) ($input['warehouse_value'] ?? '')
@@ -323,16 +328,17 @@ if (!in_array($warehouseValue, ['main', 'second'], true)) {
 $insertRfq = $conn->prepare(
     "INSERT INTO rfqs
         (rfq_number, pr_id, created_by,
-         deadline, warehouse_value, status)
-     VALUES (?, ?, ?, ?, ?, 'open')"
+         deadline, deadline_time, warehouse_value, status)
+     VALUES (?, ?, ?, ?, ?, ?, 'open')"
 );
 
 $insertRfq->bind_param(
-    'siiss',
+    'siisss',
     $rfqNumber,
     $prId,
     $buyerId,
     $deadline,
+    $deadlineTime,
     $warehouseValue
 );
 

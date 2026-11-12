@@ -2984,3 +2984,6 @@ body {
 }
 
 
+
+/* Finance success purchase chart layout: Pending Request Table takes full width */
+.lower-row { grid-template-columns:minmax(0,1fr) !important; }

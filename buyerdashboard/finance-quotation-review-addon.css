@@ -1,0 +1,7 @@
+/* Adds only a compact RFQ detail grid inside the existing Figma What Happens Next panel. */
+.finance-delivery-details { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 14px; margin:15px 0; }
+.finance-delivery-row { min-width:0; padding:9px 11px; background:#fff; border:1px solid #e5e5e5; border-radius:7px; }
+.finance-delivery-row strong { display:block; color:#333; font-size:11px; margin-bottom:3px; }
+.finance-delivery-row span { overflow-wrap:anywhere; color:#111; font-size:12px; }
+#createPOButton[hidden] { display:none !important; }
+@media(max-width:600px){ .finance-delivery-details { grid-template-columns:1fr; } }

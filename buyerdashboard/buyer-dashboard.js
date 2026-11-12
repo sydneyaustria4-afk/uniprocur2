@@ -1093,20 +1093,16 @@ function renderMonthlyPurchaseActivity(activity) {
   const top = 462.5;
   const baseline = 652.5;
 
-  const scaleMax = Math.max(
-    100000,
-    ...points.map((point) => point.value)
-  );
+  // Integer purchase counts (not PHP amounts); keep the y-axis readable.
+  const highestCount = Math.max(0, ...points.map(point => point.value));
+  const scaleMax = Math.max(5, Math.ceil(highestCount / 5) * 5);
 
   values.replaceChildren();
 
   for (let step = 5; step >= 1; step -= 1) {
     const label = document.createElement('span');
 
-    label.textContent =
-      `${Math.round(
-        scaleMax * step / 5 / 1000
-      )}K`;
+    label.textContent = String(Math.round(scaleMax * step / 5));
 
     values.append(label);
   }
@@ -1438,7 +1434,7 @@ renderDashboardInvoices(
 
   try {
     const response = await fetch(
-      "../database/get-buyer-reports.php?quarter=0",
+      "../database/get-buyer-monthly-activity.php",
       {
         method: "GET",
         credentials: "same-origin",
@@ -1468,9 +1464,9 @@ renderDashboardInvoices(
       "Sep", "Oct", "Nov", "Dec"
     ];
 
-    const activity = data.monthly.map((amount, index) => ({
+    const activity = data.monthly.map((count, index) => ({
       month: months[index],
-      value: Number(amount) || 0
+      value: Number(count) || 0
     }));
 
     if (activity.some(item => item.value > 0)) {
@@ -1478,7 +1474,7 @@ renderDashboardInvoices(
     } else {
       if (emptyMessage) {
         emptyMessage.textContent =
-          "No approved Purchase Order activity yet.";
+          "No successful purchases with approved or posted invoices yet.";
       }
 
       renderMonthlyPurchaseActivity([]);
@@ -1498,11 +1494,7 @@ renderDashboardInvoices(
 
 
 
-renderDashboardBudget({
-  remaining: 500000,
-  total: 500000,
-  categories: []
-});
+
 
 
 // ======================================================

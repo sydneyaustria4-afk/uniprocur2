@@ -1,14 +1,67 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Procurement | Real Inventory Goods Receipts</title>
-<style>
-:root{font:14px system-ui,Segoe UI,Arial,sans-serif;background:#f7f8fa;color:#202534}*{box-sizing:border-box}body{margin:0}.nav{padding:18px 25px;color:#fff;background:#173259}.nav a{color:white;margin-right:18px;text-decoration:none}.wrap{max-width:1140px;margin:0 auto;padding:30px 20px}.card{background:white;border:1px solid #dfe3ea;border-radius:12px;padding:20px;margin:18px 0}h1{font-size:26px;margin-bottom:5px}h2{font-size:18px}label{display:block;margin:8px 0}input{font:inherit;border:1px solid #cdd5df;border-radius:8px;padding:10px}button{border:0;background:#215294;border-radius:8px;padding:11px 18px;color:white;font-weight:700;cursor:pointer}table{border-collapse:collapse;width:100%}th,td{padding:10px;text-align:left;border-bottom:1px solid #eaeef3}th{color:#667186}small,.muted{color:#69768a}.tag{display:inline-block;border-radius:20px;padding:7px 12px;background:#edf4ff;color:#25518d;font-size:12px;font-weight:700}.warning{border-left:4px solid #d5a22d}.error{background:#ffe8ed;padding:14px;border-radius:7px;color:#981e35}.scroll{overflow-x:auto}.good{color:#16804b;font-weight:700}.bad{color:#af3d40;font-weight:700}</style></head>
-<body><nav class="nav"><a href="../purchaseorders/buyer-purchase-orders.html">Purchase Orders</a><strong>Real Inventory Goods Receipt Verification</strong></nav>
-<main class="wrap"><h1>Inventory Goods Receipts — Procurement</h1><p class="muted">Read-only verification of actual posted Inventory receipts, not the earlier GR-TEST.</p><div class="card warning"><span class="tag">LOCAL XAMPP • READ ONLY</span><p>Receipt confirmation is not supplier invoice approval. Even when PO is fully received, Finance posting stays disabled until PO / Goods Receipt / invoice matching is implemented.</p></div>
-<div class="card"><form id="searchForm"><label for="po">Purchase Order Number</label><input id="po" name="po_number" required maxlength="30" placeholder="PO-2026-0004"> <button type="submit">Verify real receipts</button></form></div>
-<p id="status" role="status"></p><section id="results" hidden>
-<div class="card"><h2 id="poTitle"></h2><div id="poDetails"></div></div>
-<div class="card"><h2>PO Items and Real Inventory Receipts</h2><div class="scroll"><table><thead><tr><th>Item / Inventory Code</th><th>Ordered</th><th>PO Received</th><th>Real GR Accepted</th><th>GR Rejected</th><th>Remaining</th><th>Matched?</th></tr></thead><tbody id="itemRows"></tbody></table></div></div>
-<div class="card"><h2>Actual Goods Receipt History</h2><div class="scroll"><table><thead><tr><th>GR Number</th><th>Warehouse</th><th>Delivered</th><th>Accepted</th><th>Rejected</th><th>Date</th></tr></thead><tbody id="receiptRows"></tbody></table></div></div>
-<div class="card"><strong id="verificationResult"></strong><p class="muted">Invoice verification and posting remain separate actions.</p></div>
-</section></main><script src="buyer-real-goods-receipts.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#a3130f">
+  <title>UniProcur | Goods Receipt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-real-goods-receipts.css?v=2">
+  <script src="buyer-real-goods-receipts.js?v=2" defer></script>
+  <script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</head>
+<body>
+  <div class="gr-shell">
+    <header class="gr-topbar no-print">
+      <div class="gr-brand"><span class="brand-mark"><img src="../assets/Pro%204.svg" alt=""></span><div><small>Goods Receipt</small><strong id="headerReference">Loading...</strong></div></div>
+      <div class="gr-account"><span class="bell" aria-hidden="true"><img src="../assets/Group%2050.svg" alt=""></span><span class="account-rule"></span><div class="account-copy"><strong id="buyerName">Buyer</strong><small id="buyerEmail">—</small></div><span class="avatar" id="buyerAvatar">B</span></div>
+    </header>
+    <a class="go-back no-print" id="backLink" href="purchase-orders.html" aria-label="Back to Purchase Order">‹</a>
+    <main class="outer-panel" id="mainPanel">
+      <article class="gr-sheet">
+        <div class="document-header">
+          <div class="document-titles"><div><small>Goods Receipt</small><strong id="grReference">—</strong></div><div><small>Status</small><strong id="receiptStatus">Loading...</strong></div></div>
+          <div class="document-actions no-print"><button class="outline-button" type="button" id="printGr" disabled><span aria-hidden="true">▣</span> Print GR</button><a class="close-button" id="closeLink" href="purchase-orders.html">× Close</a></div>
+        </div>
+        <div class="loading-panel" id="loading" role="status">Checking saved Inventory Goods Receipts...</div>
+        <div id="content" hidden>
+          <section class="section-block">
+            <h1>Purchase Order Details</h1>
+            <div class="details-grid">
+              <dl class="po-facts">
+                <div><dt>PO Number:</dt><dd id="poNumber">—</dd></div>
+                <div><dt>Converted from:</dt><dd id="rfqNumber">—</dd></div>
+                <div><dt>Order Date:</dt><dd id="orderDate">—</dd></div>
+                <div><dt>Expected:</dt><dd id="deliveryDate">—</dd></div>
+                <div><dt>Payment Terms:</dt><dd id="paymentTerms">—</dd></div>
+              </dl>
+              <div class="table-scroll"><table class="item-table"><thead><tr><th>No.</th><th>Item Name</th><th>Inventory Code</th><th>Expected Qty</th><th>Accepted (GR)</th></tr></thead><tbody id="itemRows"></tbody></table></div>
+            </div>
+            <div class="metrics-row"><div><strong>Priority:</strong><span class="quiet-chip" id="priority">Not recorded</span></div><div><strong>Expected Total Value:</strong><span id="totalValue">—</span> <small>(before VAT)</small></div></div>
+            <div class="supplier-row"><strong>Supplier:</strong> <span id="supplierName">—</span> <span class="dot">•</span> <strong>Linked PR:</strong> <span id="prNumber">—</span></div>
+          </section>
+          <section class="section-block tracking-block">
+            <h2>Order Tracking</h2>
+            <div class="tracking-panel"><ol class="tracking-steps" id="trackingSteps"><li><span class="step-dot"></span><strong>PO Issued</strong><small id="stageIssued">Pending</small></li><li><span class="step-dot"></span><strong>Confirmed</strong><small id="stageConfirmed">Pending</small></li><li><span class="step-dot"></span><strong>In Transit</strong><small id="stageTransit">Pending</small></li><li><span class="step-dot"></span><strong>Out for Delivery</strong><small id="stageOut">Pending</small></li><li><span class="step-dot"></span><strong>Delivery</strong><small id="stageDelivery">Pending</small></li></ol><p class="tracking-explainer" id="trackingNote"></p></div>
+          </section>
+          <section class="section-block delivery-section">
+            <h2>Delivery Address</h2>
+            <div class="delivery-line"><span class="field-tag">◎ Location</span><span class="field-value" id="deliveryAddress">—</span></div>
+            <div class="delivery-line"><span class="field-tag">⊙ Receiving Warehouse</span><span class="field-value" id="receiptWarehouse">—</span></div>
+            <div class="delivery-line"><span class="field-tag">◉ Receiving Clerk</span><span class="field-value" id="receivingClerk">Not recorded in Inventory receipt data</span></div>
+          </section>
+          <section class="section-block receipts-section">
+            <div class="section-heading"><h2>Actual Goods Receipt History</h2><span class="muted" id="receiptCount">0 receipts</span></div>
+            <p class="muted">The GR numbers below are the actual stored Inventory receipts. Multiple deliveries for one PO remain separate.</p>
+            <div class="table-scroll"><table class="receipt-table"><thead><tr><th>Goods Receipt No.</th><th>Received Date</th><th>Warehouse</th><th>Delivered</th><th>Accepted</th><th>Rejected</th></tr></thead><tbody id="receiptRows"></tbody></table></div>
+            <p class="receipt-verification" id="verificationResult" role="status"></p>
+            <p class="fine-print">Receiving confirms stock, not invoice approval. Any invoice still requires separate PO–GR–Invoice verification. Finance posting is not enabled by this page.</p>
+          </section>
+        </div>
+      </article>
+    </main>
+  </div>
+</body>
+</html>

@@ -21,6 +21,13 @@ try {
  if(!$rfq){$conn->rollback();awardReply(404,['success'=>false,'message'=>'RFQ not found for this buyer.']);}
  if($rfq['status']!=='compared'){$conn->rollback();awardReply(409,['success'=>false,'message'=>'Only compared RFQs can be awarded.']);}
  $rfqId=(int)$rfq['id'];
+ // Finance must explicitly approve this exact quotation BEFORE it can be awarded.
+ $s=$conn->prepare('SELECT quote_id,review_status FROM procurement_finance_quotes WHERE rfq_id=? FOR UPDATE');
+ $s->bind_param('i',$rfqId);$s->execute();$review=$s->get_result()->fetch_assoc();$s->close();
+ if(!$review || $review['review_status']!=='approved' || (int)$review['quote_id']!==(int)$quoteId){
+     $conn->rollback();$started=false;
+     awardReply(409,['success'=>false,'message'=>'Finance approval for the selected quotation is required before awarding.']);
+ }
  $s=$conn->prepare('SELECT id,total_amount FROM rfq_quotes WHERE id=? AND rfq_id=? FOR UPDATE');$s->bind_param('ii',$quoteId,$rfqId);$s->execute();$selected=$s->get_result()->fetch_assoc();$s->close();
  if(!$selected||$selected['total_amount']===null){$conn->rollback();awardReply(422,['success'=>false,'message'=>'Selected supplier has no saved quotation.']);}
  $s=$conn->prepare('SELECT COUNT(*) AS line_count,COALESCE(SUM(subtotal),0) AS line_total FROM rfq_quote_items WHERE rfq_quote_id=?');$s->bind_param('i',$quoteId);$s->execute();$totals=$s->get_result()->fetch_assoc();$s->close();

@@ -1146,6 +1146,18 @@ body: JSON.stringify({
     deadline: getLocalDateString(
         preview.submissionDueDate
     ),
+    // Convert actual RFQ time + AM/PM to 24-hour time for MySQL.
+    // No guess if the preview has incomplete information.
+    deadline_time: (() => {
+      const raw = String(preview.requiredTime || '').trim();
+      const period = String(preview.ampm || '').trim().toUpperCase();
+      const parts = /^(\d{1,2}):([0-5]\d)$/.exec(raw);
+      if (!parts || !['AM','PM'].includes(period)) return null;
+      let h = Number(parts[1]);
+      if (h < 1 || h > 12) return null;
+      h = (h % 12) + (period === 'PM' ? 12 : 0);
+      return `${String(h).padStart(2, '0')}:${parts[2]}`;
+    })(),
 
     // Read the warehouse currently displayed
     // on the Confirm RFQ page

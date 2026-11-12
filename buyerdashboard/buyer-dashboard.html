@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="buyer-dashboard.css?v=15" />
+    <link rel="stylesheet" href="buyer-dashboard.css?v=25" />
 
 <!-- Shared Buyer Header - Purchase Order Design -->
 <link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
@@ -232,25 +232,6 @@
         </section>
 
         <div class="lower-row">
-          <aside class="panel budget-panel">
-            <div class="panel-heading budget-head">
-              <h2>Budget Remaining</h2>
-              <span class="panel-chip" id="budget-percent" hidden></span>
-            </div>
-            <p class="budget-empty-state" id="budget-empty-state" role="status">No data available yet.</p>
-            <div class="budget-value" id="budget-remaining" hidden></div>
-            <div class="budget-sub" id="budget-total" hidden></div>
-            <div class="budget-meter" id="budget-meter" role="img" hidden>
-            </div>
-            <div class="budget-categories" id="budget-categories" hidden></div>
-            
-<a class="budget-button"
-   href="buyer-budget-transactions.html"
-   style="text-decoration:none; text-align:center;">
-  View Transaction
-</a>
-
-          </aside>
 
           <section class="panel requests-panel">
             <div class="panel-heading">
@@ -342,8 +323,9 @@
     </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     
-<script src="buyer-dashboard.js?v=18" defer></script>
+<script src="buyer-dashboard.js?v=25" defer></script>
 <script src="buyer-po-drafts.js?v2" defer></script>
+<script src="buyer-success-activity-refresh.js?v=1" defer></script>
 
   <script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
 </body>

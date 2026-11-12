@@ -8,6 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
   recordButton.setAttribute("href", "#record-invoice");
   recordButton.setAttribute("data-invoice-record", "1");
 
+  const invoiceLinkParams = new URLSearchParams(window.location.search);
+  const rawRequestedPo = (invoiceLinkParams.get("po_number") || "").trim();
+  const requestedPoFromUrl = /^PO-[A-Za-z0-9-]{1,26}$/.test(rawRequestedPo) ? rawRequestedPo : "";
+  const autoOpenRequestedInvoice = !!requestedPoFromUrl && invoiceLinkParams.get("record_invoice") === "1";
   const dialog = document.createElement("dialog");
   dialog.id = "invoiceRecordDialog";
   dialog.className = "invoice-capture-dialog";
@@ -130,7 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   recordButton.addEventListener("click", async e => {
     e.preventDefault();dialog.showModal();
-    try{await load("PO-2026-0004");}catch(e){
+    try{await load(requestedPoFromUrl || "PO-2026-0004");}catch(e){
+      if (requestedPoFromUrl) { setMessage(e.message || "Unable to load requested PO", "error"); return; }
       // A new or different PO may be appropriate; the server will choose the latest eligible PO.
       try{await load("");}catch(f){setMessage(f.message||"Unable to load invoices","error");}
     }
@@ -151,4 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const result=await post({action:"verify",po_number:state.po.po_number});
     state.wrote=true;await load(state.po.po_number);setMessage(result.message,result.data_matched?"ok":"error");
   }));
+  if (autoOpenRequestedInvoice) {
+    // Opens the existing Record Invoice dialog and loads only the requested PO.
+    queueMicrotask(() => recordButton.click());
+  }
 });

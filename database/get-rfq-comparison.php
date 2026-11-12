@@ -114,8 +114,10 @@ try {
             r.status,
             r.created_at,
             r.deadline,
+            r.deadline_time,
             r.warehouse_value,
-            pr.pr_number
+            pr.pr_number,
+            pr.needed_by AS requested_delivery_date
 
          FROM rfqs r
 
