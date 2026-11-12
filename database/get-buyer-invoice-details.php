@@ -49,7 +49,7 @@ try {
     $lineCols = $columnSet($conn, 'invoice_items');
     $lineExpressions = implode(', ', [
         $pick($lineCols, 'ii', ['unit', 'unit_of_measure', 'uom'], 'unit'),
-        $pick($lineCols, 'ii', ['quantity', 'qty', 'qty_invoiced', 'invoiced_quantity'], 'invoice_quantity'),
+        $pick($lineCols, 'ii', ['qty_billed', 'quantity', 'qty', 'qty_invoiced', 'invoiced_quantity'], 'invoice_quantity'),
         $pick($lineCols, 'ii', ['unit_price', 'price_per_unit', 'price'], 'unit_price'),
         $pick($lineCols, 'ii', ['line_total', 'subtotal', 'total_price', 'total_amount'], 'line_total'),
     ]);

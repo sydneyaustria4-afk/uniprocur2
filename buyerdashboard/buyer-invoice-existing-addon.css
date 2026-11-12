@@ -1,0 +1,45 @@
+/* Scoped modal only. Existing Figma dashboard/sidebar/cards untouched. */
+.invoice-capture-dialog{font-family:Inter,Geist,Arial,sans-serif;box-sizing:border-box;color:#18273b;width:min(1040px,calc(100vw - 28px));max-height:90vh;overflow:auto;border:0;border-radius:14px;padding:25px;background:white;box-shadow:0 18px 70px #0006}
+.invoice-capture-dialog *{box-sizing:border-box}
+.invoice-capture-dialog::backdrop{background:#0e1628a8}
+.invoice-capture-dialog .capture-head{display:flex;justify-content:space-between;align-items:start;border-bottom:1px solid #e1e3e8;padding-bottom:13px;margin-bottom:14px}
+.invoice-capture-dialog .capture-head small{color:#687589;font-size:12px}
+.invoice-capture-dialog .capture-head h2{font-size:22px;margin:6px 0 0;color:#12233e}
+.invoice-capture-dialog .capture-close{border:0;background:#f3f4f6;border-radius:8px;padding:4px 12px;font-size:25px;color:#24324b;cursor:pointer}
+.invoice-capture-dialog .capture-warning{background:#fff6e9;border:1px solid #e5c18a;border-radius:8px;color:#6d4612;padding:13px;font-size:12px;line-height:1.55}
+.invoice-capture-dialog .capture-message{border-radius:7px;background:#f1f5fb;padding:10px 12px;font-size:13px}
+.invoice-capture-dialog .capture-message[data-kind="error"]{background:#fff0f0;color:#a31d2b}
+.invoice-capture-dialog .capture-message[data-kind="ok"]{background:#edf8ef;color:#165d37}
+.invoice-capture-dialog .capture-po-picker{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.invoice-capture-dialog label{font-size:12px;font-weight:600;color:#2d374b}
+.invoice-capture-dialog input,.invoice-capture-dialog select{display:block;width:100%;padding:10px;border:1px solid #ccd3df;border-radius:7px;color:#1b283d;background:white;font:inherit;font-size:13px;margin-top:5px}
+.invoice-capture-dialog .capture-po-picker select{width:auto;min-width:215px;margin:0}
+.invoice-capture-dialog button[type=submit],.invoice-capture-dialog .capture-po-picker button,.invoice-capture-dialog #captureVerify{background:#bb102b;color:white;border:0;border-radius:7px;padding:11px 15px;cursor:pointer;font-size:12px;font-weight:700}
+.invoice-capture-dialog #captureVerify{background:#17345d}
+.invoice-capture-dialog button:disabled{opacity:.5;cursor:not-allowed}
+.invoice-capture-dialog .capture-po-info{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}
+.invoice-capture-dialog .capture-po-info>div{border-radius:9px;background:#f5f6f9;padding:12px;display:flex;flex-direction:column;gap:5px;overflow-wrap:anywhere}
+.invoice-capture-dialog .capture-po-info small{font-size:11px;color:#667388}
+.invoice-capture-dialog .capture-po-info strong{font-size:12px}
+.invoice-capture-dialog .capture-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 18px}
+.invoice-capture-dialog .capture-grid label{display:block}
+.invoice-capture-dialog .capture-doc-check{display:flex;align-items:start;gap:9px;margin:14px 0;padding:10px;border-radius:7px;background:#fff3e9}
+.invoice-capture-dialog .capture-doc-check[hidden],.invoice-capture-dialog [hidden]{display:none!important}
+.invoice-capture-dialog .capture-doc-check input{width:auto;display:inline;margin:0}
+.invoice-capture-dialog .capture-notes-label{display:block;margin:13px 0}
+.invoice-capture-dialog .capture-table-wrap{overflow-x:auto;margin-top:16px;border:1px solid #e0e3e9;border-radius:8px}
+.invoice-capture-dialog table{width:100%;border-collapse:collapse;min-width:840px}
+.invoice-capture-dialog th,.invoice-capture-dialog td{padding:9px;border-bottom:1px solid #e8e9ed;text-align:left;font-size:12px}
+.invoice-capture-dialog th{background:#f4f5f8;font-weight:700;white-space:nowrap}
+.invoice-capture-dialog td input{min-width:88px;margin:0}
+.invoice-capture-dialog .capture-total-row{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap;margin:17px 0}
+.invoice-capture-dialog .capture-total-row label{max-width:270px}
+.invoice-capture-dialog .capture-tax-note{font-size:12px;color:#844c05;background:#fff8e7;padding:10px;border-radius:6px}
+.invoice-capture-dialog .capture-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:15px}
+.invoice-capture-dialog .capture-actions a{font-size:12px;color:#17345d;font-weight:700;text-decoration:underline}
+.invoice-capture-dialog .capture-result{border-top:1px solid #e5e5e5;margin-top:18px;padding-top:10px}
+.invoice-capture-dialog .capture-result h3{font-size:16px;margin:5px 0 12px}
+.invoice-capture-dialog .capture-result p{font-size:12px;line-height:1.5;margin:7px 0}
+.invoice-capture-dialog .capture-pass{color:#176b3a}
+.invoice-capture-dialog .capture-fail{color:#a32b2b}
+@media(max-width:700px){.invoice-capture-dialog{padding:16px}.invoice-capture-dialog .capture-grid{grid-template-columns:1fr}.invoice-capture-dialog .capture-po-info{grid-template-columns:repeat(2,minmax(0,1fr))}}
