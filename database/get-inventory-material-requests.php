@@ -9,6 +9,7 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
 header('X-Content-Type-Options: nosniff');
+if (session_status() !== PHP_SESSION_ACTIVE) session_start();
 
 function reply(int $status, array $payload): void {
     http_response_code($status);
@@ -110,4 +111,37 @@ foreach ($json['data'] as $request) {
         'items' => $items,
     ];
 }
-reply(200, ['success' => true, 'data' => $requests, 'read_only' => true]);
+// Show whether a request was already converted, using Procurement's own link table.
+// Migration 01_inventory_request_pr_links.sql must be run before installing this file.
+require_once __DIR__ . '/procurement_db_connection.php';
+try {
+    $links = [];
+    $result = $conn->query(
+        'SELECT l.inventory_request_number, p.pr_number, p.status AS pr_status '
+        . 'FROM inventory_request_pr_links l '
+        . 'JOIN purchase_requisitions p ON p.id=l.pr_id'
+    );
+    while ($row = $result->fetch_assoc()) {
+        $links[(string)$row['inventory_request_number']] = [
+            'pr_number' => (string)$row['pr_number'],
+            'pr_status' => (string)$row['pr_status'],
+        ];
+    }
+    $result->free();
+    foreach ($requests as &$request) {
+        $link = $links[$request['request_number']] ?? null;
+        $request['pr_number'] = $link['pr_number'] ?? null;
+        $request['pr_status'] = $link['pr_status'] ?? null;
+    }
+    unset($request);
+} catch (Throwable $e) {
+    error_log('Inventory conversion link query: ' . $e->getMessage());
+    reply(500, ['success'=>false, 'message'=>'Procurement integration table missing. Import 01_inventory_request_pr_links.sql in uniprocur2.']);
+}
+if (empty($_SESSION['inventory_conversion_csrf'])) {
+    $_SESSION['inventory_conversion_csrf'] = bin2hex(random_bytes(32));
+}
+reply(200, [
+    'success' => true, 'data' => $requests, 'read_only' => false,
+    'conversion_csrf_token' => (string)$_SESSION['inventory_conversion_csrf']
+]);
