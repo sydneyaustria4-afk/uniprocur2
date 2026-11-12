@@ -1,0 +1,5 @@
+# Separate Procurement PHP session from Inventory
+php_value session.name UNIPROCURSESSID
+
+# Restrict Procurement session cookie to this app
+php_value session.cookie_path /uniprocur2
