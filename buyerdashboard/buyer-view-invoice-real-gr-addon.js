@@ -52,14 +52,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dataMatched=match.data_matched===true;
     const verified=inv.match_status==="matched"&&hasDocument&&dataMatched&&inv.status==="ready_to_post";
     const demo=inv.source_kind==="demo";
+    const demoReady=demo&&inv.match_status==="demo_ready"&&inv.status==="ready_to_post"&&dataMatched;
+    if(demoReady){set("statusBadge","CLASSROOM DEMO · Ready to Post");$("statusBadge").className="status-badge demo";}
     let summary="3-Way Match: Discrepancy — review invoice quantities, prices, and receipts";
     if(verified)summary="✓ 3-Way Match: Verified — Ready to Post (Finance not connected)";
+    else if(demoReady)summary="✓ 3-Way Match: CLASSROOM SIMULATION Ready to Post (NOT for real Finance posting)";
     else if(demo&&dataMatched)summary="3-Way Match: Data matches — DEMO only; not Ready to Post";
     else if(dataMatched)summary="3-Way Match: Data matches; verification/approval still required";
     set("matchResult",summary);
-    $("matchResult").classList.toggle("sample",verified);
-    set("sourceHint",`${grNumbers.length} real Inventory Goods Receipt(s) checked. Invoice source: ${demo?"classroom DEMO":"supplier-document declaration"}. ${verified?"PO, real GR and recorded invoice passed local 3-way checks.":"Do not send to Finance until genuine supplier documents and approvals are verified."} VAT is not calculated by this local integration.`);
-    set("dataBanner",verified?"Real Goods Receipts and recorded invoice were checked locally. Ready to Post is a Procurement status only; Finance posting is not connected.":"This saved invoice uses real local Goods Receipt quantities. Invoice verification is separate from receiving and Finance posting remains disabled.");
+    $("matchResult").classList.toggle("sample",verified||demoReady);
+    set("sourceHint",`${grNumbers.length} real Inventory Goods Receipt(s) checked. Invoice source: ${demo?"classroom DEMO":"supplier-document declaration"}. ${demoReady?"Classroom simulation is stored as Ready to Post; this is NOT approval for real Finance accounting.":verified?"PO, real GR and recorded invoice passed local 3-way checks.":"Do not send to Finance until genuine supplier documents and approvals are verified."} VAT is not calculated by this local integration.`);
+    set("dataBanner",demoReady?"CLASSROOM SIMULATION — invoice numerically matches PO and local GR. This is NOT a genuine supplier document and real Finance posting is disabled.":verified?"Real Goods Receipts and recorded invoice were checked locally. Ready to Post is a Procurement status only; Finance posting is not connected.":"This saved invoice uses real local Goods Receipt quantities. Invoice verification is separate from receiving and Finance posting remains disabled.");
     // The existing main script already disables these buttons. Keep them disabled.
     $("postButton").disabled=true;
     $("discrepancyButton").disabled=true;

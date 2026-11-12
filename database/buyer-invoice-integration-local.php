@@ -173,7 +173,7 @@ try {
     $body=json_decode(file_get_contents('php://input')?:'',true);
     if(!is_array($body))ilReply(400,['success'=>false,'message'=>'Invalid request JSON.']);
     $action=(string)($body['action']??'');
-    if(!in_array($action,['save','verify'],true))ilReply(422,['success'=>false,'message'=>'Invalid action.']);
+    if(!in_array($action,['save','verify','verify_demo'],true))ilReply(422,['success'=>false,'message'=>'Invalid action.']);
     $number=trim((string)($body['po_number']??''));
     if(!preg_match('/\APO-[A-Za-z0-9-]{1,26}\z/',$number))ilReply(422,['success'=>false,'message'=>'Valid PO number required.']);
     $po=ilPo($conn,$buyerId,$number);
@@ -264,10 +264,43 @@ try {
         ilReply(409,['success'=>false,'message'=>'Invoice has no local source record.']);
     $lines=ilInvoiceLines($conn,(int)$old['id']);
     $match=ilMatch($conn,$po,$poItems,$old,$lines);
+    if($action==='verify_demo') {
+        // Explicitly isolated classroom simulation. This must never trigger actual Finance posting.
+        if(($body['demo_acknowledged']??null)!==true)
+            throw new DomainException('Confirm that this verification is CLASSROOM SIMULATION ONLY.');
+        if(($old['source_kind']??'')!=='demo'||(int)($old['document_checked']??0)!==0)
+            throw new DomainException('Only an unverified classroom DEMO invoice may use this action.');
+        if(!$match['data_matched'])
+            throw new DomainException('Cannot mark demo ready: actual PO/GR/invoice quantities or amounts do not match.');
+        if(strtolower((string)$old['status'])==='ready_to_post' && ($old['match_status']??'')==='demo_ready') {
+            $conn->commit();$transaction=false;
+            ilReply(200,['success'=>true,'status'=>'ready_to_post','demo_only'=>true,'finance_posting_enabled'=>false,'message'=>'Already verified for classroom simulation. Finance posting is disabled.','match'=>$match]);
+        }
+        if(!in_array(strtolower((string)$old['status']),['pending_match','discrepancy'],true))
+            throw new DomainException('Only pending/mismatched demo invoice records can be classroom verified.');
+        $invoiceId=(int)$old['id'];
+        $summary='CLASSROOM SIMULATION ONLY: PO, actual local GR and demo invoice numbers match. No genuine supplier document verified; never post this record to real Finance.';
+        $q=$conn->prepare("UPDATE invoices SET status='ready_to_post' WHERE id=? AND created_by=? AND status IN ('pending_match','discrepancy')");
+        $q->bind_param('ii',$invoiceId,$buyerId);$q->execute();
+        if($q->affected_rows!==1)throw new DomainException('Invoice changed during verification; reload and retry.');
+        $q->close();
+        $q=$conn->prepare("UPDATE buyer_invoice_source_local SET match_status='demo_ready',match_summary=?,verified_at=NOW(),verified_by=? WHERE invoice_id=? AND source_kind='demo' AND document_checked=0");
+        $q->bind_param('sii',$summary,$buyerId,$invoiceId);$q->execute();
+        if($q->affected_rows!==1)throw new DomainException('Demo invoice source record changed.');
+        $q->close();
+        $grCount=count($match['real_receipts']);$poTotal=(string)$po['total_amount'];$invTotal=(string)$old['total_amount'];
+        $q=$conn->prepare("INSERT INTO buyer_invoice_demo_approvals (invoice_id,po_id,buyer_id,gr_receipt_count,po_total_pre_vat,invoice_total_pre_vat,result) VALUES (?,?,?,?,?,?,'demo_ready')");
+        $q->bind_param('iiiiss',$invoiceId,$poId,$buyerId,$grCount,$poTotal,$invTotal);$q->execute();$q->close();
+        $conn->commit();$transaction=false;
+        ilReply(200,['success'=>true,'status'=>'ready_to_post','demo_only'=>true,'finance_posting_enabled'=>false,
+            'message'=>'CLASSROOM DEMO Ready to Post recorded. Actual Finance posting remains disabled.','match'=>$match]);
+    }
+    // Re-verifying a matching classroom simulation must not silently turn it into a real approval.
+    $demoReady=($old['source_kind']??'')==='demo' && ($old['match_status']??'')==='demo_ready' && $match['data_matched'];
     $ready=$match['data_matched'] && $match['supplier_document_verified'];
-    $status=$ready?'ready_to_post':($match['data_matched']?'pending_match':'discrepancy');
-    $matchStatus=$ready?'matched':($match['data_matched']?'data_only_demo':'discrepancy');
-    $summary=$ready?'3-way match passed; manually checked supplier document':($match['data_matched']?'Data matches, but demo/unverified document; not eligible for Finance posting':'Mismatch detected; review PO/real GR/invoice details');
+    $status=($demoReady||$ready)?'ready_to_post':($match['data_matched']?'pending_match':'discrepancy');
+    $matchStatus=$demoReady?'demo_ready':($ready?'matched':($match['data_matched']?'data_only_demo':'discrepancy'));
+    $summary=$demoReady?'CLASSROOM SIMULATION ONLY: data matched; not eligible for real Finance posting':($ready?'3-way match passed; manually checked supplier document':($match['data_matched']?'Data matches, but demo/unverified document; not eligible for Finance posting':'Mismatch detected; review PO/real GR/invoice details'));
     $id=(int)$old['id'];$q=$conn->prepare('UPDATE invoices SET status=? WHERE id=? AND created_by=?');
     $q->bind_param('sii',$status,$id,$buyerId);$q->execute();$q->close();
     $q=$conn->prepare('UPDATE buyer_invoice_source_local SET match_status=?,match_summary=?,verified_at=NOW(),verified_by=? WHERE invoice_id=?');

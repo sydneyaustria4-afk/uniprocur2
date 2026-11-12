@@ -79,14 +79,14 @@ function updateIdentity(buyer) {
 
   function counts(){for(const g of ["pending","ready","posted","discrepancy"]){const elCount=$("count"+g[0].toUpperCase()+g.slice(1));elCount.textContent=state.invoices.filter(i=>group(i)===g).length;}}
   function makeCard(invoice){const g=group(invoice),card=el("article","invoice-card");
-    const top=el("div","card-heading"),number=el("span","badge",invoice.invoice_number||"Invoice"),status=el("span",`badge ${g}`,invoice.__figma_demo?"Demo · Ready to Post":names[g]);top.append(number,status);
+    const top=el("div","card-heading"),number=el("span","badge",invoice.invoice_number||"Invoice"),status=el("span",`badge ${g}`,invoice.__figma_demo?"Demo · Ready to Post":(invoice.source_kind==="demo"&&invoice.match_status==="demo_ready"?"CLASSROOM DEMO · Ready to Post":names[g]));top.append(number,status);
     const title=el("h2","invoice-title",invoice.supplier_name||invoice.item_summary||`Invoice ${invoice.invoice_number||""}`);
     const meta=el("div","invoice-meta");meta.append(el("span","meta-tag",invoice.po_number||`PO ID ${invoice.po_id||"—"}`));
     if (invoice.gr_reference) meta.append(el("span","meta-tag",invoice.gr_reference));
     meta.append(el("span","meta-tag",`${invoice.item_count||0} item(s)`));
     if (invoice.payment_terms) meta.append(el("span","meta-tag",invoice.payment_terms));
     const amount=el("strong","amount",`Total Amount: ${peso(invoice.total_amount)}`),due=el("div","due",`Due Date: ${formatDate(invoice.due_date)}`);
-    const match=el("p","match-label",invoice.__figma_demo?"3-Way Match: Figma illustration only (not verified)":g==="ready"?"Stored status: Ready to Post (GR match not reverified here)":g==="posted"?"Stored status: Posted to Accounting":g==="discrepancy"?"Needs review before posting":"Awaiting verified PO–GR–Invoice match");
+    const match=el("p","match-label",invoice.__figma_demo?"3-Way Match: Figma illustration only (not verified)":(invoice.source_kind==="demo"&&invoice.match_status==="demo_ready"?"3-Way Match: CLASSROOM DEMO only — Finance posting is disabled":g==="ready"?"Stored status: Ready to Post (GR match not reverified here)":g==="posted"?"Stored status: Posted to Accounting":g==="discrepancy"?"Needs review before posting":"Awaiting verified PO–GR–Invoice match");
     const actions=el("div","card-actions"),print=el("button","", "Print"),view=el("button","","View Invoice");print.type="button";view.type="button";
     
     const detailUrl = invoice.__figma_demo

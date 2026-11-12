@@ -5,3 +5,7 @@
 .document-actions .button-icon { width: 14px; height: 14px; flex: 0 0 14px; object-fit: contain; }
 /* Delivery section now displays only one authoritative PO destination. */
 .delivery-section .delivery-line { margin: 10px 0 0; }
+
+/* UniProcur GR location icon: existing assets/location.svg */
+.delivery-section .field-tag { display:inline-flex; align-items:center; justify-content:flex-start; gap:7px; }
+.delivery-section .location-svg-icon { width:16px; height:20px; flex:none; object-fit:contain; filter:brightness(0) invert(1); }
