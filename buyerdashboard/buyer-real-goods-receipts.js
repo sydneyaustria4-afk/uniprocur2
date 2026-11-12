@@ -78,9 +78,6 @@
     set("prNumber", val(info.pr_number));
     set("priority", "Not recorded"); // Priority is not supplied by either read-only endpoint.
     set("deliveryAddress", val(po.delivery_address));
-    const warehouses = [...new Set(receipts.map(r => String(r.warehouse_name || "").trim()).filter(Boolean))];
-    set("receiptWarehouse", warehouses.length ? warehouses.join(" / ") : "No receipt warehouse recorded");
-    set("receivingClerk", "Not recorded in Inventory receipt data");
     const rowItems = $("itemRows"); rowItems.replaceChildren();
     items.forEach((item, i) => {
       const tr = document.createElement("tr");

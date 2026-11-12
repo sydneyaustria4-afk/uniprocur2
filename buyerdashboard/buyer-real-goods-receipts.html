@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="buyer-real-goods-receipts.css?v=2">
-  <script src="buyer-real-goods-receipts.js?v=2" defer></script>
+  <link rel="stylesheet" href="buyer-real-goods-receipts.css?v=3">
+  <script src="buyer-real-goods-receipts.js?v=3" defer></script>
   <script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
 </head>
 <body>
@@ -23,7 +23,7 @@
       <article class="gr-sheet">
         <div class="document-header">
           <div class="document-titles"><div><small>Goods Receipt</small><strong id="grReference">—</strong></div><div><small>Status</small><strong id="receiptStatus">Loading...</strong></div></div>
-          <div class="document-actions no-print"><button class="outline-button" type="button" id="printGr" disabled><span aria-hidden="true">▣</span> Print GR</button><a class="close-button" id="closeLink" href="purchase-orders.html">× Close</a></div>
+          <div class="document-actions no-print"><button class="outline-button" type="button" id="printGr" disabled><img class="button-icon" src="../assets/print.svg" alt="" aria-hidden="true"> Print GR</button><a class="close-button" id="closeLink" href="purchase-orders.html">Close</a></div>
         </div>
         <div class="loading-panel" id="loading" role="status">Checking saved Inventory Goods Receipts...</div>
         <div id="content" hidden>
@@ -48,9 +48,7 @@
           </section>
           <section class="section-block delivery-section">
             <h2>Delivery Address</h2>
-            <div class="delivery-line"><span class="field-tag">◎ Location</span><span class="field-value" id="deliveryAddress">—</span></div>
-            <div class="delivery-line"><span class="field-tag">⊙ Receiving Warehouse</span><span class="field-value" id="receiptWarehouse">—</span></div>
-            <div class="delivery-line"><span class="field-tag">◉ Receiving Clerk</span><span class="field-value" id="receivingClerk">Not recorded in Inventory receipt data</span></div>
+            <div class="delivery-line"><span class="field-tag">Location</span><span class="field-value" id="deliveryAddress">—</span></div>
           </section>
           <section class="section-block receipts-section">
             <div class="section-heading"><h2>Actual Goods Receipt History</h2><span class="muted" id="receiptCount">0 receipts</span></div>
