@@ -219,6 +219,12 @@ try {
     }
 
 
+    // UNIPROCUR_REQUIRED_DATE_SERVER_GUARD_20261113
+    if (!preg_match('/\A\d{4}-\d{2}-\d{2}\z/D', $requiredDate) ||
+        $requiredDate < (new DateTimeImmutable('today', new DateTimeZone('Asia/Manila')))->format('Y-m-d')) {
+        jsonResponse(422, ['success' => false, 'message' => 'Required Date cannot be in the past. Choose today or a future date.']);
+    }
+
     // Validate justification.
     $justification = cleanText(
         $request['justification'] ?? '',

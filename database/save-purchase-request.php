@@ -159,6 +159,13 @@ try {
         sendJson(400, ['success' => false, 'message' => 'Please select a valid required date.']);
     }
 
+    // UNIPROCUR_REQUIRED_DATE_SERVER_GUARD_20261113
+    // Enforce a real current/future date server-side (including drafts).
+    if (!preg_match('/\A\d{4}-\d{2}-\d{2}\z/D', $requiredDate) ||
+        $requiredDate < (new DateTimeImmutable('today', new DateTimeZone('Asia/Manila')))->format('Y-m-d')) {
+        sendJson(422, ['success' => false, 'message' => 'Required Date cannot be in the past. Choose today or a future date.']);
+    }
+
     $purpose = cleanValue($request['justification'] ?? '', 5000);
     if ($status === 'submitted' && $purpose === '') {
         sendJson(400, ['success' => false, 'message' => 'Please enter a justification.']);

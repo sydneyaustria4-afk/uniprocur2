@@ -13,6 +13,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitButton = document.getElementById("submitButton");
   const cancelButton = document.getElementById("cancelButton");
   const notificationButton = document.getElementById("notificationButton");
+
+  // UNIPROCUR_REQUIRED_DATE_CLIENT_GUARD_20261113
+  const requiredDateInput = document.getElementById("requiredDate");
+
+  function manilaTodayISO() {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Manila", year: "numeric", month: "2-digit", day: "2-digit"
+    }).formatToParts(new Date());
+    const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+    return `${values.year}-${values.month}-${values.day}`;
+  }
+
+  function refreshRequiredDateLimit() {
+    const today = manilaTodayISO();
+    requiredDateInput.min = today;
+    return today;
+  }
+
+  if (requiredDateInput) {
+    refreshRequiredDateLimit();
+    requiredDateInput.addEventListener("focus", refreshRequiredDateLimit);
+    requiredDateInput.addEventListener("change", () => {
+      const minimum = refreshRequiredDateLimit();
+      if (requiredDateInput.value && requiredDateInput.value < minimum) {
+        requiredDateInput.value = "";
+        showToast("Required Date cannot be in the past. Choose today or a future date.");
+      }
+    });
+  }
   const toast = document.getElementById("toast");
 
   const MAX_FILE_SIZE = 20 * 1024 * 1024;
@@ -301,6 +330,14 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!data.requiredDate) {
       showToast("Please select a required date.");
       document.getElementById("requiredDate").focus();
+      return;
+    }
+
+    // Recheck against Manila date on both Save Draft and Submit, even after midnight.
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(data.requiredDate) ||
+        data.requiredDate < refreshRequiredDateLimit()) {
+      showToast("Required Date cannot be in the past. Choose today or a future date.");
+      requiredDateInput.focus();
       return;
     }
 

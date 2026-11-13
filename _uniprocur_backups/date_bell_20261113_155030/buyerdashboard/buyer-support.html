@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Buyer Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-support.css?v=2">
+  <link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=">
+
+<!-- Shared Buyer Header - Purchase Order Design -->
+<link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
+
+<!-- Consistent Buyer Profile and Arrow -->
+<link rel="stylesheet" href="../assets/uniprocur-buyer-profile.css?v=2">
+
+
+  <script src="buyer-support.js?v=2" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body>
+<div class="settings-shell support-shell">
+  <aside class="sidebar" aria-label="Buyer workspace navigation">
+    <a class="brand" href="buyer-dashboard.html"><img src="../assets/Pro%203.svg" alt=""><span>UniProcur</span></a>
+    <p class="nav-label">Workspace</p>
+    <nav class="nav-group" aria-label="Workspace">
+      <a class="nav-link" href="buyer-dashboard.html"><img src="../assets/Vector.svg" alt="">Dashboard</a>
+      <a class="nav-link" href="../supplier/supplier.html"><img src="../assets/Group%2027.svg" alt="">Suppliers</a>
+      <a class="nav-link" href="purchase-requests.html"><img src="../assets/Group%2033.svg" alt="">Purchase Request</a>
+      <a class="nav-link" href="rfq-workspace.html"><img src="../assets/Group.svg" alt="">RFQ Workspace</a>
+      <a class="nav-link" href="purchase-orders.html"><img src="../assets/Group%2034.svg" alt="">Purchase Order</a>
+      
+<a class="nav-link" href="buyer-invoices.html">
+  <img src="../assets/Group%2035.svg" alt="">
+  Invoice
+</a>
+
+      
+
+<a class="nav-link" href="buyer-reports.html">
+  <img src="../assets/Group 31.svg" alt="">
+  Reports
+</a>
+
+
+      <a class="nav-link" href="buyer-material-requests.html">
+  <img src="../assets/material-request.svg" alt="">
+  Material Request
+</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-rule"></div>
+      <a class="nav-link active" href="buyer-support.html" aria-current="page"><img src="../assets/support.svg" alt="">Support</a>
+      <a class="nav-link" href="buyer-settings.html"><img src="../assets/settings.svg" alt="">Settings</a>
+      <div class="sidebar-rule bottom-rule"></div>
+      <div class="sidebar-profile"><span class="sidebar-avatar" id="sideInitial">B</span><div><strong id="sideName">Buyer</strong><small id="sideEmail">buyer@gmail.com</small></div><a class="side-arrow" href="buyer-dashboard.html" aria-label="Back to Buyer Dashboard">→</a></div>
+    </div>
+  </aside>
+
+  <main class="support-main">
+    <div class="support-content">
+      <header class="support-topbar">
+        <div class="support-heading"><span class="support-workspace-logo"><img src="../assets/Pro%204.svg" alt=""></span><div><small>UniProcur Workspace</small><strong>Support</strong></div></div>
+        <div class="support-account"><span class="support-bell"><img src="../assets/Group%2050.svg" alt=""></span><span class="support-account-rule"></span><div><strong id="topName">Buyer</strong><small id="topEmail">buyer@gmail.com</small></div><span class="support-user-initial" id="topInitial">B</span></div>
+      </header>
+
+      <section class="help-hero" aria-labelledby="heroTitle">
+        <div class="hero-content">
+          <span class="hero-eyebrow">SUPPORT CENTER</span>
+          <h1 id="heroTitle">How can we help you today?</h1>
+          <p>Find step-by-step guidance for every part of your procurement workflow.</p>
+          <form class="help-search" id="helpSearchForm" role="search">
+            <span class="magnifier" aria-hidden="true"></span>
+            <input id="helpSearch" type="search" placeholder="search" aria-label="Search frequently asked questions" autocomplete="off">
+            <button type="submit">Search</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="faq-section" aria-labelledby="faqTitle">
+        <div class="faq-art" aria-hidden="true">
+          <div class="faq-photo-pattern"></div>
+          <div class="faq-art-copy"><h2 id="faqTitle">Frequently<br>asked<br>questions</h2><p>Get quick answers to common questions about procurement.</p></div>
+        </div>
+        <div class="faq-list-pane">
+          <h2 class="sr-only">Frequently asked questions</h2>
+          <p id="faqCount" class="faq-count" aria-live="polite"></p>
+          <div id="faqList" class="faq-list"></div>
+          <div id="faqEmpty" class="faq-empty" hidden>No matching questions found. Try a different search.</div>
+        </div>
+      </section>
+    
+    </div>
+  </main>
+</div>
+<div id="supportToast" class="support-toast" role="status" aria-live="polite" hidden></div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>
