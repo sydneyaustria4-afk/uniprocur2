@@ -149,3 +149,5 @@
   .contact-modal-logo { width: 77px; height: 77px; margin-top: -40px; }
   .contact-modal-body h2 { margin-bottom: 16px; }
 }
+/* Event-based delivery indicator; receipt may be recorded without supplier shipping milestones. */
+.track-step.has-receipt .track-node{background:#217b54;border-color:#217b54}

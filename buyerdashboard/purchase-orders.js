@@ -9,20 +9,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const d = new Date(`${String(value).slice(0, 10)}T00:00:00`);
     return Number.isNaN(d.getTime()) ? "—" : d.toLocaleDateString("en-PH", { month: "short", day: "2-digit", year: "numeric" });
   };
-  const names = { all: "All PO", pending: "Awaiting Approval", arriving: "Arriving Next", draft: "Drafts", approved: "In Production", rejected: "Rejected", received: "Received / Closed" };
-  // Buyer-facing Figma status labels; MySQL stores approved, issued, etc. unchanged.
-  const labels = { draft: "Draft", pending_approval: "Pending Approval", approved: "In Production", rejected: "Rejected", issued: "Issued", partial: "Partially Received", received: "Received", closed: "Closed" };
+  // UNIPROCUR_EVENT_BASED_TRACKING_V2: no time-based delivery assumptions.
+  const names = { all: "All PO", pending: "Awaiting Approval", arriving: "Awaiting Delivery", draft: "Drafts", approved: "Approved", rejected: "Rejected", received: "Received / Closed" };
+  const labels = { draft: "Draft", pending_approval: "Pending Approval", approved: "Approved - Awaiting Supplier Update", rejected: "Rejected", issued: "Issued - Awaiting Delivery Update", partial: "Partially Received", received: "Received", closed: "Closed" };
   function statusForDisplay(po) {
     const status = String(po.status || "").toLowerCase();
-    if (status === "approved" || status === "issued") {
-      if (po.tracking_inventory_accepted_at) return "Delivered (Demo)";
-      if (po.tracking_confirmed_at) {
-        const elapsed = Math.max(0, Number(po.tracking_elapsed_seconds) || 0);
-        if (elapsed >= 120) return "Out for Delivery";
-        if (elapsed >= 60) return "In Transit";
-      }
-    }
-    return labels[status] || status || "—";
+    const demoAcceptance = String(po.tracking_accept_source || "").toLowerCase() === "local_demo";
+    if (demoAcceptance && (status === "received" || status === "closed")) return "Received (Demo)";
+    if (demoAcceptance && (status === "approved" || status === "issued")) return "Accepted (Demo) - Check GR";
+    return labels[status] || status || "Unknown status";
   }
   const groupMatch = (po, group) => {
     const s = String(po.status || "").toLowerCase();

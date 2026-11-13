@@ -9,3 +9,5 @@
 /* UniProcur GR location icon: existing assets/location.svg */
 .delivery-section .field-tag { display:inline-flex; align-items:center; justify-content:flex-start; gap:7px; }
 .delivery-section .location-svg-icon { width:16px; height:20px; flex:none; object-fit:contain; filter:brightness(0) invert(1); }
+/* Received node is independent of unreported supplier shipping milestones. */
+.tracking-steps li.has-receipt .step-dot{background:#217b54;box-shadow:0 0 0 1px #a9d9c2}

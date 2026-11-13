@@ -29,31 +29,31 @@
     if (!r.ok || !d.success) throw new Error(d.message || "HTTP " + r.status);
     return d;
   };
+  // UNIPROCUR_EVENT_BASED_TRACKING_V2: Actual Goods Receipts are the ONLY
+  // evidence of a received delivery here. Supplier shipment events are unknown.
   function renderTracking(po, real) {
     const status = String(po?.status || real.po?.po_status || "").toLowerCase();
     const fullyReceived = real.fully_received_from_real_gr === true;
     const hasActualReceipts = Array.isArray(real.receipts) && real.receipts.length > 0;
-    const approved = ["approved", "issued", "partial", "received", "closed"].includes(status);
-    const confirmed = !!po?.tracking_confirmed_at && approved;
-    const seconds = Number(po?.tracking_elapsed_seconds || 0);
-    let progress = approved ? 1 : 0;
-    if (confirmed) progress = 2;
-    if (confirmed && seconds >= 60) progress = 3;
-    if (confirmed && seconds >= 120) progress = 4;
-    if (fullyReceived) progress = 5;
+    const managerApproved = ["approved", "issued", "partial", "received", "closed"].includes(status);
     const steps = Array.from($("trackingSteps").querySelectorAll("li"));
-    steps.forEach((step, index) => { step.classList.toggle("complete", index < progress); });
-    $("trackingSteps").style.setProperty("--progress", (progress < 1 ? "0%" : Math.max(0, progress - 1) * 20 + "%"));
-    set("stageIssued", approved ? fmtDate(po?.tracking_issued_at || po?.order_date) : "Pending approval");
-    set("stageConfirmed", confirmed ? "Manager approved" : "Pending");
-    set("stageTransit", confirmed && seconds >= 60 ? "Simulated" : "Pending");
-    set("stageOut", confirmed && seconds >= 120 ? "Simulated" : "Pending");
+    steps.forEach((step, index) => {
+      step.classList.toggle("complete", index === 0 && managerApproved);
+      step.classList.toggle("has-receipt", index === 4 && hasActualReceipts);
+    });
+    $("trackingSteps").style.setProperty("--progress", "0%");
+    if (steps[0]) steps[0].querySelector("strong").textContent = "Manager Approved";
+    if (steps[1]) steps[1].querySelector("strong").textContent = "Supplier Confirmed";
+    set("stageIssued", managerApproved ? "Approved in PO records" : "Pending approval");
+    set("stageConfirmed", "Not reported");
+    set("stageTransit", "Not reported");
+    set("stageOut", "Not reported");
     set("stageDelivery", fullyReceived ? "Inventory received" : hasActualReceipts ? "Partial receipt" : "Awaiting Inventory");
     set("trackingNote", fullyReceived
-      ? "Delivery completed using posted Inventory Goods Receipts. Shipment milestones before receiving are classroom simulations."
+      ? "Actual posted Goods Receipts confirm full receipt. Supplier confirmation and shipping milestones were not recorded."
       : hasActualReceipts
-        ? "Inventory has posted a partial receipt. Final Delivery remains pending until all quantities are verified."
-        : "No actual Goods Receipt found. In Transit and Out for Delivery are classroom simulation stages, not live supplier tracking.");
+        ? "Actual Inventory Goods Receipts show partial delivery. Shipping milestones were not recorded."
+        : "No actual posted Goods Receipt found. Approval does not prove supplier confirmation, transit or delivery.");
   }
   function render(real, poData) {
     if (real.po?.po_number !== poNumber) throw new Error("PO reference mismatch in Inventory Goods Receipts.");

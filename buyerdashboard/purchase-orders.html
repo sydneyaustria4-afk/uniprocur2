@@ -20,7 +20,7 @@
 
 
   
-  <script src="purchase-orders.js?v=7" defer></script>
+  <script src="purchase-orders.js?v=8" defer></script>
   <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
   <script src="buyer-header-notifications.js?v=1" defer></script>
 </head>
@@ -87,13 +87,13 @@
       <section class="stat-grid" aria-label="Purchase Order overview">
         <button type="button" class="stat-card stat-all selected" data-filter="all" aria-pressed="true"><div class="stat-top"><span>All PO</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countAll">0</strong><small>Total Orders</small></button>
         <button type="button" class="stat-card" data-filter="pending" aria-pressed="false"><div class="stat-top"><span>Awaiting Approval</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countPending">0</strong><small>Needs Manager Signature</small></button>
-        <button type="button" class="stat-card" data-filter="arriving" aria-pressed="false"><div class="stat-top"><span>Arriving Next</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countArriving">0</strong><small>In Production / In Transit</small></button>
+        <button type="button" class="stat-card" data-filter="arriving" aria-pressed="false"><div class="stat-top"><span>Awaiting Delivery</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countArriving">0</strong><small>Approved / Awaiting Update</small></button>
         <button type="button" class="stat-card" data-filter="draft" aria-pressed="false"><div class="stat-top"><span>Drafts</span><span class="stat-arrow">↗</span></div><strong class="stat-number" id="countDraft">0</strong><small>Unsubmitted</small></button>
       </section>
 
       <section class="po-toolbar" aria-label="Find Purchase Orders">
         <form class="po-search" id="searchForm"><span class="po-search-icon" aria-hidden="true"></span><input type="search" id="poSearch" placeholder="search" aria-label="Search Purchase Orders"><button type="submit">Search</button></form>
-        <div class="filter-wrap"><button class="filter-button" id="filterButton" type="button" aria-controls="filterMenu" aria-expanded="false"><img src="../assets/filter.svg" alt="">Filter</button><div class="filter-menu" id="filterMenu" hidden><p>Filter by status</p><button type="button" data-filter-value="all">All PO</button><button type="button" data-filter-value="pending">Awaiting Approval</button><button type="button" data-filter-value="approved">In Production</button><button type="button" data-filter-value="arriving">Arriving Next</button><button type="button" data-filter-value="draft">Drafts</button><button type="button" data-filter-value="rejected">Rejected</button><button type="button" data-filter-value="received">Received / Closed</button></div></div>
+        <div class="filter-wrap"><button class="filter-button" id="filterButton" type="button" aria-controls="filterMenu" aria-expanded="false"><img src="../assets/filter.svg" alt="">Filter</button><div class="filter-menu" id="filterMenu" hidden><p>Filter by status</p><button type="button" data-filter-value="all">All PO</button><button type="button" data-filter-value="pending">Awaiting Approval</button><button type="button" data-filter-value="approved">Approved</button><button type="button" data-filter-value="arriving">Awaiting Delivery</button><button type="button" data-filter-value="draft">Drafts</button><button type="button" data-filter-value="rejected">Rejected</button><button type="button" data-filter-value="received">Received / Closed</button></div></div>
         <button class="new-po" type="button" id="newPoButton"><span>＋</span> New PO</button>
       </section>
 

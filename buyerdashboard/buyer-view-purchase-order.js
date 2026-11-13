@@ -29,11 +29,13 @@
     ecobox: { cover: "ecobox.svg", logo: "Ellipse%206.svg", contact: "Rodel Mercado", email: "rodel@ecobox.ph", phone: "+63-2-8123-4572", location: "Laguna Technopark, Laguna" }
   };
 
-  // UI naming requested for Figma: this does not change purchase_orders.status.
+  // UNIPROCUR_EVENT_BASED_TRACKING_V2: UI labels must reflect saved PO states,
+  // never elapsed time. A Manager decision is NOT supplier confirmation.
   const displayStatus = {
-    draft: "Draft", pending_approval: "Pending Approval", approved: "In Production",
-    rejected: "Rejected", issued: "In Transit", partial: "Partially Received",
-    received: "Delivered", closed: "Closed"
+    draft: "Draft", pending_approval: "Pending Approval",
+    approved: "Approved - Awaiting Supplier Update",
+    rejected: "Rejected", issued: "Issued - Awaiting Delivery Update",
+    partial: "Partially Received", received: "Received", closed: "Closed"
   };
 
   let currentSupplierName = "";
@@ -46,74 +48,62 @@
     toastTimer = setTimeout(() => node.classList.remove("show"), 4000);
   }
 
-  // Tracking uses the server's saved Manager approval time, not a browser-only timer.
-  // Reloading the page never restarts the 60/120-second milestones.
+  // UNIPROCUR_EVENT_BASED_TRACKING_V2: Only known PO/Inventory records are used.
+  // We have NO supplier confirmation, in-transit or out-for-delivery events yet.
   let trackingState = null;
-  let lastTrackingAt = 0;
+  let lastTrackingAt = 0; // Legacy refresh timestamp; never used for milestones.
   let currentPoData = null;
   let viewLoaded = false;
   let refreshing = false;
 
-  function stageProgress(po) {
-    const status = String(po.status || "").toLowerCase();
-    if (!po.created_at) return 0;
-    let count = 1; // The saved Purchase Order exists: PO Issued in Figma's demo.
-    if (status === "rejected") return 1;
-    if (!po.tracking_confirmed_at) return count;
-    count = 2; // Manager clicked Approve.
-    const elapsed = Math.max(0, Number(po.tracking_elapsed_seconds) || 0);
-    const seconds = elapsed + Math.max(0, (performance.now() - lastTrackingAt) / 1000);
-    if (seconds >= 60) count = 3;
-    if (seconds >= 120) count = 4;
-    if (po.tracking_inventory_accepted_at || ["received", "closed"].includes(status)) count = 5;
-    return count;
-  }
-
   function trackingDisplayLabel(po) {
     const status = String(po.status || "").toLowerCase();
-    if (status === "draft") return "Draft";
-    if (status === "pending_approval") return "Pending Approval";
-    if (status === "rejected") return "Rejected";
-    const stage = stageProgress(po);
-    if (stage >= 5) return po.tracking_accept_source === "local_demo" ? "Delivered (Demo)" : "Delivered";
-    if (stage >= 4) return "Out for Delivery";
-    if (stage >= 3) return "In Transit";
-    if (stage >= 2) return "In Production";
-    return displayStatus[status] || status || "—";
+    const demoAcceptance = String(po.tracking_accept_source || "").toLowerCase() === "local_demo";
+    if ((status === "received" || status === "closed") && demoAcceptance) return "Received (Demo)";
+    if (["approved", "issued"].includes(status) && demoAcceptance) return "Accepted (Demo) - Check GR";
+    return displayStatus[status] || status || "Unknown status";
   }
 
   function updateTracking() {
     if (!trackingState) return;
     const po = trackingState;
     const status = String(po.status || "").toLowerCase();
-    const completeCount = stageProgress(po);
-    document.querySelectorAll(".track-step").forEach((node, index) => {
-      node.classList.toggle("complete", index < completeCount);
-      node.classList.toggle("current", index === completeCount - 1 && completeCount > 0);
+    const managerApproved = ["approved", "issued", "partial", "received", "closed"].includes(status);
+    const demoAcceptance = String(po.tracking_accept_source || "").toLowerCase() === "local_demo";
+    const receiptRecorded = ["received", "closed"].includes(status) || Boolean(po.tracking_inventory_accepted_at);
+    const partialReceipt = status === "partial" && !receiptRecorded;
+    const deliveryEvent = receiptRecorded || partialReceipt;
+    const nodes = Array.from(document.querySelectorAll(".track-step"));
+    nodes.forEach((node, index) => {
+      // Intermediate supplier and shipment events are not available; leave them grey.
+      node.classList.toggle("complete", index === 0 && managerApproved);
+      node.classList.toggle("current", index === 0 && managerApproved && !deliveryEvent);
+      node.classList.toggle("has-receipt", index === 4 && deliveryEvent);
     });
-    $("trackingSteps").style.setProperty("--progress", `${Math.max(0, completeCount - 1) * 20}%`);
-    $("stageOne").textContent = completeCount >= 1 ? formatDate(po.order_date) : "Pending";
-    $("stageTwo").textContent = completeCount >= 2 ? "Manager approved" : "Pending";
-    $("stageThree").textContent = completeCount >= 3 ? "+1 minute" : "Pending";
-    $("stageFour").textContent = completeCount >= 4 ? "+2 minutes" : "Pending";
-    $("stageFive").textContent = completeCount >= 5
-      ? (po.tracking_accept_source === "local_demo" ? "Accepted (demo)" : "Received") : "Awaiting Inventory";
+    $("trackingSteps").style.setProperty("--progress", "0%");
+    if (nodes[0]) nodes[0].querySelector("strong").textContent = "Manager Approved";
+    if (nodes[1]) nodes[1].querySelector("strong").textContent = "Supplier Confirmed";
+    $("stageOne").textContent = managerApproved
+      ? (po.tracking_confirmed_at ? "Manager approved" : "Approved in PO records")
+      : status === "rejected" ? "Rejected" : "Awaiting approval";
+    $("stageTwo").textContent = "Not reported";
+    $("stageThree").textContent = "Not reported";
+    $("stageFour").textContent = "Not reported";
+    $("stageFive").textContent = receiptRecorded
+      ? demoAcceptance ? "Local demo acceptance" : "Recorded received"
+      : partialReceipt ? "Partially received" : "Awaiting Inventory";
     const notes = {
-      draft: "PO Issued turns red when saved. This is a demo label; the draft has not been sent to the supplier.",
-      pending_approval: "PO Issued is recorded. Waiting for Manager approval to unlock confirmation and demo shipment timers.",
-      rejected: "Manager rejected this PO. The demo shipment timers are stopped."
+      draft: "Draft PO only. No Manager approval, supplier confirmation or shipment is assumed.",
+      pending_approval: "Waiting for Manager PO approval. Supplier and shipment tracking are not connected.",
+      rejected: "Manager rejected this PO. Shipment tracking remains inactive."
     };
-    const note = notes[status] || (completeCount >= 5
-      ? (po.tracking_accept_source === "local_demo"
-        ? "Inventory accepted this PO in the localhost simulator. No real GR or stock update occurred."
-        : "The PO was marked received by the connected workflow.")
-      : completeCount >= 4
-        ? "Out for Delivery. Waiting for Inventory to click Accept Order; Delivery will not turn red automatically."
-        : completeCount >= 3
-          ? "In Transit reached automatically. Out for Delivery is due 2 minutes after Manager approval."
-          : completeCount >= 2
-            ? "Confirmed by Manager. In Transit will turn red 1 minute after approval."
-            : "Waiting for confirmation.");
+    const note = notes[status] || (demoAcceptance
+      ? "The local simulator recorded acceptance. This is NOT proof of a real Goods Receipt; check View GR."
+      : receiptRecorded || partialReceipt
+        ? "Procurement records a receipt. Check View GR for actual posted Inventory Goods Receipts. Supplier shipping stages are not recorded."
+        : managerApproved
+          ? "Manager approved this PO. Awaiting supplier confirmation or an Inventory delivery update. Transit milestones are not automatic."
+          : "Waiting for a verified purchase-order event.");
     $("trackingNote").textContent = note;
     set("status", trackingDisplayLabel(po));
     $("status").className = `status-pill ${status}`;
@@ -297,7 +287,7 @@ $("printButton").addEventListener("click", () => {
   $("bellButton").addEventListener("click", () => toast("No notifications for this Purchase Order yet."));
   load();
   // Visual timer ticks each second; backend re-read detects cross-tab Inventory demo acceptance.
-  setInterval(updateTracking, 1000);
+  // No browser timer drives shipment milestones.
   setInterval(refreshTracking, 9000);
   document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshTracking(); });
 })();

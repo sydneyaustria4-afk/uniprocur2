@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#a3130f">
+  <title>UniProcur | Goods Receipt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-real-goods-receipts.css?v=3">
+  <script src="buyer-real-goods-receipts.js?v=3" defer></script>
+  <script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body>
+  <div class="gr-shell">
+    <header class="gr-topbar no-print">
+      <div class="gr-brand"><span class="brand-mark"><img src="../assets/Pro%204.svg" alt=""></span><div><small>Goods Receipt</small><strong id="headerReference">Loading...</strong></div></div>
+      <div class="gr-account"><span class="bell" aria-hidden="true"><img src="../assets/Group%2050.svg" alt=""></span><span class="account-rule"></span><div class="account-copy"><strong id="buyerName">Buyer</strong><small id="buyerEmail">—</small></div><span class="avatar" id="buyerAvatar">B</span></div>
+    </header>
+    <a class="go-back no-print" id="backLink" href="purchase-orders.html" aria-label="Back to Purchase Order">‹</a>
+    <main class="outer-panel" id="mainPanel">
+      <article class="gr-sheet">
+        <div class="document-header">
+          <div class="document-titles"><div><small>Goods Receipt</small><strong id="grReference">—</strong></div><div><small>Status</small><strong id="receiptStatus">Loading...</strong></div></div>
+          <div class="document-actions no-print"><button class="outline-button" type="button" id="printGr" disabled><img class="button-icon" src="../assets/print.svg" alt="" aria-hidden="true"> Print GR</button><a class="close-button" id="closeLink" href="purchase-orders.html">Close</a></div>
+        </div>
+        <div class="loading-panel" id="loading" role="status">Checking saved Inventory Goods Receipts...</div>
+        <div id="content" hidden>
+          <section class="section-block">
+            <h1>Purchase Order Details</h1>
+            <div class="details-grid">
+              <dl class="po-facts">
+                <div><dt>PO Number:</dt><dd id="poNumber">—</dd></div>
+                <div><dt>Converted from:</dt><dd id="rfqNumber">—</dd></div>
+                <div><dt>Order Date:</dt><dd id="orderDate">—</dd></div>
+                <div><dt>Expected:</dt><dd id="deliveryDate">—</dd></div>
+                <div><dt>Payment Terms:</dt><dd id="paymentTerms">—</dd></div>
+              </dl>
+              <div class="table-scroll"><table class="item-table"><thead><tr><th>No.</th><th>Item Name</th><th>Inventory Code</th><th>Expected Qty</th><th>Accepted (GR)</th></tr></thead><tbody id="itemRows"></tbody></table></div>
+            </div>
+            <div class="metrics-row"><div><strong>Priority:</strong><span class="quiet-chip" id="priority">Not recorded</span></div><div><strong>Expected Total Value:</strong><span id="totalValue">—</span> <small>(before VAT)</small></div></div>
+            <div class="supplier-row"><strong>Supplier:</strong> <span id="supplierName">—</span> <span class="dot">•</span> <strong>Linked PR:</strong> <span id="prNumber">—</span></div>
+          </section>
+          <section class="section-block tracking-block">
+            <h2>Order Tracking</h2>
+            <div class="tracking-panel"><ol class="tracking-steps" id="trackingSteps"><li><span class="step-dot"></span><strong>PO Issued</strong><small id="stageIssued">Pending</small></li><li><span class="step-dot"></span><strong>Confirmed</strong><small id="stageConfirmed">Pending</small></li><li><span class="step-dot"></span><strong>In Transit</strong><small id="stageTransit">Pending</small></li><li><span class="step-dot"></span><strong>Out for Delivery</strong><small id="stageOut">Pending</small></li><li><span class="step-dot"></span><strong>Delivery</strong><small id="stageDelivery">Pending</small></li></ol><p class="tracking-explainer" id="trackingNote"></p></div>
+          </section>
+          <section class="section-block delivery-section">
+            <h2>Delivery Address</h2>
+            <div class="delivery-line"><span class="field-tag"><img src="../assets/location.svg" alt="" aria-hidden="true" class="location-svg-icon">Location</span><span class="field-value" id="deliveryAddress">—</span></div>
+          </section>
+          <section class="section-block receipts-section">
+            <div class="section-heading"><h2>Actual Goods Receipt History</h2><span class="muted" id="receiptCount">0 receipts</span></div>
+            <p class="muted">The GR numbers below are the actual stored Inventory receipts. Multiple deliveries for one PO remain separate.</p>
+            <div class="table-scroll"><table class="receipt-table"><thead><tr><th>Goods Receipt No.</th><th>Received Date</th><th>Warehouse</th><th>Delivered</th><th>Accepted</th><th>Rejected</th></tr></thead><tbody id="receiptRows"></tbody></table></div>
+            <p class="receipt-verification" id="verificationResult" role="status"></p>
+            <p class="fine-print">Receiving confirms stock, not invoice approval. Any invoice still requires separate PO–GR–Invoice verification. Finance posting is not enabled by this page.</p>
+          </section>
+        </div>
+      </article>
+    </main>
+  </div>
+</body>
+</html>
