@@ -35,22 +35,34 @@ try {
          WHERE LOWER(status) IN ('pending_approval','approved','rejected','issued','partial','received','closed')"
     )->fetch_assoc();
 
-    // Purchase-order commitments, not Finance-confirmed expense or paid invoices.
-    $months = array_fill(0, 12, 0.0);
+    // Successful purchases: one distinct PO with at least one CURRENT invoice
+    // status approved / posted / paid / completed. No currency is aggregated.
+    // Identical status/PO rule to Buyer Dashboard, but across all Buyers.
+    // Until Finance provides an approval timestamp, group by the earliest
+    // eligible invoice's CREATED date. This is not an approval-date claim.
+    $months = array_fill(0, 12, 0);
     $stmt = $conn->prepare(
-        "SELECT MONTH(COALESCE(order_date, DATE(created_at))) AS month_num,
-                COALESCE(SUM(total_amount), 0) AS po_value
-         FROM purchase_orders
-         WHERE YEAR(COALESCE(order_date, DATE(created_at))) = ?
-           AND LOWER(status) IN ('approved','issued','partial','received','closed')
-         GROUP BY MONTH(COALESCE(order_date, DATE(created_at)))"
+        "SELECT MONTH(a.first_eligible_invoice_at) AS month_num, COUNT(*) AS successful_count
+         FROM (
+            SELECT po.id AS po_id, MIN(i.created_at) AS first_eligible_invoice_at
+            FROM invoices AS i
+            INNER JOIN purchase_orders AS po ON po.id = i.po_id
+            INNER JOIN rfqs AS r ON r.id = po.rfq_id
+            INNER JOIN purchase_requisitions AS pr ON pr.id = r.pr_id
+            WHERE LOWER(i.status) IN ('approved','posted','paid','completed')
+              AND LOWER(po.status) NOT IN ('cancelled','canceled')
+            GROUP BY po.id
+         ) AS a
+         WHERE YEAR(a.first_eligible_invoice_at) = ?
+         GROUP BY MONTH(a.first_eligible_invoice_at)"
     );
+    if (!$stmt) throw new RuntimeException('Monthly successful purchase query preparation failed.');
     $stmt->bind_param('i', $currentYear);
     $stmt->execute();
     $monthResult = $stmt->get_result();
     while ($month = $monthResult->fetch_assoc()) {
         $index = (int) $month['month_num'] - 1;
-        if ($index >= 0 && $index < 12) $months[$index] = (float) $month['po_value'];
+        if ($index >= 0 && $index < 12) $months[$index] = (int) $month['successful_count'];
     }
     $stmt->close();
 
@@ -121,9 +133,9 @@ try {
         'monthly' => [
             'year' => $currentYear,
             'values' => $months,
-            'current_month_value' => $monthValue,
+            'current_month_count' => $monthValue,
             'change_from_previous_month_pct' => $changePercent,
-            'basis' => 'Approved Purchase Order commitments (not Finance-confirmed spending)',
+            'basis' => 'Distinct POs with approved/posted/paid/completed invoices; uses earliest eligible invoice creation date',
         ],
         'recent_prs' => $recentPrs,
         'recent_pos' => $recentPos,

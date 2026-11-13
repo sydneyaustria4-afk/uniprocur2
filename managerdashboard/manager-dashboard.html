@@ -13,7 +13,7 @@
     rel="stylesheet">
   <!-- Reuse EXACT current manager navigation/topbar styling. -->
   <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
-  <link rel="stylesheet" href="manager-dashboard.css?v=1">
+  <link rel="stylesheet" href="manager-dashboard.css?v=activity-20261113">
 
 <!-- Shared Manager Header: Purchase Request design -->
 <link rel="stylesheet" href="manager-header.css?v=1">
@@ -22,7 +22,7 @@
   <!-- Shared Manager Sidebar -->
   <link rel="stylesheet" href="../assets/uniprocur-manager-sidebar.css?v=1">
 
-  <script src="manager-dashboard.js?v=3" defer></script>
+  <script src="manager-dashboard.js?v=activity-20261113" defer></script>
 </head>
 
 <body class="manager-dashboard-page">
@@ -112,36 +112,36 @@
               Orders</span><strong id="purchaseOrders">—</strong><small id="poStatusNote">Submitted orders</small></a>
         </section>
 
-        <section class="spending-panel" aria-labelledby="spendingTitle">
-          <div class="spending-heading">
+        <section class="activity-panel" aria-labelledby="spendingTitle">
+          <div class="activity-heading">
             <div>
-              <h1 id="spendingTitle">Monthly Procurement Spending</h1>
-              <div class="spending-metric"><strong id="monthlyAmount">—</strong><span id="monthlyChange"
+              <h1 id="spendingTitle">Monthly Purchase Activity</h1>
+              <div class="activity-metric"><strong id="monthlyAmount">—</strong><span id="monthlyChange"
                   class="monthly-change">—</span></div>
-              <p class="metric-caption" id="monthlyBasis">Approved PO commitments · not Finance-confirmed expense</p>
+              <p class="metric-caption" id="monthlyBasis">One PO counted after an eligible invoice</p>
             </div>
             <span class="chart-year" id="chartYear">2026</span>
           </div>
           <div class="chart-layout">
             <div id="chartYAxis" class="chart-yaxis" aria-hidden="true"></div>
-            <div class="chart-visual"><svg id="spendingChart" role="img"
-                aria-label="Monthly approved purchase order values for the current year" viewBox="0 0 1000 250"
+            <div class="chart-visual"><svg id="activityChart" role="img"
+                aria-label="Monthly count of successful purchases for the current year" viewBox="0 0 1000 250"
                 preserveAspectRatio="none">
                 <defs>
-                  <linearGradient id="spendingGradient" x1="0" x2="0" y1="0" y2="1">
+                  <linearGradient id="activityGradient" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0" stop-color="#ff1010" stop-opacity=".92" />
                     <stop offset="1" stop-color="#ff1717" stop-opacity=".12" />
                   </linearGradient>
                 </defs>
                 <g id="chartGrid"></g>
-                <path id="chartArea" fill="url(#spendingGradient)"></path>
+                <path id="chartArea" fill="url(#activityGradient)"></path>
                 <path id="chartLine" fill="none" stroke="#ff0909" stroke-width="3.8" stroke-linecap="round"></path>
                 <g id="chartPoints"></g>
               </svg>
               <div id="chartMonths" class="chart-months" aria-hidden="true"></div>
             </div>
           </div>
-          <p class="chart-hint" id="chartNote">Chart will load from saved approved Purchase Orders.</p>
+          <p class="chart-hint" id="chartNote">Loading monthly successful purchases...</p>
         </section>
 
         <section class="recent-section" aria-labelledby="recentPrTitle">

@@ -43,69 +43,68 @@ $("welcomeText").textContent = "Welcome Manager!";
     $("purchaseOrders").textContent = number(summary.purchase_orders);
     $("poStatusNote").textContent = `${number(summary.pending_pos)} awaiting approval`;
   }
+  // Count chart, not a peso/budget chart. The Manager API uses the same
+  // one-PO-once successful-purchase rule as the Buyer Dashboard.
   function formatTick(value) {
-    if (value === 0) return "0";
-    return value >= 1000 ? `${Math.round(value/1000)}K` : String(Math.round(value));
+    return String(Math.round(value));
   }
   function niceAxisCeiling(maxValue) {
-    if (maxValue <= 0) return 100000;
-    const raw = maxValue / 4;
-    const power = Math.pow(10, Math.floor(Math.log10(raw)));
-    const factor = raw / power;
-    const step = (factor <= 1 ? 1 : factor <= 2 ? 2 : factor <= 2.5 ? 2.5 : factor <= 5 ? 5 : 10) * power;
-    return step * 4;
+    if (maxValue <= 4) return 4;
+    return Math.ceil(maxValue / 4) * 4;
   }
-  function renderSpending(monthly) {
-    const values = Array.isArray(monthly?.values) ? months.map((_,i) => Math.max(0, Number(monthly.values[i]) || 0)) : months.map(()=>0);
+  function renderSuccessfulPurchases(monthly) {
+    const values = Array.isArray(monthly?.values) && monthly.values.length === 12
+      ? months.map((_, i) => Math.max(0, Math.floor(Number(monthly.values[i]) || 0)))
+      : months.map(() => 0);
     const axisMax = niceAxisCeiling(Math.max(...values));
-    $("chartYear").textContent = String(monthly?.year || new Date().getFullYear());
-    $("monthlyAmount").textContent = peso(monthly?.current_month_value);
-    $("monthlyBasis").textContent = "Approved PO commitments · not Finance-confirmed expense";
+    const year = Number(monthly?.year) || new Date().getFullYear();
+    $("chartYear").textContent = String(year);
+    $("monthlyAmount").textContent = `${number(monthly?.current_month_count)} successful purchase(s) this month`;
+    $("monthlyBasis").textContent = "One Purchase Order counted once after an approved / posted / paid / completed invoice";
     const change = monthly?.change_from_previous_month_pct;
     const delta = $("monthlyChange");
     delta.className = "monthly-change";
-    if (change === null || change === undefined) delta.textContent = "No prior comparison";
+    if (change === null || change === undefined) delta.textContent = "No prior-month comparison";
     else {
       const diff = Number(change);
       delta.textContent = `${diff >= 0 ? "+" : ""}${diff.toFixed(1)}% vs last month`;
       delta.classList.add(diff >= 0 ? "positive" : "negative");
     }
-    const side = $("chartYAxis");
-    side.replaceChildren();
+    const side = $("chartYAxis"); side.replaceChildren();
     for (let i = 4; i >= 0; i--) side.append(node("span", "", formatTick(axisMax * i / 4)));
     const labels = $("chartMonths"); labels.replaceChildren();
     months.forEach(m => labels.append(node("span", "", m)));
-
     const svgNS = "http://www.w3.org/2000/svg";
-    const grid = $("chartGrid");
-    grid.replaceChildren();
+    const grid = $("chartGrid"); grid.replaceChildren();
     const base = 218, top = 8;
     for (let i = 0; i <= 4; i++) {
       const y = top + (base - top) * i / 4;
       const line = document.createElementNS(svgNS, "line");
-      for (const [key,value] of Object.entries({x1:0,x2:1000,y1:y,y2:y,stroke:"#dedede","stroke-dasharray":"5 7","stroke-width":1.6})) line.setAttribute(key, value);
+      for (const [key, value] of Object.entries({x1:0, x2:1000, y1:y, y2:y, stroke:"#dedede", "stroke-dasharray":"5 7", "stroke-width":1.6})) line.setAttribute(key, value);
       grid.append(line);
     }
-    const points = values.map((v,i) => ({x:1000*i/11,y:base - (v/axisMax)*(base-top),value:v,month:months[i]}));
+    const points = values.map((v,i) => ({x:1000*i/11, y:base-(v/axisMax)*(base-top), value:v, month:months[i]}));
     let d = `M ${points[0].x} ${points[0].y}`;
-    for (let i=1; i<points.length; i++) {
+    for (let i = 1; i < points.length; i++) {
       const a=points[i-1], b=points[i], ease=(b.x-a.x)*.38;
       d += ` C ${a.x+ease} ${a.y}, ${b.x-ease} ${b.y}, ${b.x} ${b.y}`;
     }
-    $("chartLine").setAttribute("d",d);
-    $("chartArea").setAttribute("d",`${d} L 1000 ${base} L 0 ${base} Z`);
-    const group = $("chartPoints");group.replaceChildren();
-    points.forEach(p=>{
-      if (!p.value) return; // show data markers for recorded PO values only
+    $("chartLine").setAttribute("d", d);
+    $("chartArea").setAttribute("d", `${d} L 1000 ${base} L 0 ${base} Z`);
+    const group = $("chartPoints"); group.replaceChildren();
+    points.forEach(p => {
+      if (!p.value) return;
       const c=document.createElementNS(svgNS,"circle");
-      c.setAttribute("cx",p.x);c.setAttribute("cy",p.y);c.setAttribute("r",3.4);
-      c.setAttribute("fill","#ee0909");c.setAttribute("stroke","#fff");c.setAttribute("stroke-width",2);
-      const title=document.createElementNS(svgNS,"title");title.textContent=`${p.month}: ${peso(p.value)} approved PO value`;c.append(title);group.append(c);
+      c.setAttribute("cx",p.x); c.setAttribute("cy",p.y); c.setAttribute("r",3.4);
+      c.setAttribute("fill","#ee0909"); c.setAttribute("stroke","#fff"); c.setAttribute("stroke-width",2);
+      const title=document.createElementNS(svgNS,"title");
+      title.textContent=`${p.month}: ${p.value} successful purchase(s)`;
+      c.append(title); group.append(c);
     });
     const hasData=values.some(v=>v>0);
     $("chartNote").textContent = hasData
-      ? `Approved PO totals for ${monthly.year}. VAT/accounting posting is not verified by this chart.`
-      : `No approved Purchase Orders recorded for ${monthly.year}. This is a zero-value chart, not sample spending.`;
+      ? `Successful purchases for ${year}. Counts distinct POs with eligible invoice status. Grouped by earliest eligible invoice record date, not Finance approval date.`
+      : `No successful purchases for ${year} with approved/posted/paid/completed invoices yet. Ready to Post and classroom DEMO do not count.`;
   }
   function statusName(input) {
     const s=String(input||"").toLowerCase();
@@ -162,10 +161,11 @@ $("welcomeText").textContent = "Welcome Manager!";
     if(!response.ok || !data.success) throw new Error(data.message || `HTTP ${response.status}`);
     renderIdentity(data.manager);
     renderSummary(data.summary || {});
-    renderSpending(data.monthly || {});
+    renderSuccessfulPurchases(data.monthly || {});
     renderPrs(Array.isArray(data.recent_prs)?data.recent_prs:[]);
     renderPos(Array.isArray(data.recent_pos)?data.recent_pos:[]);
   }
+  window.setInterval(() => { if (!document.hidden) loadDashboard().catch(error => console.warn('Manager dashboard refresh:', error)); }, 30000);
   loadDashboard().catch(error=>{
     console.error("Manager dashboard:",error);
     const err=$("dashboardError");err.textContent=error.message;err.hidden=false;

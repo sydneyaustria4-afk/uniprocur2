@@ -1,0 +1,32 @@
+/* Buyer-only notification dropdown. Scoped to avoid changing Figma page layout. */
+.uni-notif-trigger{position:relative!important;cursor:pointer!important;}
+.uni-notif-trigger.uni-notif-from-span{background:transparent;border:0;padding:0;color:inherit;font:inherit;display:inline-flex;align-items:center;justify-content:center;}
+.uni-notif-trigger .uni-notif-badge{position:absolute!important;right:-7px!important;top:-8px!important;display:flex!important;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 5px;border:2px solid white;border-radius:20px;background:#b80c16;color:#fff;font:700 10px/1 Inter,Arial,sans-serif;z-index:5;box-sizing:border-box;pointer-events:none}
+.uni-notif-trigger .uni-notif-badge[hidden],.uni-notif-panel[hidden]{display:none!important}
+.uni-notif-panel{font-family:Inter,Arial,sans-serif;position:fixed;z-index:25000;box-sizing:border-box;max-height:min(520px,75vh);display:flex;flex-direction:column;background:#fff;color:#172235;box-shadow:0 15px 45px rgba(0,0,0,.30);border:1px solid #e5e5e5;border-radius:14px;overflow:hidden;text-align:left;}
+.uni-notif-panel *{box-sizing:border-box}
+.uni-notif-head{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:16px 15px 8px;border-bottom:1px solid #e9edf1}
+.uni-notif-heading{font:700 16px Inter,Arial,sans-serif!important;color:#162239!important;margin:0!important;letter-spacing:0!important}
+.uni-notif-close{display:grid;place-items:center;background:#f0f2f5;border:0;border-radius:7px;min-width:30px;min-height:30px;color:#354359;font-size:23px;cursor:pointer}
+.uni-notif-subtitle{margin:0;padding:8px 15px;color:#677489;font:400 11px/1.5 Inter,Arial,sans-serif}
+.uni-notif-list{overflow-y:auto;overscroll-behavior:contain;min-height:40px;max-height:360px}
+.uni-notif-item{padding:13px 15px;border-top:1px solid #f0f1f3;background:#fff}
+.uni-notif-item.is-unread{background:#fff8f7;border-left:3px solid #c52222;padding-left:12px}
+.uni-notif-item-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+.uni-notif-category{color:#c12d27;font-size:10px;font-weight:700;letter-spacing:.02em;text-transform:uppercase}
+.uni-notif-time{color:#8891a0;font-size:10px;text-align:right}
+.uni-notif-title{display:block;color:#18283e;font-size:13px;font-weight:700;line-height:1.4}
+.uni-notif-message{color:#4c5b70;font-size:11px;line-height:1.5;margin:5px 0 9px;overflow-wrap:anywhere}
+.uni-notif-item-actions{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.uni-notif-open{font-size:11px!important;font-weight:700!important;color:#b91218!important;text-decoration:none!important}
+.uni-notif-open:hover{text-decoration:underline!important}
+.uni-notif-mark{border:1px solid #d4dae4;border-radius:6px;background:#fff;color:#57677e;padding:5px 9px;cursor:pointer;font-size:10px;font-weight:600}
+.uni-notif-mark:disabled,.uni-notif-mark-all:disabled{opacity:.45;cursor:default}
+.uni-notif-footer{display:flex;justify-content:flex-end;padding:10px 13px;border-top:1px solid #e9edf1;background:#fbfbfc}
+.uni-notif-mark-all{background:#b80b18;color:#fff;border:0;border-radius:7px;padding:8px 12px;font-size:11px;cursor:pointer;font-weight:700}
+.uni-notif-empty,.uni-notif-error{font-size:12px;line-height:1.5;color:#657187;padding:18px 16px;margin:0}
+.uni-notif-error{color:#af2735}
+.uni-notif-warnings{background:#fff9ea;border-top:1px solid #f3e0bc;padding:8px 12px;color:#755c25}
+.uni-notif-warnings p{font-size:10px;line-height:1.5;margin:4px 0}
+@media(max-width:480px){.uni-notif-panel{max-height:70vh}.uni-notif-list{max-height:48vh}}
+@media print{.uni-notif-panel,.uni-notif-badge{display:none!important}}

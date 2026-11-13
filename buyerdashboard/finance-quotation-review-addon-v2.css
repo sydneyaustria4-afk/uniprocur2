@@ -1,0 +1,15 @@
+/* Small additive style; original Figma award-confirmation styles are preserved. */
+.finance-po-link {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:12px;
+  padding:10px 16px;
+  border-radius:8px;
+  background:#bd1715;
+  color:#fff;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+}
+.finance-po-link:hover,.finance-po-link:focus-visible { background:#911110; color:#fff; }

@@ -19,7 +19,7 @@ function fqLoadRfq(mysqli $db, string $rfqNumber, int $buyerId, bool $lock = fal
     return $row;
 }
 function fqExisting(mysqli $db, int $rfqId, bool $lock = false): ?array {
-    $stmt = $db->prepare('SELECT quote_id, review_status, submitted_at, reviewed_at, review_note
+    $stmt = $db->prepare('SELECT quote_id, review_status, submitted_at, reviewed_at, review_note, request_version, reviewer_ref, decision_reference
                           FROM procurement_finance_quotes WHERE rfq_id = ?'
                         . ($lock ? ' FOR UPDATE' : ''));
     $stmt->bind_param('i', $rfqId);
@@ -93,17 +93,31 @@ try {
         $conn->rollback(); $started=false;
         fqReply(409, ['success'=>false,'message'=>'Already sent to Finance, or reviewed. Cannot submit again unless rejected.']);
     }
+    // Freeze the approved quotation total and increment version on a rejected resubmission.
+    // Finance callbacks MUST provide this version; old callbacks cannot approve a new round.
+    $submittedTotal = round((float)$quote['total_amount'], 2);
     if ($existing) {
-        $stmt=$conn->prepare("UPDATE procurement_finance_quotes SET quote_id=?, review_status='pending', submitted_at=NOW(),reviewed_at=NULL,reviewed_by=NULL,review_note=NULL WHERE rfq_id=? AND buyer_id=? AND review_status='rejected'");
-        $stmt->bind_param('iii',$quoteId,$rfqId,$buyerId);$stmt->execute();$stmt->close();
+        $stmt=$conn->prepare("UPDATE procurement_finance_quotes
+            SET quote_id=?, review_status='pending', request_version=request_version+1,
+                submitted_quote_total=?, submitted_at=NOW(), reviewed_at=NULL,
+                reviewed_by=NULL, review_note=NULL, reviewer_ref=NULL, decision_reference=NULL
+            WHERE rfq_id=? AND buyer_id=? AND review_status='rejected'");
+        $stmt->bind_param('idii',$quoteId,$submittedTotal,$rfqId,$buyerId);
+        $stmt->execute();$changed=$stmt->affected_rows;$stmt->close();
+        if ($changed !== 1) throw new RuntimeException('Finance resubmission state changed.');
     } else {
-        $stmt=$conn->prepare("INSERT INTO procurement_finance_quotes(rfq_id,quote_id,buyer_id,review_status) VALUES(?,?,?,'pending')");
-        $stmt->bind_param('iii',$rfqId,$quoteId,$buyerId);$stmt->execute();$stmt->close();
+        $stmt=$conn->prepare("INSERT INTO procurement_finance_quotes
+            (rfq_id,quote_id,buyer_id,review_status,request_version,submitted_quote_total)
+            VALUES(?,?,?,'pending',1,?)");
+        $stmt->bind_param('iiid',$rfqId,$quoteId,$buyerId,$submittedTotal);
+        $stmt->execute();$stmt->close();
     }
+    $savedReview = fqExisting($conn, $rfqId, true);
     $conn->commit(); $started=false;
     fqReply(200, [
         'success'=>true,'rfq_number'=>$number,'quote_id'=>$quoteId,
-        'status'=>'pending','message'=>'Quotation submitted for Finance review. Not approved; PO creation is not unlocked.'
+        'status'=>'pending','request_version'=>(int)$savedReview['request_version'],
+        'message'=>'Quotation submitted for Finance review. Not approved; PO creation is not unlocked.'
     ]);
 } catch(Throwable $e) {
     if($started) { try{$conn->rollback();} catch(Throwable $ignored) {} }
