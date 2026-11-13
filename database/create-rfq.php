@@ -46,7 +46,7 @@ $stmt = $conn->prepare(
 
         $stmt->bind_param('i', $userId);
     } else {
-        $email = 'buyer@gmail.com';
+        $email = (require __DIR__ . '/buyer-demo-email.php');
 
        
 $stmt = $conn->prepare(

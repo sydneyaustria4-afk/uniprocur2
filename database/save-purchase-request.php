@@ -36,7 +36,7 @@ function getActiveBuyer(mysqli $conn): array
         $stmt->bind_param('i', $userId);
     } else {
         // Matches the demo-buyer fallback in the existing PR endpoint.
-        $email = 'buyer@gmail.com';
+        $email = (require __DIR__ . '/buyer-demo-email.php');
         $stmt = $conn->prepare(
             "SELECT id, full_name, email, role, department, is_active
              FROM users WHERE email = ? LIMIT 1"

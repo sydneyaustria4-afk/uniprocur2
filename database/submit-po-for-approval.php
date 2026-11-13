@@ -48,7 +48,7 @@ try {
             !in_array($remoteIp, ['::1', '127.0.0.1'], true)) {
             poSubmitReply(401, ['success' => false, 'message' => 'Buyer login required.']);
         }
-        $email = 'buyer@gmail.com';
+        $email = (require __DIR__ . '/buyer-demo-email.php');
         $stmt = $conn->prepare('SELECT id, role, is_active FROM users WHERE email = ? LIMIT 1');
         $stmt->bind_param('s', $email);
     }

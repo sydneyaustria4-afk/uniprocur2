@@ -46,7 +46,7 @@ function getBuyer(mysqli $conn): array
     } else {
         // Prototype fallback: the seeded Clark buyer account.
         // Replace this when the PHP login/session flow is connected.
-        $demoBuyerEmail = 'buyer@gmail.com';
+        $demoBuyerEmail = (require __DIR__ . '/buyer-demo-email.php');
 
         $stmt = $conn->prepare(
             "SELECT id, full_name, email, role, department, is_active

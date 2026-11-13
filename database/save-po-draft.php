@@ -113,7 +113,7 @@ try {
     } else {
         // Matches the existing UniProcur demo login.
         // Remove this fallback before production.
-        $email = 'buyer@gmail.com';
+        $email = (require __DIR__ . '/buyer-demo-email.php');
 
         $stmt = $conn->prepare(
             'SELECT id, role, is_active

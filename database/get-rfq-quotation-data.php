@@ -17,7 +17,7 @@ try {
         $userStmt->bind_param('i', $userId);
     } else {
         // Consistent with the existing UniProcur demo buyer fallback.
-        $email = 'buyer@gmail.com';
+        $email = (require __DIR__ . '/buyer-demo-email.php');
         $userStmt = $conn->prepare('SELECT id, role, is_active FROM users WHERE email = ? LIMIT 1');
         $userStmt->bind_param('s', $email);
     }

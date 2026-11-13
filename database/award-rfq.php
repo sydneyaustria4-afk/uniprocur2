@@ -12,7 +12,7 @@ try {
  $number=trim((string)($data['rfq_number']??''));$quoteId=filter_var($data['quote_id']??null,FILTER_VALIDATE_INT);
  if($number===''||strlen($number)>30||!$quoteId||$quoteId<1)awardReply(422,['success'=>false,'message'=>'Invalid RFQ or supplier quotation.']);
  if(!empty($_SESSION['user_id'])){$uid=(int)$_SESSION['user_id'];$s=$conn->prepare('SELECT id,role,is_active FROM users WHERE id=? LIMIT 1');$s->bind_param('i',$uid);}
- else{$email='buyer@gmail.com';$s=$conn->prepare('SELECT id,role,is_active FROM users WHERE email=? LIMIT 1');$s->bind_param('s',$email);}
+ else{$email=(require __DIR__ . '/buyer-demo-email.php');$s=$conn->prepare('SELECT id,role,is_active FROM users WHERE email=? LIMIT 1');$s->bind_param('s',$email);}
  $s->execute();$buyer=$s->get_result()->fetch_assoc();$s->close();
  if(!$buyer||strtolower((string)$buyer['role'])!=='buyer'||!(int)$buyer['is_active'])awardReply(401,['success'=>false,'message'=>'Active Buyer account required.']);
  $buyerId=(int)$buyer['id'];$conn->begin_transaction();$started=true;

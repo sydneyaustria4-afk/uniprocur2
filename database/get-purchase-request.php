@@ -34,7 +34,7 @@ try {
         );
         $buyerStmt->bind_param('i', $userId);
     } else {
-        $email = 'buyer@gmail.com';
+        $email = (require __DIR__ . '/buyer-demo-email.php');
         $buyerStmt = $conn->prepare(
             "SELECT id, full_name, email, role, is_active
              FROM users WHERE email = ? LIMIT 1"

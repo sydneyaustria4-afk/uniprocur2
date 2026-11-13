@@ -34,7 +34,7 @@ try {
         $userStmt->bind_param('i', $uid);
     } else {
         // Existing local prototype fallback.
-        $demoEmail = 'buyer@gmail.com';
+        $demoEmail = (require __DIR__ . '/buyer-demo-email.php');
 
         $userStmt = $conn->prepare(
             'SELECT id, role, is_active
