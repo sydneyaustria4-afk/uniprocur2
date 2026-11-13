@@ -1,0 +1,6 @@
+/* Small informational label only. Existing Figma colors, typography, and layout retained. */
+.buyer-finance-handoff-message{font:500 11px/1.6 Inter,Arial,sans-serif;color:#315479;background:#eef6ff;border:1px solid #cfe2f8;border-radius:7px;padding:10px 12px;margin:11px 0 0;overflow-wrap:anywhere}
+.buyer-finance-handoff-message[data-kind="warning"]{color:#815c19;background:#fff7e7;border-color:#f0dfb5}
+.buyer-finance-handoff-message[data-kind="success"]{color:#155e3f;background:#e9f7ef;border-color:#bfe4d0}
+.buyer-finance-handoff-message[hidden]{display:none!important}
+@media print{.buyer-finance-handoff-message{display:none!important}}
