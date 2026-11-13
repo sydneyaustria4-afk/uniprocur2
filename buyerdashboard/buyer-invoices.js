@@ -86,7 +86,7 @@ function updateIdentity(buyer) {
     meta.append(el("span","meta-tag",`${invoice.item_count||0} item(s)`));
     if (invoice.payment_terms) meta.append(el("span","meta-tag",invoice.payment_terms));
     const amount=el("strong","amount",`Total Amount: ${peso(invoice.total_amount)}`),due=el("div","due",`Due Date: ${formatDate(invoice.due_date)}`);
-    const match=el("p","match-label",invoice.__figma_demo?"3-Way Match: Figma illustration only (not verified)":(invoice.source_kind==="demo"&&invoice.match_status==="demo_ready"?"3-Way Match: CLASSROOM DEMO only — Finance posting is disabled":g==="ready"?"Stored status: Ready to Post (GR match not reverified here)":g==="posted"?"Stored status: Posted to Accounting":g==="discrepancy"?"Needs review before posting":"Awaiting verified PO–GR–Invoice match");
+    const match=el("p","match-label",invoice.__figma_demo?"3-Way Match: Figma illustration only (not verified)":(invoice.source_kind==="demo"&&invoice.match_status==="demo_ready"?"3-Way Match: CLASSROOM DEMO only — Finance posting is disabled":g==="ready"?"Stored status: Ready to Post (GR match not reverified here)":g==="posted"?"Stored status: Posted to Accounting":g==="discrepancy"?"Needs review before posting":"Awaiting verified PO–GR–Invoice match"));
     const actions=el("div","card-actions"),print=el("button","", "Print"),view=el("button","","View Invoice");print.type="button";view.type="button";
     
     const detailUrl = invoice.__figma_demo
