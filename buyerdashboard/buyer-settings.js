@@ -36,21 +36,21 @@ if (!error) {
     }
     location.hash = tabName;
   }
-  function setProfile(user, preferences) {
-    const name = user.full_name || "Buyer";
-    const email = user.email || "—";
+  function setProfile(user, preferences, authenticated) {
+    const name = authenticated ? (user.full_name || "Buyer") : "Buyer";
+    const email = authenticated ? (user.email || "—") : "buyer@gmai.com";
     const initial = (name.trim().charAt(0) || "B").toUpperCase();
     
 for (const id of ["sideName", "topName"]) {
-  fill(id, "Buyer");
+  fill(id, name);
 }
 
 for (const id of ["sideEmail", "topEmail"]) {
-  fill(id, "buyer@gmail.com");
+  fill(id, email);
 }
 
 for (const id of ["sideInitial", "topInitial"]) {
-  fill(id, "B");
+  fill(id, initial);
 }
 
 // Actual HR-managed account details in Profile
@@ -91,7 +91,7 @@ fill("profileInitial", initial);
       const response = await fetch(api, { credentials: "same-origin", cache: "no-store", headers: { Accept: "application/json" } });
       const data = await response.json();
       if (!response.ok || !data.success) throw new Error(data.message || `Unable to load account (HTTP ${response.status}).`);
-      setProfile(data.user || {}, data.preferences || {});
+      setProfile(data.user || {}, data.preferences || {}, data.authenticated === true);
       csrfToken = data.csrf_token || "";
       canSave = data.authenticated === true && data.schema_ready === true && !!csrfToken;
       $("editButton").disabled = !canSave;
