@@ -57,7 +57,7 @@
         const actions = make('div','uni-notif-item-actions');
         const open = make('a','uni-notif-open','View details');
         // Only server-provided same-directory relative URLs are allowed.
-        if (typeof n.url === 'string' && /^(?:award-confirmation|comparison-matrix|buyer-real-goods-receipts)\.html\?/.test(n.url)) {
+        if (typeof n.url === 'string' && /^(?:award-confirmation|comparison-matrix|buyer-real-goods-receipts|buyer-view-purchase-order)\.html\?/.test(n.url)) {
           open.href=n.url;
         } else { open.href='buyer-dashboard.html'; }
         open.addEventListener('click', async e => {
@@ -171,7 +171,7 @@
     close.type='button';close.setAttribute('aria-label','Close notifications');
     close.addEventListener('click',()=>toggle(false));
     head.append(heading,close);
-    status=make('p','uni-notif-subtitle','Finance decisions and actual Inventory receipts');
+    status=make('p','uni-notif-subtitle','Finance, Manager approvals and Inventory receipts');
     list=make('div','uni-notif-list');
     markAll=make('button','uni-notif-mark-all','Mark all as read');
     markAll.type='button';markAll.disabled=true;

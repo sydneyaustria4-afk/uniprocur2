@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#c6140a">
+  <title>UniProcur | Manager Audit Trail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
+  <link rel="stylesheet" href="manager-audit-trail.css?v=1">
+  <!-- Keep the shared Manager sidebar LAST for consistent size and alignment. -->
+  <link rel="stylesheet" href="../assets/uniprocur-manager-sidebar.css?v=1">
+
+<!-- Shared Manager Header: Purchase Request design -->
+<link rel="stylesheet" href="manager-header.css?v=1">
+
+  <script src="manager-audit-trail.js?v=4" defer></script>
+</head>
+<body class="manager-audit-page">
+  <div class="manager-shell">
+    <aside class="sidebar" aria-label="Manager workspace navigation">
+      <a class="brand" href="manager-dashboard.html" aria-label="UniProcur Manager Dashboard">
+        <img class="brand-logo" src="../assets/Pro%203.svg" alt=""><span>UniProcur</span>
+      </a>
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav class="workspace-nav" aria-label="Manager workspace">
+          <a class="nav-item" href="manager-dashboard.html"><span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span><span>Dashboard</span></a>
+          <a class="nav-item" href="manager-purchase-requests.html"><span class="nav-icon"><img src="../assets/Group%2033.svg" alt=""></span><span>Purchase Request</span></a>
+          <a class="nav-item" href="manager-purchase-orders.html"><span class="nav-icon"><img src="../assets/Group%2034.svg" alt=""></span><span>Purchase Order</span></a>
+          <a class="nav-item" href="manager-reports.html"><span class="nav-icon"><img src="../assets/Group%2031.svg" alt=""></span><span>Reports</span></a>
+          <a class="nav-item is-active" href="manager-audit-trail.html" aria-current="page"><span class="nav-icon"><img src="../assets/Group%2035.svg" alt=""></span><span>Audit Trail</span></a>
+        </nav>
+      </div>
+      <div class="sidebar-rule" aria-hidden="true"></div>
+      <div class="sidebar-bottom">
+        
+<a class="nav-item" href="manager-support.html">
+  <span class="nav-icon">
+    <img src="../assets/support.svg" alt="">
+  </span>
+  <span>Support</span>
+</a>
+
+        
+<a class="nav-item" href="manager-settings.html">
+  <span class="nav-icon">
+    <img src="../assets/settings.svg" alt="">
+  </span>
+  <span>Settings</span>
+</a>
+
+        <div class="profile-mini">
+          <span class="profile-avatar" id="sidebarAvatar">M</span>
+          <span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small id="sidebarManagerEmail">Loading…</small></span>
+          <button class="signout-button" type="button" id="signOutButton" title="Sign out is controlled by HR" aria-label="Sign out is controlled by HR">↦</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-panel audit-main">
+      <div class="audit-inner">
+        <header class="topbar">
+          <div class="workspace-title"><span class="workspace-mark"><img src="../assets/Pro%204.svg" alt=""></span><span class="workspace-copy"><span>UniProcur Workspace</span><strong id="welcomeText">Welcome Manager!</strong></span></div>
+          <div class="topbar-account"><button class="notification-button" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button><span class="topbar-divider"></span><span class="account-copy"><strong id="topbarManagerName">Manager</strong><small id="topbarManagerEmail">Loading…</small></span><span class="account-avatar" id="topbarAvatar">M</span></div>
+        </header>
+
+        <div class="audit-error" id="auditError" role="alert" hidden></div>
+        <section class="audit-controls" aria-label="Audit search and filters">
+          <div class="audit-first-row">
+            <form id="auditSearchForm" class="audit-search" role="search">
+              <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="10.7" cy="10.7" r="6.8"/><path d="m16 16 5 5"/></svg></span>
+              <input id="auditSearch" type="search" name="search" placeholder="search" aria-label="Search audit trail entries" autocomplete="off" maxlength="120">
+              <button type="submit">Search</button>
+            </form>
+            <div class="audit-filter-wrap">
+              <button id="auditFilterButton" class="audit-filter-button" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="auditFilterMenu"><img src="../assets/filter.svg" alt="">Filter</button>
+              <div id="auditFilterMenu" class="audit-filter-menu" hidden>
+                <label>Action
+                  <select id="actionFilter"><option value="all">All actions</option><option value="submitted">Submitted</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
+                </label>
+                <label>Time period
+                  <select id="periodFilter"><option value="all">All time</option><option value="today">Today</option><option value="week">This week</option></select>
+                </label>
+                <button class="filter-reset" id="filterReset" type="button">Reset filters</button>
+              </div>
+            </div>
+          </div>
+          <div class="audit-second-row">
+            <label class="sr-only" for="roleFilter">Filter by role</label>
+            <select id="roleFilter" class="role-select"><option value="all">Roles</option><option value="manager">Manager</option><option value="buyer">Buyer</option></select>
+            <div class="export-row"><button id="exportPdf" type="button" class="pdf-button">Export PDF</button><button id="exportCsv" type="button" class="excel-button">Excel</button></div>
+          </div>
+        </section>
+
+        <section class="audit-stats" aria-label="Audit statistics">
+          <article class="audit-stat audit-stat-primary"><span>Total Activities</span><strong id="totalActivities">—</strong><small>Actually recorded audit events</small></article>
+          <article class="audit-stat"><span>Activity This Week</span><strong id="thisWeek">—</strong><small>Recorded events since Monday</small></article>
+          <article class="audit-stat"><span>Today</span><strong id="todayCount">—</strong><small>Recorded events today</small></article>
+          <article class="audit-stat"><span>Pending Actions</span><strong id="pendingActions">—</strong><small>PR + PO approvals awaiting review</small></article>
+        </section>
+
+        <section class="audit-panel" aria-label="Audit log table">
+          <div class="audit-table-scroll">
+            <table class="audit-table">
+              <thead><tr><th>Timestamp</th><th>User</th><th>Role</th><th>Module</th><th>Action</th><th>Description</th><th>IP Address</th></tr></thead>
+              <tbody id="auditRows"><tr><td colspan="7" class="audit-empty">Loading recorded activities…</td></tr></tbody>
+            </table>
+          </div>
+          <div class="audit-table-footer"><span id="resultSummary" aria-live="polite">Loading activities…</span><nav id="auditPagination" class="audit-pagination" aria-label="Audit log pages"></nav></div>
+        </section>
+        <p id="auditHistoryNote" class="audit-history-note">Only actual activities recorded after audit logging is installed appear here. Prior transactions cannot be reconstructed as verified IP-based audit events.</p>
+      </div>
+    </main>
+  </div>
+  <div id="auditToast" class="audit-toast" role="status" aria-live="polite" hidden></div>
+  <script src="../assets/uniprocur-manager-profile-display.js?v=1" defer></script>
+</body>
+</html>

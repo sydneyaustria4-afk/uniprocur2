@@ -61,6 +61,43 @@ function bnEvents(mysqli $db, int $buyerId): array {
         $warnings[] = 'Finance decision history is unavailable. Verify the Finance handoff migration and API.';
     }
 
+    // UNIPROCUR_BUYER_PO_DECISION_NOTIFICATIONS_V1
+    // Actual Manager PO decisions, captured when Manager's existing API commits.
+    try {
+        $stmt = $db->prepare(
+            "SELECT e.id, e.event_type, e.po_number, e.recorded_at,
+                    u.full_name AS manager_name
+             FROM procurement_po_notification_events e
+             INNER JOIN purchase_orders po ON po.id=e.po_id
+             LEFT JOIN users u ON u.id=e.manager_id
+             WHERE e.event_type IN ('approved','rejected')
+               AND e.buyer_id=? AND po.created_by=?
+             ORDER BY e.recorded_at DESC, e.id DESC LIMIT 80"
+        );
+        $stmt->bind_param('ii', $buyerId, $buyerId);
+        $stmt->execute();
+        $rows=$stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        $sources['manager_po_decisions']=true;
+        foreach ($rows as $row) {
+            $no=(string)$row['po_number'];
+            $approved=$row['event_type']==='approved';
+            $events[] = [
+                'key'=>'podecision:'.(int)$row['id'],
+                'type'=>$approved?'manager_po_approved':'manager_po_rejected',
+                'category'=>'Manager',
+                'title'=>'Manager '.($approved?'approved ':'rejected ').$no,
+                'message'=>'Manager decision saved in Procurement. '.($approved
+                    ? 'The Purchase Order is approved.'
+                    : 'The Purchase Order was rejected; review it before taking the next action.'),
+                'occurred_at'=>(string)$row['recorded_at'],
+                'url'=>'buyer-view-purchase-order.html?po_number='.rawurlencode($no),
+            ];
+        }
+    } catch (Throwable $error) {
+        error_log('Buyer notifications Manager PO source: '.$error->getMessage());
+        $warnings[]='Manager Purchase Order decision notifications are unavailable. Run the PO notification SQL migration.';
+    }
     // This is the SAME local Inventory database used by the existing real GR page.
     // Do not claim Radmin/cross-PC connectivity: this only works on local XAMPP.
     $host = strtolower(trim((string) ($_SERVER['HTTP_HOST'] ?? '')));

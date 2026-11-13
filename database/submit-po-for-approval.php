@@ -127,6 +127,16 @@ try {
     if ($changed !== 1) {
         throw new RuntimeException('PO update failed.');
     }
+    // UNIPROCUR_PO_SUBMISSION_NOTIFICATION_V1
+    // Store this event in the SAME transaction as the draft -> pending transition.
+    $notify = $conn->prepare(
+        "INSERT INTO procurement_po_notification_events
+         (po_id,po_number,buyer_id,event_type,origin,recorded_at)
+         VALUES (?,?,?,'submitted','workflow',NOW())"
+    );
+    $notify->bind_param('isi',$poId,$poNumber,$buyerId);
+    $notify->execute();
+    $notify->close();
     $conn->commit();
     $transactionStarted = false;
 

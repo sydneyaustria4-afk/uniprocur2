@@ -91,6 +91,17 @@ try {
         $trackStmt->close();
     }
 
+    // UNIPROCUR_PO_MANAGER_DECISION_NOTIFICATION_V1
+    // Record real Manager decision atomically with PO status change.
+    $notifyBuyerId = (int)$existing['created_by'];
+    $notify = $conn->prepare(
+        "INSERT INTO procurement_po_notification_events
+         (po_id,po_number,buyer_id,manager_id,event_type,origin,recorded_at)
+         VALUES (?,?,?,?,?,'workflow',NOW())"
+    );
+    $notify->bind_param('isiis',$poId,$number,$notifyBuyerId,$managerId,$newStatus);
+    $notify->execute();
+    $notify->close();
     $conn->commit();
     $started = false;
     managerSendJson(200, [
