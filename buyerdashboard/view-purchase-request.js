@@ -262,7 +262,7 @@ const images = {
       timeline.append(
         createTimelineItem({
           heading: "Approved",
-          title: `Approved by ${request.approved_by_name || "Manager"}.`,
+          title: "Approved by Manager.",
           description: "Purchase Request approved.",
           date: request.approved_at,
           completed: true

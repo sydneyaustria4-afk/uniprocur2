@@ -188,23 +188,24 @@ try {
         $unit = cleanValue($item['unit'] ?? '', 20);
         $quantityRaw = trim((string)($item['quantity'] ?? ''));
 
-        if ($status === 'submitted') {
-            if ($name === '' || $unit === '' || !is_numeric($quantityRaw) || (float)$quantityRaw <= 0) {
-                throw new RuntimeException(
-                    'Complete the item name, unit, and positive quantity for item ' . ($index + 1) . '.'
-                );
-            }
-            $quantity = (float)$quantityRaw;
-        } else {
-            // pr_items.item_name, unit and qty are NOT NULL, so unfinished
-            // draft rows are stored as empty strings and a zero quantity.
-            $quantity = is_numeric($quantityRaw) && (float)$quantityRaw > 0
-                ? (float)$quantityRaw
-                : 0.0;
+        // UNIPROCUR_SAVE_DRAFT_QTY_VALIDATION_V1
+        // pr_items.qty is DECIMAL(10,2) CHECK (qty > 0). This applies to
+        // submitted AND draft PRs. Never insert zero for an unfinished row.
+        if ($status === 'submitted' && ($name === '' || $unit === '')) {
+            throw new InvalidArgumentException(
+                'Complete the item name and unit for item ' . ($index + 1) . '.'
+            );
         }
-
-        if (!is_finite($quantity) || $quantity > 99999999.99) {
-            throw new RuntimeException('Enter a valid quantity for item ' . ($index + 1) . '.');
+        if (!preg_match('/\A(?:\d+(?:\.\d{1,2})?|\.\d{1,2})\z/D', $quantityRaw)) {
+            throw new InvalidArgumentException(
+                'Item ' . ($index + 1) . ': enter a positive quantity with at most two decimal places, or remove the unfinished row.'
+            );
+        }
+        $quantity = (float)$quantityRaw;
+        if (!is_finite($quantity) || $quantity < 0.01 || $quantity > 99999999.99) {
+            throw new InvalidArgumentException(
+                'Item ' . ($index + 1) . ': quantity must be between 0.01 and 99999999.99.'
+            );
         }
 
         $items[] = [
@@ -410,6 +411,10 @@ try {
     }
 
     error_log('Save Purchase Request Error: ' . $error->getMessage());
+
+    if ($error instanceof InvalidArgumentException) {
+        sendJson(422, ['success' => false, 'message' => $error->getMessage()]);
+    }
 
     $message = $error instanceof mysqli_sql_exception
         ? 'A database error prevented the Purchase Request from being saved. Check the database and PHP error log.'

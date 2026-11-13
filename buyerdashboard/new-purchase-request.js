@@ -348,6 +348,21 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // UNIPROCUR_SAVE_DRAFT_QTY_VALIDATION_V1
+    // MySQL pr_items.qty is DECIMAL(10,2) CHECK(qty > 0).
+    // A draft may have no items, but any listed item needs a valid quantity.
+    const invalidQuantityIndex = data.items.findIndex((item) => {
+      const raw = String(item.quantity ?? "").trim();
+      return !/^(?:\d+(?:\.\d{1,2})?|\.\d{1,2})$/.test(raw) ||
+        Number(raw) < 0.01 || Number(raw) > 99999999.99;
+    });
+    if (invalidQuantityIndex !== -1) {
+      showToast(`Item ${invalidQuantityIndex + 1}: enter a quantity above zero (up to 2 decimals), or remove the unfinished item.`);
+      const itemRows = itemEntryList.querySelectorAll(".item-entry");
+      itemRows[invalidQuantityIndex]?.querySelector('[name="itemQuantity[]"]')?.focus();
+      return;
+    }
+
     const button =
       action === "draft" ? saveDraftButton : submitButton;
 
