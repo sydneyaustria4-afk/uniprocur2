@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UniProcur | Classroom Demo Mode</title>
+  <link rel="stylesheet" href="uniprocur-demo.css?v=20261113">
+  <script src="uniprocur-demo.js?v=20261113" defer></script>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <a class="brand" href="buyer-dashboard.html" aria-label="Return to Buyer Dashboard"><span class="brand-symbol">▦</span><span><strong>UniProcur</strong><small>Procurement Workspace</small></span></a>
+      <span class="mode-flag">CLASSROOM DEMO • NO DATABASE CHANGES</span>
+      <a href="buyer-dashboard.html" class="back">Back to Buyer Dashboard</a>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <div class="eyebrow">OFFLINE-FRIENDLY PRESENTATION</div>
+          <h1>Procurement → Inventory → Finance</h1>
+          <p>Try the complete <strong>simulated</strong> workflow on any PC. This preview uses example records only. It is not connected to your Inventory or Finance team's systems.</p>
+        </div>
+        <button type="button" id="resetDemo" class="reset">Reset demonstration</button>
+      </div>
+      <div class="notice" role="note"><strong>DEMO ONLY</strong> Actions on this page change browser display only. Nothing is saved to MySQL, no real Purchase Order or Goods Receipt is created, and no payment, approval, budget deduction, or stock update is performed.</div>
+      <section class="summary" aria-label="Simulation summary">
+        <div class="fact"><span>Purchase Order</span><strong>SIM-PO-0001</strong><small>Example number — not a real PO</small></div>
+        <div class="fact"><span>Supplier</span><strong>SoleTech Rubber Manufacturing</strong><small>Sample quotation</small></div>
+        <div class="fact"><span>Material</span><strong>EVA Foam Sheets</strong><small>10 pairs × ₱125.00</small></div>
+        <div class="fact"><span>Sample total</span><strong>₱1,250.00</strong><small>Illustrative, before taxes</small></div>
+      </section>
+      <section class="simulator" aria-labelledby="demoTitle">
+        <div class="sim-header">
+          <div><div class="eyebrow">DEMO WORKFLOW</div><h2 id="demoTitle">Order progress</h2><p id="phaseDescription" aria-live="polite">Approved Purchase Order created (demo).</p></div>
+          <div class="sim-buttons"><span class="stage-pill" id="stagePill">PO Approved (Demo)</span><button id="advanceDemo" type="button" class="primary">Simulate supplier confirmation</button></div>
+        </div>
+        <ol class="stages" id="stageList" aria-label="Simulated processing stages">
+          <li>PO Approved</li><li>Supplier Confirmed</li><li>In Transit</li><li>Out for Delivery</li><li>Goods Received</li><li>Invoice Matched</li><li>Finance Review</li>
+        </ol>
+      </section>
+      <section class="details" aria-labelledby="detailsTitle">
+        <div class="details-heading"><h2 id="detailsTitle">Sample documents</h2><p>Switch between documents. All references beginning with <strong>SIM-</strong> are demonstration-only.</p></div>
+        <div class="tabs" role="tablist" aria-label="Sample documents">
+          <button role="tab" aria-selected="true" aria-controls="pane-po" id="tab-po" type="button" data-tab="po">Purchase Order</button>
+          <button role="tab" aria-selected="false" aria-controls="pane-gr" id="tab-gr" type="button" data-tab="gr">Goods Receipt</button>
+          <button role="tab" aria-selected="false" aria-controls="pane-inv" id="tab-inv" type="button" data-tab="inv">Invoice</button>
+          <button role="tab" aria-selected="false" aria-controls="pane-fin" id="tab-fin" type="button" data-tab="fin">Finance Review</button>
+        </div>
+        <div id="pane-po" role="tabpanel" aria-labelledby="tab-po" class="document" tabindex="0">
+          <div class="doc-top"><h3>Purchase Order <span>SIM-PO-0001</span></h3><span class="doc-tag" id="poStatus">Approved (Demo)</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Item</th><th>Qty</th><th>Unit price</th><th>Total</th></tr></thead><tbody><tr><td>EVA Foam Sheets</td><td>10 pairs</td><td>₱125.00</td><td>₱1,250.00</td></tr></tbody></table></div>
+          <p class="helper">This is a standalone preview. The real Purchase Order list continues to use the Procurement database.</p>
+        </div>
+        <div id="pane-gr" role="tabpanel" aria-labelledby="tab-gr" class="document" tabindex="0" hidden>
+          <div class="doc-top"><h3>Inventory Goods Receipt <span>SIM-GR-0001</span></h3><span class="doc-tag" id="grStatus">Awaiting simulated receipt</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Reference</th><th>Item</th><th>Ordered</th><th>Accepted (Demo)</th></tr></thead><tbody><tr><td>SIM-PO-0001</td><td>EVA Foam Sheets</td><td>10 pairs</td><td id="acceptedQty">—</td></tr></tbody></table></div>
+          <p class="helper" id="grNote">Click through the simulated delivery stages to reveal sample receiving information.</p>
+        </div>
+        <div id="pane-inv" role="tabpanel" aria-labelledby="tab-inv" class="document" tabindex="0" hidden>
+          <div class="doc-top"><h3>Supplier Invoice <span>SIM-INV-0001</span></h3><span class="doc-tag" id="invStatus">Not verified (Demo)</span></div>
+          <div class="table-wrap"><table><thead><tr><th>Invoice reference</th><th>PO total</th><th>Receipt total</th><th>Invoice total</th></tr></thead><tbody><tr><td>SIM-INV-0001</td><td>₱1,250.00</td><td id="invGr">Awaiting demo</td><td>₱1,250.00</td></tr></tbody></table></div>
+          <p class="helper" id="invNote">The matching result below is simulated; it is not a verified supplier invoice or actual 3-way match.</p>
+        </div>
+        <div id="pane-fin" role="tabpanel" aria-labelledby="tab-fin" class="document" tabindex="0" hidden>
+          <div class="doc-top"><h3>Finance Quotation / Invoice Review</h3><span class="doc-tag" id="financeStatus">Not started (Demo)</span></div>
+          <div class="finance-grid"><div><span>Example supplier</span><strong>SoleTech Rubber Manufacturing</strong></div><div><span>Example amount</span><strong>₱1,250.00</strong></div><div><span>Approval state</span><strong id="financeState">Not submitted</strong></div></div>
+          <p class="helper">This screen does not call <code>finance-quote-api.php</code>, create Finance decisions, or post to an accounting ledger.</p>
+        </div>
+      </section>
+      <footer>UniProcur Classroom Demo • Sample records cannot be used as proof of Inventory receipt, Finance approval, or procurement completion.</footer>
+    </main>
+  </div>
+</body>
+</html>

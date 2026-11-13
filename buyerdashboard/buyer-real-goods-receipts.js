@@ -123,7 +123,7 @@
       catch (e) { console.warn("PO details not available; rendering actual Inventory GRs only:", e); }
       render(r, p);
     } catch (e) {
-      showError("Unable to verify actual Inventory Goods Receipts: " + (e.message || "connection error") + ". Local XAMPP Inventory database and read-only GR endpoint are required.");
+      showError("Goods Receipt verification unavailable: " + (e.message || "connection error") + " No receipt has been verified and Finance posting is not enabled."); // UNIPROCUR_PORTABLE_GR_MESSAGE_V1
       console.error("Figma Goods Receipt viewer:", e);
     }
   })();

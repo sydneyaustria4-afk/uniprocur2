@@ -4,6 +4,7 @@
  */
 declare(strict_types=1);
 require_once __DIR__ . '/buyer-po-common.php';
+require_once __DIR__ . '/inventory-local-preflight.php'; // UNIPROCUR_PORTABLE_INVENTORY_V1
 header('X-Content-Type-Options: nosniff');
 
 $host=strtolower((string)($_SERVER['HTTP_HOST']??''));
@@ -19,6 +20,16 @@ if (!preg_match('/\APO-[A-Za-z0-9-]{1,30}\z/',$number)) {
 try {
     $buyer=buyerPoIdentity($conn);
     $buyerId=(int)$buyer['id'];
+    // UNIPROCUR_PORTABLE_INVENTORY_CHECK_V1
+    if (!uniLocalInventoryReady($conn, [
+        'inventory_po_item_mappings', 'items', 'inventory_po_real_receipt_items',
+        'inventory_po_real_receipts', 'warehouses'
+    ])) {
+        buyerPoJson(503, [
+            'success' => false, 'code' => 'INVENTORY_NOT_CONFIGURED',
+            'message' => 'Inventory integration is not configured on this PC. Actual Goods Receipts cannot be verified. Procurement Purchase Orders remain available; no receipt was created.'
+        ]);
+    }
     $q=$conn->prepare("SELECT po.id,po.po_number,LOWER(po.status) AS po_status, pr.pr_number,
         s.name AS supplier_name, COALESCE(l.inventory_request_number,'') AS inventory_request_number
         FROM purchase_orders po

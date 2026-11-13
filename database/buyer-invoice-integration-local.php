@@ -6,6 +6,7 @@
 declare(strict_types=1);
 date_default_timezone_set('Asia/Manila');
 require_once __DIR__ . '/buyer-po-common.php';
+require_once __DIR__ . '/inventory-local-preflight.php'; // UNIPROCUR_PORTABLE_INVENTORY_V1
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: same-origin');
 
@@ -143,6 +144,14 @@ if(!in_array($method,['GET','POST'],true))ilReply(405,['success'=>false,'message
 $transaction=false;
 try {
     $buyer=buyerPoIdentity($conn);$buyerId=(int)$buyer['id'];
+    // UNIPROCUR_PORTABLE_INVOICE_GUARD_V1
+    // Fail closed for GET and POST. Do not create/verify invoices without real GR tables.
+    if (!uniLocalInventoryReady($conn, ['inventory_po_real_receipt_items', 'inventory_po_real_receipts'])) {
+        ilReply(503, [
+            'success' => false, 'code' => 'INVENTORY_NOT_CONFIGURED',
+            'message' => 'Invoice verification requires real Inventory Goods Receipts. The Inventory integration is not configured on this PC. No invoice was created or verified; Finance posting remains disabled.'
+        ]);
+    }
     if($method==='GET') {
         if(empty($_SESSION['buyer_invoice_local_csrf']))$_SESSION['buyer_invoice_local_csrf']=bin2hex(random_bytes(32));
         $list=$conn->prepare("SELECT po.po_number,LOWER(po.status) AS status,s.name AS supplier_name

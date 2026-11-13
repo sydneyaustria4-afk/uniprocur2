@@ -5,6 +5,7 @@
  * A buyer-checked document flag is a recorded declaration, NOT document authentication.
  */
 declare(strict_types=1);
+require_once __DIR__ . '/inventory-local-preflight.php'; // UNIPROCUR_PORTABLE_INVENTORY_V1
 
 function fihMoneyCents($v): int {
     $text = (string)$v;
@@ -54,6 +55,11 @@ function fihVerifiedSnapshot(mysqli $db, array $inv): array {
     }
     if ($inv['invoice_date'] < $inv['order_date'] || $inv['due_date'] < $inv['invoice_date']) {
         throw new DomainException('Invoice or due date is inconsistent.');
+    }
+    // UNIPROCUR_PORTABLE_FINANCE_GUARD_V1
+    // No valid, real Inventory source: do not queue an invoice for Finance.
+    if (!uniLocalInventoryReady($db, ['inventory_po_real_receipt_items', 'inventory_po_real_receipts'])) {
+        throw new DomainException('Inventory Goods Receipt verification is not configured on this PC. Finance invoice handoff is blocked until real receiving can be verified.');
     }
     $invoiceId=(int)$inv['invoice_id'];$poId=(int)$inv['po_id'];$poNumber=(string)$inv['po_number'];
     $q=$db->prepare('SELECT pi.id, pi.item_name, pi.unit, pi.qty_ordered, pi.qty_received,pi.unit_price,

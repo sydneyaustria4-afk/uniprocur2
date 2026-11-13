@@ -34,7 +34,7 @@ if (!in_array($remoteIp, ['127.0.0.1', '::1'], true) ||
 // The same Apache SetEnv IMS_API_KEY already configured for the Inventory app.
 $key = (string) (getenv('IMS_API_KEY') ?: ($_SERVER['IMS_API_KEY'] ?? ''));
 if ($key === '') {
-    reply(500, ['success' => false, 'message' => 'Inventory API key not configured in Apache.']);
+    reply(503, ['success' => false, 'code' => 'INVENTORY_NOT_CONFIGURED', 'message' => 'Inventory Material Request API is not configured on this PC. The Procurement-only demo can continue without Inventory.']); // UNIPROCUR_PORTABLE_REQUEST_MESSAGE_V1
 }
 
 if (!function_exists('curl_init')) {
