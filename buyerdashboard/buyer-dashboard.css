@@ -3000,3 +3000,20 @@ body {
 .tasks-panel {
   margin-top: -30px !important;
 }
+
+/* ONE-CLICK FIX 2026-11-13: wrap long PR titles without overlapping code number. */
+.requests-panel .dashboard-table tbody td {
+    height: auto;
+    min-height: 43px;
+    vertical-align: middle;
+}
+.requests-panel .dashboard-table tbody td:first-child {
+    max-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.4;
+}
+.requests-panel .dashboard-table tbody td:nth-child(2) {
+    white-space: nowrap;
+}

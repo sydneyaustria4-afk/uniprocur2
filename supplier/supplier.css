@@ -1134,3 +1134,6 @@ img {
   text-decoration: none;
   color: inherit;
 }
+
+/* ONE-CLICK FIX 2026-11-13: Catalog stays right-aligned after button removal. */
+.supplier-actions .catalog-button { margin-left: auto; }

@@ -88,7 +88,7 @@ $stmt = $conn->prepare(
     $prNumber = trim((string) ($input['pr_number'] ?? ''));
     $deadline = trim((string) ($input['deadline'] ?? ''));
     $deadlineTime = trim((string) ($input['deadline_time'] ?? ''));
-    if ($deadlineTime !== '' && !preg_match('/\A(?:[01]\d|2[0-3]):[0-5]\d\z/D', $deadlineTime)) {
+    if ($deadlineTime === '' || !preg_match('/\A(?:[01]\d|2[0-3]):[0-5]\d\z/D', $deadlineTime)) {
         sendJson(422, ['success' => false, 'message' => 'Invalid RFQ required time.']);
     }
     $deadlineTime = $deadlineTime === '' ? null : $deadlineTime;
@@ -129,6 +129,10 @@ if (!in_array($warehouseValue, ['main', 'second'], true)) {
         ]);
     }
 
+    // ONE-CLICK FIX 2026-11-13: reject past dates even if caller bypasses the form.
+    if ($deadline < (new DateTimeImmutable('today', new DateTimeZone('Asia/Manila')))->format('Y-m-d')) {
+        sendJson(422, ['success' => false, 'message' => 'RFQ deadline cannot be in the past.']);
+    }
     if (!is_array($suppliers) || count($suppliers) === 0) {
         sendJson(422, [
             'success' => false,

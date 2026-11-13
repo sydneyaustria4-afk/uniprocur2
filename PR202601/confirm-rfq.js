@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     prRequiredDate: "2026-10-05",
 
-    submissionDueDate: "2026-09-30",
+    submissionDueDate: "",
 
     requiredTime: "05:00",
 
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dateInput.value =
       getLocalDateString(data.submissionDueDate) ||
-      "2026-09-30";
+      "";
 
   }
 
@@ -1110,6 +1110,19 @@ if (confirmButton) {
 
     if (!preview) {
       showToast("RFQ information is missing. Please return to Edit RFQ.");
+      return;
+    }
+
+    // ONE-CLICK FIX 2026-11-13: reject stale or manipulated cached RFQ settings.
+    const rfqDue = getLocalDateString(preview.submissionDueDate);
+    const rfqTime = String(preview.requiredTime || "").trim();
+    const rfqPeriod = String(preview.ampm || "").toUpperCase();
+    const now = new Date();
+    const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(rfqDue) || rfqDue < today ||
+        !/^(?:0?[1-9]|1[0-2]):[0-5]\d$/.test(rfqTime) ||
+        !["AM","PM"].includes(rfqPeriod)) {
+      showToast("Invalid RFQ deadline. Return to Edit RFQ and enter valid date/time.");
       return;
     }
 

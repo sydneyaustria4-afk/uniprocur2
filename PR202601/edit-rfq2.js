@@ -18,6 +18,53 @@ document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("fileInput");
   const filesList = document.getElementById("uploadedFilesList");
   const ampmButtons = document.querySelectorAll(".ampm-btn");
+
+  // ONE-CLICK FIX 2026-11-13: validate RFQ date/time BEFORE preview/save.
+  const rfqSubmissionDate = document.getElementById("submissionDate");
+  const rfqSubmissionTime = document.getElementById("submissionTime");
+  function rfqTodayLocal() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+  function validateRfqSettings() {
+    const due = rfqSubmissionDate?.value || "";
+    const time = (rfqSubmissionTime?.value || "").trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(due) ||
+        !Number.isFinite(Date.parse(`${due}T00:00:00`)) ||
+        due < rfqTodayLocal()) {
+      showToast("Select a valid RFQ date (today or later).");
+      rfqSubmissionDate?.focus();
+      return false;
+    }
+    if (!/^(?:0?[1-9]|1[0-2]):[0-5]\d$/.test(time)) {
+      showToast("Use a valid 12-hour time (example: 05:30).");
+      rfqSubmissionTime?.setCustomValidity("Enter HH:MM between 01:00 and 12:59.");
+      rfqSubmissionTime?.reportValidity();
+      rfqSubmissionTime?.focus();
+      return false;
+    }
+    rfqSubmissionTime?.setCustomValidity("");
+    return true;
+  }
+  if (rfqSubmissionDate) {
+    rfqSubmissionDate.min = rfqTodayLocal();
+    if (rfqSubmissionDate.value && rfqSubmissionDate.value < rfqTodayLocal()) {
+      rfqSubmissionDate.value = "";
+    }
+  }
+  if (rfqSubmissionTime) {
+    rfqSubmissionTime.addEventListener("input", () => {
+      rfqSubmissionTime.value = rfqSubmissionTime.value.replace(/[^0-9:]/g, "").slice(0, 5);
+      rfqSubmissionTime.setCustomValidity("");
+    });
+    rfqSubmissionTime.addEventListener("blur", () => {
+      const ok = /^(?:0?[1-9]|1[0-2]):[0-5]\d$/.test(rfqSubmissionTime.value);
+      rfqSubmissionTime.setCustomValidity(ok ? "" : "Enter HH:MM between 01:00 and 12:59.");
+    });
+  }
   const rfqParams = new URLSearchParams(window.location.search);
   const requestedPrNumber = rfqParams.get("pr_number");
 
@@ -417,6 +464,8 @@ document.querySelectorAll(".supplier-selection-card").forEach((card) => {
   reviewSubmitBtn.addEventListener("click", (event) => {
     event.preventDefault();
 
+    if (!validateRfqSettings()) return;
+
     if (!purchaseRequestReady) {
       showToast("Wait for the selected Purchase Request to finish loading.");
       return;
@@ -752,7 +801,7 @@ window.location.href = "confirm-rfq.html";
         convertDateToISO(prRequiredDateText),
 
       submissionDueDate:
-        submissionDate?.value || "2026-09-30",
+        submissionDate?.value || "",
 
       requiredTime:
         submissionTime?.value || "05:00",

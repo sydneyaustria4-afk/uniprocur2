@@ -170,7 +170,6 @@
   }
 
   document.getElementById('back-to-detail').addEventListener('click', navigateToDetail);
-  document.getElementById('inner-back').addEventListener('click', navigateToDetail);
   document.getElementById('back-to-list').addEventListener('click', () => {
     window.location.href = 'manager-purchase-requests.html';
   });

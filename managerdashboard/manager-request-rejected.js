@@ -179,7 +179,6 @@
   }
 
   document.getElementById('back-to-detail').addEventListener('click', navigateToList);
-  document.getElementById('inner-back').addEventListener('click', navigateToList);
   document.getElementById('back-to-list').addEventListener('click', navigateToList);
   document.getElementById('notifications-button').addEventListener('click', () => showToast('No new notifications.'));
 

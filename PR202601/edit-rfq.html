@@ -33,7 +33,7 @@
   defer
 ></script>
 
-<script src="edit-rfq.js?v=5" defer></script>
+<script src="edit-rfq.js?v=ui20261113" defer></script>
 
 </head>
 
@@ -270,7 +270,7 @@
         type="date"
         id="submissionDate"
         name="submissionDate"
-        value="2026-09-30"
+        value=""
         class="field-input"
       >
     </div>
@@ -286,6 +286,11 @@
         name="submissionTime"
         value="05:00"
         maxlength="5"
+        inputmode="numeric"
+        autocomplete="off"
+        pattern="(?:0?[1-9]|1[0-2]):[0-5][0-9]"
+        title="Use 12-hour time, e.g. 05:30"
+        required
         class="field-input time-input"
       >
 
