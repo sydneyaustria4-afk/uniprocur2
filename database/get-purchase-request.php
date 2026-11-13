@@ -84,6 +84,7 @@ try {
 
         WHERE pr.pr_number = ?
           AND pr.created_by = ?
+          AND NOT EXISTS (SELECT 1 FROM procurement_audit_logs AS deleted_pr WHERE deleted_pr.reference_number = (pr.pr_number COLLATE utf8mb4_unicode_ci) AND deleted_pr.action_name = 'PR Archived')
 
         LIMIT 1
     ";

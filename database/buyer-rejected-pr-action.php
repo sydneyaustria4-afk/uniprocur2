@@ -89,6 +89,10 @@ try {
                 FROM purchase_requisitions WHERE pr_number=? AND created_by=? LIMIT 1");
         $stmt->bind_param('si',$number,$buyerId);$stmt->execute();$pr=$stmt->get_result()->fetch_assoc();$stmt->close();
         if (!$pr) rejectReply(404,['success'=>false,'message'=>'PR not found for this Buyer.']);
+        $archivedCheck=$conn->prepare("SELECT id FROM procurement_audit_logs WHERE reference_number=? AND action_name='PR Archived' LIMIT 1");
+        $archivedCheck->bind_param('s',$number);$archivedCheck->execute();
+        $alreadyArchived=$archivedCheck->get_result()->num_rows>0;$archivedCheck->close();
+        if($alreadyArchived) rejectReply(410,['success'=>false,'message'=>'This PR was deleted from active lists.']);
         $id=(int)$pr['id'];$items=rejectItems($conn,$id);
         $history=[];$baseline=null;
         if (rejectTableExists($conn,'procurement_pr_rejection_history')) {
@@ -145,8 +149,12 @@ try {
     $stmt->bind_param('si',$number,$buyerId);$stmt->execute();$pr=$stmt->get_result()->fetch_assoc();$stmt->close();
     if (!$pr){$conn->rollback();$transaction=false;rejectReply(404,['success'=>false,'message'=>'PR not found for this Buyer.']);}
     if (strtolower((string)$pr['status'])!=='rejected'){$conn->rollback();$transaction=false;rejectReply(409,['success'=>false,'message'=>'This PR is no longer Rejected. Refresh the page.']);}
-    $id=(int)$pr['id'];
-    // Snapshot the initially rejected version only once, even after many Save Draft actions.
+    $archivedCheck=$conn->prepare("SELECT id FROM procurement_audit_logs WHERE reference_number=? AND action_name='PR Archived' LIMIT 1");
+     $archivedCheck->bind_param('s',$number);$archivedCheck->execute();
+     $alreadyArchived=$archivedCheck->get_result()->num_rows>0;$archivedCheck->close();
+     if($alreadyArchived){$conn->rollback();$transaction=false;rejectReply(410,['success'=>false,'message'=>'This rejected PR was deleted and cannot be revised.']);}
+     $id=(int)$pr['id'];
+     // Snapshot the initially rejected version only once, even after many Save Draft actions.
     $stmt=$conn->prepare('SELECT pr_id FROM procurement_pr_revision_baselines WHERE pr_id=? LIMIT 1');
     $stmt->bind_param('i',$id);$stmt->execute();$baselineExists=$stmt->get_result()->num_rows>0;$stmt->close();
     if (!$baselineExists) {

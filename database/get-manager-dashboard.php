@@ -25,7 +25,8 @@ try {
                 COALESCE(SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE())
                     AND MONTH(created_at) = MONTH(CURDATE()) THEN 1 ELSE 0 END), 0) AS this_month
          FROM purchase_requisitions
-         WHERE LOWER(status) IN ('submitted','pending','approved','rejected')"
+         WHERE LOWER(status) IN ('submitted','pending','approved','rejected')
+           AND NOT EXISTS (SELECT 1 FROM procurement_audit_logs AS deleted_pr WHERE deleted_pr.reference_number = (purchase_requisitions.pr_number COLLATE utf8mb4_unicode_ci) AND deleted_pr.action_name = 'PR Archived')"
     )->fetch_assoc();
 
     $poCounts = $conn->query(
@@ -72,6 +73,7 @@ try {
                 DATE_FORMAT(needed_by, '%Y-%m-%d') AS required_date
          FROM purchase_requisitions
          WHERE LOWER(status) IN ('submitted','pending','approved','rejected')
+           AND NOT EXISTS (SELECT 1 FROM procurement_audit_logs AS deleted_pr WHERE deleted_pr.reference_number = (purchase_requisitions.pr_number COLLATE utf8mb4_unicode_ci) AND deleted_pr.action_name = 'PR Archived')
          ORDER BY created_at DESC, id DESC LIMIT 5"
     );
     $recentPrs = $prQuery->fetch_all(MYSQLI_ASSOC);

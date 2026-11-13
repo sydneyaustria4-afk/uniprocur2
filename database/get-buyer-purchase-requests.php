@@ -119,6 +119,7 @@ try {
 
         WHERE pr.created_by = ?
           AND LOWER(pr.status) IN ('draft', 'submitted', 'approved', 'rejected')
+          AND NOT EXISTS (SELECT 1 FROM procurement_audit_logs AS deleted_pr WHERE deleted_pr.reference_number = (pr.pr_number COLLATE utf8mb4_unicode_ci) AND deleted_pr.action_name = 'PR Archived')
 
         GROUP BY
             pr.id,
