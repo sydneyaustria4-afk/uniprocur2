@@ -1,0 +1,96 @@
+/* Scoped Add Item catalog overlay; does not change other UniProcur pages. */
+.rip-dialog-open { overflow: hidden !important; }
+.rip-overlay[hidden], .rip-filter-panel[hidden] { display: none !important; }
+.rip-overlay { position: fixed; inset: 0; z-index: 2500; background: linear-gradient(125deg,#500d08 0%,#a30b07 35%,#ed170c 70%,#f78e53 100%); padding: min(5vh,35px) max(18px,calc((100vw - 1260px)/2)); overflow:auto; color: #171717; box-sizing: border-box; font-family: Inter, Arial, sans-serif; }
+.rip-overlay *, .rip-overlay *::before, .rip-overlay *::after { box-sizing:border-box; }
+.rip-shell { max-width: 1160px; margin: 0 auto; }
+.rip-header { min-height:70px; border:1px solid #ffffff75; border-radius:19px; padding:11px 22px; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(100deg,#3b1514ba,#bd4e4da8); color:white; margin-bottom:28px; }
+.rip-brand { display:flex; align-items:center; gap:12px; }
+.rip-logo { width:45px; height:45px; border:1px solid #fff9; border-radius:100%; display:grid; place-items:center; flex-shrink:0; }
+.rip-logo img { width:26px; height:26px; }
+.rip-brand span:last-child { display:flex; flex-direction:column; gap:2px; }
+.rip-brand small { font-size:12px; }
+.rip-brand strong { font-size:20px; }
+.rip-account { display:flex; align-items:center; gap:15px; font-size:14px; }
+.rip-avatar { border-radius:100%; background:white; color:#a00000; height:35px; width:35px; font-weight:700; display:grid; place-items:center; }
+.rip-paper { padding:22px; background:#fafafa; border-radius:11px; box-shadow:0 10px 28px #33060020; }
+.rip-inner { background:white; border:1px solid #dfdfdf; padding:25px 27px 22px; border-radius:7px; min-height:450px; }
+.rip-toolbar { display:flex; gap:14px; align-items:center; border-bottom:1px solid #d5d5d5; padding-bottom:24px; }
+.rip-search { display:flex; flex:1; min-width:150px; align-items:center; gap:8px; border:2px solid #f3ebeb; border-radius:35px; padding:5px 6px 5px 14px; background:linear-gradient(90deg,#ddd3d3,#ece2e2); height:46px; }
+.rip-search-icon { width:22px; height:22px; flex-shrink:0; display:block; position:relative; border-radius:100%; border:1.8px solid #888; background:white; }
+.rip-search-icon::before { content:''; position:absolute; width:9px; height:9px; border:1.6px solid #555; border-radius:100%; top:3px; left:3px; }
+.rip-search-icon::after { content:''; position:absolute; background:#555; width:8px; height:1.6px; transform:rotate(49deg); top:14px; left:12px; }
+.rip-search input { border:0; background:transparent; outline:0; flex:1; min-width:25px; padding:5px 6px; color:#161616; font-size:14px; }
+.rip-search-submit { background:#fff; border:0; padding:10px 22px; border-radius:30px; font-size:13px; }
+.rip-filter-wrap { position:relative; }
+.rip-filter-btn { display:flex; gap:8px; align-items:center; justify-content:center; border:1px solid #aaa; min-width:102px; min-height:38px; background:#fff; border-radius:5px; padding:9px 14px; font-size:13px; }
+.rip-filter-btn:hover, .rip-filter-btn[aria-expanded='true'] { background:#f7f7f7; }
+.rip-filter-panel { position:absolute; top:calc(100% + 7px); left:0; background:#fff; border:1px solid #d4d4d4; box-shadow:0 6px 20px #0002; padding:13px; border-radius:7px; width:220px; z-index:3; display:grid; gap:9px; }
+.rip-filter-panel label { font-size:12px; font-weight:600; }
+.rip-filter-panel select { border:1px solid #ddd; border-radius:5px; padding:8px; width:100%; background:#fff; }
+.rip-filter-panel button { background:transparent; color:#b31b17; border:0; text-align:left; font-size:12px; text-decoration:underline; }
+.rip-cancel { margin-left:auto; border:1px solid #f34e45; color:#eb1f19; border-radius:9px; padding:10px 24px; background:#fff; font-size:13px; }
+.rip-cancel:hover { background:#fff3f3; }
+.rip-table-caption { display:flex; justify-content:space-between; gap:10px; color:#555; padding:17px 0 10px; font-size:12px; }
+.rip-table-scroller { max-height:min(56vh,410px); overflow:auto; border:1px solid #ddd; border-radius:6px; }
+.rip-table { width:100%; table-layout:fixed; border-collapse:collapse; font-size:12px; }
+.rip-table th, .rip-table td { padding:10px 12px; border-bottom:1px solid #e7e7e7; text-align:left; overflow-wrap:anywhere; }
+.rip-table th { position:sticky; top:0; background:#fafafa; z-index:1; font-weight:700; color:#313131; }
+.rip-table th:nth-child(1) {width:18%;}.rip-table th:nth-child(2) {width:28%;}.rip-table th:nth-child(3) {width:19%;}.rip-table th:nth-child(4) {width:21%;}.rip-table th:nth-child(5) {width:14%;}
+.rip-table tbody tr:hover { background:#fffafa; }
+.rip-action-cell { text-align:center !important; }
+.rip-add-button { background:#fff; border:1px solid #555; color:#222; padding:5px 9px; border-radius:15px; font-size:11px; white-space:nowrap; }
+.rip-add-button:not(:disabled):hover { background:#121212; color:white; }
+.rip-add-button:disabled { background:#f0f0f0; color:#999; border-color:#ddd; cursor:not-allowed; opacity:1; }
+.rip-empty { text-align:center !important; padding:30px !important; color:#777; }
+.rip-footnote { color:#666; font-size:11px; margin:14px 0 0; line-height:1.5; }
+.rip-sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+.rip-overlay button {cursor:pointer}.rip-overlay button:disabled{cursor:not-allowed}
+.rip-overlay button:focus-visible,.rip-overlay input:focus-visible,.rip-overlay select:focus-visible { outline:2px solid #cb140c; outline-offset:2px; }
+@media (max-width:700px) { .rip-overlay {padding:12px;} .rip-paper {padding:9px;} .rip-inner {padding:12px;} .rip-header {margin-bottom:12px;} .rip-account {display:none;} .rip-toolbar {flex-wrap:wrap;} .rip-search {width:100%;flex-basis:100%;} .rip-cancel {margin-left:auto;} .rip-table {min-width:640px;} .rip-table-scroller {max-height:65vh;} }
+
+/* UNIPROCUR_REVISE_SEARCH_ICON_V2
+   Use the real ../assets/invoice-search.svg from the UniProcur repo.
+   Disable the old CSS-drawn magnifying glass; retain accessible focus indication
+   on the entire search field rather than an outline around the text input.
+*/
+.rip-search .rip-search-icon {
+  display: inline-grid;
+  place-items: center;
+  position: static;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(50, 50, 50, .08);
+}
+.rip-search .rip-search-icon::before,
+.rip-search .rip-search-icon::after {
+  content: none;
+  display: none;
+}
+.rip-search .rip-search-icon img {
+  display: block;
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+}
+.rip-overlay .rip-search input:focus,
+.rip-overlay .rip-search input:focus-visible {
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+.rip-search:focus-within {
+  box-shadow: 0 0 0 2px rgba(198, 32, 24, .32);
+}
+
+/* UNIPROCUR_REVISE_SEARCH_ICON_V3: real asset and clean focus state. */
+.rip-search .rip-search-icon{display:inline-grid;place-items:center;position:static;flex:0 0 32px;width:32px;height:32px;border:0;border-radius:50%;background:white;box-shadow:0 0 0 1px rgba(50,50,50,.08)}
+.rip-search .rip-search-icon::before,.rip-search .rip-search-icon::after{content:none;display:none}
+.rip-search .rip-search-icon img{display:block;width:19px;height:19px;object-fit:contain}
+.rip-overlay .rip-search input:focus,.rip-overlay .rip-search input:focus-visible{outline:none;box-shadow:none;border:0}
+.rip-search:focus-within{box-shadow:0 0 0 2px rgba(198,32,24,.32)}
+
