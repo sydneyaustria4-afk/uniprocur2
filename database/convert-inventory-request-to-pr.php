@@ -8,7 +8,7 @@ date_default_timezone_set('Asia/Manila');
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
 header('X-Content-Type-Options: nosniff');
-if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) require_once __DIR__ . '/uniprocur-session.php';
 
 function respond(int $status, array $data): void {
     http_response_code($status);

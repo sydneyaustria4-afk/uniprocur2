@@ -1,7 +1,7 @@
 <?php
 /** Shared authorization for new Buyer PO read-only APIs. */
 require_once __DIR__ . '/procurement_db_connection.php';
-if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) require_once __DIR__ . '/uniprocur-session.php';
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
 

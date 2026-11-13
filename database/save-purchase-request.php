@@ -2,7 +2,7 @@
 header('Content-Type: application/json; charset=utf-8');
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
+    require_once __DIR__ . '/uniprocur-session.php';
 }
 
 date_default_timezone_set('Asia/Manila');

@@ -1,7 +1,7 @@
 <?php
 // Saves simulated quotations using unit prices from supplier_items (MySQL).
 header('Content-Type: application/json; charset=utf-8');
-if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) require_once __DIR__ . '/uniprocur-session.php';
 require_once __DIR__ . '/procurement_db_connection.php';
 function respond($status, $data) { http_response_code($status); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
 function unitKey($unit) {

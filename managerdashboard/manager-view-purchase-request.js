@@ -309,6 +309,31 @@
     if (previousFocus && typeof previousFocus.focus === 'function') previousFocus.focus();
   }
 
+  // GET endpoint issues a fresh token for the current Manager session.
+  // Never bypass the server-side CSRF or role check.
+  async function refreshManagerDecisionToken() {
+    const response = await fetch(`${API_URL}?pr_number=${encodeURIComponent(prNumber)}`, {
+      credentials: 'same-origin',
+      headers: { Accept: 'application/json' },
+      cache: 'no-store'
+    });
+    const result = await response.json();
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || 'Could not verify Manager session. Reload and try again.');
+    }
+    if (!result.purchase_request || Number(result.purchase_request.id) !== Number(currentRequest.id)) {
+      throw new Error('Purchase Request changed. Reload the page before deciding.');
+    }
+    if (normalizeStatus(result.purchase_request.status) !== 'pending') {
+      throw new Error('This Purchase Request is no longer pending. Reload the page.');
+    }
+    if (!result.manager || Number(result.manager.id) !== Number(currentManager?.id)) {
+      throw new Error('Manager account changed. Reload the page before deciding.');
+    }
+    csrfToken = String(result.csrf_token || '');
+    if (!csrfToken) throw new Error('Manager session verification is unavailable. Reload the page.');
+  }
+
   async function submitDecision() {
     if (!currentRequest) return;
     const remarks = remarksInput.value.trim();
@@ -319,21 +344,29 @@
     modalError.hidden = true;
 
     try {
-      const response = await fetch(DECISION_URL, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          'X-CSRF-Token': csrfToken
-        },
-        body: JSON.stringify({
-          request_id: Number(currentRequest.id),
-          decision: activeDecision,
-          remarks
-        })
-      });
-      const result = await response.json();
+      // Refresh on this session, then retry only after a rejected HTTP 419.
+      // Server-side code sends 419 BEFORE touching the purchase request.
+      let response;
+      let result;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        await refreshManagerDecisionToken();
+        response = await fetch(DECISION_URL, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'X-CSRF-Token': csrfToken
+          },
+          body: JSON.stringify({
+            request_id: Number(currentRequest.id),
+            decision: activeDecision,
+            remarks
+          })
+        });
+        result = await response.json();
+        if (response.status !== 419) break;
+      }
       if (!response.ok || !result.success) {
         throw new Error(result.message || 'The decision could not be saved.');
       }

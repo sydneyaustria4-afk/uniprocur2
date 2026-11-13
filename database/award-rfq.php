@@ -1,7 +1,7 @@
 <?php
 // Confirm the winner of a previously compared simulated RFQ.
 header('Content-Type: application/json; charset=utf-8');
-if (session_status() !== PHP_SESSION_ACTIVE) session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) require_once __DIR__ . '/uniprocur-session.php';
 require_once __DIR__.'/procurement_db_connection.php';
 function awardReply(int $code,array $body):void {http_response_code($code);echo json_encode($body,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);exit;}
 $started=false;

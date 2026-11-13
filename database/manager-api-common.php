@@ -5,7 +5,7 @@
  */
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
+    require_once __DIR__ . '/uniprocur-session.php';
 }
 
 const UNIPROCUR_MANAGER_LOCAL_DEMO_MODE = true;

@@ -3,7 +3,7 @@
 // No RFQ quote amount is written here. Save and Compare remains the save step.
 header('Content-Type: application/json; charset=utf-8');
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
+    require_once __DIR__ . '/uniprocur-session.php';
 }
 require_once __DIR__ . '/procurement_db_connection.php';
 
