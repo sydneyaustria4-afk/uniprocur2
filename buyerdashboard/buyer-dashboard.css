@@ -2987,3 +2987,16 @@ body {
 
 /* Finance success purchase chart layout: Pending Request Table takes full width */
 .lower-row { grid-template-columns:minmax(0,1fr) !important; }
+
+
+
+
+/* FINAL FIX - Move My Task closer to Arriving Next */
+
+.bottom-row {
+  margin-bottom: 0 !important;
+}
+
+.tasks-panel {
+  margin-top: -30px !important;
+}
