@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Create Purchase Order</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="create-purchase-order.css?v=1">
+  <link rel="stylesheet" href="po-approval-modal.css?v=1">
+  <script src="create-purchase-order.js?v=2" defer></script>
+ <script src="po-approval-modal.js?v=1" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+
+<body>
+  <div class="shell">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">
+          <img src="../assets/Pro 4.svg" alt="">
+        </span>
+        <div>
+          <small>UniProcur Workspace</small>
+          <strong>Create Purchase Order</strong>
+        </div>
+      </div>
+
+      <div class="account">
+        <span class="bell">
+          <img src="../assets/Group 50.svg" alt="Notifications">
+        </span>
+        <span class="account-divider"></span>
+        <div>
+          <strong>Buyer</strong>
+          <small>buyer@gmail.com</small>
+        </div>
+        <span class="avatar">C</span>
+      </div>
+    </header>
+
+    <a id="backLink" class="back"
+       href="buyer-dashboard.html"
+       aria-label="Back to Award Confirmation">‹</a>
+
+    <main class="outer">
+      <div class="panel">
+
+        <div class="heading-row">
+          <div class="metadata">
+            <div>
+              <small>PO Number:</small>
+              <strong id="poNumber">Not yet assigned</strong>
+            </div>
+            <div>
+              <small>Date Created:</small>
+              <strong id="poDate">On save</strong>
+            </div>
+            <div>
+              <small>Converted From:</small>
+              <strong id="rfqLabel">Loading...</strong>
+            </div>
+          </div>
+
+          <div class="actions">
+            <a id="cancelLink" class="btn cancel"
+               href="buyer-dashboard.html">Cancel</a>
+
+            <button type="button" id="saveDraft"
+                    class="btn draft" disabled
+                    title="PO database saving is not implemented yet">
+              ✎ Save as Draft
+            </button>
+
+            <button type="button" id="submitApproval"
+                    class="btn submit" disabled
+                    title="PO manager approval integration is not implemented yet">
+              ✎ Submit for Approval
+            </button>
+          </div>
+        </div>
+
+        <p id="status" class="status" role="status">
+          Loading awarded supplier and RFQ items from MySQL...
+        </p>
+
+        <div class="details-grid">
+
+          <section class="items-section">
+            <h2>
+              Items (from <span id="itemsRfqNumber">RFQ</span>)
+            </h2>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>No.</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Line Total</th>
+                  </tr>
+                </thead>
+                <tbody id="itemRows"></tbody>
+              </table>
+            </div>
+
+            <div class="totals">
+              <div>
+                <strong>Subtotal:</strong>
+                <span id="subtotal">—</span>
+              </div>
+              <div>
+                <strong>VAT (12% estimate):</strong>
+                <span id="vat">—</span>
+              </div>
+              <div>
+                <strong>Total:</strong>
+                <span id="grandTotal">—</span>
+              </div>
+            </div>
+
+            <p class="note">
+              VAT is shown for Figma preview only.
+              Confirm tax treatment before saving a Purchase Order.
+            </p>
+          </section>
+
+          <section class="supplier-section">
+            <h2>Supplier and Delivery</h2>
+
+            <dl>
+              <dt>Supplier:</dt>
+              <dd id="supplierName">—</dd>
+
+              <dt>Contact:</dt>
+              <dd id="supplierContact">Not provided</dd>
+
+              <dt>Payment Terms:</dt>
+              <dd id="paymentTerms">—</dd>
+
+              <dt>Expected Delivery:</dt>
+              <dd>
+                <input id="expectedDelivery"
+       type="date"
+       readonly
+       aria-label="Expected delivery date">
+              </dd>
+
+              <dt>Delivery Address:</dt>
+              <dd>
+                <input id="deliveryAddress"
+       type="text"
+       readonly
+       aria-label="Delivery address">
+              </dd>
+            </dl>
+          </section>
+        </div>
+
+        <section class="notes-section">
+          <label for="notes">Notes to Supplier</label>
+          <textarea id="notes" rows="2"
+                    placeholder="Enter delivery instructions or special requests"></textarea>
+        </section>
+
+        <p class="implementation-note">
+          This page is a live RFQ-based preview.
+          Save as Draft and Submit for Approval will be
+          enabled after the Purchase Order database workflow
+          is connected.
+        </p>
+
+      </div>
+    </main>
+  </div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

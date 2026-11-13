@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Manager Purchase Orders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Reuse the existing Manager Purchase Request sidebar and header styling -->
+  <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
+  <link rel="stylesheet" href="manager-purchase-orders.css?v=3">
+
+<!-- Shared Manager Header: Purchase Request design -->
+<link rel="stylesheet" href="manager-header.css?v=1">
+
+
+<!-- Shared Manager Sidebar -->
+<link rel="stylesheet"
+      href="../assets/uniprocur-manager-sidebar.css?v=1">
+
+  <script src="manager-purchase-orders.js?v=7" defer></script>
+  <!-- Reuse existing Buyer notification panel styling; Manager events use a separate authenticated endpoint. -->
+  <link rel="stylesheet" href="../buyerdashboard/buyer-header-notifications.css?v=20261113po1">
+  <script src="manager-header-notifications.js?v=20261113po1" defer></script>
+</head>
+<body>
+  <div class="manager-shell">
+    <aside class="sidebar">
+      <a class="brand" href="manager-purchase-requests.html" aria-label="UniProcur Manager workspace">
+        <img class="brand-logo" src="../assets/Pro 3.svg" alt="">
+        <span>UniProcur</span>
+      </a>
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav class="workspace-nav" aria-label="Manager workspace">
+          
+<a class="nav-item" href="manager-dashboard.html">
+  <span class="nav-icon">
+    <img src="../assets/Vector.svg" alt="">
+  </span>
+  <span>Dashboard</span>
+</a>
+
+          <a class="nav-item" href="manager-purchase-requests.html"><span class="nav-icon"><img src="../assets/Group 33.svg" alt=""></span><span>Purchase Request</span></a>
+          <a class="nav-item is-active" href="manager-purchase-orders.html" aria-current="page"><span class="nav-icon"><img src="../assets/Group 34.svg" alt=""></span><span>Purchase Order</span></a>
+          
+          
+<a class="nav-item" href="manager-reports.html">
+  <span class="nav-icon">
+    <img src="../assets/Group%2031.svg" alt="">
+  </span>
+  <span>Reports</span>
+</a>
+
+          
+<a class="nav-item" href="manager-audit-trail.html">
+  <span class="nav-icon">
+    <img src="../assets/Group%2035.svg" alt="">
+  </span>
+  <span>Audit Trail</span>
+</a>
+
+        </nav>
+      </div>
+      <div class="sidebar-rule" aria-hidden="true"></div>
+      <div class="sidebar-bottom">
+        
+<a class="nav-item" href="manager-support.html">
+  <span class="nav-icon">
+    <img src="../assets/support.svg" alt="">
+  </span>
+  <span>Support</span>
+</a>
+
+
+
+<a class="nav-item" href="manager-settings.html">
+  <span class="nav-icon">
+    <img src="../assets/settings.svg" alt="">
+  </span>
+  <span>Settings</span>
+</a>
+
+        <div class="profile-mini">
+          <span class="profile-avatar" id="sidebarAvatar" aria-hidden="true">M</span>
+          <span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small id="sidebarManagerEmail">—</small></span>
+          <button class="signout-button" type="button" data-coming-soon="Sign out" aria-label="Sign out" title="Sign out">↦</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-panel po-main">
+      <header class="topbar">
+        <div class="workspace-title">
+          <span class="workspace-mark"><img src="../assets/Pro 4.svg" alt=""></span>
+          <span class="workspace-copy"><span>UniProcur Workspace</span><strong id="welcomeText">Welcome Manager!</strong></span>
+        </div>
+        <div class="topbar-account">
+          <button class="notification-button" type="button" data-coming-soon="Notifications" aria-label="Notifications"><img src="../assets/Group 50.svg" alt=""></button>
+          <span class="topbar-divider" aria-hidden="true"></span>
+          <span class="account-copy"><strong id="topbarManagerName">Manager</strong><small id="topbarManagerEmail">—</small></span>
+          <span class="account-avatar" id="topbarAvatar" aria-hidden="true">M</span>
+        </div>
+      </header>
+
+      <section class="po-panel" aria-label="Manager Purchase Order table">
+        <div class="po-toolbar">
+          <form class="search-bar" id="poSearchForm" role="search">
+            <span class="search-icon" aria-hidden="true"></span>
+            <input id="poSearch" type="search" placeholder="search" aria-label="Search purchase orders" autocomplete="off">
+            <button type="submit">Search</button>
+          </form>
+          <div class="filter-wrap po-filter-wrap">
+            <button class="filter-button" id="poFilterButton" type="button" aria-expanded="false" aria-controls="poFilterMenu"><span class="filter-funnel" aria-hidden="true"></span> Filter</button>
+            <div class="filter-menu" id="poFilterMenu" hidden>
+              <strong class="filter-title">Status</strong>
+              <label><input class="po-status-filter" type="checkbox" value="pending_approval"> Pending</label>
+              <label><input class="po-status-filter" type="checkbox" value="approved"> Approved</label>
+              <label><input class="po-status-filter" type="checkbox" value="rejected"> Rejected</label>
+              <label><input class="po-status-filter" type="checkbox" value="issued"> Issued</label>
+              <label><input class="po-status-filter" type="checkbox" value="partial"> In Progress</label>
+              <label><input class="po-status-filter" type="checkbox" value="received"> Received</label>
+              <label><input class="po-status-filter" type="checkbox" value="closed"> Closed</label>
+              <div class="filter-actions"><button type="button" class="filter-reset" id="resetPoFilters">Reset</button><button type="button" class="filter-apply" id="applyPoFilters">Apply Filter</button></div>
+            </div>
+          </div>
+          <button id="exportPoCsv" class="po-export-button" type="button" aria-label="Export current purchase order search results to CSV"><span aria-hidden="true">⇩</span> Export</button>
+        </div>
+
+        <div class="po-table-scroll">
+          <table class="po-table">
+            <thead>
+              <tr>
+                <th scope="col">PO Number</th>
+                <th scope="col">Supplier</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">Expected Delivery</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="poTableRows"><tr><td colspan="7" class="po-empty">Loading Purchase Orders...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="po-table-footer"><span id="poResultsSummary" aria-live="polite">Loading records...</span><nav class="po-pages" id="poPagination" aria-label="Purchase order pages"></nav></div>
+      </section>
+
+      <section class="po-recent" aria-labelledby="recentPoHeading">
+        <h2 id="recentPoHeading">Recent Purchase Orders</h2>
+        <p class="po-recent-subtitle">PO number · Supplier · Date · Status</p>
+        <div id="recentPoList" class="po-recent-list"><p class="po-recent-empty">Loading recent Purchase Orders...</p></div>
+      </section>
+      <p id="poPageError" class="page-error" role="alert" hidden></p>
+    </main>
+  </div>
+
+  <!-- Read-only preview: approve/reject actions will be implemented in the next stage. -->
+  <dialog class="po-detail-dialog" id="poDetailDialog" aria-labelledby="detailTitle">
+    <div class="po-detail-header"><div><small>Purchase Order Details</small><h2 id="detailTitle">Loading...</h2></div><button type="button" id="closePoDetail" class="po-detail-close" aria-label="Close details">×</button></div>
+    <div id="poDetailContent"></div>
+    <div class="po-dialog-footer"><span>Read-only preview · Manager approval actions will be added next.</span><button type="button" id="closePoFooter" class="po-close-button">Close</button></div>
+  </dialog>
+  <div id="poToast" class="toast" role="status" aria-live="polite"></div>
+  <script src="../assets/uniprocur-manager-profile-display.js?v=1" defer></script>
+</body>
+</html>

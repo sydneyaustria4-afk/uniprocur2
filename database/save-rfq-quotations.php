@@ -23,7 +23,7 @@ try {
         $id = (int)$_SESSION['user_id'];
         $s = $conn->prepare('SELECT id, role, is_active FROM users WHERE id = ? LIMIT 1'); $s->bind_param('i', $id);
     } else {
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
         $s = $conn->prepare('SELECT id, role, is_active FROM users WHERE email = ? LIMIT 1'); $s->bind_param('s', $email);
     }
     $s->execute(); $user = $s->get_result()->fetch_assoc(); $s->close();

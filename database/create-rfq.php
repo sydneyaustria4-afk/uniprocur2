@@ -46,7 +46,7 @@ $stmt = $conn->prepare(
 
         $stmt->bind_param('i', $userId);
     } else {
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
 
        
 $stmt = $conn->prepare(

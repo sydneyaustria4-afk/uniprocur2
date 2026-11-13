@@ -28,7 +28,7 @@ try {
         );
         $buyerStmt->bind_param('i', $userId);
     } else {
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
 
         $buyerStmt = $conn->prepare(
             "SELECT id, full_name, email, role, is_active

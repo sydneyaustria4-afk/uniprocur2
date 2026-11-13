@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Purchase Request</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="purchase-requests.css?v=1">
+  
+<link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
+
+<!-- Consistent Buyer Profile and Arrow -->
+<link rel="stylesheet" href="../assets/uniprocur-buyer-profile.css?v=2">
+
+
+<!-- Shared Buyer Header - Purchase Order Design -->
+<link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
+
+  
+  <script src="purchase-requests.js?v=2" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+
+<body>
+
+<div class="pr-shell">
+
+  <!-- LEFT SIDEBAR -->
+  <aside class="pr-sidebar">
+
+    <a class="pr-brand" href="buyer-dashboard.html">
+      <img src="../assets/Pro 3.svg" alt="">
+      <span>UniProcur</span>
+    </a>
+
+    <div class="pr-nav-group">
+
+      <p class="pr-nav-label">Workspace</p>
+
+      <nav aria-label="Workspace">
+
+        <a class="pr-nav-item" href="buyer-dashboard.html">
+          <span class="pr-nav-icon">
+            <img src="../assets/Vector.svg" alt="">
+          </span>
+          Dashboard
+        </a>
+
+        <a class="pr-nav-item" href="../supplier/supplier.html">
+          <span class="pr-nav-icon">
+            <img src="../assets/Group 27.svg" alt="">
+          </span>
+          Suppliers
+        </a>
+
+        <a class="pr-nav-item is-active"
+           href="purchase-requests.html"
+           aria-current="page">
+          <span class="pr-nav-icon">
+            <img src="../assets/Group 33.svg" alt="">
+          </span>
+          Purchase Request
+        </a>
+
+       <a class="pr-nav-item" href="rfq-workspace.html">
+  <span class="pr-nav-icon"><img src="../assets/Group.svg" alt=""></span>
+  RFQ Workspace
+</a>
+
+       
+
+<a class="pr-nav-item" href="purchase-orders.html">
+  <span class="pr-nav-icon">
+    <img src="../assets/Group 34.svg" alt="">
+  </span>
+  Purchase Order
+</a>
+
+
+
+       
+<a class="pr-nav-item" href="buyer-invoices.html">
+  <span class="pr-nav-icon">
+    <img src="../assets/Group 35.svg" alt="">
+  </span>
+  Invoice
+</a>
+
+
+<a class="pr-nav-item" href="buyer-reports.html">
+  <span class="pr-nav-icon">
+    <img src="../assets/Group 31.svg" alt="">
+  </span>
+  Reports
+</a>
+
+        
+
+       <a class="pr-nav-item" href="buyer-material-requests.html">
+  <span class="pr-nav-icon"><img src="../assets/material-request.svg" alt=""></span>
+  Material Request
+</a>
+
+      </nav>
+    </div>
+
+    <!-- SIDEBAR BOTTOM -->
+    <div class="pr-sidebar-bottom">
+
+      <div class="pr-sidebar-divider"></div>
+
+      
+
+<a class="pr-nav-item" href="buyer-support.html">
+  <span class="pr-nav-icon">
+    <img src="../assets/support.svg" alt="">
+  </span>
+  Support
+</a>
+
+
+<a class="pr-nav-item" href="buyer-settings.html">
+  <span class="pr-nav-icon">
+    <img src="../assets/settings.svg" alt="">
+  </span>
+  Settings
+</a>
+
+
+      <div class="pr-profile">
+
+        <span class="pr-avatar pr-avatar-gray">B</span>
+
+        <div class="pr-profile-copy">
+          <strong id="buyerSidebarName">Buyer</strong>
+          <small id="buyerSidebarEmail">buyer@gmail.com</small>
+        </div>
+
+        <button class="pr-profile-exit"
+                type="button"
+                aria-label="Sign out"
+                data-toast="Sign out selected">
+          ↪
+        </button>
+
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- RIGHT CONTENT -->
+  <main class="pr-main">
+
+    <div class="pr-main-inner">
+
+      <!-- TOPBAR -->
+      <header class="pr-topbar">
+
+        <div class="pr-workspace-title">
+
+          <span class="pr-workspace-icon">
+            <img src="../assets/Pro 4.svg" alt="UniProcur">
+          </span>
+
+          <div class="pr-workspace-copy">
+            <span>UniProcur Workspace</span>
+            <strong>Purchase Request</strong>
+          </div>
+
+        </div>
+
+        <div class="pr-account-actions">
+
+          <!-- UNIPROCUR_PR_NOTIFICATION_BELL_FIX_20261113 -->
+          <button class="pr-notification-button" id="notificationButton"
+                  type="button"
+                  aria-label="Notifications">
+            <img src="../assets/Group 50.svg" alt="">
+          </button>
+
+          <span class="pr-account-divider"></span>
+
+          <div class="pr-account-name">
+            <strong id="buyerTopName">Buyer</strong>
+            <small id="buyerTopEmail">buyer@gmail.com</small>
+          </div>
+
+          <span class="pr-avatar pr-avatar-white">B</span>
+
+        </div>
+
+      </header>
+
+      <!-- SUMMARY CARDS -->
+      <section class="pr-summary-grid"
+               aria-label="Purchase Request summary">
+
+        <button class="pr-summary-card pr-summary-total is-selected"
+                type="button"
+                data-summary-filter="all">
+
+          <span class="pr-summary-top">
+            <span>All PRs</span>
+            <span class="pr-summary-arrow">↗</span>
+          </span>
+
+          <strong class="pr-summary-number" id="countAll">0</strong>
+          <small>Total Requests</small>
+
+        </button>
+
+        <button class="pr-summary-card"
+                type="button"
+                data-summary-filter="approved">
+
+          <span class="pr-summary-top">
+            <span>Approved</span>
+            <span class="pr-summary-arrow">↗</span>
+          </span>
+
+          <strong class="pr-summary-number" id="countApproved">0</strong>
+          <small>Ready for RFQ</small>
+
+        </button>
+
+        <button class="pr-summary-card"
+                type="button"
+                data-summary-filter="draft">
+
+          <span class="pr-summary-top">
+            <span>Draft</span>
+            <span class="pr-summary-arrow">↗</span>
+          </span>
+
+          <strong class="pr-summary-number" id="countDraft">0</strong>
+          <small>Needs Submission</small>
+
+        </button>
+
+        <button class="pr-summary-card"
+                type="button"
+                data-summary-filter="attention">
+
+          <span class="pr-summary-top">
+            <span>Pending / Rejected</span>
+            <span class="pr-summary-arrow">↗</span>
+          </span>
+
+          <strong class="pr-summary-number" id="countAttention">0</strong>
+          <small>Needs Attention</small>
+
+        </button>
+
+      </section>
+
+      <!-- SEARCH / FILTER / NEW PR -->
+      <section class="pr-toolbar">
+
+        <form class="pr-search" id="searchForm">
+
+          <span class="pr-search-icon"></span>
+
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="search"
+            aria-label="Search Purchase Requests"
+          >
+
+          <button type="submit">Search</button>
+
+        </form>
+
+        <div class="pr-filter-wrap">
+
+          <button class="pr-filter-button"
+                  id="filterButton"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="filterMenu">
+
+            <span class="pr-filter-symbol">☷</span>
+            Filter
+
+          </button>
+
+          <div class="pr-filter-menu" id="filterMenu" hidden>
+
+            <p>Filter by status</p>
+
+            <button type="button" data-filter-option="all">
+              All Purchase Requests
+            </button>
+
+            <button type="button" data-filter-option="approved">
+              Approved
+            </button>
+
+            <button type="button" data-filter-option="draft">
+              Draft
+            </button>
+
+            <button type="button" data-filter-option="pending">
+              Pending
+            </button>
+
+            <button type="button" data-filter-option="rejected">
+              Rejected
+            </button>
+
+          </div>
+        </div>
+
+        <a class="pr-new-button" href="new-purchase-request.html">
+          <span>＋</span> New PR
+        </a>
+
+      </section>
+
+      <!-- SHOWING FILTER -->
+      <div class="pr-results-heading">
+
+        <strong>Showing:</strong>
+
+        <span id="currentFilterLabel">
+          All Purchase Request
+        </span>
+
+        <small id="resultCount" aria-live="polite">
+          0 requests
+        </small>
+
+      </div>
+
+      <!-- REQUEST CARDS -->
+      <section class="pr-card-grid"
+               id="purchaseRequestGrid"
+               aria-label="Purchase Requests"
+               aria-live="polite">
+
+        <p class="pr-loading-state">
+          Loading Purchase Requests...
+        </p>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>
+
+<div class="pr-toast"
+     id="toast"
+     role="status"
+     aria-live="polite"></div>
+
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

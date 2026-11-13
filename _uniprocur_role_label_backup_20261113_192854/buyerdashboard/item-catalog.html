@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Select Request Item</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="item-catalog.css?v=1">
+  <script src="item-catalog.js?v=2" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body>
+  <main class="catalog-page">
+    <header class="catalog-topbar">
+      <a class="catalog-brand" href="new-purchase-request.html" aria-label="Return to Purchase Request">
+        <span class="brand-mark">
+          <img src="../assets/Pro 4.svg" alt="UniProcur">
+        </span>
+        <span class="brand-copy">
+          <span>Edit Purchase Request</span>
+          <strong>PR-2026-NN</strong>
+        </span>
+      </a>
+
+      <div class="topbar-account">
+        <button class="notification-button" id="notificationButton" type="button" aria-label="Notifications">
+          <img src="../assets/Group 50.svg" alt="">
+        </button>
+        <span class="account-divider" aria-hidden="true"></span>
+        <div class="account-copy">
+          <strong>Buyer</strong>
+          <span>buyer@gmail.com</span>
+        </div>
+        <span class="account-avatar" aria-label="Buyer profile"></span>
+      </div>
+    </header>
+
+    <section class="catalog-outer" aria-label="Choose an item for this purchase request">
+      <div class="catalog-card">
+        <div class="catalog-toolbar">
+          <form class="search-bar" id="itemSearchForm" role="search">
+            <span class="search-icon" aria-hidden="true"></span>
+            <input
+              id="itemSearchInput"
+              type="search"
+              placeholder="search"
+              aria-label="Search item code, name, category, or unit"
+              autocomplete="off"
+            >
+            <button class="search-submit" type="submit">Search</button>
+          </form>
+
+          <div class="filter-wrap">
+            <button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="categoryFilterPanel">
+              <svg viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M3 5h14M5.5 10h9M8 15h4" />
+                <circle cx="7" cy="5" r="1.5" />
+                <circle cx="12.5" cy="10" r="1.5" />
+                <circle cx="10" cy="15" r="1.5" />
+              </svg>
+              <span>Filter</span>
+            </button>
+            <div class="filter-panel" id="categoryFilterPanel" hidden>
+              <label for="categoryFilter">Category</label>
+              <select id="categoryFilter">
+                <option value="all">All categories</option>
+                <option value="Leather">Leather</option>
+                <option value="Textile">Textile</option>
+                <option value="Synthetic">Synthetic</option>
+                <option value="Components">Components</option>
+                <option value="Hardware">Hardware</option>
+                <option value="Packaging">Packaging</option>
+                <option value="Adhesive">Adhesive</option>
+              </select>
+              <button type="button" id="clearFilterButton">Clear filter</button>
+            </div>
+          </div>
+
+          <button class="cancel-button" id="cancelButton" type="button">Cancel</button>
+        </div>
+
+        <div class="table-viewport" tabindex="0" aria-label="Available item catalog. Scroll to see all items.">
+          <table class="item-table">
+            <thead>
+              <tr>
+                <th scope="col" class="code-column">Item Code</th>
+                <th scope="col" class="name-column">Item Name</th>
+                <th scope="col" class="category-column">Category</th>
+                <th scope="col" class="unit-column">Unit of Measure</th>
+                <th scope="col" class="action-column"><span class="visually-hidden">Action</span></th>
+              </tr>
+            </thead>
+            <tbody id="itemTableBody">
+              <tr><td colspan="5" class="loading-cell">Loading items...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

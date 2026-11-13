@@ -640,11 +640,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const buyerName =
         document.getElementById("loggedInName")
-          ?.textContent.trim() || "Clark Alameda";
+          ?.textContent.trim() || "Buyer";
 
       const buyerEmail =
         document.getElementById("loggedInEmail")
-          ?.textContent.trim() || "buyer@company.com";
+          ?.textContent.trim() || "buyer@gmail.com";
 
 
       // ----------------------------------------------------------------------

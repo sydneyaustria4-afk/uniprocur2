@@ -278,12 +278,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setText(
     "buyerName",
-    data.buyerName || "Clark Alameda"
+    data.buyerName || "Buyer"
   );
 
   setText(
     "buyerEmail",
-    data.buyerEmail || "buyer@company.com"
+    data.buyerEmail || "buyer@gmail.com"
   );
 
 
@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (buyerAvatar) {
 
     buyerAvatar.textContent =
-      (data.buyerName || "Clark Alameda")
+      (data.buyerName || "Buyer")
         .charAt(0)
         .toUpperCase();
 

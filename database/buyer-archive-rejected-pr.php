@@ -33,7 +33,7 @@ function archiveBuyer(mysqli $conn): array {
             !preg_match('/\A(?:localhost|127\.0\.0\.1)(?::\d+)?\z/D', $host)) {
             archiveReply(401, ['success' => false, 'message' => 'Buyer sign-in required.']);
         }
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
         $stmt = $conn->prepare('SELECT id,full_name,email,role,is_active FROM users WHERE email=? LIMIT 1');
         $stmt->bind_param('s', $email);
     }

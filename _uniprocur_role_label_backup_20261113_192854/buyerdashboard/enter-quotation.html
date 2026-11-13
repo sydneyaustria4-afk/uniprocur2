@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Enter Quotation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="enter-quotation.css?v=2">
+  <script src="enter-quotation.js?v=2" defer></script>
+  
+<script src="enter-quotation-save.js?v=1" defer></script>
+
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand-side">
+        <div class="topbar-logo"><img src="../assets/Pro 4.svg" alt="" /></div>
+        <div class="topbar-title">
+          <span>RFQ Details</span>
+          <strong id="headerTitle">Loading...</strong>
+        </div>
+      </div>
+      <div class="topbar-user">
+        <div class="bell-circle"><img src="../assets/Group 50.svg" alt="Notifications"></div>
+        <span class="user-divider"></span>
+        <div class="user-copy"><strong>Buyer</strong><small>buyer@gmail.com</small></div>
+        <span class="user-avatar">C</span>
+      </div>
+    </header>
+
+    <a class="back-circle" href="buyer-dashboard.html" aria-label="Back to Buyer Dashboard">‹</a>
+
+    <main class="paper-shell">
+      <section class="quotation-form" aria-labelledby="rfqHeading">
+        <div class="form-header">
+          <div class="rfq-summary">
+            <span id="rfqSmallNumber">RFQ</span>
+            <h1 id="rfqHeading">Loading supplier quotations.. .</h1>
+          </div>
+          <div class="header-actions">
+            <a class="btn btn-cancel" href="buyer-dashboard.html"><span aria-hidden="true">×</span> Cancel</a>
+            <button type="button" class="btn btn-save" id="compareButton" disabled title="Quotation saving and Comparison Matrix are the next implementation step">
+              
+<img src="../assets/save.svg" alt="" class="save-icon">
+Save and Compare
+
+            </button>
+          </div>
+        </div>
+
+        <p id="message" class="status-message" role="status">Loading RFQ from MySQL...</p>
+        <div id="supplierList" class="supplier-list"></div>
+        <p id="draftNotice" class="draft-notice" hidden>Prices shown are simulated demo quotations for testing. They are not yet saved to MySQL. The Save and Compare action will be connected in the next step.</p>
+      </section>
+    </main>
+  </div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

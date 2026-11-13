@@ -22,7 +22,7 @@ function buyerPoIdentity(mysqli $conn): array {
         if (!preg_match('/\A(localhost|127\.0\.0\.1)(:\d+)?\z/', $host) || !in_array($ip, ['127.0.0.1', '::1'], true)) {
             buyerPoJson(401, ['success' => false, 'message' => 'Sign in using a Buyer account.']);
         }
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
         $stmt = $conn->prepare('SELECT id, full_name, email, role, is_active FROM users WHERE email = ? LIMIT 1');
         $stmt->bind_param('s', $email);
     }

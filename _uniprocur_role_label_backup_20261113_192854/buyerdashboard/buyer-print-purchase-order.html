@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Print Purchase Order | UniProcur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="buyer-print-purchase-order.css?v=2" />
+  <script src="buyer-print-purchase-order.js?v=3" defer></script>
+
+
+<link rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet"
+  href="buyer-print-leaflet.css?v=1">
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  defer></script>
+
+<script src="buyer-print-leaflet.js?v=1" defer></script>
+
+
+
+
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header" aria-label="Purchase order navigation">
+      <div class="site-heading">
+        <span class="brand-circle" aria-hidden="true">
+          <!-- Existing local Procurement asset: htdocs/uniprocur2/assets/Pro 4.svg -->
+          <img src="../assets/Pro%204.svg" alt="" onerror="this.hidden=true;this.parentElement.classList.add('no-logo')" />
+          <span class="brand-fallback" aria-hidden="true">P</span>
+        </span>
+        <div class="heading-copy">
+          <span class="heading-eyebrow">Purchase Order</span>
+          <strong id="headerPoNumber">—</strong>
+        </div>
+      </div>
+      <div class="user-tools">
+        <span class="notify-circle" aria-label="Notifications">
+          <img src="../assets/Group%2050.svg" alt="" onerror="this.hidden=true;this.nextElementSibling.hidden=false" />
+          <svg hidden viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="user-profile">
+          <strong id="userFullName">Buyer</strong>
+          <small id="userEmail">buyer@gmail.com</small>
+        </div>
+        <span class="user-avatar" aria-hidden="true"></span>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="page-actions">
+        <button id="goBack" class="back-button" type="button" aria-label="Back to purchase order" title="Back to Purchase Order">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5-6.5 6.5 6.5 6.5"/></svg>
+        </button>
+        <span class="page-caption">Purchase Order / Print Preview</span>
+        
+      </div>
+
+      <div id="errorMessage" class="error-message" role="alert" hidden></div>
+
+      <section class="document-stage" aria-label="Purchase Order print preview">
+        <article class="po-paper" id="printArea" aria-label="Printable purchase order">
+          <div class="document-header">
+            <div class="document-title">
+              <span>Procurement</span>
+              <strong>Purchase Order</strong>
+            </div>
+            <div class="document-divider" aria-hidden="true"></div>
+            
+
+<button
+  id="printButton"
+  type="button"
+  class="print-button"
+>
+  <img src="../assets/print.svg" alt="">
+  Print
+</button>
+
+
+          </div>
+
+          <section class="po-section">
+            <h1>Purchase Order Details</h1>
+            <div class="details-grid">
+              <div class="details-card">
+                <dl>
+                  <div><dt>PO Number:</dt><dd id="poNumber">—</dd></div>
+                  <div><dt>Converted from:</dt><dd id="rfqNumber">—</dd></div>
+                  <div><dt>Order Date:</dt><dd id="orderDate">—</dd></div>
+                  <div><dt>Expected:</dt><dd id="expectedDate">—</dd></div>
+                  <div><dt>Payment Terms:</dt><dd id="paymentTerms">—</dd></div>
+                </dl>
+              </div>
+              <div class="details-card">
+                <dl>
+                  <div><dt>Supplier:</dt><dd id="supplierName">—</dd></div>
+                  <div><dt>Contact:</dt><dd id="supplierContact">—</dd></div>
+                  <div><dt>Email:</dt><dd id="supplierEmail">—</dd></div>
+                  <div><dt>Phone:</dt><dd id="supplierPhone">—</dd></div>
+                  <div><dt>Location:</dt><dd id="supplierLocation">—</dd></div>
+                </dl>
+              </div>
+            </div>
+            <div class="status-row"><span>Status:</span><span class="status-chip" id="poStatus">—</span></div>
+          </section>
+
+          <section class="items-section">
+            <div class="order-column">
+              <h2>Order Items</h2>
+              <div class="table-scroll">
+                <table class="items-table">
+                  <thead><tr><th scope="col">No.</th><th scope="col">Item Name</th><th scope="col">Quantity</th><th scope="col">Unit Price</th><th scope="col">Line Total</th></tr></thead>
+                  <tbody id="poItems"><tr><td colspan="5">Loading purchase order...</td></tr></tbody>
+                </table>
+              </div>
+              <div class="totals-grid">
+                <dl class="totals-list">
+                  <div><dt>Subtotal:</dt><dd id="subtotal">—</dd></div>
+                  <div><dt>Estimated VAT (<span id="vatRate">12</span>%):</dt><dd id="vat">—</dd></div>
+                  <div class="grand-total"><dt>Estimated Total:</dt><dd id="total">—</dd></div>
+                </dl>
+                <dl class="totals-list payment-list">
+                  <div><dt>Payment Terms:</dt><dd id="paymentTermsShort">—</dd></div>
+                  <div><dt>Subtotal:</dt><dd id="paymentSubtotal">—</dd></div>
+                  <div><dt>Estimated VAT:</dt><dd id="paymentVat">—</dd></div>
+                  <div class="grand-total"><dt>Estimated Total:</dt><dd id="paymentTotal">—</dd></div>
+                </dl>
+              </div>
+            </div>
+            <aside class="delivery-column">
+              <h2>Delivery Address</h2>
+              <div class="map-frame">
+                <!-- Map image intentionally omitted unless a verified map matching the real delivery address exists. -->
+                <img id="deliveryMap" alt="Delivery location map" hidden />
+                <div id="mapFallback" class="map-fallback">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.8"/></svg>
+                  <span>Delivery address provided below</span>
+                </div>
+              </div>
+              <dl class="delivery-info">
+                <div><dt>Receiving Clerk:</dt><dd id="receivingClerk">—</dd></div>
+                <div><dt>Location:</dt><dd id="deliveryAddress">—</dd></div>
+              </dl>
+            </aside>
+          </section>
+          <p class="document-demo-label" id="documentTaxNote">VAT is an estimate. The saved Purchase Order total excludes estimated VAT.</p>
+        </article>
+      </section>
+    </main>
+  </div>
+
+
+
+
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>
+
+
+
+

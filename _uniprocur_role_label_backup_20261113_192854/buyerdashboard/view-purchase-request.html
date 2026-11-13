@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | View Purchase Request</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="view-purchase-request.css?v=2">
+  <script src="view-purchase-request.js?v=4" defer></script>
+<script src="buyer-view-rejected-actions.js?v=figma-20261113" defer></script>
+<script src="buyer-view-pr-print.js?v=20261113" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+  <link rel="stylesheet" href="buyer-view-rejected-actions.css?v=figma-20261113">
+  <script src="buyer-rejected-pr-delete.js?v=20261113" defer></script>
+</head>
+
+<body>
+
+  <div class="view-shell">
+
+    <header class="request-topbar">
+      <div class="request-brand">
+        <span class="brand-mark">
+          <img src="../assets/Pro 4.svg" alt="UniProcur">
+        </span>
+
+        <span class="brand-copy">
+          <span>View Purchase Request</span>
+          <strong id="headerPRNumber">Loading...</strong>
+        </span>
+      </div>
+
+      <div class="topbar-account">
+        <span class="notification-button">
+          <img src="../assets/Group 50.svg" alt="">
+        </span>
+
+        <span class="account-divider"></span>
+
+        <span class="account-copy">
+          <strong id="buyerName">Buyer</strong>
+          <span id="buyerEmail">buyer@gmail.com</span>
+        </span>
+
+        <span class="account-avatar">C</span>
+      </div>
+    </header>
+
+    <main class="view-container">
+
+      <a class="back-button"
+   href="purchase-requests.html"
+   aria-label="Back to Purchase Requests">
+  <span>‹</span>
+</a>
+
+      <div id="loadingMessage" class="page-message">
+        Loading Purchase Request...
+      </div>
+
+      <div id="errorMessage" class="page-message error-message" hidden>
+        Purchase Request could not be loaded.
+      </div>
+
+      <section class="pr-view-card" id="prViewCard" hidden>
+
+        <div class="pr-overview">
+
+          <div class="pr-meta">
+            <div class="meta-item">
+              <span>PR No.</span>
+              <strong id="prNumber">—</strong>
+            </div>
+
+            <div class="meta-item">
+              <span>Date Created</span>
+              <strong id="createdDate">—</strong>
+            </div>
+
+            <div class="meta-item">
+              <span>Approved Date</span>
+              <strong id="approvedDate">Not yet approved</strong>
+            </div>
+          </div>
+
+          <div class="pr-actions" id="prActions">
+
+            
+<button class="delete-button" id="deleteDraftButton" type="button">
+  <img src="../assets/delete.svg" alt="" aria-hidden="true">
+  <span>Delete Draft</span>
+</button>
+
+<button class="outline-button" id="editPRButton" type="button">
+  <img src="../assets/edit.svg" alt="" aria-hidden="true">
+  <span>Edit PR</span>
+</button>
+
+<button class="outline-button" id="submitPRButton" type="button">
+  <img src="../assets/submit.svg" alt="" aria-hidden="true">
+  <span>Submit PR</span>
+</button>
+
+
+
+            
+<button class="outline-button" id="createRFQButton" type="button" hidden>
+  <span>✎</span> Create RFQ
+</button>
+
+
+          </div>
+
+        </div>
+
+        <div class="pr-content">
+
+          <section class="items-panel">
+            <div id="itemList" class="item-list"></div>
+
+            <div class="purpose-panel">
+              <strong>Justification / Purpose</strong>
+              <p id="prPurpose">—</p>
+            </div>
+
+          </section>
+
+          <aside class="approval-panel">
+
+            <h2>Approval History</h2>
+
+            <div class="timeline" id="approvalTimeline"></div>
+
+          </aside>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  </div>
+
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

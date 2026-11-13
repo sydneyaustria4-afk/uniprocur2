@@ -43,7 +43,7 @@ try {
         $buyerStmt->bind_param('i', $userId);
     } else {
         // Existing local prototype fallback.
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
 
         $buyerStmt = $conn->prepare(
             "SELECT id, role, is_active

@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Purchase Request Submitted</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="purchase-request-submitted.css?v=1">
+  <script src="purchase-request-submitted.js?v=1" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+
+<body>
+
+  <main class="success-page">
+
+    <!-- Header behind success overlay -->
+    <header class="request-topbar" aria-hidden="true">
+
+      <div class="request-brand">
+        <span class="brand-mark">
+          <img src="../assets/Pro 4.svg" alt="">
+        </span>
+
+        <span class="brand-copy">
+          <span>New Purchase Request</span>
+          <strong id="backgroundRequestNumber">PR-2026-NN</strong>
+        </span>
+      </div>
+
+      <div class="topbar-account">
+
+        <span class="notification-button">
+          <img src="../assets/Group 50.svg" alt="">
+        </span>
+
+        <span class="account-divider"></span>
+
+        <span class="account-copy">
+          <strong>Buyer</strong>
+          <span>buyer@gmail.com</span>
+        </span>
+
+        <span class="account-avatar"></span>
+
+      </div>
+    </header>
+
+
+    <!-- Background Purchase Request form -->
+    <section class="request-outer-card" aria-hidden="true">
+
+      <div class="request-card">
+
+        <div class="request-meta-row">
+
+          <div class="request-number-block">
+            <span>PR No.</span>
+            <strong id="cardRequestNumber">PR-2026-NN</strong>
+          </div>
+
+          <div class="request-actions">
+            <span class="mock-button mock-cancel">Cancel</span>
+            <span class="mock-button">✎ Save Draft</span>
+            <span class="mock-button">✎ Submit for Approval</span>
+          </div>
+
+        </div>
+
+
+        <div class="mock-add-item">
+          ＋ <strong>Add Item</strong>
+        </div>
+
+
+        <div class="mock-content-row">
+
+          <div class="mock-upload">
+            <div class="mock-upload-icon">☁</div>
+
+            <strong>
+              Click to upload
+              <span>or drag &amp; drop</span>
+            </strong>
+
+            <small>
+              DOC, XLS, PDF, JPG, and PNG up to 20MB
+            </small>
+          </div>
+
+          <div class="mock-map"></div>
+
+        </div>
+
+
+        <div class="mock-footer-row">
+
+          <div class="mock-date">
+            <strong>Required Date:</strong>
+            <span id="requiredDatePreview">25 / 10 / 2026</span>
+          </div>
+
+          <div class="mock-justification">
+            <strong>Justification:</strong>
+            <span id="justificationPreview">
+              Q4 production materials for sneaker line (Style #SN-2026).
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Dimmed overlay and success modal -->
+  <div class="success-overlay">
+
+    <section
+      class="success-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="successTitle"
+      aria-describedby="successDescription"
+    >
+
+      <div class="success-logo-wrap">
+
+        <img
+          class="success-logo"
+          src="../assets/shoes.svg"
+          alt=""
+        >
+
+      </div>
+
+
+      <h1 id="successTitle">
+
+        <span id="successRequestNumber">
+          PR-2026-NN
+        </span>
+
+        <span>
+          Submitted Successfully!
+        </span>
+
+      </h1>
+
+
+      <p id="successDescription">
+        Your Purchase Request has been send to the Manager for approval.
+      </p>
+
+
+      <a
+        class="back-dashboard-button"
+        id="backToDashboardButton"
+        href="buyer-dashboard.html"
+      >
+
+        <span>Back to Dashboard</span>
+
+        <span class="button-arrow" aria-hidden="true">
+          ➜
+        </span>
+
+      </a>
+
+    </section>
+
+  </div>
+
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

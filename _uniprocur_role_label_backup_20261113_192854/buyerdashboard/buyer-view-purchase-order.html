@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#b81611">
+  <title>UniProcur | View Purchase Order</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-view-purchase-order.css?v=4">
+  <script src="buyer-view-purchase-order.js?v=9" defer></script>
+  <script src="buyer-po-to-invoice-handoff.js?v=2" defer></script>
+  
+  
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body>
+<main class="view-shell">
+  <header class="view-topbar no-print">
+    <div class="view-workspace">
+      <span class="workspace-icon"><img src="../assets/Pro%204.svg" alt="UniProcur"></span>
+      <div class="workspace-copy"><small>Purchase Order</small><strong id="headerNumber">Loading...</strong></div>
+    </div>
+    <div class="account">
+      <button id="bellButton" class="bell" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button>
+      <div class="account-divider" aria-hidden="true"></div>
+      <div class="buyer-id"><strong id="buyerName">Buyer</strong><small id="buyerEmail">—</small></div>
+      <span class="avatar" id="buyerInitial" aria-hidden="true">B</span>
+    </div>
+  </header>
+
+  <a href="purchase-orders.html" class="back-button no-print" aria-label="Back to Buyer Purchase Orders">‹</a>
+  <p id="loading" class="loading-box" role="status">Loading Purchase Order...</p>
+
+  <article id="poSheet" class="outer-sheet" hidden>
+    <div class="inner-sheet">
+      <section class="summary-bar" aria-label="Purchase Order actions">
+        <div class="summary-identifier"><small>PO No.</small><strong id="poNumber">—</strong></div>
+        <div class="document-actions no-print">
+          <button id="printButton" type="button" class="outline-button"><img src="../assets/print.svg" alt="">Print PO</button>
+          <button id="contactSupplier" type="button" class="outline-button"><img src="../assets/mail.svg" alt="">Contact Supplier</button>
+          <button id="viewGrButton" type="button" class="dark-button"><img src="../assets/ordered%20items.svg" alt="">View GR</button>
+        </div>
+      </section>
+
+      <section class="po-details" aria-labelledby="detailsHeading">
+        <h1 id="detailsHeading">Purchase Order Details</h1>
+        <div class="detail-pair">
+          <div class="detail-card" aria-label="Order summary">
+            <dl class="detail-list">
+              <div><dt>PO Number:</dt><dd id="summaryNumber">—</dd></div>
+              <div><dt>Converted from:</dt><dd id="rfqNumber">—</dd></div>
+              <div><dt>Order Date:</dt><dd id="orderDate">—</dd></div>
+              <div><dt>Expected:</dt><dd id="deliveryDate">—</dd></div>
+              <div><dt>Payment Terms:</dt><dd id="paymentTerms">—</dd></div>
+            </dl>
+          </div>
+          <div class="detail-card" aria-label="Supplier information">
+            <div class="supplier-heading"><img id="supplierLogo" src="../assets/catalog/avatar-outline.svg" alt="Supplier logo"><strong>Supplier Information</strong></div>
+            <dl class="detail-list supplier-detail-list">
+              <div><dt>Supplier:</dt><dd id="supplierName">—</dd></div>
+              <div><dt>Contact:</dt><dd id="supplierContact">—</dd></div>
+              <div><dt>Email:</dt><dd id="supplierEmail">—</dd></div>
+              <div><dt>Phone:</dt><dd id="supplierPhone">—</dd></div>
+              <div><dt>Location:</dt><dd id="supplierLocation">—</dd></div>
+            </dl>
+          </div>
+        </div>
+        <div class="status-line"><strong>Status:</strong><span id="status" class="status-pill">—</span></div>
+      </section>
+
+      <section class="items-section" aria-labelledby="orderedHeading">
+        <h2 id="orderedHeading">Ordered Items</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th scope="col">No.</th><th scope="col">Item Name</th><th scope="col">Quantity</th><th scope="col">Unit Price</th><th scope="col">Line Total</th></tr></thead>
+            <tbody id="itemRows"><tr><td colspan="5">Loading items...</td></tr></tbody>
+          </table>
+        </div>
+        <div class="totals" aria-label="Purchase Order totals">
+          <div><span>Subtotal:</span><strong id="subtotal">—</strong></div>
+          <div><span>VAT (12% estimate):</span><strong id="vatAmount">—</strong></div>
+          <div class="grand-total"><span>Total (estimate incl. VAT):</span><strong id="estimatedTotal">—</strong></div>
+          <small>Saved PO total excludes the estimated VAT. Actual tax has not been confirmed.</small>
+        </div>
+        <div id="supplierNotes" class="notes" hidden></div>
+      </section>
+
+      <section class="tracking-section" aria-labelledby="trackingHeading">
+        <h2 id="trackingHeading">Order Tracking</h2>
+        <div class="tracking-panel">
+          <ol class="tracking-steps" id="trackingSteps" aria-label="Order tracking steps">
+            <li class="track-step" data-stage="1"><span class="track-node"></span><strong>Manager Approved</strong><small id="stageOne">Pending</small></li>
+            <li class="track-step" data-stage="2"><span class="track-node"></span><strong>Supplier Confirmed</strong><small id="stageTwo">Pending</small></li>
+            <li class="track-step" data-stage="3"><span class="track-node"></span><strong>In Transit</strong><small id="stageThree">Pending</small></li>
+            <li class="track-step" data-stage="4"><span class="track-node"></span><strong>Out for Delivery</strong><small id="stageFour">Pending</small></li>
+            <li class="track-step" data-stage="5"><span class="track-node"></span><strong>Delivery</strong><small id="stageFive">Pending</small></li>
+          </ol>
+          <p id="trackingNote" class="tracking-note" role="status"></p>
+        </div>
+      </section>
+    </div>
+  </article>
+</main>
+<!-- Contact Supplier profile (Figma-style; data populated from current PO) -->
+<dialog id="supplierContactDialog" class="contact-dialog no-print" aria-labelledby="supplierContactTitle" aria-modal="true">
+  <div class="contact-modal-card">
+    <div id="supplierContactCover" class="contact-modal-cover">
+      <button id="closeSupplierContact" type="button" class="contact-modal-close" aria-label="Close supplier contact profile">×</button>
+    </div>
+    <div class="contact-modal-body">
+      <img id="supplierContactLogo" class="contact-modal-logo" src="../assets/catalog/avatar-outline.svg" alt="Supplier logo">
+      <a id="supplierContactMail" class="contact-modal-mail" aria-label="Email supplier" href="#" title="Email supplier">
+        <img src="../assets/mail.svg" alt="">
+      </a>
+      <h2 id="supplierContactTitle">Supplier</h2>
+      <dl class="contact-modal-grid">
+        <div><dt>Contact Person</dt><dd id="supplierContactPerson">—</dd></div>
+        <div><dt>Email</dt><dd><a id="supplierContactEmail" href="#">—</a></dd></div>
+        <div><dt>Telephone Number</dt><dd id="supplierContactPhone">—</dd></div>
+        <div><dt>Location</dt><dd id="supplierContactLocation">—</dd></div>
+      </dl>
+    </div>
+  </div>
+</dialog>
+<div id="toast" class="toast no-print" role="status" aria-live="polite"></div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

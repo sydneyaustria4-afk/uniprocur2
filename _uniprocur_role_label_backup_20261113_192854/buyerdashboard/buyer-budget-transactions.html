@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <meta name="description" content="UniProcur Procurement Budget Transaction preview. Accounting integration is not active.">
+  <title>UniProcur | Budget Transactions (Demo)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="buyer-budget-transactions.css?v=1">
+  <!-- Reuse the Purchase Order header standard. -->
+  <link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
+  <script src="buyer-budget-transactions.js?v=1" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body class="budget-transactions-page">
+  <div class="bt-shell">
+    <main class="bt-content">
+
+      <!-- Purchase Order-style header; same Buyer display across the workspace. -->
+      <header class="po-topbar">
+        <div class="workspace-brand">
+          <span class="workspace-logo">
+            <img src="../assets/Pro%204.svg" alt="">
+          </span>
+          <div class="bt-workspace-copy">
+            <span>UniProcur Workspace</span>
+            <strong>Budget Transaction</strong>
+          </div>
+        </div>
+        <div class="account-row">
+          <button class="bell" type="button" id="notificationButton" aria-label="Notifications">
+            <img src="../assets/Group%2050.svg" alt="">
+          </button>
+          <span class="topbar-divider" aria-hidden="true"></span>
+          <div class="account-copy">
+            <strong>Buyer</strong>
+            <small>buyer@gmail.com</small>
+          </div>
+          <span class="account-avatar" aria-label="Buyer account">B</span>
+        </div>
+      </header>
+
+      <a class="bt-back" href="buyer-dashboard.html" aria-label="Back to Buyer Dashboard" title="Back to Buyer Dashboard">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m14.5 5.5-7 6.5 7 6.5"></path>
+        </svg>
+      </a>
+
+      <section class="bt-panel" aria-label="Budget transaction overview">
+        <div class="bt-card">
+          <div class="bt-stats" aria-label="Budget summary">
+            <div class="bt-stat">
+              <span>Total Budget</span>
+              <strong id="totalBudget">₱500,000.00</strong>
+            </div>
+            <div class="bt-stat">
+              <span>Used Budget</span>
+              <strong id="usedBudget">₱0.00</strong>
+            </div>
+            <div class="bt-stat">
+              <span>Remaining Budget</span>
+              <strong id="remainingBudget">₱500,000.00</strong>
+            </div>
+          </div>
+
+          <div class="bt-rule" aria-hidden="true"></div>
+
+          <!-- Explicitly identified demo amounts: not posted to Accounting. -->
+          <p class="bt-demo-notice" role="note">
+            <span class="bt-demo-tag">DEMO PREVIEW</span>
+            Example transactions only. No Accounting posting is connected, and these values do not affect the Buyer Dashboard budget.
+          </p>
+
+          <!-- Office Supplies intentionally omitted, per the Figma revision. -->
+          <div class="bt-filters" role="group" aria-label="Transaction category filters">
+            <button class="bt-filter is-active" type="button" data-filter="all" aria-pressed="true">All Transactions</button>
+            <button class="bt-filter" type="button" data-filter="production" aria-pressed="false">Production Supplies</button>
+          </div>
+
+          <div class="bt-table-wrap">
+            <table class="bt-table">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Reference Number</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Category</th>
+                  <th scope="col" class="bt-amount">Amount</th>
+                </tr>
+              </thead>
+              <tbody id="transactionRows">
+                <tr><td colspan="5" class="bt-empty">Loading preview transactions...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="bt-footer" id="transactionSummary" aria-live="polite">Sample transactions only · Not posted</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="bt-toast" id="transactionToast" role="status" aria-live="polite" hidden></div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

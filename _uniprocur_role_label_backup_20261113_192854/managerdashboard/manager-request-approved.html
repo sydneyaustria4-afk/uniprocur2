@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Request Approved</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="manager-request-approved.css?v=1">
+  <script src="manager-request-approved.js?v=1" defer></script>
+</head>
+<body>
+  <main class="approved-page">
+    <header class="topbar">
+      <div class="topbar-title">
+        <span class="workspace-logo"><img src="../assets/Pro 4.svg" alt="UniProcur"></span>
+        <span class="title-copy">
+          <small>Purchase Request</small>
+          <strong id="topbar-pr-number">Loading...</strong>
+        </span>
+      </div>
+
+      <div class="topbar-account">
+        <button class="notification-button" type="button" id="notifications-button" aria-label="Notifications">
+          <img src="../assets/Group 50.svg" alt="">
+        </button>
+        <span class="topbar-divider" aria-hidden="true"></span>
+        <span class="topbar-user">
+          <strong id="manager-name">Manager</strong>
+          <small id="manager-email">carlo@company.com</small>
+        </span>
+        <span class="avatar" id="manager-avatar" aria-hidden="true">M</span>
+      </div>
+    </header>
+
+    <button class="back-button" type="button" id="back-to-detail" aria-label="Back to Purchase Request details">
+      <span aria-hidden="true">‹</span>
+    </button>
+
+    <section class="outer-card" id="approved-content" hidden>
+      <article class="approved-card">
+
+        <section class="success-summary" aria-labelledby="success-heading">
+          <h1 id="success-heading">Request Approved</h1>
+          <p class="success-pr-number" id="approved-pr-number">—</p>
+          <p class="success-description">
+            Purchase request <strong id="approved-pr-inline">—</strong> has been approved successfully. The request can now proceed to the next procurement step.
+          </p>
+        </section>
+
+        <section class="content-section items-section" aria-labelledby="items-heading">
+          <h2 id="items-heading">Items Requested</h2>
+          <div class="table-wrap">
+            <table class="items-table">
+              <thead>
+                <tr>
+                  <th scope="col" class="number-column">#</th>
+                  <th scope="col">Item Description</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Unit</th>
+                </tr>
+              </thead>
+              <tbody id="approved-items">
+                <tr><td colspan="4" class="empty-row">Loading requested items...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="content-section remarks-section" aria-labelledby="remarks-heading">
+          <div class="section-heading-row">
+            <h2 id="remarks-heading">Approval Remarks</h2>
+            <span class="optional-badge">Optional</span>
+          </div>
+          <div class="remarks-display" id="approval-remarks">Loading approval remarks...</div>
+          <p class="decision-by" id="decision-by">Decision by Manager</p>
+        </section>
+
+        <section class="content-section history-section" aria-labelledby="history-heading">
+          <h2 id="history-heading">Approval History</h2>
+          <ol class="timeline" id="approval-history">
+            <li class="timeline-item complete"><span class="timeline-dot" aria-hidden="true"></span><div><strong>Submitted</strong><small>Loading submission details...</small></div></li>
+            <li class="timeline-item complete"><span class="timeline-dot" aria-hidden="true"></span><div><strong>Reviewed</strong><small>by the Manager</small></div></li>
+            <li class="timeline-item complete"><span class="timeline-dot" aria-hidden="true"></span><div><strong>Approved / Rejected</strong><small>by the Manager</small></div></li>
+          </ol>
+        </section>
+
+        <div class="page-actions">
+          <button class="back-to-list" type="button" id="back-to-list">Back to Purchase Request</button>
+        </div>
+      </article>
+    </section>
+
+    <section class="loading-card" id="loading-state" role="status">Loading approved Purchase Request...</section>
+    <section class="loading-card error-card" id="error-state" role="alert" hidden></section>
+    <div class="toast" id="approved-toast" role="status" aria-live="polite"></div>
+  </main>
+  <script src="../assets/uniprocur-manager-profile-display.js?v=1" defer></script>
+</body>
+</html>

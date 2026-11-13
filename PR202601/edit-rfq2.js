@@ -762,12 +762,12 @@ window.location.href = "confirm-rfq.html";
     const buyerName =
       document.getElementById("loggedInName")
         ?.textContent.trim() ||
-      "Clark Almeda";
+      "Buyer";
 
     const buyerEmail =
       document.getElementById("loggedInEmail")
         ?.textContent.trim() ||
-      "buyer@company.com";
+      "buyer@gmail.com";
 
 
     // Generate a preview number from the PR number.

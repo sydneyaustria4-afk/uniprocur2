@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateBuyer(user){const name=String(user?.full_name||"Buyer"), email=String(user?.email||"—");set("buyerName",name);set("buyerEmail",email);set("buyerInitial",name.trim().charAt(0).toUpperCase()||"B");}
   function displayQty(value,unit){if(value===undefined||value===null||value==="")return "—";const n=Number(value);return `${Number.isFinite(n)?new Intl.NumberFormat("en-PH",{maximumFractionDigits:3}).format(n):value}${unit?" "+unit:""}`;}
   const sample = {
-    buyer:{full_name:"Clark Almeda",email:"buyer@company.com"},
+    buyer:{full_name:"Buyer",email:"buyer@gmail.com"},
     invoice:{invoice_number:"INV-2026-0004", supplier_invoice_number:"SUP-INV-2026-1478",invoice_date:"2026-10-25",due_date:"2026-11-24",po_number:"PO-2026-04",gr_reference:"GR-0004",supplier_name:"SynthHide Textile Corp.",payment_terms:"Net 30",status:"ready_to_post",subtotal:36580,vat_amount:4389.6,total_amount:40969.6},
     items:[
       {item_name:"Canvas Fabric",ordered_quantity:100,gr_received_quantity:100,invoice_quantity:100,unit:"meters",unit_price:95,line_total:9500},

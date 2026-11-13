@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniProcur | RFQ Details</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="view-rfq.css?v=1">
+  <!-- Reuse your existing product image mappings from the RFQ workflow. -->
+  <script src="../PR202601/product-images.js?v=4" defer></script>
+  <script src="view-rfq.js?v=2" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body>
+  <div class="rfq-page">
+    <header class="topbar">
+      <div class="brand-group">
+        <div class="brand-logo"><img src="../assets/Pro 4.svg" alt=""></div>
+        <div class="brand-titles">
+          <span>RFQ Details</span>
+          <strong id="headerNumber">Loading...</strong>
+        </div>
+      </div>
+      <div class="profile">
+        <div class="bell"><img src="../assets/Group 50.svg" alt="Notifications"></div>
+        <div class="profile-rule"></div>
+        <div class="profile-copy">
+          <strong id="buyerName">Buyer</strong>
+          <small id="buyerEmail">—</small>
+        </div>
+        <div class="avatar" id="buyerInitial">B</div>
+      </div>
+    </header>
+
+    <a href="buyer-dashboard.html" class="back-button" aria-label="Back to Buyer Dashboard">‹</a>
+
+    <main>
+      <section class="paper primary-paper" aria-labelledby="detailsTitle">
+        <div class="paper-inner">
+          <h1 id="detailsTitle" class="visually-hidden">RFQ Details</h1>
+          <div class="rfq-summary">
+            <div class="summary-cell">
+              <span>RFQ Number</span><strong id="rfqNumber">—</strong>
+            </div>
+            <div class="summary-cell">
+              <span>Date Created</span><strong id="createdDate">—</strong>
+            </div>
+            <div class="summary-cell">
+              <span>Submission Deadline</span><strong id="dueDate">—</strong>
+            </div>
+            <div class="summary-cell">
+              <span>Converted From</span><strong id="prNumber">—</strong>
+            </div>
+            <div class="header-buttons">
+              <a id="enterQuotation" class="action-button" href="#" aria-disabled="true"><span aria-hidden="true">✎</span> Enter Quotation</a>
+              <button class="action-button" id="reminderButton" type="button" disabled title="Email reminders are not connected yet"><span aria-hidden="true">↗</span> Submit Reminder</button>
+            </div>
+          </div>
+          <p id="pageStatus" class="page-status" role="status">Loading RFQ information from MySQL...</p>
+          <div class="items-grid" id="itemCards" aria-label="Requested materials"></div>
+        </div>
+      </section>
+
+      <section class="paper suppliers-paper" aria-labelledby="supplierTitle">
+        <h2 id="supplierTitle" class="visually-hidden">Selected Suppliers</h2>
+        <div class="table-wrap">
+          <table class="supplier-table">
+            <thead>
+              <tr>
+                <th>Supplier Name</th>
+                <th>Email</th>
+                <th>RFQ Created</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="supplierRows">
+              <tr><td colspan="4">Loading suppliers...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-footnote">Quotation status reflects records saved in UniProcur. No reminder emails are sent by this page.</p>
+      </section>
+    </main>
+  </div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

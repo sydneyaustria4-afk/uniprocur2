@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Buyer Reports</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Use the exact existing Buyer sidebar base; Reports styles only apply to this page. -->
+  <link rel="stylesheet" href="buyer-dashboard.css?v=14">
+  <link rel="stylesheet" href="buyer-reports.css?v=1">
+  <link rel="stylesheet" href="../assets/uniprocur-sidebar.css?v=1">
+
+<!-- Shared Buyer Header - Purchase Order Design -->
+<link rel="stylesheet" href="../assets/uniprocur-buyer-header.css?v=1">
+
+<!-- Consistent Buyer Profile and Arrow -->
+<link rel="stylesheet" href="../assets/uniprocur-buyer-profile.css?v=2">
+
+
+  <script src="buyer-reports.js?v=2" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body class="buyer-reports-page">
+  <div class="dashboard-shell">
+    <aside class="sidebar" aria-label="Buyer workspace navigation">
+      <a class="brand" href="buyer-dashboard.html" aria-label="UniProcur Buyer Dashboard"><img class="brand-logo" src="../assets/Pro%203.svg" alt=""><span>UniProcur</span></a>
+      <div class="nav-group">
+        <p class="nav-label">Workspace</p>
+        <nav aria-label="Buyer workspace">
+          <a class="nav-item" href="buyer-dashboard.html"><span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span>Dashboard</a>
+          <a class="nav-item" href="../supplier/supplier.html"><span class="nav-icon"><img src="../assets/Group%2027.svg" alt=""></span>Suppliers</a>
+          <a class="nav-item" href="purchase-requests.html"><span class="nav-icon"><img src="../assets/Group%2033.svg" alt=""></span>Purchase Request</a>
+          <a class="nav-item" href="rfq-workspace.html"><span class="nav-icon"><img src="../assets/Group.svg" alt=""></span>RFQ Workspace</a>
+          <a class="nav-item" href="purchase-orders.html"><span class="nav-icon"><img src="../assets/Group%2034.svg" alt=""></span>Purchase Order</a>
+          <a class="nav-item" href="buyer-invoices.html"><span class="nav-icon"><img src="../assets/Group%2035.svg" alt=""></span>Invoice</a>
+          <a class="nav-item is-active" href="buyer-reports.html" aria-current="page"><span class="nav-icon"><img src="../assets/Group%2031.svg" alt=""></span>Reports</a>
+          <a class="nav-item" href="buyer-material-requests.html">
+  <span class="nav-icon"><img src="../assets/material-request.svg" alt=""></span>
+  Material Request
+</a>
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+        <a class="nav-item" href="buyer-support.html"><span class="nav-icon"><img src="../assets/support.svg" alt=""></span>Support</a>
+        <a class="nav-item" href="buyer-settings.html"><span class="nav-icon"><img src="../assets/settings.svg" alt=""></span>Settings</a>
+        <div class="profile-mini">
+          <span class="avatar avatar-gray" id="sideInitial" aria-hidden="true">B</span>
+          <span class="profile-copy"><strong id="sideName">Buyer</strong><small id="sideEmail">Loading…</small></span>
+          <button class="profile-exit" type="button" id="signOutButton" aria-label="Sign out (handled by HR)" title="Sign out handled by HR">↪</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-panel br-main" id="mainContent">
+      <div class="br-content">
+        <header class="br-topbar">
+          <div class="br-workspace"><span class="br-workspace-icon"><img src="../assets/Pro%204.svg" alt=""></span><span class="br-workspace-title"><small>UniProcur Workspace</small><strong>Reports</strong></span></div>
+          <div class="br-account"><button type="button" class="br-bell" id="notificationButton" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button><span class="br-divider"></span><span class="br-account-copy"><strong id="topName">Buyer</strong><small id="topEmail">Loading…</small></span><span class="br-avatar" id="topInitial">B</span></div>
+        </header>
+
+        <div class="br-toolbar">
+          <div class="br-filters">
+            <label for="reportYear" class="br-sr-only">Report year</label>
+            <select id="reportYear" class="br-year"><option value="">Loading…</option></select>
+            <div class="br-filter-wrap">
+              <button type="button" class="br-filter-button" id="filterButton" aria-expanded="false" aria-controls="filterMenu"><img src="../assets/filter.svg" alt="">Filter</button>
+              <div class="br-filter-menu" id="filterMenu" hidden>
+                <p>Reporting period</p>
+                <label for="reportQuarter">Quarter</label>
+                <select id="reportQuarter"><option value="0">Full year</option><option value="1">Q1 · Jan–Mar</option><option value="2">Q2 · Apr–Jun</option><option value="3">Q3 · Jul–Sep</option><option value="4">Q4 · Oct–Dec</option></select>
+                <div class="br-filter-actions"><button type="button" id="resetFilter">Reset</button><button type="button" id="applyFilter">Apply</button></div>
+              </div>
+            </div>
+          </div>
+          <div class="br-export"><button type="button" class="br-pdf" id="exportPdf">Export PDF</button><button type="button" class="br-excel" id="exportExcel">Excel</button></div>
+        </div>
+        <p id="reportError" class="br-error" role="alert" hidden></p>
+        <p class="br-report-note" id="reportBasis">Showing real Buyer Purchase Order data. Approved PO value is not confirmed Finance spending.</p>
+
+        <section class="br-kpis" aria-label="Buyer procurement summary">
+          <article class="br-kpi br-kpi-primary"><span>Total Approved PO Value</span><span class="br-kpi-arrow" aria-hidden="true">↗</span><strong id="totalSpend">—</strong><small id="totalSpendNote">Approved PO commitments</small></article>
+          <article class="br-kpi"><span>Avg. PO Value / Month</span><span class="br-kpi-arrow" aria-hidden="true">↗</span><strong id="avgSpend">—</strong><small id="avgSpendNote">Based on selected period</small></article>
+          <article class="br-kpi"><span>Top Supplier</span><span class="br-kpi-arrow" aria-hidden="true">↗</span><strong class="br-kpi-supplier" id="topSupplier">—</strong><small id="topSupplierNote">By approved PO value</small></article>
+          <article class="br-kpi"><span>Total POs Created</span><span class="br-kpi-arrow" aria-hidden="true">↗</span><strong id="totalPos">—</strong><small id="totalPosNote">Including drafts in selected period</small></article>
+        </section>
+
+        <section class="br-chart-panel" aria-labelledby="activityTitle"><div class="br-section-head"><h1 id="activityTitle">Monthly Purchase Activity</h1><span class="br-section-caption" id="activityYear">—</span></div><div class="br-linechart" id="activityChart" role="img" aria-label="Monthly approved Purchase Order values"><p class="br-empty">Loading activity…</p></div></section>
+
+        <div class="br-dual-panels">
+          <section class="br-card" aria-labelledby="categoryTitle"><div class="br-section-head"><h2 id="categoryTitle">Spend by Category</h2></div><div class="br-category-row"><div id="categoryPie" class="br-pie" role="img" aria-label="Category breakdown by approved Purchase Order value"></div><div id="categoryLegend" class="br-pie-legend"><p class="br-empty">Loading…</p></div></div></section>
+          <section class="br-card" aria-labelledby="supplierTitle"><div class="br-section-head"><h2 id="supplierTitle">Top Suppliers by Spend</h2></div><div class="br-supplier-list" id="supplierList"><p class="br-empty">Loading suppliers…</p></div></section>
+        </div>
+
+        <section class="br-transactions br-card" aria-labelledby="recentTitle"><div class="br-section-head"><h2 id="recentTitle">Recent High-Value Transactions</h2><span class="br-section-caption">Approved Purchase Orders</span></div><div class="br-table-scroll"><table class="br-table"><thead><tr><th scope="col">Date</th><th scope="col">PO Number</th><th scope="col">Supplier</th><th scope="col">Items</th><th scope="col">Amount</th></tr></thead><tbody id="recentRows"><tr><td colspan="5" class="br-empty-cell">Loading transactions…</td></tr></tbody></table></div></section>
+      </div>
+    </main>
+  </div>
+  <div id="reportToast" class="br-toast" role="status" aria-live="polite" hidden></div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

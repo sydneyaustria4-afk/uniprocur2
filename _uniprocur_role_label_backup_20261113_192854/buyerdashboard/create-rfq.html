@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Create Request for Quotation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="create-rfq.css?v=2">
+  <script src="create-rfq.js?v=1" defer></script>
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar">
+      <div class="workspace-title">
+        <span class="workspace-icon">
+          <img src="../assets/Pro 4.svg" alt="UniProcur logo">
+        </span>
+        <div class="workspace-copy">
+          <span>Create</span>
+          <strong>Request to Quotation</strong>
+        </div>
+      </div>
+
+      <div class="account-area">
+        <button class="notification-button" type="button" aria-label="Notifications" id="notificationButton">
+          <img src="../assets/catalog/notification-bell.svg" alt="">
+        </button>
+        <span class="account-divider" aria-hidden="true"></span>
+        <div class="account-copy">
+          <strong id="buyerName">Buyer</strong>
+          <small id="buyerEmail">buyer@gmail.com</small>
+        </div>
+        <span class="buyer-avatar" aria-label="Buyer profile">
+          <img src="../assets/catalog/avatar-outline.svg" alt="">
+        </span>
+      </div>
+    </header>
+
+    <a class="back-button" href="buyer-dashboard.html" aria-label="Back to Buyer Dashboard" title="Back to Buyer Dashboard">
+      <img src="../assets/catalog/back-chevron.svg" alt="">
+    </a>
+
+    <section class="outer-panel" aria-label="Create Request for Quotation">
+      <div class="content-card">
+        <header class="card-heading">
+          <div>
+            <h1>Create Request for Quotation</h1>
+            <p>Draft - not yet sent</p>
+          </div>
+        </header>
+
+        <div class="section-divider"></div>
+
+        <section class="approved-pr-section" aria-labelledby="approvedPrTitle">
+          <div class="section-heading-row">
+            <h2 id="approvedPrTitle">Select an approved PR to Convert</h2>
+            <span class="result-count" id="resultCount" aria-live="polite"></span>
+          </div>
+
+          <div class="table-scroll">
+            <table class="approved-pr-table">
+              <thead>
+                <tr>
+                  <th scope="col">PR Number</th>
+                  <th scope="col">Items</th>
+                  <th scope="col">Approved at</th>
+                  <th scope="col">Required Date</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="action-heading">Action</th>
+                </tr>
+              </thead>
+              <tbody id="approvedPrTableBody">
+                <tr>
+                  <td colspan="6" class="table-message">Loading approved Purchase Requests...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="table-footnote">Only PRs with status “Approved” and no RFQ yet are shown.</p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="pageToast" role="status" aria-live="polite"></div>
+<script src="../assets/uniprocur-buyer-profile-display.js?v=1" defer></script>
+</body>
+</html>

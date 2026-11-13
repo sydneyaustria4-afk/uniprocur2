@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#bd1715">
+  <title>UniProcur | Manager Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="manager-purchase-requests.css?v=1">
+  <link rel="stylesheet" href="manager-support.css?v=2">
+  <link rel="stylesheet" href="../assets/uniprocur-manager-sidebar.css?v=1">
+
+<!-- Shared Manager Header: Purchase Request design -->
+<link rel="stylesheet" href="manager-header.css?v=1">
+
+  <script src="manager-support.js?v=4" defer></script>
+  <!-- Reuse existing Buyer notification panel styling; Manager events use a separate authenticated endpoint. -->
+  <link rel="stylesheet" href="../buyerdashboard/buyer-header-notifications.css?v=20261113po1">
+  <script src="manager-header-notifications.js?v=20261113po1" defer></script>
+</head>
+<body class="manager-support-page">
+<div class="manager-shell">
+  <aside class="sidebar" aria-label="Manager workspace navigation">
+    <a class="brand" href="manager-dashboard.html" aria-label="UniProcur Manager Dashboard"><img class="brand-logo" src="../assets/Pro%203.svg" alt=""><span>UniProcur</span></a>
+    <div class="nav-group">
+      <p class="nav-label">Workspace</p>
+      <nav class="workspace-nav" aria-label="Manager workspace">
+        <a class="nav-item" href="manager-dashboard.html"><span class="nav-icon"><img src="../assets/Vector.svg" alt=""></span><span>Dashboard</span></a>
+        <a class="nav-item" href="manager-purchase-requests.html"><span class="nav-icon"><img src="../assets/Group%2033.svg" alt=""></span><span>Purchase Request</span></a>
+        <a class="nav-item" href="manager-purchase-orders.html"><span class="nav-icon"><img src="../assets/Group%2034.svg" alt=""></span><span>Purchase Order</span></a>
+        <a class="nav-item" href="manager-reports.html"><span class="nav-icon"><img src="../assets/Group%2031.svg" alt=""></span><span>Reports</span></a>
+        <a class="nav-item" href="manager-audit-trail.html"><span class="nav-icon"><img src="../assets/Group%2035.svg" alt=""></span><span>Audit Trail</span></a>
+      </nav>
+    </div>
+    <div class="sidebar-rule" aria-hidden="true"></div>
+    <div class="sidebar-bottom">
+     
+<a class="nav-item" href="manager-support.html">
+  <span class="nav-icon">
+    <img src="../assets/support.svg" alt="">
+  </span>
+  <span>Support</span>
+</a>
+
+      
+<a class="nav-item" href="manager-settings.html">
+  <span class="nav-icon">
+    <img src="../assets/settings.svg" alt="">
+  </span>
+  <span>Settings</span>
+</a>
+
+      <div class="profile-mini"><span class="profile-avatar" id="sidebarAvatar">M</span><span class="profile-copy"><strong id="sidebarManagerName">Manager</strong><small id="sidebarManagerEmail">Loading…</small></span><button class="signout-button" type="button" id="signOutButton" aria-label="Sign out (managed by HR)" title="Sign out managed by HR">↦</button></div>
+    </div>
+  </aside>
+  <main class="main-panel support-main">
+    <div class="support-content">
+      <header class="topbar">
+        <div class="workspace-title"><span class="workspace-mark"><img src="../assets/Pro%204.svg" alt=""></span><span class="workspace-copy"><span>UniProcur Workspace</span><strong id="welcomeText">Welcome Manager!</strong></span></div>
+        <div class="topbar-account"><button class="notification-button" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button><span class="topbar-divider" aria-hidden="true"></span><span class="account-copy"><strong id="topbarManagerName">Manager</strong><small id="topbarManagerEmail">Loading…</small></span><span class="account-avatar" id="topbarAvatar">M</span></div>
+      </header>
+      <p id="managerSupportError" class="support-identity-note" hidden></p>
+<div class="support-page">
+    <section class="support-hero" aria-labelledby="supportTitle">
+      <span class="support-kicker">SUPPORT CENTER</span>
+      <h1 id="supportTitle">How can we help you today?</h1>
+      <p>Find step-by-step guidance for every part of your procurement workflow.</p>
+      <form class="support-search" id="supportSearch" role="search">
+        <span class="support-search-icon" aria-hidden="true"></span>
+        <label class="visually-hidden" for="supportSearchInput">Search support questions</label>
+        <input id="supportSearchInput" type="search" placeholder="search" autocomplete="off">
+        <button type="submit">Search</button>
+      </form>
+    </section>
+
+    <section class="support-faq" aria-labelledby="supportFaqTitle">
+      <div class="support-faq-intro">
+        <div>
+          <h2 id="supportFaqTitle"><span>Frequently</span><span>asked</span><span>questions</span></h2>
+          <p>Get quick answers to common questions about procurement.</p>
+        </div>
+      </div>
+      <div class="support-faq-panel">
+        <div class="support-faq-list" id="supportFaqList">
+          <details class="support-faq-item">
+            <summary>What can I see on the Dashboard?<span aria-hidden="true"></span></summary>
+            <p>The Dashboard summarizes your procurement activity, including pending transactions and recent request or order updates.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>Can I track pending transactions?<span aria-hidden="true"></span></summary>
+            <p>Yes. Review pending items from the Dashboard or open the related Purchase Request or Purchase Order to check its current status.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>How do I review a PR?<span aria-hidden="true"></span></summary>
+            <p>Open Purchase Request and select a request awaiting review. Check its item details, quantities, reference information, and supporting notes before deciding.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>Can I approve or reject a PR?<span aria-hidden="true"></span></summary>
+            <p>Open a pending request and choose the appropriate review action. If you reject it, include a clear reason so the requester knows what needs to change.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>What if a support concern is unresolved?<span aria-hidden="true"></span></summary>
+            <p>Use Contact support to describe the issue and include its ticket or procurement reference. You can check for updates in Recent support requests.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>Can I view resolved concerns?<span aria-hidden="true"></span></summary>
+            <p>Resolved concerns appear in the support request history with a Resolved status. Use the request details to review the recorded subject and category.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>What happens after PR approval?<span aria-hidden="true"></span></summary>
+            <p>Approval advances the purchase through your procurement workflow. Follow the request and its related Purchase Order for the next status updates.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>How do I track a PO?<span aria-hidden="true"></span></summary>
+            <p>Open Purchase Order to review its status and details. Check the current PO status and details; verified goods receiving will come from the Inventory integration.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>Can I update product details?<span aria-hidden="true"></span></summary>
+            <p>Open the relevant procurement record and check which details are editable. If the information is locked or needs correction, contact support with the record reference.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>How do I generate reports?<span aria-hidden="true"></span></summary>
+            <p>Open Reports, choose the report you need, and set its available filters before reviewing or exporting the results.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>What if I encounter an error?<span aria-hidden="true"></span></summary>
+            <p>Retry the action and note what you were doing if the error continues. Contact support with the affected record reference and a screenshot if possible.</p>
+          </details>
+          <details class="support-faq-item">
+            <summary>How do I track my concerns?<span aria-hidden="true"></span></summary>
+            <p>Check Recent support requests for the ticket status. Open a request to review its subject, category, and latest recorded status.</p>
+          </details>
+        </div>
+        <p class="support-faq-empty" id="supportFaqEmpty" hidden>No questions match that search. Try another term.</p>
+      </div>
+    </section>
+
+    <section class="support-requests" aria-labelledby="supportRequestsTitle">
+      
+      <header class="support-requests-header">
+        <div class="support-requests-heading">
+          <span class="support-requests-icon" aria-hidden="true">
+            <svg width="33.3333" height="26.6667" viewBox="0 0 33.3333 26.6667" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.6667 20C22.9928 20 24.2641 20.5272 25.2018 21.4648C25.7336 21.9966 26.1274 22.6377 26.3737 23.3333H28.3333C28.7754 23.3333 29.1992 23.1576 29.5117 22.8451C29.8243 22.5325 30 22.1087 30 21.6667V5C30 4.55797 29.8243 4.13418 29.5117 3.82161C29.1992 3.50905 28.7754 3.33333 28.3333 3.33333H26.3737C26.1274 4.02898 25.7336 4.67004 25.2018 5.20182C24.2641 6.1395 22.9927 6.66667 21.6667 6.66667C20.3406 6.66667 19.0692 6.1395 18.1315 5.20182C17.5997 4.67004 17.206 4.02898 16.9596 3.33333H5C4.55797 3.33333 4.13417 3.50905 3.82161 3.82161C3.50905 4.13417 3.33333 4.55797 3.33333 5V21.6667C3.33333 22.1087 3.50905 22.5325 3.82161 22.8451C4.13418 23.1576 4.55797 23.3333 5 23.3333H16.9596C17.206 22.6377 17.5997 21.9966 18.1315 21.4648C19.0692 20.5272 20.3406 20 21.6667 20ZM20 16.6667V15.8333C20 14.9129 20.7462 14.1667 21.6667 14.1667C22.5871 14.1667 23.3333 14.9129 23.3333 15.8333V16.6667C23.3333 17.5871 22.5871 18.3333 21.6667 18.3333C20.7462 18.3333 20 17.5871 20 16.6667ZM20 10.8333V10C20 9.07953 20.7462 8.33333 21.6667 8.33333C22.5871 8.33333 23.3333 9.07953 23.3333 10V10.8333C23.3333 11.7538 22.5871 12.5 21.6667 12.5C20.7462 12.5 20 11.7538 20 10.8333ZM33.3333 21.6667C33.3333 22.9928 32.8062 24.2641 31.8685 25.2018C30.9308 26.1395 29.6594 26.6667 28.3333 26.6667H25C24.0795 26.6667 23.3333 25.9205 23.3333 25C23.3333 24.558 23.1576 24.1342 22.8451 23.8216C22.5325 23.5091 22.1087 23.3333 21.6667 23.3333C21.2246 23.3333 20.8008 23.5091 20.4883 23.8216C20.1757 24.1342 20 24.558 20 25C20 25.9205 19.2538 26.6667 18.3333 26.6667H5C3.67392 26.6667 2.40252 26.1395 1.46484 25.2018C0.527162 24.2641 0 22.9927 0 21.6667V5C0 3.67392 0.527162 2.40253 1.46484 1.46484C2.40253 0.527162 3.67392 0 5 0H18.3333C19.2538 0 20 0.746192 20 1.66667C20 2.10869 20.1757 2.53249 20.4883 2.84505C20.8008 3.15761 21.2246 3.33333 21.6667 3.33333C22.1087 3.33333 22.5325 3.15761 22.8451 2.84505C23.1576 2.53249 23.3333 2.10869 23.3333 1.66667C23.3333 0.746192 24.0795 0 25 0H28.3333C29.6594 0 30.9308 0.527162 31.8685 1.46484C32.8062 2.40253 33.3333 3.67392 33.3333 5V21.6667Z" fill="black"/>
+            </svg>
+          </span>
+          <div>
+            <h2 id="supportRequestsTitle">Recent support requests</h2>
+            <p>Your recent support requests stored in Procurement.</p>
+          </div>
+        </div>
+        <button class="support-view-all" id="toggleAllTickets" type="button">View all support requests <span aria-hidden="true">→</span></button>
+      </header>
+      <div class="support-table-wrap">
+        <table class="support-requests-table" id="supportRequestsTable">
+          
+          <thead>
+            <tr>
+              <th scope="col">Ticket no.</th>
+              <th scope="col">Subject</th>
+              <th scope="col">Category</th>
+              <th scope="col">Date</th>
+              <th scope="col">Status</th>
+              <th scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="supportTicketsBody"><tr><td colspan="6" class="support-table-empty">Loading support requests...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="support-contact" aria-labelledby="supportContactTitle">
+      <p class="support-save-notice" role="note">Support requests are saved in Procurement. Email notifications are not configured yet.</p>
+      <header class="support-contact-header">
+        <h2 id="supportContactTitle">Contact support</h2>
+        <p>Can't find an answer? Contact the support team for assistance.</p>
+      </header>
+      <form class="support-contact-form" id="supportContactForm">
+        <div class="support-form-top">
+          <label class="support-field" for="supportIssueCategory">
+            <span>Issue category</span>
+            <select id="supportIssueCategory" name="category" required>
+              <option value="">Type</option>
+              <option>Dashboard</option>
+              <option>Purchase Request</option>
+              <option>Purchase Order</option>
+              <option>RFQ Workspace</option>
+              <option>Supplier Management</option>
+              <option>Suppliers</option>
+              <option>Reports</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label class="support-field" for="supportReference">
+            <span>Related reference (Optional)</span>
+            <input id="supportReference" name="reference" maxlength="80" type="text" placeholder="PR-2026-01">
+          </label>
+        </div>
+
+        <label class="support-field support-subject-field" for="supportSubject">
+          <span>Subject</span>
+          <textarea id="supportSubject" name="subject" required minlength="10" maxlength="4000" placeholder="Include what happened and what you expected."></textarea>
+        </label>
+
+        <div class="support-upload">
+          <input class="visually-hidden support-file-input" id="supportFileInput" type="file" multiple
+            accept=".doc,.docx,.xls,.xlsx,.pdf,.jpg,.jpeg,.png" aria-describedby="supportUploadHint supportFileFeedback">
+          <label class="support-upload-dropzone" id="supportDropzone" for="supportFileInput">
+            <svg class="support-upload-icon" width="29.3096" height="21" viewBox="0 0 29.3096 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M13.3226 11.6156L12.1235 12.7641C11.8793 13.0047 11.5742 13.125 11.2083 13.125C10.8423 13.125 10.5257 12.9937 10.2584 12.7312C10.0141 12.4906 9.892 12.1844 9.892 11.8125C9.892 11.4406 10.0141 11.1344 10.2584 10.8937L13.7222 7.48124C13.9887 7.21874 14.2995 7.08749 14.6548 7.08749C15.0101 7.08749 15.3209 7.21874 15.5874 7.48124L19.0513 10.8937C19.2955 11.1344 19.423 11.4354 19.4336 11.7967C19.4443 12.1581 19.3168 12.4696 19.0513 12.7312C18.807 12.9719 18.5019 13.0979 18.136 13.1092C17.7701 13.1206 17.4534 13.0056 17.1861 12.7641L15.9871 11.6156V18.375H23.3145C24.2471 18.375 25.0353 18.0578 25.6792 17.4234C26.3232 16.789 26.6451 16.0125 26.6451 15.0937C26.6451 14.175 26.3232 13.3984 25.6792 12.7641C25.0353 12.1297 24.2471 11.8125 23.3145 11.8125H21.3161V9.18749C21.3161 7.37187 20.6664 5.824 19.367 4.54387C18.0676 3.26375 16.4969 2.62412 14.6548 2.625C12.8127 2.62587 11.242 3.26593 9.94263 4.54518C8.64323 5.82443 7.99354 7.37187 7.99354 9.18749H7.32741C6.03956 9.18749 4.94045 9.63593 4.03007 10.5328C3.1197 11.4297 2.66451 12.5125 2.66451 13.7812C2.66451 15.05 3.1197 16.1328 4.03007 17.0297C4.94045 17.9265 6.03956 18.375 7.32741 18.375H9.32579C9.70326 18.375 10.0199 18.501 10.2757 18.753C10.5315 19.005 10.6589 19.3165 10.658 19.6875C10.6572 20.0585 10.5293 20.3704 10.2744 20.6233C10.0195 20.8762 9.70326 21.0017 9.32579 21H7.32741C5.30682 21 3.58066 20.3109 2.14893 18.9328C0.717198 17.5547 0.000888171 15.8703 0 13.8797C0 12.1734 0.5218 10.6531 1.5654 9.31874C2.609 7.98437 3.97456 7.13124 5.66209 6.75937C6.21719 4.74687 7.32741 3.11719 8.99273 1.87031C10.658 0.623437 12.5454 0 14.6548 0C17.2527 0 19.4567 0.891624 21.2668 2.67487C23.0769 4.45812 23.9815 6.62899 23.9806 9.18749C25.5127 9.36249 26.7841 10.0135 27.7949 11.1405C28.8056 12.2675 29.3105 13.5852 29.3096 15.0937C29.3096 16.7344 28.727 18.1291 27.5617 19.278C26.3964 20.4269 24.9807 21.0009 23.3145 21H15.9871C15.2543 21 14.6273 20.7432 14.1059 20.2295C13.5846 19.7159 13.3234 19.0977 13.3226 18.375V11.6156Z" fill="black"/>
+            </svg>
+            <span><strong>Click to upload</strong> or drag &amp; drop</span>
+            <small id="supportUploadHint">DOC, XLS, PDF, JPG, and PNG · up to 20 MB each (4 files max)</small>
+          </label>
+          <p class="support-file-feedback" id="supportFileFeedback" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="support-attachments">
+          <h3>Attach Files</h3>
+          <div class="support-attachment-list" id="supportAttachmentList" aria-live="polite">
+            <p class="support-attachments-empty">No files attached.</p>
+          </div>
+        </div>
+
+        <div class="support-form-footer">
+          <p class="support-submit-status" id="supportSubmitStatus" role="status" aria-live="polite"></p>
+          <button class="support-submit-button" type="submit">Submit Support Request</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="support-ticket-detail support-real-detail" id="supportTicketDetail" aria-labelledby="supportDetailTitle" hidden>
+      <button type="button" class="support-detail-back" id="supportDetailBack" aria-label="Back to support requests">← Back to support requests</button>
+      <p class="support-detail-meta" id="supportDetailMeta"></p>
+      <h2 class="support-detail-title" id="supportDetailTitle">Support request</h2>
+      <div class="support-real-detail-grid">
+        <div><small>Category</small><strong id="detailCategory">—</strong></div>
+        <div><small>Reference</small><strong id="detailReference">—</strong></div>
+        <div><small>Status</small><strong id="detailStatus">—</strong></div>
+      </div>
+      <article class="support-real-message">
+        <h3>Your request</h3>
+        <p id="detailDescription"></p>
+      </article>
+      <div class="support-real-attachments">
+        <h3>Attachments</h3>
+        <div id="detailAttachments">No attachments.</div>
+      </div>
+      <p class="support-real-help">Your ticket is recorded in Procurement. Support replies and email delivery require a separate support-team integration.</p>
+    </section>
+
+    <template id="supportPngFileIcon"><span class="support-file-type-label">IMG</span></template>
+    <template id="supportPdfFileIcon"><span class="support-file-type-label">PDF</span></template>
+    <template id="supportEyeActionIcon"><span aria-hidden="true">◉</span></template>
+    <template id="supportDownloadActionIcon"><span aria-hidden="true">↓</span></template>
+    <template id="supportTrashActionIcon"><span aria-hidden="true">×</span></template>
+  </div>
+    </div>
+  </main>
+</div>
+<div id="supportManagerToast" class="support-manager-toast" role="status" aria-live="polite" hidden></div>
+  <script src="../assets/uniprocur-manager-profile-display.js?v=1" defer></script>
+</body>
+</html>

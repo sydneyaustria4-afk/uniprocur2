@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#a11610">
+  <title>UniProcur | Revise Purchase Request</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
+  <link rel="stylesheet" href="edit-rejected-pr.css?v=figma-icons-20261113">
+  <script src="buyer-header-notifications.js?v=1" defer></script>
+  <script src="edit-rejected-pr.js?v=figma-icons-20261113" defer></script>
+  <link rel="stylesheet" href="revise-item-picker.css?v=20261113-search-icon-v2">
+  <script src="revise-item-picker.js?v=20261113-search-icon-v2" defer></script>
+</head>
+<body>
+  <div class="rev-shell">
+    <header class="rev-header">
+      <a class="rev-brand" href="buyer-dashboard.html" aria-label="Go to Buyer Dashboard">
+        <span class="rev-brand-mark"><img src="../assets/Pro%204.svg" alt=""></span>
+        <span class="rev-brand-copy"><small>Revise Purchase Request</small><strong id="headerNumber">PR —</strong></span>
+      </a>
+      <div class="rev-account">
+        <button class="notification-button rev-notification" id="notificationButton" type="button" aria-label="Notifications"><img src="../assets/Group%2050.svg" alt=""></button>
+        <span class="rev-divider"></span>
+        <span class="rev-identity"><strong id="buyerName">Buyer</strong><small id="buyerEmail">buyer@gmail.com</small></span>
+        <span class="rev-avatar" id="buyerInitial">B</span>
+      </div>
+    </header>
+    <a class="rev-back" id="backLink" href="buyer-dashboard.html" aria-label="Back to Purchase Request"><span class="rev-back-chevron" aria-hidden="true"></span></a>
+    <main class="rev-outer">
+      <section class="rev-paper" aria-labelledby="pageTitle">
+        <div class="rev-toolbar">
+          <div class="rev-meta"><div class="rev-meta-group"><small>PR No.</small><strong id="prNumber">Loading…</strong></div>
+          <div class="rev-meta-group rev-reason-summary"><small>Reason Rejection</small><strong id="topReason">Loading Manager remarks…</strong></div></div>
+          <div class="rev-toolbar-buttons">
+            <button type="button" class="rev-outline-btn" id="saveChanges" disabled><img src="../assets/edit.svg" alt="">Save Draft</button>
+            <button type="button" class="rev-outline-btn rev-submit-btn" id="resubmit" disabled><img src="../assets/submit.svg" alt="">Resubmit for Approval</button>
+          </div>
+        </div>
+        <h1 id="pageTitle" class="rev-visually-hidden">Revise Rejected Purchase Request</h1>
+        <div id="statusMessage" class="rev-notice" role="status" aria-live="polite">Loading the rejected Purchase Request from MySQL…</div>
+        <div class="rev-items-grid" id="itemRows" aria-live="polite"></div>
+        <div class="rev-divider-line"></div>
+        <div class="rev-footer-fields">
+          <label class="rev-date"><span>Required Date:</span><input id="requiredDate" type="date" required></label>
+          <label class="rev-justification"><span>Justification:</span><textarea id="justification" rows="3" maxlength="5000" required placeholder="Explain why these materials are needed"></textarea></label>
+        </div>
+        <p class="rev-hint">Same PR number will be retained. Save Draft keeps it rejected; Resubmit sends the revised PR back to Manager approval. Existing uploaded attachments remain attached.</p>
+      </section>
+    </main>
+  </div>
+  <div class="rev-dialog-backdrop" id="confirmLayer" hidden>
+    <section class="rev-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmDescription">
+      <div class="rev-dialog-title"><h2 id="confirmTitle">Resubmit for Approval</h2><button class="rev-x" id="closeDialog" aria-label="Close dialog" type="button">&times;</button></div>
+      <p id="confirmDescription">Are you sure you want to resubmit this Purchase Request for approval?</p>
+      <div class="rev-warning"><span class="rev-warning-mark" aria-hidden="true">!</span><strong>Warning:</strong> You will not be able to edit or delete this PR once it is submitted.</div>
+      <div class="rev-confirm-summary">
+        <div class="rev-confirm-top"><span class="rev-file-icon" aria-hidden="true"><img src="../assets/Group%2033.svg" alt=""></span><strong id="confirmPrNumber">PR —</strong><span class="rev-priority">High</span></div>
+        <div class="rev-confirm-info"><span>Required by:</span><strong id="confirmDate">—</strong></div>
+        <div class="rev-confirm-info"><span>Items:</span><strong id="confirmItems">—</strong></div>
+      </div>
+      <div class="rev-changes-wrapper"><h3>Changes Made</h3><div id="changesTable" class="rev-changes-list" aria-label="Purchase Request changes"></div></div>
+      <label class="rev-confirm-check"><input id="confirmCheckbox" type="checkbox"> <span>I confirm all details are correct and ready for approval.</span></label>
+      <div class="rev-dialog-actions"><button type="button" class="rev-cancel-btn" id="cancelDialog">Cancel</button><button type="button" class="rev-black-btn" id="submitConfirmed" disabled>Resubmit for Approval <span class="rev-submit-arrow" aria-hidden="true"></span></button></div>
+    </section>
+  </div>
+  <div class="rev-dialog-backdrop rev-success-layer" id="successLayer" hidden>
+    <section class="rev-success" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+      <div class="rev-success-top"><img class="rev-success-illustration" src="../assets/shoes.svg" alt="" aria-hidden="true"></div>
+      <div class="rev-success-body"><h2 id="successTitle"><span id="successNumber">PR —</span><span>Submitted Successfully!</span></h2><p>Your Purchase Request has been sent to the Manager for approval.</p></div>
+      <a href="buyer-dashboard.html" class="rev-success-back">Back to Dashboard <span class="rev-dashboard-arrow" aria-hidden="true"></span></a>
+    </section>
+  </div>
+  <div class="rev-toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

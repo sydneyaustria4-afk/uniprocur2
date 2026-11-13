@@ -69,7 +69,7 @@ try {
     } else {
 
         // Existing demo buyer fallback
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
 
         $s = $conn->prepare(
             'SELECT id, role, is_active

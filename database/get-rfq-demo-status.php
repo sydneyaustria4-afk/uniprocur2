@@ -29,7 +29,7 @@ try {
         $stmt->bind_param('i', $userId);
     } else {
         // Existing demo fallback; remove when enforcing real user sessions.
-        $email = 'clark@company.com';
+        $email = 'buyer@gmail.com';
         $stmt = $conn->prepare('SELECT id, role, is_active FROM users WHERE email=? LIMIT 1');
         $stmt->bind_param('s', $email);
     }

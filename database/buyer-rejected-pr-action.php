@@ -23,7 +23,7 @@ function rejectBuyer(mysqli $db): array {
         if (!in_array((string)($_SERVER['REMOTE_ADDR'] ?? ''), ['127.0.0.1','::1'], true)) {
             rejectReply(401,['success'=>false,'message'=>'Buyer login session is required.']);
         }
-        $email='clark@company.com';
+        $email='buyer@gmail.com';
         $stmt=$db->prepare('SELECT id,full_name,email,role,is_active FROM users WHERE email=? LIMIT 1');
         $stmt->bind_param('s',$email);
     }

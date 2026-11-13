@@ -33,7 +33,7 @@ try {
         );
         $userStmt->bind_param('i', $userId);
     } else {
-        $demoEmail = 'clark@company.com';
+        $demoEmail = 'buyer@gmail.com';
         $userStmt = $conn->prepare(
             'SELECT id, full_name, email, role, is_active FROM users WHERE email = ? LIMIT 1'
         );
