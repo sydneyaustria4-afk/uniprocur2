@@ -1,7 +1,7 @@
 
 "use strict";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const form = document.getElementById("purchaseRequestForm");
   const addItemButton = document.getElementById("addItemButton");
   const itemEntryList = document.getElementById("itemEntryList");
@@ -53,13 +53,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const SAVED_DRAFT_KEY = "uniprocur_new_pr_draft";
   const SELECTED_ITEM_KEY = "uniprocur_selected_pr_item";
   const SAVED_DRAFT_RECORD_KEY = "uniprocur_saved_pr_record_id";
+  const editPrNumber = new URLSearchParams(
+  window.location.search
+).get("pr");
 
   let toastTimer = null;
   let selectedFiles = [];
   let itemCounter = 0;
 
-  let savedRequestId =
-    Number(localStorage.getItem(SAVED_DRAFT_RECORD_KEY)) || null;
+let savedRequestId = editPrNumber
+  ? null
+  : (Number(localStorage.getItem(SAVED_DRAFT_RECORD_KEY)) || null);
 
   function showToast(message) {
     if (!toast) return;
@@ -262,7 +266,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (draft.requestId) {
       savedRequestId =
         Number(draft.requestId) || savedRequestId;
+
+        const browserDraftId =
+  Number(localStorage.getItem(SAVED_DRAFT_RECORD_KEY)) || 0;
+
+const updateBrowserDraft =
+  !editPrNumber || browserDraftId === savedRequestId;
     }
+
+
 
     if (draft.requestNumber) {
       document.getElementById("requestNumber").textContent =
@@ -439,7 +451,10 @@ document.addEventListener("DOMContentLoaded", () => {
           })
         );
 
-        showToast(
+        window.location.href =
+  `view-purchase-request.html?pr=${encodeURIComponent(requestNumber)}`;
+
+return;(
           `Draft ${requestNumber} saved to MySQL.`
         );
 
@@ -531,6 +546,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // CANCEL PURCHASE REQUEST
   cancelButton.addEventListener("click", () => {
+
+if (editPrNumber) {
+  // Discard unsaved changes from the editing session.
+  sessionStorage.removeItem(WORKING_DRAFT_KEY);
+  sessionStorage.removeItem(SELECTED_ITEM_KEY);
+
+  // Return to the original Purchase Request.
+  window.location.href =
+    `view-purchase-request.html?pr=${encodeURIComponent(editPrNumber)}`;
+
+  return;
+}
+
     const hasContent =
       itemEntryList.children.length > 0 ||
       selectedFiles.length > 0 ||
@@ -561,31 +589,131 @@ document.addEventListener("DOMContentLoaded", () => {
     showToast("You have no new notifications.");
   });
 
-  // Restore the unsaved form after returning from the item catalog.
-  try {
-    const workingDraft = sessionStorage.getItem(WORKING_DRAFT_KEY);
-    const savedDraft = localStorage.getItem(SAVED_DRAFT_KEY);
-
-    if (workingDraft) {
-      restoreDraft(JSON.parse(workingDraft));
-      sessionStorage.removeItem(WORKING_DRAFT_KEY);
-    } else if (savedDraft) {
-      restoreDraft(JSON.parse(savedDraft));
-    }
-
-    // Add the one item selected in the catalog, then consume the one-time value.
-    const selectedItemRaw = sessionStorage.getItem(SELECTED_ITEM_KEY);
-
-    if (selectedItemRaw) {
-      const selectedItem = JSON.parse(selectedItemRaw);
-      sessionStorage.removeItem(SELECTED_ITEM_KEY);
-      addItemRow({ ...selectedItem, quantity: "" });
-      showToast(`${selectedItem.name} added. Enter its quantity.`);
-    }
-  } catch (error) {
-    console.warn("Request details could not be restored:", error);
-    showToast(
-      "Some request details could not be restored. Please check your items."
-    );
+ 
+  // Restore PR data from MySQL when editing.
+  if (editPrNumber) {
+    saveDraftButton.disabled = true;
+    submitButton.disabled = true;
+    addItemButton.disabled = true;
   }
+
+  try {
+    const workingRaw = sessionStorage.getItem(WORKING_DRAFT_KEY);
+    const savedRaw = localStorage.getItem(SAVED_DRAFT_KEY);
+
+    let acceptCatalogItem = !editPrNumber;
+
+    if (editPrNumber) {
+      const response = await fetch(
+        "../database/get-purchase-request.php?pr_number=" +
+          encodeURIComponent(editPrNumber),
+        {
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: { "Accept": "application/json" }
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(
+          result.message || "Unable to load Purchase Request."
+        );
+      }
+
+      const pr = result.purchase_request;
+
+      if (
+        pr.pr_number !== editPrNumber ||
+        String(pr.status).toLowerCase() !== "draft"
+      ) {
+        throw new Error("Only existing draft PRs can be edited.");
+      }
+
+      savedRequestId = Number(pr.id);
+
+      if (!Number.isSafeInteger(savedRequestId) ||
+          savedRequestId <= 0) {
+        throw new Error("Invalid Purchase Request ID.");
+      }
+
+      // Preserve unsaved changes after visiting Item Catalog.
+      const working = workingRaw ? JSON.parse(workingRaw) : null;
+
+      const sameDraft = working &&
+        working.requestNumber === pr.pr_number &&
+        Number(working.requestId) === savedRequestId;
+
+      acceptCatalogItem = Boolean(sameDraft);
+
+      const draft = sameDraft ? working : {
+        requestId: savedRequestId,
+        requestNumber: pr.pr_number,
+        requiredDate: pr.needed_by,
+        justification: pr.purpose || "",
+        items: (result.items || []).map(item => ({
+          code: item.item_code || "",
+          category: item.category || "",
+          name: item.item_name || "",
+          unit: item.unit || "",
+          quantity: item.qty || ""
+        }))
+      };
+
+      itemEntryList.replaceChildren();
+      restoreDraft(draft);
+
+      document.title = "UniProcur | Edit Purchase Request";
+
+      const title = document.querySelector(
+        ".request-brand .brand-copy > span"
+      );
+      if (title) title.textContent = "Edit Purchase Request";
+
+      document.querySelector(".request-outer-card")
+        ?.setAttribute("aria-label", "Edit Purchase Request form");
+
+      sessionStorage.removeItem(WORKING_DRAFT_KEY);
+
+      saveDraftButton.disabled = false;
+      submitButton.disabled = false;
+      addItemButton.disabled = false;
+
+    } else if (workingRaw) {
+      restoreDraft(JSON.parse(workingRaw));
+      sessionStorage.removeItem(WORKING_DRAFT_KEY);
+
+    } else if (savedRaw) {
+      restoreDraft(JSON.parse(savedRaw));
+    }
+
+    // Restore item selected from Item Catalog.
+    const selectedRaw = sessionStorage.getItem(SELECTED_ITEM_KEY);
+
+    if (selectedRaw) {
+      sessionStorage.removeItem(SELECTED_ITEM_KEY);
+
+      if (acceptCatalogItem) {
+        const selected = JSON.parse(selectedRaw);
+        addItemRow({ ...selected, quantity: "" });
+        showToast(`${selected.name} added. Enter its quantity.`);
+      }
+    }
+
+  } catch (error) {
+    console.error("Purchase Request loading error:", error);
+    showToast(error.message || "Unable to load PR.");
+
+    if (editPrNumber) {
+      saveDraftButton.disabled = true;
+      submitButton.disabled = true;
+      addItemButton.disabled = true;
+      window.alert(
+        "Unable to load this draft. No new PR was created.\n" +
+        error.message
+      );
+    }
+  }
+
 });

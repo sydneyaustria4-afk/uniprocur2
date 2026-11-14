@@ -52,9 +52,30 @@ const items = [
     }, 2600);
   }
 
-  function returnToRequest() {
-    window.location.href = "new-purchase-request.html";
+
+function returnToRequest() {
+  let prNumber = "";
+
+  try {
+    const working = JSON.parse(
+      sessionStorage.getItem("uniprocur_new_pr_working") || "null"
+    );
+
+    if (
+      Number(working?.requestId) > 0 &&
+      /^PR-\d{4}-\d+$/.test(working?.requestNumber || "")
+    ) {
+      prNumber = working.requestNumber;
+    }
+  } catch (error) {
+    console.warn("Unable to restore PR number:", error);
   }
+
+  window.location.href = prNumber
+    ? `new-purchase-request.html?pr=${encodeURIComponent(prNumber)}`
+    : "new-purchase-request.html";
+}
+
 
   function getFilteredItems() {
     const query = currentSearch.toLowerCase();
@@ -174,6 +195,13 @@ const items = [
   notificationButton.addEventListener("click", () => {
     showToast("You have no new notifications.");
   });
+
+document.querySelector(".catalog-brand")
+  ?.addEventListener("click", (event) => {
+    event.preventDefault();
+    returnToRequest();
+  });
+
 
   renderItems();
 });

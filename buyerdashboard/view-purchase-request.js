@@ -394,10 +394,52 @@ createRFQButton.addEventListener("click", () => {
 
     // The buttons are displayed here; their database actions
     // will be connected in the next implementation step.
-    document.getElementById("deleteDraftButton")
-      .addEventListener("click", () => {
-        showToast("Delete Draft action is not connected yet.");
-      });
+  
+deleteDraftButton.addEventListener("click", async () => {
+  if (!isDraft) return;
+
+  const confirmed = window.confirm(
+    `Permanently delete ${request.pr_number}? This cannot be undone.`
+  );
+
+  if (!confirmed) return;
+
+  deleteDraftButton.disabled = true;
+
+  try {
+    const response = await fetch(
+      "../database/buyer-draft-action.php",
+      {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          action: "delete",
+          pr_number: request.pr_number
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Unable to delete draft."
+      );
+    }
+
+    window.location.href = "buyer-dashboard.html";
+
+  } catch (error) {
+    console.error("Delete Draft error:", error);
+    showToast(error.message || "Unable to delete draft.");
+    deleteDraftButton.disabled = false;
+  }
+});
+
 
     document.getElementById("editPRButton")
       .addEventListener("click", () => {
