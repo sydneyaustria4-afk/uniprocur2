@@ -8,7 +8,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     require_once __DIR__ . '/uniprocur-session.php';
 }
 
-const UNIPROCUR_MANAGER_LOCAL_DEMO_MODE = true;
+const UNIPROCUR_MANAGER_LOCAL_DEMO_MODE = false;
 
 function managerSendJson(int $statusCode, array $payload): void
 {

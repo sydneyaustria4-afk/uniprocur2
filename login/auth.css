@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Inter:ital,wght@0,400;0,500;1,400&display=swap');
+
+:root {
+    --auth-red: #d8231a;
+    --auth-panel: #d9d9d9;
+    --auth-input: #f4efef;
+    --auth-purple: #9e6add;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body { font-family: 'Instrument Sans', 'Inter', sans-serif; color: #080808; }
+.auth-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 42px 24px;
+    background: #d8231a url('../assets/auth-bg.png') center / cover fixed;
+}
+.auth-card {
+    width: min(1109px, 100%);
+    min-height: 548px;
+    display: grid;
+    grid-template-columns: minmax(300px, 524px) minmax(0, 1fr);
+    gap: 31px;
+    padding: 30px;
+    border-radius: 20px;
+    background: var(--auth-panel);
+}
+.auth-art {
+    min-height: 488px;
+    display: flex;
+    align-items: flex-start;
+    padding: 60px 42px;
+    border-radius: 14px;
+    color: #fff;
+    background: url('../assets/auth-image.png') center / cover;
+}
+.art-copy { display: flex; flex-direction: column; gap: 0; font-family: Inter, sans-serif; font-size: clamp(28px, 3vw, 40px); line-height: .98; letter-spacing: -1.5px; }
+.art-copy strong { margin-top: 66px; max-width: 330px; font-size: inherit; font-weight: 400; }
+.is-hidden { display: none !important; }
+.auth-content { min-width: 0; display: flex; align-items: center; }
+.auth-form { width: min(470px, 100%); margin: 0 auto; }
+.auth-form h1 { margin: 0; font-family: Inter, sans-serif; font-size: 30px; font-weight: 500; line-height: 1.1; }
+.auth-form h2 { margin: 9px 0 20px; font-size: 18px; font-weight: 600; }
+.auth-subtitle { margin: 4px 0 15px; color: #6a6161; font-size: 15px; }
+.auth-form hr { margin: 0 0 9px; border: 0; border-top: 1px solid #6a6161; }
+.auth-form label { display: block; margin: 0 0 5px; font-size: 13px; }
+.auth-form input, .auth-form select {
+    width: 100%; height: 42px; margin: 0 0 10px; padding: 0 14px; border: 1px solid #111; border-radius: 8px;
+    background: var(--auth-input); box-shadow: 0 4px 4px rgba(0, 0, 0, .25); color: #111; font: italic 15px Inter, sans-serif;
+}
+.auth-form select { appearance: auto; }
+.auth-form input:focus, .auth-form select:focus { outline: 2px solid rgba(158, 106, 221, .55); outline-offset: 1px; }
+.auth-button { width: 100%; height: 46px; margin-top: 8px; border: 1px solid #111; border-radius: 8px; background: var(--auth-red); color: #fff; font: 600 12px 'Instrument Sans', sans-serif; cursor: pointer; box-shadow: 1px 4px 4px rgba(0, 0, 0, .25); }
+.auth-button:hover { background: #bf1d16; }
+.auth-switch { margin: 12px 0 0; font-size: 13px; }
+.auth-switch a, .back-link { color: var(--auth-purple); text-decoration: none; }
+.auth-switch a:hover, .back-link:hover { text-decoration: underline; }
+.back-link { display: block; margin-bottom: 70px; color: #080808; font: 500 27px Inter, sans-serif; }
+.error-text { display: none; margin: -4px 0 8px; color: #a41e18; font-size: 12px; }
+.error-text.is-visible { display: block; }
+
+/* Password field with eye toggle */
+.password-field { position: relative; width: 100%; margin: 0 0 10px; }
+.password-field input { margin: 0; padding-right: 46px; }
+.toggle-password {
+    position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
+    width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
+    padding: 0; border: 0; background: transparent; color: #4a4a4a; cursor: pointer; border-radius: 6px;
+}
+.toggle-password:hover { color: #080808; background: rgba(0, 0, 0, .06); }
+.toggle-password:focus-visible { outline: 2px solid rgba(158, 106, 221, .55); outline-offset: 1px; }
+.toggle-password .eye-closed { display: none; }
+.toggle-password.is-visible .eye-open { display: none; }
+.toggle-password.is-visible .eye-closed { display: block; }
+@media (max-width: 760px) {
+    .auth-shell { padding: 16px; }
+    .auth-card { grid-template-columns: 1fr; gap: 0; padding: 16px; }
+    .auth-art { min-height: 230px; padding: 34px 26px; border-radius: 12px 12px 0 0; }
+    .art-copy { font-size: 30px; }
+    .art-copy strong { margin-top: 28px; }
+    .auth-content { padding: 30px 8px 20px; }
+    .back-link { margin-bottom: 30px; }
+}
