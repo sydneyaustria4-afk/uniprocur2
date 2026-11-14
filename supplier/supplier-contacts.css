@@ -1,0 +1,132 @@
+/* Only Buyer Supplier Call/Email dialog; no Manager styles changed. */
+.upc-dialog {
+    border: 0;
+    width: min(460px, calc(100vw - 32px));
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 20px 65px rgba(0, 0, 0, .3);
+    color: #151515;
+    background: #fff;
+    font: 14px Inter, Arial, sans-serif;
+}
+
+.upc-dialog::backdrop {
+    background: rgba(0, 0, 0, .55);
+}
+
+.upc-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.upc-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 5px;
+}
+
+.upc-header p {
+    margin: 0 0 20px;
+    color: #555;
+    font-size: 13px;
+}
+
+.upc-x {
+    font-size: 25px;
+    line-height: 1;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    padding: 0 3px;
+}
+
+.upc-body {
+    padding: 8px 0 14px;
+}
+
+.upc-field {
+    display: grid;
+    grid-template-columns: 105px minmax(0, 1fr);
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ececec;
+}
+
+.upc-field span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.upc-field strong {
+    overflow-wrap: anywhere;
+    font-size: 13px;
+}
+
+.upc-source {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #657187;
+    margin: 14px 0 0;
+}
+
+.upc-error {
+    font-size: 12px;
+    color: #a52621;
+}
+
+.upc-footer {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.upc-footer a,
+.upc-footer button {
+    border-radius: 9px;
+    padding: 11px 15px;
+    font: 600 13px Inter, Arial, sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.upc-secondary {
+    border: 1px solid #cdd0d5;
+    background: white;
+    color: #262626;
+}
+
+.upc-primary {
+    border: 1px solid #cd241c;
+    background: #cd241c;
+    color: white !important;
+}
+
+.upc-footer [hidden] {
+    display: none !important;
+}
+
+.upc-footer button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+@media(max-width:440px) {
+    .upc-dialog {
+        padding: 18px;
+    }
+
+    .upc-field {
+        grid-template-columns: 85px minmax(0, 1fr);
+    }
+}
+
+/* Hide sample contact message */
+#upc-source {
+    display: none !important;
+}

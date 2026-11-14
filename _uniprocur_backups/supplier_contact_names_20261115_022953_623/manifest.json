@@ -1,0 +1,18 @@
+﻿[
+    {
+        "RelativePath":  "supplier\\supplier.html",
+        "Existed":  true
+    },
+    {
+        "RelativePath":  "supplier\\supplier-contacts.js",
+        "Existed":  true
+    },
+    {
+        "RelativePath":  "supplier\\supplier-contacts.css",
+        "Existed":  true
+    },
+    {
+        "RelativePath":  "database\\get-buyer-supplier-profile.php",
+        "Existed":  true
+    }
+]
