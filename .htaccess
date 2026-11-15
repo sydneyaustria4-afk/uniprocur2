@@ -2,3 +2,4 @@
 RewriteEngine On
 RewriteRule ^(buyerdashboard|managerdashboard|PR202601)/[A-Za-z0-9._-]+\.html$ database/guard-page.php [L,NC]
 
+

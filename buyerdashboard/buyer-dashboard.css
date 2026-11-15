@@ -1039,10 +1039,10 @@ img {
 }
 
 .quick-actions {
-  display: grid;
-  align-content: start;
-  justify-items: center;
-  padding-top: 15px;
+  align-self: flex-start;
+  margin-top: 0;
+  padding: 15px;
+  gap: 10px;
 }
 
 .quick-actions-art {
@@ -3017,3 +3017,11 @@ body {
 .requests-panel .dashboard-table tbody td:nth-child(2) {
     white-space: nowrap;
 }
+/* UNIPROCUR_MINIMAL_QA_20261115 - only align original shortcut image with Arriving Next */
+@media (min-width: 821px) {
+  .bottom-row .quick-actions-art {
+    width: 240px;
+  }
+}
+
+

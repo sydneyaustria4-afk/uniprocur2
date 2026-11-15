@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
       $("toggleDemoPreview").textContent = state.sampleVisible
         ? "Show actual 0 records" : "Show Figma sample";
     }
-    state.status = "all";
+    state.status = new URLSearchParams(window.location.search).get("status") === "ready" ? "ready" : "all";
     state.search = "";
     $("searchInput").value = "";
     render();
