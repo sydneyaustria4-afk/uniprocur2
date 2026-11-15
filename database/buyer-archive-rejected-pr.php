@@ -14,8 +14,10 @@ require_once __DIR__ . '/procurement-audit-log.php';
 
 const PR_ARCHIVE_EVENT = 'PR Archived';
 
+require_once __DIR__ . '/uniprocur-http-status.php';
+
 function archiveReply(int $status, array $data): void {
-    http_response_code($status);
+    uniprocurHttpCode($status);
     echo json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }

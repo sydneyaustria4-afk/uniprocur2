@@ -10,9 +10,11 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 const UNIPROCUR_MANAGER_LOCAL_DEMO_MODE = false;
 
+require_once __DIR__ . '/uniprocur-http-status.php';
+
 function managerSendJson(int $statusCode, array $payload): void
 {
-    http_response_code($statusCode);
+    uniprocurHttpCode($statusCode);
     header('Content-Type: application/json; charset=utf-8');
     header('Cache-Control: no-store, max-age=0');
     echo json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

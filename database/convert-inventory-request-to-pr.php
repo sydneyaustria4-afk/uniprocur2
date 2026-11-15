@@ -10,8 +10,10 @@ header('Cache-Control: no-store, max-age=0');
 header('X-Content-Type-Options: nosniff');
 if (session_status() !== PHP_SESSION_ACTIVE) require_once __DIR__ . '/uniprocur-session.php';
 
+require_once __DIR__ . '/uniprocur-http-status.php';
+
 function respond(int $status, array $data): void {
-    http_response_code($status);
+    uniprocurHttpCode($status);
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }

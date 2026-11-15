@@ -5,8 +5,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) require_once __DIR__ . '/uniprocur-
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store, max-age=0');
 
+require_once __DIR__ . '/uniprocur-http-status.php';
+
 function buyerPoJson(int $code, array $data): void {
-    http_response_code($code);
+    uniprocurHttpCode($code);
     echo json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }

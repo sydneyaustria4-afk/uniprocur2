@@ -8,8 +8,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 require_once __DIR__ . '/procurement_db_connection.php';
 require_once __DIR__ . '/procurement-audit-log.php';
 
+require_once __DIR__ . '/uniprocur-http-status.php';
+
 function rejectReply(int $code, array $body): void {
-    http_response_code($code);
+    uniprocurHttpCode($code);
     echo json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }

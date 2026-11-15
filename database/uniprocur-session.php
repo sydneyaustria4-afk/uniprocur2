@@ -45,9 +45,18 @@ if ($uniprocurUnifiedInstall && !empty($_COOKIE['PHPSESSID'])
         $u = $_SESSION['user'] ?? null;
         if (is_array($u)) $uniprocurRootUser = $u;
     }
+    // The read-only root session leaves its session ID in PHP; never reuse it.
+    session_id('');
 }
 
 $uniprocurCookieName = 'UPRSESS_' . strtoupper(substr(hash('sha256', $uniprocurCookiePath), 0, 12));
+// Resume an existing Procurement session, not the root ERP session.
+// PHP strict mode still checks whether the cookie ID belongs to an existing session.
+if (!empty($_COOKIE[$uniprocurCookieName])
+    && is_string($_COOKIE[$uniprocurCookieName])
+    && preg_match('/\A[A-Za-z0-9,-]{16,128}\z/D', $_COOKIE[$uniprocurCookieName])) {
+    session_id($_COOKIE[$uniprocurCookieName]);
+}
 $uniprocurHttps = (!empty($_SERVER['HTTPS']) && strtolower((string)$_SERVER['HTTPS']) !== 'off')
     || (string)($_SERVER['SERVER_PORT'] ?? '') === '443';
 ini_set('session.use_only_cookies', '1');
