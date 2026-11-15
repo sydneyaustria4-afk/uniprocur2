@@ -1549,10 +1549,10 @@ img {
     padding-top: 0;
   }
 
-  .tasks-panel {
-    min-height: 0;
-  }
-
+ /* Fix spacing between Arriving Next and My Task */
+.tasks-panel {
+    margin-top: 0 !important;
+} 
   .task-items {
     grid-template-columns: minmax(0, 259px);
   }
@@ -3025,3 +3025,28 @@ body {
 }
 
 
+/* FINAL: Original shortcut width, aligned height */
+.bottom-row .quick-actions {
+    padding: 0 !important;
+    margin: 0;
+    align-self: start;
+}
+
+.bottom-row .quick-actions-art {
+    width: 253px;
+    max-width: 100%;
+    height: 300px;
+    aspect-ratio: auto;
+}
+
+.bottom-row .quick-actions-art > img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+
+/* FIX: Spacing between Arriving Next and My Task */
+.bottom-row > .tasks-panel {
+    margin-top: 0 !important;
+}
