@@ -2,7 +2,7 @@
 // LOCALHOST PR-DRAFT CONVERSION TEST. API key stays on server; conversion creates a real Procurement PR draft.
 document.addEventListener("DOMContentLoaded", () => {
   const $ = id => document.getElementById(id);
-  const state = { requests: [], status: "pending", search: "", csrfToken: "", active: null, busy: false };
+  const state = { requests: [], status: "all", search: "", csrfToken: "", active: null, busy: false };
   const formatQty = qty => Number.isFinite(Number(qty))
     ? new Intl.NumberFormat("en-PH", { maximumFractionDigits: 3 }).format(Number(qty))
     : String(qty ?? "—");
@@ -47,7 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return (state.status === "all" || (req.pr_number ? "converted" : req.status.toLowerCase()) === state.status) &&
         (!state.search || content.includes(state.search));
     });
-    $("materialShowingLabel").textContent = state.status === "all" ? "All Material Requests" : "Pending Material Requests";
+   $("materialShowingLabel").textContent =
+  state.status === "all"
+    ? "All Material Requests"
+    : state.status === "converted"
+      ? "Converted to PR"
+      : "Pending Material Requests";
     $("materialCount").textContent = `${matches.length} request${matches.length === 1 ? "" : "s"}`;
     const cards = $("materialCards");
     cards.replaceChildren();
