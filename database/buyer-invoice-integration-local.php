@@ -50,22 +50,19 @@ function ilPoItems(mysqli $db,int $poId): array {
                      FROM po_items WHERE po_id=? ORDER BY id');
     $q->bind_param('i',$poId);$q->execute();$data=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();return $data;
 }
+// ITPROFEL_VERIFIED_INVOICE_V1 — only authenticated Inventory DR snapshots are accepted.
 function ilReceiptTotals(mysqli $db,int $poId,string $poNumber): array {
-    // Match real GR by both PO ID and PO number; never include GR-TEST rows.
-    $q=$db->prepare('SELECT rli.procurement_po_item_id AS po_item_id,
-        SUM(rli.accepted_qty) AS accepted, SUM(rli.rejected_qty) AS rejected
-        FROM inventory_system_api_test.inventory_po_real_receipt_items rli
-        JOIN inventory_system_api_test.inventory_po_real_receipts gr ON gr.id=rli.receipt_id
-        WHERE gr.po_id=? AND gr.po_number=?
-        GROUP BY rli.procurement_po_item_id');
-    $q->bind_param('is',$poId,$poNumber);$q->execute();$arr=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();
-    $result=[];foreach($arr as $row)$result[(int)$row['po_item_id']]=$row;
-    return $result;
+    $q=$db->prepare('SELECT ri.po_item_id, SUM(ri.accepted_qty) AS accepted,SUM(ri.rejected_qty) AS rejected
+                     FROM procurement_inventory_receipt_items ri
+                     INNER JOIN procurement_inventory_receipts gr ON gr.id=ri.receipt_id
+                     WHERE gr.po_id=? AND gr.po_number=? GROUP BY ri.po_item_id');
+    $q->bind_param('is',$poId,$poNumber);$q->execute();$rows=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();
+    $out=[];foreach($rows as $row)$out[(int)$row['po_item_id']]=$row;return $out;
 }
-function ilReceiptNumbers(mysqli $db, int $poId, string $poNumber): array {
-    $q=$db->prepare('SELECT goods_receipt_number,received_date
-        FROM inventory_system_api_test.inventory_po_real_receipts WHERE po_id=? AND po_number=? ORDER BY id');
-    $q->bind_param('is',$poId,$poNumber);$q->execute();$r=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();return $r;
+function ilReceiptNumbers(mysqli $db,int $poId,string $poNumber): array {
+    $q=$db->prepare('SELECT receipt_number AS goods_receipt_number,receipt_date AS received_date
+                     FROM procurement_inventory_receipts WHERE po_id=? AND po_number=? ORDER BY id');
+    $q->bind_param('is',$poId,$poNumber);$q->execute();$rows=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();return $rows;
 }
 function ilInvoice(mysqli $db,int $poId, int $buyerId): ?array {
     $q=$db->prepare('SELECT i.*,src.supplier_invoice_reference,src.source_kind,src.document_checked,
@@ -130,14 +127,11 @@ function ilMatch(mysqli $db,array $po,array $poItems,?array $invoice, array $lin
         'supplier_document_verified'=>(bool)($invoice && ($invoice['source_kind']??'')==='supplier_document' && (int)($invoice['document_checked']??0)===1),
         'pre_vat_only'=>true];
 }
+require_once __DIR__ . '/uniprocur-verified-receipts.php';
 function ilLocalGuard(): void {
-    $host=strtolower(trim((string)($_SERVER['HTTP_HOST']??'')));
-    if(!preg_match('/\A(?:localhost|127\.0\.0\.1)(?::\d+)?\z/',$host)
-       || !in_array((string)($_SERVER['REMOTE_ADDR']??''),['127.0.0.1','::1'],true)) {
-        ilReply(403,['success'=>false,'message'=>'This local test is disabled outside localhost. Do not use over Radmin.']);
-    }
+    // Buyer role and CSRF remain enforced; Radmin clients are allowed.
+    // Real Supplier PO receipts must have been verified through Inventory API.
 }
-
 ilLocalGuard();
 $method=(string)($_SERVER['REQUEST_METHOD']??'');
 if(!in_array($method,['GET','POST'],true))ilReply(405,['success'=>false,'message'=>'GET or POST only.']);
@@ -146,10 +140,10 @@ try {
     $buyer=buyerPoIdentity($conn);$buyerId=(int)$buyer['id'];
     // UNIPROCUR_PORTABLE_INVOICE_GUARD_V1
     // Fail closed for GET and POST. Do not create/verify invoices without real GR tables.
-    if (!uniLocalInventoryReady($conn, ['inventory_po_real_receipt_items', 'inventory_po_real_receipts'])) {
+    if (!uniVerifiedReceiptsReady($conn)) {
         ilReply(503, [
             'success' => false, 'code' => 'INVENTORY_NOT_CONFIGURED',
-            'message' => 'Invoice verification requires real Inventory Goods Receipts. The Inventory integration is not configured on this PC. No invoice was created or verified; Finance posting remains disabled.'
+            'message' => 'Invoice verification requires real Inventory Goods Receipts. The Verified Inventory receipt tables are missing. Import 02_itprofel_inventory_sync.sql before recording invoices.'
         ]);
     }
     if($method==='GET') {

@@ -2,6 +2,7 @@
 /** UniProcur — Manager approves / rejects a submitted Purchase Order. */
 require_once __DIR__ . '/procurement_db_connection.php';
 require_once __DIR__ . '/manager-api-common.php';
+require_once __DIR__ . '/uniprocur-inventory-sync.php';
 
 header('Cache-Control: no-store, max-age=0');
 $started = false;
@@ -102,12 +103,19 @@ try {
     $notify->bind_param('isiis',$poId,$number,$notifyBuyerId,$managerId,$newStatus);
     $notify->execute();
     $notify->close();
+    // Only linked Inventory requests are synced; standalone POs remain local.
+    $inventoryQueueId = $newStatus === 'approved' ? uniInventoryQueuePo($conn,$poId,$number) : 0;
     $conn->commit();
     $started = false;
+    $inventorySynced = false;
+    try { $inventorySynced = uniInventorySendQueued($conn,$inventoryQueueId); } catch (Throwable $syncError) { error_log('Inventory event delivery deferred: '.$syncError->getMessage()); }
     managerSendJson(200, [
         'success' => true,
         'po_number' => $number,
         'status' => $newStatus,
+        'inventory_linked' => $inventoryQueueId > 0,
+        'inventory_synced' => $inventorySynced,
+        'inventory_warning' => $inventorySynced ? null : 'PO approval saved, but Inventory dispatch is pending. Use server retry command.',
         'message' => $newStatus === 'approved'
             ? "{$number} approved successfully."
             : "{$number} rejected successfully."

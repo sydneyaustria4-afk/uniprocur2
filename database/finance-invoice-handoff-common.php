@@ -5,7 +5,7 @@
  * A buyer-checked document flag is a recorded declaration, NOT document authentication.
  */
 declare(strict_types=1);
-require_once __DIR__ . '/inventory-local-preflight.php'; // UNIPROCUR_PORTABLE_INVENTORY_V1
+require_once __DIR__ . '/uniprocur-verified-receipts.php'; // ITPROFEL_VERIFIED_FINANCE_INVOICE_V1
 
 function fihMoneyCents($v): int {
     $text = (string)$v;
@@ -58,8 +58,8 @@ function fihVerifiedSnapshot(mysqli $db, array $inv): array {
     }
     // UNIPROCUR_PORTABLE_FINANCE_GUARD_V1
     // No valid, real Inventory source: do not queue an invoice for Finance.
-    if (!uniLocalInventoryReady($db, ['inventory_po_real_receipt_items', 'inventory_po_real_receipts'])) {
-        throw new DomainException('Inventory Goods Receipt verification is not configured on this PC. Finance invoice handoff is blocked until real receiving can be verified.');
+    if (!uniVerifiedReceiptsReady($db)) {
+        throw new DomainException('Verified Inventory receipt schema missing. Import 02_itprofel_inventory_sync.sql.');
     }
     $invoiceId=(int)$inv['invoice_id'];$poId=(int)$inv['po_id'];$poNumber=(string)$inv['po_number'];
     $q=$db->prepare('SELECT pi.id, pi.item_name, pi.unit, pi.qty_ordered, pi.qty_received,pi.unit_price,
@@ -71,16 +71,16 @@ function fihVerifiedSnapshot(mysqli $db, array $inv): array {
     $q=$db->prepare('SELECT COUNT(*) AS n FROM invoice_items WHERE invoice_id=?');
     $q->bind_param('i',$invoiceId);$q->execute();$n=(int)$q->get_result()->fetch_assoc()['n'];$q->close();
     if (!$rows || count($rows)!==$n) throw new DomainException('Invoice lines must match the complete PO exactly.');
-    $q=$db->prepare('SELECT ri.procurement_po_item_id AS item_id,
-              SUM(ri.accepted_qty) AS accepted
-        FROM inventory_system_api_test.inventory_po_real_receipt_items ri
-        JOIN inventory_system_api_test.inventory_po_real_receipts gr ON gr.id=ri.receipt_id
-        WHERE gr.po_id=? AND gr.po_number=? AND gr.posted_at IS NOT NULL
-        GROUP BY ri.procurement_po_item_id');
+    $q=$db->prepare('SELECT ri.po_item_id AS item_id,
+               SUM(ri.accepted_qty) AS accepted
+        FROM procurement_inventory_receipt_items ri
+        JOIN procurement_inventory_receipts gr ON gr.id=ri.receipt_id
+        WHERE gr.po_id=? AND gr.po_number=?
+        GROUP BY ri.po_item_id');
     $q->bind_param('is',$poId,$poNumber);$q->execute();$received=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();
     $actual=[];foreach($received as $x)$actual[(int)$x['item_id']]=(float)$x['accepted'];
-    $q=$db->prepare('SELECT goods_receipt_number,received_date FROM inventory_system_api_test.inventory_po_real_receipts
-        WHERE po_id=? AND po_number=? AND posted_at IS NOT NULL ORDER BY id');
+    $q=$db->prepare('SELECT receipt_number AS goods_receipt_number,receipt_date AS received_date FROM procurement_inventory_receipts
+        WHERE po_id=? AND po_number=? ORDER BY id');
     $q->bind_param('is',$poId,$poNumber);$q->execute();$receipts=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();
     if (!$receipts) throw new DomainException('No posted real Inventory Goods Receipts found.');
     $items=[];$total=0;
@@ -120,7 +120,7 @@ function fihVerifiedSnapshot(mysqli $db, array $inv): array {
         'amount_pre_vat'=>(string)$inv['total_amount'],
         'tax_status'=>'NOT_VERIFIED_PRE_VAT_ONLY',
         'document_review'=>'BUYER_DECLARED_REVIEW_NOT_INDEPENDENT_DOCUMENT_AUTHENTICATION',
-        'three_way_match'=>'RECHECKED_AGAINST_LOCAL_POSTED_INVENTORY_GOODS_RECEIPTS',
+        'three_way_match'=>'RECHECKED_AGAINST_VERIFIED_INVENTORY_DR_SNAPSHOTS',
         'goods_receipts'=>$receipts,'items'=>$items
     ];
 }

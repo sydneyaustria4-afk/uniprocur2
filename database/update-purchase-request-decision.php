@@ -3,6 +3,7 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once __DIR__ . '/procurement_db_connection.php';
 require_once __DIR__ . '/manager-api-common.php';
+require_once __DIR__ . '/uniprocur-inventory-sync.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     managerSendJson(405, ['success' => false, 'message' => 'Use POST to record a Manager decision.']);
@@ -81,15 +82,22 @@ try {
     $updateStmt->execute();
     $updateStmt->close();
 
+    // Durable Inventory event queued within the approved PR transaction.
+    $inventoryQueueId = $newStatus === 'approved' ? uniInventoryQueuePr($conn,(int)$requestId) : 0;
     $conn->commit();
     $transactionStarted = false;
+    $inventorySynced = false;
+    try { $inventorySynced = uniInventorySendQueued($conn,$inventoryQueueId); } catch (Throwable $syncError) { error_log('Inventory event delivery deferred: '.$syncError->getMessage()); }
 
     managerSendJson(200, [
         'success' => true,
         'message' => $decision === 'approve' ? 'Purchase Request approved successfully.' : 'Purchase Request rejected successfully.',
         'request_id' => (int) $requestId,
         'status' => $newStatus,
-        'decided_by' => $manager['full_name']
+        'decided_by' => $manager['full_name'],
+        'inventory_linked' => $inventoryQueueId > 0,
+        'inventory_synced' => $inventorySynced,
+        'inventory_warning' => $inventorySynced ? null : 'Manager approval saved, but Inventory sync is pending. Run retry-inventory-sync.php on the server.'
     ]);
 } catch (Throwable $error) {
     if ($transactionStarted) {

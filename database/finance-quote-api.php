@@ -17,8 +17,9 @@ function finJson(int $code, array $body): void {
     echo json_encode($body, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }
+require_once __DIR__ . '/uniprocur-finance-path.php';
 function finAuth(): void {
-    $file = getenv('UNIPROCUR_FINANCE_TOKEN_FILE') ?: dirname(__DIR__, 3) . '/uniprocur_secrets/finance_integration_token.txt';
+    $file = uniprocurFinanceTokenFile();
     $expected = is_file($file) ? trim((string)@file_get_contents($file)) : '';
     if (!preg_match('/\A[a-fA-F0-9]{64}\z/D', $expected)) {
         finJson(503, ['success'=>false,'message'=>'Finance integration token is not configured on the Procurement server.']);

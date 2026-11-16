@@ -1,5 +1,5 @@
 "use strict";
-// LOCALHOST PR-DRAFT CONVERSION TEST. API key stays on server; conversion creates a real Procurement PR draft.
+// Inventory-to-Procurement API. API key stays on server; conversion creates a real Procurement PR draft.
 document.addEventListener("DOMContentLoaded", () => {
   const $ = id => document.getElementById(id);
   const state = { requests: [], status: "all", search: "", csrfToken: "", active: null, busy: false };
@@ -43,7 +43,7 @@ document.querySelector(".mr-demo-banner")?.remove();
 
   // Do not claim the Inventory account is the Procurement Buyer's identity.
   for (const id of ["sidebarBuyerName", "topbarBuyerName"]) $(id).textContent = "Buyer";
-  for (const id of ["sidebarBuyerEmail", "topbarBuyerEmail"]) $(id).textContent = "Local API Test";
+  // Account email is supplied by the HR/profile display component.
   for (const id of ["sidebarAvatar", "topbarAvatar"]) $(id).textContent = "B";
 
   function render() {
@@ -164,7 +164,7 @@ document.querySelector(".mr-demo-banner")?.remove();
   const statusText = document.querySelector("#convertDialog .mr-convert-summary div:nth-child(3) dd");
   if (statusText) statusText.textContent = "Will create a Draft PR";
   const modalHead = document.querySelector("#convertDialog .mr-modal-head small");
-  if (modalHead) modalHead.textContent = "Inventory → Procurement • Local test";
+  if (modalHead) modalHead.textContent = "Inventory → Procurement";
 
   $("confirmConvert").addEventListener("click", async () => {
     if (state.busy || !state.active) return;

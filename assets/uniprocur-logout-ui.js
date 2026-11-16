@@ -29,7 +29,8 @@ document.addEventListener("click", (event) => {
   // POST (not a link/GET) invokes the already installed PHP logout endpoint.
   const form = document.createElement("form");
   form.method = "POST";
-  form.action = "/uniprocur2/login/logout.php";
+  const source = document.querySelector('script[src*="uniprocur-logout-ui.js"]')?.src;
+  form.action = source ? new URL("../login/logout.php", source).href : "/ITPROFEL/PROCUREMENT/login/logout.php";
   form.hidden = true;
   document.body.appendChild(form);
   form.submit();

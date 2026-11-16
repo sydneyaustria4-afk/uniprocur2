@@ -10,6 +10,9 @@ declare(strict_types=1);
 if (!function_exists('uniLocalInventoryReady')) {
     function uniLocalInventoryReady(mysqli $db, array $requiredTables): bool
     {
+        // Legacy receipt schema is intentionally disabled in the final ERP by default.
+        // This opt-in is for isolated legacy tests, NOT production invoice posting.
+        if (getenv('UNIPROCUR_ENABLE_LEGACY_RECEIPTS') !== '1') return false;
         if (!$requiredTables) {
             return false;
         }

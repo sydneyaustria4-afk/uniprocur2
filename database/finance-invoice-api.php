@@ -16,8 +16,9 @@ function fiaReply(int $code,array $data): void {
     echo json_encode($data, JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE);
     exit;
 }
+require_once __DIR__ . '/uniprocur-finance-path.php';
 function fiaAuth(): void {
-    $file=getenv('UNIPROCUR_FINANCE_TOKEN_FILE') ?: dirname(__DIR__,3).'/uniprocur_secrets/finance_integration_token.txt';
+    $file=uniprocurFinanceTokenFile();
     $expected=is_file($file)?trim((string)@file_get_contents($file)):'';
     $provided=trim((string)($_SERVER['HTTP_X_FINANCE_INTEGRATION_KEY']??''));
     if(!preg_match('/\A[a-fA-F0-9]{64}\z/D',$expected))fiaReply(503,['success'=>false,'message'=>'Procurement Finance integration key not configured.']);

@@ -98,27 +98,22 @@ function bnEvents(mysqli $db, int $buyerId): array {
         error_log('Buyer notifications Manager PO source: '.$error->getMessage());
         $warnings[]='Manager Purchase Order decision notifications are unavailable. Run the PO notification SQL migration.';
     }
-    // This is the SAME local Inventory database used by the existing real GR page.
-    // Do not claim Radmin/cross-PC connectivity: this only works on local XAMPP.
-    $host = strtolower(trim((string) ($_SERVER['HTTP_HOST'] ?? '')));
-    $ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
-    $local = (bool) preg_match('/\A(?:localhost|127\.0\.0\.1)(?::\d+)?\z/D', $host)
-        && in_array($ip, ['127.0.0.1', '::1'], true);
-    if ($local) {
+    // Buyer authorization is enforced by the endpoint. Receipt source is
+    // deliberately disabled until the legacy schema is explicitly verified.
+    require_once __DIR__ . '/uniprocur-verified-receipts.php'; // ITPROFEL_VERIFIED_RECEIPT_NOTIFICATIONS_V1
+    if (uniVerifiedReceiptsReady($db)) {
         try {
-            $sql = 'SELECT gr.id AS receipt_id, gr.goods_receipt_number, gr.po_number, gr.posted_at,
-                           COUNT(ri.id) AS item_lines
-                    FROM inventory_system_api_test.inventory_po_real_receipts gr
-                    INNER JOIN inventory_system_api_test.inventory_po_real_receipt_items ri
-                        ON ri.receipt_id=gr.id
-                    INNER JOIN purchase_orders po ON po.po_number=gr.po_number
-                    INNER JOIN rfqs r ON r.id=po.rfq_id
-                    INNER JOIN purchase_requisitions pr ON pr.id=r.pr_id
-                    WHERE po.created_by=? AND r.created_by=? AND pr.created_by=?
-                      AND gr.posted_at IS NOT NULL
-                    GROUP BY gr.id, gr.goods_receipt_number, gr.po_number, gr.posted_at
-                    HAVING SUM(COALESCE(ri.accepted_qty,0)) > 0
-                    ORDER BY gr.posted_at DESC, gr.id DESC LIMIT 80';
+            $sql = 'SELECT gr.id AS receipt_id, gr.receipt_number AS goods_receipt_number,
+                            gr.po_number, gr.verified_at AS posted_at, COUNT(ri.id) AS item_lines
+                     FROM procurement_inventory_receipts gr
+                     INNER JOIN procurement_inventory_receipt_items ri ON ri.receipt_id=gr.id
+                     INNER JOIN purchase_orders po ON po.id=gr.po_id
+                     INNER JOIN rfqs r ON r.id=po.rfq_id
+                     INNER JOIN purchase_requisitions pr ON pr.id=r.pr_id
+                     WHERE po.created_by=? AND r.created_by=? AND pr.created_by=?
+                     GROUP BY gr.id, gr.receipt_number, gr.po_number, gr.verified_at
+                     HAVING SUM(COALESCE(ri.accepted_qty,0)) > 0
+                     ORDER BY gr.verified_at DESC, gr.id DESC LIMIT 80';
             $stmt = $db->prepare($sql);
             $stmt->bind_param('iii', $buyerId, $buyerId, $buyerId);
             $stmt->execute();
@@ -143,7 +138,7 @@ function bnEvents(mysqli $db, int $buyerId): array {
             $warnings[] = 'Local Inventory Goods Receipts are unavailable. Check Inventory tables or the XAMPP database connection.';
         }
     } else {
-        $warnings[] = 'Inventory notifications are local-XAMPP only until the Inventory team provides the cross-PC integration API.';
+        $warnings[] = 'Inventory receipt notifications require confirmed supplier-PO receiving integration.';
     }
 
     usort($events, static function (array $a, array $b): int {
