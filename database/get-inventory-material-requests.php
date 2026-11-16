@@ -37,7 +37,7 @@ if (!function_exists('curl_init')) {
     reply(500, ['success' => false, 'message' => 'PHP cURL extension is not enabled.']);
 }
 
-$url = 'http://127.0.0.1/ITPROFEL/INVENTORY/api/requests.php';
+$url = 'http://127.0.0.1/ITPROFEL/inventory_management/api/requests.php';
 $curl = curl_init($url);
 if ($curl === false) {
     reply(500, ['success' => false, 'message' => 'Could not start Inventory API connection.']);

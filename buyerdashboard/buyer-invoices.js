@@ -3,37 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const $ = id => document.getElementById(id);
   const state = { invoices: [], actualInvoices: [], sampleVisible: false, status: "all", search: "", selected: null };
 
-  // Figma-only visual sample. Never saved or sent to MySQL / Finance.
-  const FIGMA_SAMPLE = Object.freeze({
-    invoice_number: "INV-2026-0004",
-    status: "ready_to_post",
-    supplier_name: "SynthHide Textile Corp.",
-    po_number: "PO-2026-04",
-    po_id: "04",
-    gr_reference: "GR-0004",
-    payment_terms: "Net 30",
-    total_amount: 40969.60,
-    item_summary: "Canvas Fabric, PU Leather, Nubuck Leather",
-    item_count: 3,
-    invoice_date: "2026-10-25",
-    due_date: "2026-11-24",
-    created_at: "2026-10-25 08:00:00",
-    __figma_demo: true
-  });
 
+  // Show only saved MySQL invoices. Never auto-populate a Figma demo.
   function setSampleMode(on) {
-    const available = state.actualInvoices.length === 0;
-    state.sampleVisible = Boolean(available && on);
-    state.invoices = state.sampleVisible ? [FIGMA_SAMPLE] : state.actualInvoices;
-    const note = $("invoiceDemoNotice");
-    note.hidden = !available;
-    if (available) {
-      $("invoiceDemoText").textContent = state.sampleVisible
-        ? "FIGMA SAMPLE PREVIEW — This example is NOT in MySQL. No 3-way match or Finance posting has occurred."
-        : "DATABASE VIEW — There are 0 invoice records assigned to the current Buyer.";
-      $("toggleDemoPreview").textContent = state.sampleVisible
-        ? "Show actual 0 records" : "Show Figma sample";
-    }
+    state.sampleVisible = false;
+    state.invoices = state.actualInvoices;
     state.status = new URLSearchParams(window.location.search).get("status") === "ready" ? "ready" : "all";
     state.search = "";
     $("searchInput").value = "";
@@ -135,6 +109,5 @@ function updateIdentity(buyer) {
   for(const id of ["closeDialog","closeInvoice"])$(id).addEventListener("click",()=>$("invoiceDialog").close());
   $("invoiceDialog").addEventListener("click",e=>{if(e.target===$("invoiceDialog"))$("invoiceDialog").close()});
   $("printInvoice").addEventListener("click",()=>window.print());
-  $("toggleDemoPreview").addEventListener("click", () => setSampleMode(!state.sampleVisible));
-  (async()=>{try{const response=await fetch("../database/get-buyer-invoices.php",{credentials:"same-origin",cache:"no-store",headers:{Accept:"application/json"}});const data=await response.json();if(!response.ok||!data.success)throw new Error(data.message||`HTTP ${response.status}`);state.actualInvoices=Array.isArray(data.invoices)?data.invoices:[];updateIdentity(data.buyer||{});setSampleMode(state.actualInvoices.length===0)}catch(error){$("errorMessage").textContent=error.message;$("errorMessage").hidden=false;$("invoiceCards").replaceChildren(el("p","empty-state","Invoices could not be loaded."));$("resultsCount").textContent="Unavailable";}})();
+  (async()=>{try{const response=await fetch("../database/get-buyer-invoices.php",{credentials:"same-origin",cache:"no-store",headers:{Accept:"application/json"}});const data=await response.json();if(!response.ok||!data.success)throw new Error(data.message||`HTTP ${response.status}`);/* UNIPROCUR_HIDE_LEGACY_DEMO_INVOICE_V3 — Hide saved DEMO records from normal Buyer listing; never relabel them as real. */ state.actualInvoices=(Array.isArray(data.invoices)?data.invoices:[]).filter(i=>String(i.source_kind||"").toLowerCase()!=="demo"&&String(i.match_status||"").toLowerCase()!=="demo_ready");updateIdentity(data.buyer||{});setSampleMode(false)}catch(error){$("errorMessage").textContent=error.message;$("errorMessage").hidden=false;$("invoiceCards").replaceChildren(el("p","empty-state","Invoices could not be loaded."));$("resultsCount").textContent="Unavailable";}})();
 });

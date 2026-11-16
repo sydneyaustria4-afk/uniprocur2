@@ -26,11 +26,9 @@
   <!-- Consistent Buyer Profile and Arrow -->
   <link rel="stylesheet" href="../assets/uniprocur-buyer-profile.css?v=2">
 
-  <script src="buyer-invoices.js?v=20261113syntaxfix1" defer></script>
+  <script src="buyer-invoices.js?v=20261117hidelegacyv3" defer></script>
   <link rel="stylesheet" href="buyer-invoice-existing-addon.css?v=1">
-  <script src="buyer-invoice-existing-addon.js?v=1" defer></script>
-  <link rel="stylesheet" href="buyer-invoice-demo-verify-addon.css?v=1">
-  <script src="buyer-invoice-demo-verify-addon.js?v=1" defer></script>
+  <script src="buyer-invoice-existing-addon.js?v=20261117actual1" defer></script>
   <link rel="stylesheet" href="buyer-header-notifications.css?v=1">
   <script src="buyer-header-notifications.js?v=1" defer></script>
   <script src="../assets/uniprocur-display-roles.js?v=20261113-roles" defer></script>
@@ -197,23 +195,6 @@
 
         </header>
 
-        <!-- ==========================================
-             FIGMA SAMPLE NOTICE
-        =========================================== -->
-        <p
-          id="invoiceDemoNotice"
-          class="invoice-demo-notice"
-          role="status"
-          hidden
-        >
-          <span id="invoiceDemoText">
-            Figma sample preview only — not saved in MySQL and cannot be posted to Finance.
-          </span>
-
-          <button id="toggleDemoPreview" type="button">
-            Show actual 0 records
-          </button>
-        </p>
 
         <!-- ==========================================
              INVOICE STATISTICS

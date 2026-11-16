@@ -53,16 +53,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     const verified=inv.match_status==="matched"&&hasDocument&&dataMatched&&inv.status==="ready_to_post";
     const demo=inv.source_kind==="demo";
     const demoReady=demo&&inv.match_status==="demo_ready"&&inv.status==="ready_to_post"&&dataMatched;
-    if(demoReady){set("statusBadge","CLASSROOM DEMO · Ready to Post");$("statusBadge").className="status-badge demo";}
+    // Never present a stored demo or an unmatched invoice as Finance-ready.
+    if(demo){
+      set("statusBadge","Archived Demo · Not Finance Eligible");
+      $("statusBadge").className="status-badge demo";
+    }else if(verified){
+      set("statusBadge","Verified · Ready for Finance Review");
+      $("statusBadge").className="status-badge ready";
+    }else{
+      set("statusBadge",dataMatched?"Verification Pending":"Discrepancy · Review Required");
+      $("statusBadge").className=`status-badge ${dataMatched?"pending":"discrepancy"}`;
+    }
     let summary="3-Way Match: Discrepancy — review invoice quantities, prices, and receipts";
     if(verified)summary="✓ 3-Way Match: Verified — Ready to Post (Finance not connected)";
     else if(demoReady)summary="✓ 3-Way Match: CLASSROOM SIMULATION Ready to Post (NOT for real Finance posting)";
     else if(demo&&dataMatched)summary="3-Way Match: Data matches — DEMO only; not Ready to Post";
     else if(dataMatched)summary="3-Way Match: Data matches; verification/approval still required";
-    set("matchResult",summary);
+    set("matchResult",demo?"Archived demo record — this is NOT a verified supplier invoice and cannot be sent to Finance.":summary);
     $("matchResult").classList.toggle("sample",verified||demoReady);
     set("sourceHint",`${grNumbers.length} real Inventory Goods Receipt(s) checked. Invoice source: ${demo?"classroom DEMO":"supplier-document declaration"}. ${demoReady?"Classroom simulation is stored as Ready to Post; this is NOT approval for real Finance accounting.":verified?"PO, real GR and recorded invoice passed local 3-way checks.":"Do not send to Finance until genuine supplier documents and approvals are verified."} VAT is not calculated by this local integration.`);
-    set("dataBanner",demoReady?"CLASSROOM SIMULATION — invoice numerically matches PO and local GR. This is NOT a genuine supplier document and real Finance posting is disabled.":verified?"Real Goods Receipts and recorded invoice were checked locally. Ready to Post is a Procurement status only; Finance posting is not connected.":"This saved invoice uses real local Goods Receipt quantities. Invoice verification is separate from receiving and Finance posting remains disabled.");
+    set("dataBanner",demo
+      ? "ARCHIVED CLASSROOM DEMO — retained for reference only. This is not a genuine supplier invoice, and Finance processing is blocked."
+      : verified
+        ? "Verified Inventory Goods Receipts and recorded supplier invoice match. Finance must still review and approve this invoice."
+        : "Supplier invoice is not yet verified against an authenticated Goods Receipt. Do not send it to Finance.");
     // The existing main script already disables these buttons. Keep them disabled.
     $("postButton").disabled=true;
     $("discrepancyButton").disabled=true;

@@ -28,7 +28,7 @@ try {
         $field(['phone', 'contact_phone', 'mobile', 'phone_number'], 'supplier_phone'),
         $field(['city', 'location', 'address'], 'supplier_location')
     ]);
-    $sql = "SELECT po.id, po.po_number, po.rfq_quote_id, po.order_date, po.expected_delivery,
+    $sql = "SELECT po.id, po.po_number, po.rfq_id, po.rfq_quote_id, po.order_date, po.expected_delivery,
                    po.delivery_address, po.notes_to_supplier, po.total_amount,
                    LOWER(po.status) AS status,
                    DATE_FORMAT(po.created_at, '%Y-%m-%d %H:%i:%s') AS created_at,
@@ -72,6 +72,31 @@ try {
         $stmt->execute();
         $items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
+        // ITPROFEL_INVENTORY_DISPATCH_LOOKUP_V2
+        // Read-only dispatch status from the Inventory request linked to THIS PO.
+        // A status lookup failure must never block viewing the Purchase Order.
+        $po['tracking_inventory_delivery_status'] = null;
+        try {
+            $lk = $conn->prepare('SELECT l.inventory_request_number FROM inventory_request_pr_links l
+                JOIN rfqs r ON r.pr_id=l.pr_id WHERE r.id=? LIMIT 1');
+            $rfqId = (int)$po['rfq_id'];
+            $lk->bind_param('i', $rfqId);
+            $lk->execute();
+            $invReqNumber = (string)($lk->get_result()->fetch_assoc()['inventory_request_number'] ?? '');
+            $lk->close();
+            if ($invReqNumber !== '') {
+                require_once __DIR__ . '/uniprocur-inventory-sync.php';
+                $inv = uniInventoryCall('requests', 'GET', [], ['request_number' => $invReqNumber]);
+                foreach (($inv['data'] ?? []) as $record) {
+                    if (is_array($record) && (string)($record['request_number'] ?? '') === $invReqNumber) {
+                        $po['tracking_inventory_delivery_status'] = (string)($record['delivery_status'] ?? '');
+                        break;
+                    }
+                }
+            }
+        } catch (Throwable $invError) {
+            error_log('PO Inventory dispatch lookup: '.$invError->getMessage());
+        }
         buyerPoJson(200, ['success' => true, 'buyer' => ['full_name' => $buyer['full_name'], 'email' => $buyer['email']], 'po' => $po, 'items' => $items]);
     }
     $stmt = $conn->prepare($sql . ' ORDER BY po.created_at DESC, po.id DESC');

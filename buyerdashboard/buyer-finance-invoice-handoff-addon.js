@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   disabledObserver.observe(button,{attributes:true,attributeFilter:['disabled']});
   button.addEventListener('click', async event => {
     if (!eligible || busy || savedState) {event.preventDefault();return;}
-    if (!window.confirm('Queue '+invoiceNumber+' in PROCUREMENT for Finance pickup? This does NOT create a Finance ledger entry, post payment, or verify an original supplier document.')) return;
+    
     busy = true;renderButton();
     try {
       if (!csrf) throw new Error('Session unavailable; refresh the page.');

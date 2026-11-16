@@ -61,6 +61,7 @@
     const demoAcceptance = String(po.tracking_accept_source || "").toLowerCase() === "local_demo";
     if ((status === "received" || status === "closed") && demoAcceptance) return "Received (Demo)";
     if (["approved", "issued"].includes(status) && demoAcceptance) return "Accepted (Demo) - Check GR";
+    if (status === "approved" && ["Out for Delivery", "Partially Delivered", "Delivered"].includes(String(po.tracking_inventory_delivery_status || ""))) return "Approved · Inventory: " + po.tracking_inventory_delivery_status;
     return displayStatus[status] || status || "Unknown status";
   }
 
@@ -73,11 +74,15 @@
     const receiptRecorded = ["received", "closed"].includes(status) || Boolean(po.tracking_inventory_accepted_at);
     const partialReceipt = status === "partial" && !receiptRecorded;
     const deliveryEvent = receiptRecorded || partialReceipt;
+    // ITPROFEL_INVENTORY_DISPATCH_UI_V2
+    // Inventory request dispatch does not prove supplier confirmation or PO receipt.
+    const invDispatch = String(po.tracking_inventory_delivery_status || "").trim();
+    const dispatched = ["Out for Delivery", "Partially Delivered", "Delivered"].includes(invDispatch);
     const nodes = Array.from(document.querySelectorAll(".track-step"));
     nodes.forEach((node, index) => {
-      // Intermediate supplier and shipment events are not available; leave them grey.
-      node.classList.toggle("complete", index === 0 && managerApproved);
-      node.classList.toggle("current", index === 0 && managerApproved && !deliveryEvent);
+      // Do not invent supplier confirmation or transit milestones.
+      node.classList.toggle("complete", (index === 0 && managerApproved) || (index === 3 && dispatched && !deliveryEvent));
+      node.classList.toggle("current", index === 0 && managerApproved && !deliveryEvent && !dispatched);
       node.classList.toggle("has-receipt", index === 4 && deliveryEvent);
     });
     $("trackingSteps").style.setProperty("--progress", "0%");
@@ -88,7 +93,7 @@
       : status === "rejected" ? "Rejected" : "Awaiting approval";
     $("stageTwo").textContent = "Not reported";
     $("stageThree").textContent = "Not reported";
-    $("stageFour").textContent = "Not reported";
+    $("stageFour").textContent = dispatched ? invDispatch : "Not reported";
     $("stageFive").textContent = receiptRecorded
       ? demoAcceptance ? "Local demo acceptance" : "Recorded received"
       : partialReceipt ? "Partially received" : "Awaiting Inventory";
@@ -102,7 +107,7 @@
       : receiptRecorded || partialReceipt
         ? "Procurement records a receipt. Check View GR for actual posted Inventory Goods Receipts. Supplier shipping stages are not recorded."
         : managerApproved
-          ? "Manager approved this PO. Awaiting supplier confirmation or an Inventory delivery update. Transit milestones are not automatic."
+          ? (dispatched ? `Inventory request dispatch: ${invDispatch}. This does not confirm supplier shipment or PO receipt.` : "Manager approved this PO. Awaiting supplier confirmation or an Inventory delivery update. Transit milestones are not automatic.")
           : "Waiting for a verified purchase-order event.");
     $("trackingNote").textContent = note;
     set("status", trackingDisplayLabel(po));

@@ -64,11 +64,15 @@ function ilReceiptNumbers(mysqli $db,int $poId,string $poNumber): array {
                      FROM procurement_inventory_receipts WHERE po_id=? AND po_number=? ORDER BY id');
     $q->bind_param('is',$poId,$poNumber);$q->execute();$rows=$q->get_result()->fetch_all(MYSQLI_ASSOC);$q->close();return $rows;
 }
+// UNIPROCUR_REAL_SUPPLIER_INVOICE_SEPARATE_FROM_DEMO_V5
+// Look up genuine supplier-document invoices ONLY. Archived 'demo' records remain
+// stored in MySQL, but must not be loaded/edited as the active supplier invoice.
+// The existing PO row lock serializes genuine invoice creation for each PO.
 function ilInvoice(mysqli $db,int $poId, int $buyerId): ?array {
     $q=$db->prepare('SELECT i.*,src.supplier_invoice_reference,src.source_kind,src.document_checked,
         src.source_notes,src.match_status,src.match_summary,src.verified_at
         FROM invoices i LEFT JOIN buyer_invoice_source_local src ON src.invoice_id=i.id
-        WHERE i.po_id=? AND i.created_by=? ORDER BY i.id DESC LIMIT 1');
+        WHERE i.po_id=? AND i.created_by=? AND src.source_kind=\'supplier_document\' ORDER BY i.id DESC LIMIT 1');
     $q->bind_param('ii',$poId,$buyerId);$q->execute();$v=$q->get_result()->fetch_assoc();$q->close();return $v?:null;
 }
 function ilInvoiceLines(mysqli $db,int $invoiceId): array {
@@ -176,7 +180,7 @@ try {
     $body=json_decode(file_get_contents('php://input')?:'',true);
     if(!is_array($body))ilReply(400,['success'=>false,'message'=>'Invalid request JSON.']);
     $action=(string)($body['action']??'');
-    if(!in_array($action,['save','verify','verify_demo'],true))ilReply(422,['success'=>false,'message'=>'Invalid action.']);
+    if(!in_array($action,['save','verify'],true))ilReply(422,['success'=>false,'message'=>'Invalid action.']);
     $number=trim((string)($body['po_number']??''));
     if(!preg_match('/\APO-[A-Za-z0-9-]{1,26}\z/',$number))ilReply(422,['success'=>false,'message'=>'Valid PO number required.']);
     $po=ilPo($conn,$buyerId,$number);
@@ -194,14 +198,15 @@ try {
     $old=ilInvoice($conn,$poId,$buyerId);
     $poItems=ilPoItems($conn,$poId);
     if($action==='save') {
+        if($old && ($old['source_kind']??'')==='demo')throw new DomainException('Existing classroom demo invoice cannot be changed into a supplier-document invoice. Create a separate genuine invoice through an authorized workflow.');
         $ref=trim((string)($body['supplier_invoice_reference']??''));
-        $source=(string)($body['source_kind']??'demo');
+        $source=(string)($body['source_kind']??'supplier_document');
         $notes=trim((string)($body['source_notes']??''));
         $checked=($body['document_checked']??false)===true;
         $invDate=(string)($body['invoice_date']??'');$dueDate=(string)($body['due_date']??'');
         if(!preg_match('/\A[A-Za-z0-9][A-Za-z0-9._\/-]{2,79}\z/',$ref))
             throw new DomainException('Enter a supplier invoice reference (3–80 characters, letters/numbers and . _ / -).');
-        if(!in_array($source,['demo','supplier_document'],true))throw new DomainException('Choose a valid invoice source.');
+        if($source!=='supplier_document')throw new DomainException('Only genuine supplier-document invoices can be newly recorded. Existing DEMO invoices remain labeled as demo.');
         if($source==='supplier_document'&&!$checked)
             throw new DomainException('Confirm you personally checked the actual supplier invoice document.');
         if(strlen($notes)>255)throw new DomainException('Notes must be 255 characters or fewer.');

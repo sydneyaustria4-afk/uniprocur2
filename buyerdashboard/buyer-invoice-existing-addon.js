@@ -19,20 +19,20 @@ document.addEventListener("DOMContentLoaded", () => {
   dialog.innerHTML = `
     <header class="capture-head"><div><small>UniProcur · Buyer</small><h2 id="invoiceCaptureTitle">Record Supplier Invoice</h2></div>
       <button type="button" class="capture-close" aria-label="Close Invoice form" id="captureClose">×</button></header>
-    <p class="capture-warning">LOCAL INTEGRATION: A recorded invoice does not mean payment. Finance posting and budget deduction are disabled. The Invoice dashboard design stays unchanged.</p>
+    <p class="capture-warning">Record an actual supplier-issued invoice for a PO with verified Inventory receipts. Save and verify the 3-way match before queuing to Finance. Recording an invoice does not itself mean payment.</p>
     <p class="capture-message" id="captureMessage" role="status">Choose an approved Purchase Order with real Inventory Goods Receipts.</p>
     <div class="capture-po-picker"><label for="capturePoSelect">Purchase Order</label><select id="capturePoSelect"></select><button type="button" id="captureLoadPo">Load PO</button></div>
     <div class="capture-po-info" id="capturePoInfo" hidden></div>
     <form id="captureInvoiceForm" hidden>
       <div class="capture-grid">
         <label>Source of invoice
-          <select id="captureSource" required><option value="demo">Classroom DEMO / sample</option><option value="supplier_document">Actual supplier invoice reviewed</option></select>
+          <select id="captureSource" required><option value="supplier_document">Actual supplier invoice reviewed</option></select>
         </label>
-        <label>Supplier invoice reference <input type="text" id="captureSupplierRef" placeholder="e.g. DEMO-SUP-0004" maxlength="80" required></label>
+        <label>Supplier invoice reference <input type="text" id="captureSupplierRef" placeholder="e.g. SUP-INV-2026-0001" maxlength="80" required></label>
         <label>Invoice date <input type="date" id="captureInvoiceDate" required></label>
         <label>Due date <input type="date" id="captureDueDate" required></label>
       </div>
-      <label class="capture-doc-check" id="captureDocumentBox" hidden><input type="checkbox" id="captureDocumentChecked"> I personally reviewed the genuine supplier-issued invoice document. (Do not check for demo data.)</label>
+      <label class="capture-doc-check" id="captureDocumentBox" hidden><input type="checkbox" id="captureDocumentChecked"> I personally checked the genuine supplier-issued invoice document.</label>
       <label class="capture-notes-label">Notes (optional)<input id="captureNotes" type="text" maxlength="255" placeholder="Supplier invoice notes"></label>
       <div class="capture-table-wrap"><table><thead><tr><th>Item</th><th>Ordered</th><th>Received</th><th>Billed now</th><th>PO unit price</th><th>Invoice unit price</th><th>Line total</th></tr></thead><tbody id="captureLineRows"></tbody></table></div>
       <div class="capture-total-row"><span>Calculated line total: <strong id="captureCalculated">—</strong></span><label>Supplier invoice total (pre-VAT) <input id="captureInvoiceTotal" type="number" min="0.01" step="0.01" required></label></div>
@@ -72,11 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const box=make("div");appendText(box,"small",label);appendText(box,"strong",value);$("capturePoInfo").append(box);
     }
     const inv=state.invoice;
-    $("captureSource").value=inv?.source_kind||"demo";
+    const legacyDemo=inv?.source_kind==="demo";
+    $("captureSource").value="supplier_document";
     $("captureSupplierRef").value=inv?.supplier_invoice_reference||"";
     $("captureNotes").value=inv?.source_notes||"";
     $("captureDocumentChecked").checked=Number(inv?.document_checked||0)===1;
-    $("captureDocumentBox").hidden=$("captureSource").value!=="supplier_document";
+    $("captureDocumentBox").hidden=false;
     $("captureInvoiceDate").value=inv?.invoice_date||localDate();
     const due=new Date();due.setDate(due.getDate()+30);
     $("captureDueDate").value=inv?.due_date||[due.getFullYear(),String(due.getMonth()+1).padStart(2,"0"),String(due.getDate()).padStart(2,"0")].join("-");
@@ -95,11 +96,11 @@ document.addEventListener("DOMContentLoaded", () => {
       $("captureLineRows").append(tr);
     }
     refreshTotal();
-    const editable=!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase());
+    const editable=(!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase()))&&inv?.source_kind!=="demo";
     for(const field of $("captureInvoiceForm").querySelectorAll("input,select"))field.disabled=!editable;
     $("captureSave").disabled=!editable;
     $("captureSave").textContent=inv?"Update Invoice as Pending Match":"Save Invoice as Pending Match";
-    $("captureVerify").disabled=!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
+    $("captureVerify").disabled=inv?.source_kind==="demo"||!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
     $("captureViewInvoice").hidden=!inv;
     if (inv) $("captureViewInvoice").href="buyer-view-invoice.html?invoice_number="+encodeURIComponent(inv.invoice_number);
     $("captureChecks").replaceChildren();
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
       for(const c of state.match.items) {const ok=c.receipt_matched&&c.invoice_quantity_matched&&c.price_matched&&c.line_identity_matched;
         const p=make("p",`${ok?"✓":"✕"} ${c.item_name}: PO ${c.po_qty}, GR ${c.real_gr_accepted}, invoice ${c.invoice_qty??"—"}, PO unit price ${amt(c.po_unit_price)}, invoice ${amt(c.invoice_unit_price)}`);p.className=ok?"capture-pass":"capture-fail";$("captureChecks").append(p);}
     }
-    setMessage(inv?`Invoice ${inv.invoice_number} · ${inv.status} · ${inv.source_kind==="demo"?"DEMO only":"Supplier-document declaration"}`:`PO ${po.po_number} loaded. Record the supplier invoice before verification.`,"ok");
+    setMessage(legacyDemo?`Invoice ${inv.invoice_number} is an existing CLASSROOM DEMO record. It cannot be relabeled as an actual supplier invoice. Keep it separate from a new genuine supplier invoice.`:(inv?`Invoice ${inv.invoice_number} · ${inv.status} · Supplier-document review`:`PO ${po.po_number} loaded. Record the genuine supplier invoice before verification.`),"ok");
   }
   async function load(poNumber="") {
     setMessage("Loading Purchase Order and real Inventory Goods Receipts...");
@@ -127,9 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
   async function withBusy(work) {if(state.busy)return;state.busy=true;$("captureSave").disabled=true;$("captureVerify").disabled=true;
     try{await work();}catch(e){setMessage(e.message||"Invoice action failed.","error");}finally{state.busy=false;
       const inv=state.invoice;
-      const editable=!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase());
+      const editable=(!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase()))&&inv?.source_kind!=="demo";
       $("captureSave").disabled=!editable;
-      $("captureVerify").disabled=!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
+      $("captureVerify").disabled=inv?.source_kind==="demo"||!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
     }
   }
   recordButton.addEventListener("click", async e => {
@@ -144,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
   dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
   dialog.addEventListener("close",()=>{if(state.wrote)location.reload();});
   $("captureLoadPo").addEventListener("click",()=>withBusy(async()=>{await load($("capturePoSelect").value);}));
-  $("captureSource").addEventListener("change",()=>{$("captureDocumentBox").hidden=$("captureSource").value!=="supplier_document";if($("captureDocumentBox").hidden)$("captureDocumentChecked").checked=false;});
+  $("captureSource").addEventListener("change",()=>{$("captureDocumentBox").hidden=false;if($("captureDocumentBox").hidden)$("captureDocumentChecked").checked=false;});
   $("captureInvoiceForm").addEventListener("submit",e=>{e.preventDefault();withBusy(async()=>{
     if(!state.po)throw new Error("Select a PO first.");
     const lines=[...$("captureLineRows").children].map(tr=>({po_item_id:Number(tr.querySelector("[data-qty]").dataset.qty),qty_billed:tr.querySelector("[data-qty]").value,unit_price:tr.querySelector("[data-price]").value}));

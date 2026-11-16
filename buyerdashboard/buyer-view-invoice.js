@@ -31,7 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const i=payload.invoice, items=Array.isArray(payload.items)?payload.items:[];
     updateBuyer(payload.buyer||{});set("headerNumber",i.invoice_number);set("invoiceNumber",i.invoice_number);set("supplierInvoiceNumber",i.supplier_invoice_number);set("invoiceDate",formatDate(i.invoice_date));set("dueDate",formatDate(i.due_date));
     set("poReference",i.po_number||"—");set("grReference",isDemo?i.gr_reference||"—":i.gr_reference?`${i.gr_reference} (not independently verified)`:"Not verified");set("supplier",i.supplier_name);set("paymentTerms",i.payment_terms);
-    const [label,cls]=labelStatus(i.status);set("statusBadge",isDemo?"Demo · "+label:label);$("statusBadge").className=`status-badge ${isDemo?"demo":cls}`;
+    const [label,cls]=labelStatus(i.status);
+    // A stored ready_to_post status alone is NOT proof of an authenticated 3-way match.
+    const pendingVerification=!isDemo&&cls==="ready";
+    set("statusBadge",isDemo?"Demo · "+label:(pendingVerification?"Stored Ready — Verification Pending":label));
+    $("statusBadge").className=`status-badge ${isDemo?"demo":pendingVerification?"pending":cls}`;
     $("demoBanner").hidden=!isDemo;$("dataBanner").hidden=isDemo;
     set("matchResult",isDemo?"☑ 3-Way Match Result: Sample illustration only":"Not verified — Inventory GR data unavailable");$("matchResult").classList.toggle("sample",false);
     set("sourceHint",isDemo?"Figma illustration only. This invoice, goods receipt and 3-way match do not exist in MySQL.":"Received (GR) values are intentionally blank until Inventory Goods Receipt records are linked and verified. PO ordered quantities alone do not prove receipt.");

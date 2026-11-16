@@ -63,7 +63,7 @@ if ($key === '') respond(503, ['success' => false, 'message' => 'Inventory API k
 if (!function_exists('curl_init')) respond(503, ['success' => false, 'message' => 'PHP cURL is not enabled.']);
 
 // Never trust item lists sent by browser: fetch request from Inventory's API again.
-$curl = curl_init('http://127.0.0.1/ITPROFEL/INVENTORY/api/requests.php');
+$curl = curl_init('http://127.0.0.1/ITPROFEL/inventory_management/api/requests.php');
 if ($curl === false) respond(502, ['success' => false, 'message' => 'Could not start Inventory connection.']);
 curl_setopt_array($curl, [
     CURLOPT_RETURNTRANSFER => true,
