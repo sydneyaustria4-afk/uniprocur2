@@ -33,8 +33,8 @@
   // never elapsed time. A Manager decision is NOT supplier confirmation.
   const displayStatus = {
     draft: "Draft", pending_approval: "Pending Approval",
-    approved: "Approved - Awaiting Supplier Update",
-    rejected: "Rejected", issued: "Issued - Awaiting Delivery Update",
+    approved: "Approved - Awaiting Inventory Update",
+    rejected: "Rejected", issued: "Issued - Awaiting Inventory Update",
     partial: "Partially Received", received: "Received", closed: "Closed"
   };
 
@@ -65,55 +65,56 @@
     return displayStatus[status] || status || "Unknown status";
   }
 
+  // UNIPROCUR_INVENTORY_TRACKING_V11 — grounded four-stage Procurement / Inventory workflow.
+  // A PO status alone does not prove successful Inventory sync or an authenticated GR.
   function updateTracking() {
     if (!trackingState) return;
     const po = trackingState;
     const status = String(po.status || "").toLowerCase();
-    const managerApproved = ["approved", "issued", "partial", "received", "closed"].includes(status);
-    const demoAcceptance = String(po.tracking_accept_source || "").toLowerCase() === "local_demo";
-    const receiptRecorded = ["received", "closed"].includes(status) || Boolean(po.tracking_inventory_accepted_at);
-    const partialReceipt = status === "partial" && !receiptRecorded;
-    const deliveryEvent = receiptRecorded || partialReceipt;
-    // ITPROFEL_INVENTORY_DISPATCH_UI_V2
-    // Inventory request dispatch does not prove supplier confirmation or PO receipt.
-    const invDispatch = String(po.tracking_inventory_delivery_status || "").trim();
-    const dispatched = ["Out for Delivery", "Partially Delivered", "Delivered"].includes(invDispatch);
-    const nodes = Array.from(document.querySelectorAll(".track-step"));
-    nodes.forEach((node, index) => {
-      // Do not invent supplier confirmation or transit milestones.
-      node.classList.toggle("complete", (index === 0 && managerApproved) || (index === 3 && dispatched && !deliveryEvent));
-      node.classList.toggle("current", index === 0 && managerApproved && !deliveryEvent && !dispatched);
-      node.classList.toggle("has-receipt", index === 4 && deliveryEvent);
+    const approved = ["approved", "issued", "partial", "received", "closed"].includes(status);
+    const oldLocalDemo = String(po.tracking_accept_source || "").toLowerCase() === "local_demo";
+    const sync = String(po.tracking_inventory_sync_status || "").toLowerCase();
+    const linked = Boolean(String(po.tracking_inventory_request_number || "").trim());
+    const synced = sync === "sent";
+    // Only an Inventory status linked to the SAME PO may appear here.
+    const invStatus = String(po.tracking_inventory_delivery_status || "").trim();
+    const reportedProcessing = ["Out for Delivery", "Partially Delivered", "Delivered"].includes(invStatus);
+    const hasVerifiedGr = !oldLocalDemo && Number(po.tracking_verified_receipt_count || 0) > 0;
+    const received = hasVerifiedGr && ["received", "closed"].includes(status);
+    const partiallyReceived = hasVerifiedGr && status === "partial";
+    // A verified Inventory receipt establishes that processing occurred, even if the
+    // intermediate live dispatch status is no longer available.
+    const processed = reportedProcessing || hasVerifiedGr;
+    const steps = Array.from(document.querySelectorAll(".track-step"));
+    if (steps.length !== 4) return; // Do not render a misleading five-stage fallback.
+    const flags = [approved, synced, processed, received];
+    steps.forEach((node, index) => {
+      node.classList.toggle("complete", index < 3 && flags[index]);
+      node.classList.toggle("has-receipt", index === 3 && received);
+      node.classList.toggle("current", index !== 3 && approved && flags.slice(0, index).every(Boolean) && !flags[index]);
     });
-    $("trackingSteps").style.setProperty("--progress", "0%");
-    if (nodes[0]) nodes[0].querySelector("strong").textContent = "Manager Approved";
-    if (nodes[1]) nodes[1].querySelector("strong").textContent = "Supplier Confirmed";
-    $("stageOne").textContent = managerApproved
-      ? (po.tracking_confirmed_at ? "Manager approved" : "Approved in PO records")
-      : status === "rejected" ? "Rejected" : "Awaiting approval";
-    $("stageTwo").textContent = "Not reported";
-    $("stageThree").textContent = "Not reported";
-    $("stageFour").textContent = dispatched ? invDispatch : "Not reported";
-    $("stageFive").textContent = receiptRecorded
-      ? demoAcceptance ? "Local demo acceptance" : "Recorded received"
-      : partialReceipt ? "Partially received" : "Awaiting Inventory";
-    const notes = {
-      draft: "Draft PO only. No Manager approval, supplier confirmation or shipment is assumed.",
-      pending_approval: "Waiting for Manager PO approval. Supplier and shipment tracking are not connected.",
-      rejected: "Manager rejected this PO. Shipment tracking remains inactive."
-    };
-    const note = notes[status] || (demoAcceptance
-      ? "The local simulator recorded acceptance. This is NOT proof of a real Goods Receipt; check View GR."
-      : receiptRecorded || partialReceipt
-        ? "Procurement records a receipt. Check View GR for actual posted Inventory Goods Receipts. Supplier shipping stages are not recorded."
-        : managerApproved
-          ? (dispatched ? `Inventory request dispatch: ${invDispatch}. This does not confirm supplier shipment or PO receipt.` : "Manager approved this PO. Awaiting supplier confirmation or an Inventory delivery update. Transit milestones are not automatic.")
-          : "Waiting for a verified purchase-order event.");
+    // Progress line is drawn only across consecutive, actually supported events.
+    let connected = approved ? 1 : 0;
+    while (connected > 0 && connected < 4 && flags[connected]) connected++;
+    $("trackingSteps").style.setProperty("--progress", `${Math.max(0, connected - 1) * 25}%`);
+    $("stageOne").textContent = approved ? "Manager approved" : status === "rejected" ? "Rejected" : "Awaiting approval";
+    $("stageTwo").textContent = synced ? "PO synced" : sync === "pending" ? "Sync pending / retry" : linked ? "Sync not recorded" : "No linked request";
+    $("stageThree").textContent = reportedProcessing ? invStatus
+      : hasVerifiedGr ? "Processed (verified GR)" : synced ? "Awaiting Inventory update" : "Not reported";
+    $("stageFour").textContent = received ? "Goods Receipt verified"
+      : partiallyReceived ? "Partially received" : ["received", "closed"].includes(status)
+        ? "Verify Goods Receipt" : "Awaiting Goods Receipt";
+    const note = !approved ? "Manager approval is required before Inventory processing."
+      : received ? `Inventory receiving confirmed${po.tracking_latest_receipt_number ? " · DR: " + po.tracking_latest_receipt_number : ""}. Review View GR for item quantities.`
+      : partiallyReceived ? "Inventory recorded a partial Goods Receipt. Remaining items still need verification."
+      : synced && reportedProcessing ? `Inventory reports: ${invStatus}. Receiving requires a verified Goods Receipt.`
+      : synced ? "Approved PO was sent to Inventory; waiting for a processing or receiving update."
+      : linked ? "Approved PO is linked to Inventory, but its sync has not been confirmed. Check the sync outbox."
+      : "This PO is not linked to an Inventory Material Request; no cross-module sync can be assumed.";
     $("trackingNote").textContent = note;
     set("status", trackingDisplayLabel(po));
     $("status").className = `status-pill ${status}`;
   }
-
   async function refreshTracking() {
     if (refreshing || !viewLoaded || document.hidden) return;
     refreshing = true;

@@ -72,30 +72,77 @@ try {
         $stmt->execute();
         $items = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
-        // ITPROFEL_INVENTORY_DISPATCH_LOOKUP_V2
-        // Read-only dispatch status from the Inventory request linked to THIS PO.
-        // A status lookup failure must never block viewing the Purchase Order.
+        // UNIPROCUR_INVENTORY_TRACKING_API_V11 — read-only records, no fake milestones.
+        $po['tracking_inventory_request_number'] = null;
+        $po['tracking_inventory_sync_status'] = null;
+        $po['tracking_inventory_sync_delivered_at'] = null;
         $po['tracking_inventory_delivery_status'] = null;
+        $po['tracking_verified_receipt_count'] = 0;
+        $po['tracking_latest_receipt_number'] = null;
+        $invReqNumber = '';
         try {
             $lk = $conn->prepare('SELECT l.inventory_request_number FROM inventory_request_pr_links l
                 JOIN rfqs r ON r.pr_id=l.pr_id WHERE r.id=? LIMIT 1');
-            $rfqId = (int)$po['rfq_id'];
-            $lk->bind_param('i', $rfqId);
+            $rfqId=(int)$po['rfq_id'];
+            $lk->bind_param('i',$rfqId);
             $lk->execute();
-            $invReqNumber = (string)($lk->get_result()->fetch_assoc()['inventory_request_number'] ?? '');
+            $invReqNumber=(string)($lk->get_result()->fetch_assoc()['inventory_request_number']??'');
             $lk->close();
             if ($invReqNumber !== '') {
+                $po['tracking_inventory_request_number']=$invReqNumber;
+            }
+        } catch (Throwable $e) {
+            error_log('PO Inventory request link lookup: '.$e->getMessage());
+        }
+        // Source of truth for "Sent to Inventory" is the authenticated PO outbox.
+        try {
+            $sync=$conn->prepare("SELECT status,delivered_at FROM procurement_inventory_sync_outbox
+                WHERE event_type='po_approved' AND source_id=? LIMIT 1");
+            $sync->bind_param('i',$id);
+            $sync->execute();
+            $row=$sync->get_result()->fetch_assoc();
+            $sync->close();
+            if ($row) {
+                $po['tracking_inventory_sync_status']=(string)$row['status'];
+                $po['tracking_inventory_sync_delivered_at']=$row['delivered_at'];
+            }
+        } catch (Throwable $e) {
+            error_log('PO Inventory sync lookup: '.$e->getMessage());
+        }
+        // A verified Inventory Goods Receipt is independent of the PO's saved status.
+        try {
+            $gr=$conn->prepare('SELECT gr.receipt_number FROM procurement_inventory_receipts gr
+                WHERE gr.po_id=? AND gr.po_number=? AND EXISTS
+                    (SELECT 1 FROM procurement_inventory_receipt_items x WHERE x.receipt_id=gr.id AND x.accepted_qty>0)
+                ORDER BY gr.id DESC LIMIT 1');
+            $poNumber=(string)$po['po_number'];
+            $gr->bind_param('is',$id,$poNumber);
+            $gr->execute();
+            $row=$gr->get_result()->fetch_assoc();
+            $gr->close();
+            if ($row) {
+                $po['tracking_verified_receipt_count']=1;
+                $po['tracking_latest_receipt_number']=(string)$row['receipt_number'];
+            }
+        } catch (Throwable $e) {
+            error_log('PO verified receipt lookup: '.$e->getMessage());
+        }
+        // Optional live Inventory dispatch status. Never trust a different PO's status.
+        if ($invReqNumber !== '') {
+            try {
                 require_once __DIR__ . '/uniprocur-inventory-sync.php';
-                $inv = uniInventoryCall('requests', 'GET', [], ['request_number' => $invReqNumber]);
+                $inv=uniInventoryCall('requests','GET',[],['request_number'=>$invReqNumber]);
                 foreach (($inv['data'] ?? []) as $record) {
-                    if (is_array($record) && (string)($record['request_number'] ?? '') === $invReqNumber) {
-                        $po['tracking_inventory_delivery_status'] = (string)($record['delivery_status'] ?? '');
+                    if (is_array($record)
+                        && (string)($record['request_number'] ?? '') === $invReqNumber
+                        && (string)($record['po_number'] ?? '') === (string)$po['po_number']) {
+                        $po['tracking_inventory_delivery_status']=(string)($record['delivery_status'] ?? '');
                         break;
                     }
                 }
+            } catch (Throwable $e) {
+                error_log('PO Inventory dispatch lookup: '.$e->getMessage());
             }
-        } catch (Throwable $invError) {
-            error_log('PO Inventory dispatch lookup: '.$invError->getMessage());
         }
         buyerPoJson(200, ['success' => true, 'buyer' => ['full_name' => $buyer['full_name'], 'email' => $buyer['email']], 'po' => $po, 'items' => $items]);
     }

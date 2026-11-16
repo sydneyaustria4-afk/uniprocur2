@@ -68,12 +68,14 @@ function ilReceiptNumbers(mysqli $db,int $poId,string $poNumber): array {
 // Look up genuine supplier-document invoices ONLY. Archived 'demo' records remain
 // stored in MySQL, but must not be loaded/edited as the active supplier invoice.
 // The existing PO row lock serializes genuine invoice creation for each PO.
-function ilInvoice(mysqli $db,int $poId, int $buyerId): ?array {
+// UNIPROCUR_DEFENSE_REFERENCE_V8 — demo records are NEVER reclassified as genuine invoices.
+function ilInvoice(mysqli $db,int $poId, int $buyerId, string $mode="genuine"): ?array {
+    $sourceKind=$mode==="simulated" ? "demo" : "supplier_document";
     $q=$db->prepare('SELECT i.*,src.supplier_invoice_reference,src.source_kind,src.document_checked,
         src.source_notes,src.match_status,src.match_summary,src.verified_at
         FROM invoices i LEFT JOIN buyer_invoice_source_local src ON src.invoice_id=i.id
-        WHERE i.po_id=? AND i.created_by=? AND src.source_kind=\'supplier_document\' ORDER BY i.id DESC LIMIT 1');
-    $q->bind_param('ii',$poId,$buyerId);$q->execute();$v=$q->get_result()->fetch_assoc();$q->close();return $v?:null;
+        WHERE i.po_id=? AND i.created_by=? AND src.source_kind=? AND (?=\'supplier_document\' OR src.source_notes LIKE \'DEFENSE_SIM_V8:%\') ORDER BY i.id DESC LIMIT 1');
+    $q->bind_param('iiss',$poId,$buyerId,$sourceKind,$sourceKind);$q->execute();$v=$q->get_result()->fetch_assoc();$q->close();return $v?:null;
 }
 function ilInvoiceLines(mysqli $db,int $invoiceId): array {
     $q=$db->prepare('SELECT id,po_item_id,item_name,unit,qty_billed,unit_price,subtotal FROM invoice_items WHERE invoice_id=? ORDER BY id');
@@ -159,18 +161,19 @@ try {
             ORDER BY po.id DESC LIMIT 40");
         $list->bind_param('iii',$buyerId,$buyerId,$buyerId);$list->execute();
         $orders=$list->get_result()->fetch_all(MYSQLI_ASSOC);$list->close();
+        $mode=($_GET['invoice_mode']??'')==='simulated' ? 'simulated' : 'genuine';
         $number=trim((string)($_GET['po_number']??''));
         if($number==='')$number=(string)($orders[0]['po_number']??'');
         if($number!==''&&!preg_match('/\APO-[A-Za-z0-9-]{1,26}\z/',$number))ilReply(422,['success'=>false,'message'=>'Invalid PO number.']);
         $po=$number!==''?ilPo($conn,$buyerId,$number):null;
         if($number!==''&&!$po)ilReply(404,['success'=>false,'message'=>'Purchase Order not found for this Buyer.']);
         $items=$po?ilPoItems($conn,(int)$po['id']):[];
-        $invoice=$po?ilInvoice($conn,(int)$po['id'],$buyerId):null;
+        $invoice=$po?ilInvoice($conn,(int)$po['id'],$buyerId,$mode):null;
         $lines=$invoice?ilInvoiceLines($conn,(int)$invoice['id']):[];
         $match=$po?ilMatch($conn,$po,$items,$invoice,$lines):null;
         ilReply(200,['success'=>true,'local_only'=>true,'finance_posting_enabled'=>false,
             'csrf_token'=>(string)$_SESSION['buyer_invoice_local_csrf'], 'orders'=>$orders,
-            'po'=>$po,'po_items'=>$items,'invoice'=>$invoice,'invoice_items'=>$lines,'match'=>$match]);
+            'po'=>$po,'po_items'=>$items,'invoice'=>$invoice,'invoice_items'=>$lines,'match'=>$match,'invoice_mode'=>$mode]);
     }
     if(stripos((string)($_SERVER['CONTENT_TYPE']??''),'application/json')!==0)
         ilReply(415,['success'=>false,'message'=>'Send JSON.']);
@@ -179,8 +182,10 @@ try {
         ilReply(419,['success'=>false,'message'=>'Session verification expired. Reload this page.']);
     $body=json_decode(file_get_contents('php://input')?:'',true);
     if(!is_array($body))ilReply(400,['success'=>false,'message'=>'Invalid request JSON.']);
+    $mode=($body['invoice_mode']??'')==='simulated' ? 'simulated' : 'genuine';
     $action=(string)($body['action']??'');
-    if(!in_array($action,['save','verify'],true))ilReply(422,['success'=>false,'message'=>'Invalid action.']);
+    if (($action==='verify_demo' && $mode!=='simulated') || ($action==='verify' && $mode==='simulated')) ilReply(422,['success'=>false,'message'=>'Verification action does not match invoice source.']);
+    if(!in_array($action,['save','verify','verify_demo'],true))ilReply(422,['success'=>false,'message'=>'Invalid action.']);
     $number=trim((string)($body['po_number']??''));
     if(!preg_match('/\APO-[A-Za-z0-9-]{1,26}\z/',$number))ilReply(422,['success'=>false,'message'=>'Valid PO number required.']);
     $po=ilPo($conn,$buyerId,$number);
@@ -195,10 +200,10 @@ try {
     $po=ilPo($conn,$buyerId,$number);
     if(!$po || !in_array(strtolower((string)$po['status']),['received','partial'],true))
         throw new DomainException('PO is no longer eligible for Invoice verification.');
-    $old=ilInvoice($conn,$poId,$buyerId);
+    $old=ilInvoice($conn,$poId,$buyerId,$mode);
     $poItems=ilPoItems($conn,$poId);
     if($action==='save') {
-        if($old && ($old['source_kind']??'')==='demo')throw new DomainException('Existing classroom demo invoice cannot be changed into a supplier-document invoice. Create a separate genuine invoice through an authorized workflow.');
+        if($old && ($old['source_kind']??'')==='demo' && ($mode!=='simulated' || !str_starts_with((string)($old['source_notes']??''),'DEFENSE_SIM_V8:')))throw new DomainException('Archived demo invoices cannot be modified or relabeled.');
         $ref=trim((string)($body['supplier_invoice_reference']??''));
         $source=(string)($body['source_kind']??'supplier_document');
         $notes=trim((string)($body['source_notes']??''));
@@ -206,7 +211,14 @@ try {
         $invDate=(string)($body['invoice_date']??'');$dueDate=(string)($body['due_date']??'');
         if(!preg_match('/\A[A-Za-z0-9][A-Za-z0-9._\/-]{2,79}\z/',$ref))
             throw new DomainException('Enter a supplier invoice reference (3–80 characters, letters/numbers and . _ / -).');
-        if($source!=='supplier_document')throw new DomainException('Only genuine supplier-document invoices can be newly recorded. Existing DEMO invoices remain labeled as demo.');
+        if($mode==='simulated') {
+            if($source!=='demo' || $checked)throw new DomainException('Simulated invoices cannot claim review of genuine supplier documents.');
+            if($ref!=='SIM-'.$number)throw new DomainException('Simulated reference must match the Purchase Order.');
+            if(strlen($notes)>239)throw new DomainException('Simulation notes must be 239 characters or fewer.');
+            $notes='DEFENSE_SIM_V8:'.$notes;
+        } elseif($source!=='supplier_document' || preg_match('/\A(?:SIM-|DEMO-)/i',$ref)) {
+            throw new DomainException('A genuine invoice requires a supplier-issued reference; SIM- references are for defense simulation only.');
+        }
         if($source==='supplier_document'&&!$checked)
             throw new DomainException('Confirm you personally checked the actual supplier invoice document.');
         if(strlen($notes)>255)throw new DomainException('Notes must be 255 characters or fewer.');

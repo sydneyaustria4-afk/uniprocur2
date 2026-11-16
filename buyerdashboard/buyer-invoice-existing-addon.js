@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
     <form id="captureInvoiceForm" hidden>
       <div class="capture-grid">
         <label>Source of invoice
-          <select id="captureSource" required><option value="supplier_document">Actual supplier invoice reviewed</option></select>
+          <select id="captureSource" required><option value="supplier_document">Actual supplier invoice reviewed</option><option value="demo">System-generated reference (internal)</option></select>
         </label>
-        <label>Supplier invoice reference <input type="text" id="captureSupplierRef" placeholder="e.g. SUP-INV-2026-0001" maxlength="80" required></label>
+        <label><span id="captureSupplierRefLabel">Supplier invoice reference</span> <input type="text" id="captureSupplierRef" placeholder="e.g. SUP-INV-2026-0001" maxlength="80" required></label>
         <label>Invoice date <input type="date" id="captureInvoiceDate" required></label>
         <label>Due date <input type="date" id="captureDueDate" required></label>
       </div>
@@ -43,7 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.body.append(dialog);
 
   const $ = id => dialog.querySelector("#" + id);
-  const state = {csrf:"", po:null, items:[], invoice:null, invoice_items:[], match:null, orders:[], wrote:false, busy:false};
+  // UNIPROCUR_DEFENSE_REFERENCE_V8
+  // UNIPROCUR_INTERNAL_REFERENCE_UI_V9 — professional internal-reference wording, backend unchanged.
+  const state = {csrf:"", po:null, items:[], invoice:null, invoice_items:[], match:null, orders:[], wrote:false, busy:false, mode:"genuine"};
   const amt = value => new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP"}).format(Number(value)||0);
   const localDate = () => { const d=new Date(); return [d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-"); };
   const setMessage = (msg,type="") => {const el=$("captureMessage");el.textContent=msg;el.dataset.kind=type;};
@@ -73,11 +75,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const inv=state.invoice;
     const legacyDemo=inv?.source_kind==="demo";
-    $("captureSource").value="supplier_document";
-    $("captureSupplierRef").value=inv?.supplier_invoice_reference||"";
-    $("captureNotes").value=inv?.source_notes||"";
-    $("captureDocumentChecked").checked=Number(inv?.document_checked||0)===1;
-    $("captureDocumentBox").hidden=false;
+    $("captureSource").value=state.mode==="simulated"?"demo":"supplier_document";
+    $("captureSupplierRefLabel").textContent=state.mode==="simulated"?"Invoice reference (auto-generated)":"Supplier invoice reference";
+    $("captureSupplierRef").value=inv?.supplier_invoice_reference||(state.mode==="simulated"?`SIM-${po.po_number}`:"");
+    $("captureNotes").value=String(inv?.source_notes||"").replace(/^DEFENSE_SIM_V8:/,"");
+    $("captureDocumentChecked").checked=state.mode!=="simulated" && Number(inv?.document_checked||0)===1;
+    $("captureDocumentBox").hidden=state.mode==="simulated";
+    const intro=dialog.querySelector(".capture-warning");
+    if(intro) intro.textContent=state.mode==="simulated"
+      ? "This invoice uses a system-generated internal reference linked to the PO and Inventory receipt. It is not supplier-issued, and genuine Finance posting requires supplier documentation."
+      : "Record an actual supplier-issued invoice for a PO with verified Inventory receipts. Save and verify the 3-way match before queuing to Finance. Recording an invoice does not itself mean payment.";
     $("captureInvoiceDate").value=inv?.invoice_date||localDate();
     const due=new Date();due.setDate(due.getDate()+30);
     $("captureDueDate").value=inv?.due_date||[due.getFullYear(),String(due.getMonth()+1).padStart(2,"0"),String(due.getDate()).padStart(2,"0")].join("-");
@@ -96,11 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
       $("captureLineRows").append(tr);
     }
     refreshTotal();
-    const editable=(!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase()))&&inv?.source_kind!=="demo";
+    const editable=(!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase())) && (inv?.source_kind!=="demo" || (state.mode==="simulated" && String(inv?.source_notes||"").startsWith("DEFENSE_SIM_V8:")));
     for(const field of $("captureInvoiceForm").querySelectorAll("input,select"))field.disabled=!editable;
+    $("captureSource").disabled=false;
     $("captureSave").disabled=!editable;
     $("captureSave").textContent=inv?"Update Invoice as Pending Match":"Save Invoice as Pending Match";
-    $("captureVerify").disabled=inv?.source_kind==="demo"||!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
+    $("captureVerify").disabled=(inv?.source_kind==="demo" && state.mode!=="simulated")||!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
     $("captureViewInvoice").hidden=!inv;
     if (inv) $("captureViewInvoice").href="buyer-view-invoice.html?invoice_number="+encodeURIComponent(inv.invoice_number);
     $("captureChecks").replaceChildren();
@@ -109,14 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
       for(const c of state.match.items) {const ok=c.receipt_matched&&c.invoice_quantity_matched&&c.price_matched&&c.line_identity_matched;
         const p=make("p",`${ok?"✓":"✕"} ${c.item_name}: PO ${c.po_qty}, GR ${c.real_gr_accepted}, invoice ${c.invoice_qty??"—"}, PO unit price ${amt(c.po_unit_price)}, invoice ${amt(c.invoice_unit_price)}`);p.className=ok?"capture-pass":"capture-fail";$("captureChecks").append(p);}
     }
-    setMessage(legacyDemo?`Invoice ${inv.invoice_number} is an existing CLASSROOM DEMO record. It cannot be relabeled as an actual supplier invoice. Keep it separate from a new genuine supplier invoice.`:(inv?`Invoice ${inv.invoice_number} · ${inv.status} · Supplier-document review`:`PO ${po.po_number} loaded. Record the genuine supplier invoice before verification.`),"ok");
+    setMessage(state.mode==="simulated" ? (inv?`Invoice ${inv.invoice_number} · ${inv.status} · Internal reference. Supplier-issued documentation is required for genuine Finance posting.`:`Internal reference SIM-${po.po_number} generated from the selected PO. Not a supplier-issued invoice; genuine Finance posting requires supplier documentation.`) : (legacyDemo?`Invoice ${inv.invoice_number} is an archived classroom demo.`:(inv?`Invoice ${inv.invoice_number} · ${inv.status} · Supplier-document review`:`PO ${po.po_number} loaded. Genuine supplier invoice required for Finance.`)),"ok");
   }
-  async function load(poNumber="") {
+  async function load(poNumber="", mode=state.mode) {
     setMessage("Loading Purchase Order and real Inventory Goods Receipts...");
-    const response=await fetch("../database/buyer-invoice-integration-local.php?po_number="+encodeURIComponent(poNumber),{credentials:"same-origin",cache:"no-store",headers:{Accept:"application/json"}});
+    const response=await fetch("../database/buyer-invoice-integration-local.php?po_number="+encodeURIComponent(poNumber)+"&invoice_mode="+encodeURIComponent(mode),{credentials:"same-origin",cache:"no-store",headers:{Accept:"application/json"}});
     const d=await response.json().catch(()=>({}));
     if(!response.ok||!d.success)throw new Error(d.message||`HTTP ${response.status}`);
-    Object.assign(state,{csrf:d.csrf_token||"",po:d.po,items:d.po_items||[],invoice:d.invoice,invoice_items:d.invoice_items||[],match:d.match,orders:d.orders||[]});
+    Object.assign(state,{csrf:d.csrf_token||"",po:d.po,items:d.po_items||[],invoice:d.invoice,invoice_items:d.invoice_items||[],match:d.match,orders:d.orders||[],mode:d.invoice_mode||mode});
     render();
   }
   async function post(data) {
@@ -128,9 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   async function withBusy(work) {if(state.busy)return;state.busy=true;$("captureSave").disabled=true;$("captureVerify").disabled=true;
     try{await work();}catch(e){setMessage(e.message||"Invoice action failed.","error");}finally{state.busy=false;
       const inv=state.invoice;
-      const editable=(!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase()))&&inv?.source_kind!=="demo";
+      const editable=(!inv||["pending_match","discrepancy"].includes(String(inv.status).toLowerCase())) && (inv?.source_kind!=="demo" || (state.mode==="simulated" && String(inv?.source_notes||"").startsWith("DEFENSE_SIM_V8:")));
       $("captureSave").disabled=!editable;
-      $("captureVerify").disabled=inv?.source_kind==="demo"||!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
+      $("captureVerify").disabled=(inv?.source_kind==="demo" && state.mode!=="simulated")||!inv||!["pending_match","discrepancy","ready_to_post"].includes(String(inv.status).toLowerCase());
     }
   }
   recordButton.addEventListener("click", async e => {
@@ -145,16 +153,16 @@ document.addEventListener("DOMContentLoaded", () => {
   dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
   dialog.addEventListener("close",()=>{if(state.wrote)location.reload();});
   $("captureLoadPo").addEventListener("click",()=>withBusy(async()=>{await load($("capturePoSelect").value);}));
-  $("captureSource").addEventListener("change",()=>{$("captureDocumentBox").hidden=false;if($("captureDocumentBox").hidden)$("captureDocumentChecked").checked=false;});
+  $("captureSource").addEventListener("change",()=>withBusy(async()=>{const nextMode=$("captureSource").value==="demo"?"simulated":"genuine";await load(state.po?.po_number||"",nextMode);}));
   $("captureInvoiceForm").addEventListener("submit",e=>{e.preventDefault();withBusy(async()=>{
     if(!state.po)throw new Error("Select a PO first.");
     const lines=[...$("captureLineRows").children].map(tr=>({po_item_id:Number(tr.querySelector("[data-qty]").dataset.qty),qty_billed:tr.querySelector("[data-qty]").value,unit_price:tr.querySelector("[data-price]").value}));
-    const result=await post({action:"save",po_number:state.po.po_number,source_kind:$("captureSource").value,supplier_invoice_reference:$("captureSupplierRef").value.trim(),source_notes:$("captureNotes").value.trim(),document_checked:$("captureDocumentChecked").checked,invoice_date:$("captureInvoiceDate").value,due_date:$("captureDueDate").value,total_amount:$("captureInvoiceTotal").value,items:lines});
+    const result=await post({action:"save",invoice_mode:state.mode,po_number:state.po.po_number,source_kind:$("captureSource").value,supplier_invoice_reference:$("captureSupplierRef").value.trim(),source_notes:$("captureNotes").value.trim(),document_checked:$("captureDocumentChecked").checked,invoice_date:$("captureInvoiceDate").value,due_date:$("captureDueDate").value,total_amount:$("captureInvoiceTotal").value,items:lines});
     state.wrote=true;await load(state.po.po_number);setMessage(result.message,"ok");
   });});
   $("captureVerify").addEventListener("click",()=>withBusy(async()=>{
     if(!state.po)throw new Error("Select a PO first.");
-    const result=await post({action:"verify",po_number:state.po.po_number});
+    const result=await post({action:state.mode==="simulated"?"verify_demo":"verify",invoice_mode:state.mode,demo_acknowledged:state.mode==="simulated",po_number:state.po.po_number});
     state.wrote=true;await load(state.po.po_number);setMessage(result.message,result.data_matched?"ok":"error");
   }));
   if (autoOpenRequestedInvoice) {

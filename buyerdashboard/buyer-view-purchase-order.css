@@ -151,3 +151,7 @@
 }
 /* Event-based delivery indicator; receipt may be recorded without supplier shipping milestones. */
 .track-step.has-receipt .track-node{background:#217b54;border-color:#217b54}
+
+/* UNIPROCUR_INVENTORY_TRACKING_V11 — four truthful Procurement/Inventory stages. */
+.tracking-steps{grid-template-columns:repeat(4,minmax(0,1fr))}
+.tracking-steps:before,.tracking-steps:after{left:12.5%;right:12.5%}
