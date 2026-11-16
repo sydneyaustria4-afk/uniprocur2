@@ -20,11 +20,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Retain existing layout, but make demo-only limitations explicit.
-  document.title = "UniProcur | Buyer Material Requests (Local Conversion Test)";
-  const banner = document.querySelector(".mr-demo-banner span:nth-child(2)");
-  if (banner) banner.textContent = "LOCAL CONVERSION TEST — Inventory requests are live. Creating a PR draft writes ONLY to Procurement MySQL; it does not change Inventory stock or request status.";
-  $("resetPreview").textContent = "Refresh Requests";
-  $("resetPreview").title = "Fetch latest Inventory requests";
+document.title = "UniProcur | Buyer Material Requests";
+
+$("resetPreview").textContent = "Refresh Requests";
+$("resetPreview").title = "Fetch latest Inventory requests";
+
+// Keep Refresh Requests working without the test banner
+const refreshButton = $("resetPreview");
+document.querySelector(".mr-controls")?.appendChild(refreshButton);
+
+// Remove testing banner
+document.querySelector(".mr-demo-banner")?.remove();
   $("materialPriorityFilter").closest("select")?.replaceChildren(new Option("All", "all"));
   const priorityLabel = document.querySelector('label[for="materialPriorityFilter"]');
   if (priorityLabel) priorityLabel.hidden = true;

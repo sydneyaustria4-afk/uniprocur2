@@ -18,12 +18,10 @@ function respond(int $status, array $data): void {
     exit;
 }
 
-$host = strtolower((string)($_SERVER['HTTP_HOST'] ?? ''));
-$ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
-if (!in_array($ip, ['127.0.0.1', '::1'], true) ||
-    !preg_match('/\A(localhost|127\.0\.0\.1)(:\d+)?\z/', $host)) {
-    respond(403, ['success' => false, 'message' => 'Localhost-only integration test.']);
-}
+// RADMIN_BUYER_POST_V1: IP-based localhost limit removed.
+// Buyer role and session are checked by buyerPoIdentity($conn) below;
+// the session-bound CSRF token must still pass before any database writes.
+
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Allow: POST');
     respond(405, ['success' => false, 'message' => 'POST required.']);
@@ -65,7 +63,7 @@ if ($key === '') respond(503, ['success' => false, 'message' => 'Inventory API k
 if (!function_exists('curl_init')) respond(503, ['success' => false, 'message' => 'PHP cURL is not enabled.']);
 
 // Never trust item lists sent by browser: fetch request from Inventory's API again.
-$curl = curl_init('http://127.0.0.1/inventory_management/api/requests.php');
+$curl = curl_init('http://127.0.0.1/ITPROFEL/INVENTORY/api/requests.php');
 if ($curl === false) respond(502, ['success' => false, 'message' => 'Could not start Inventory connection.']);
 curl_setopt_array($curl, [
     CURLOPT_RETURNTRANSFER => true,

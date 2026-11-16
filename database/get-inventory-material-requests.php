@@ -22,14 +22,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'GET') {
     reply(405, ['success' => false, 'message' => 'GET only.']);
 }
 
-// Local-only protection. Replace with real Buyer-session authorization before
-// connecting laptops via Radmin or publishing either app to the internet.
-$remoteIp = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
-$host = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
-if (!in_array($remoteIp, ['127.0.0.1', '::1'], true) ||
-    !preg_match('/\A(localhost|127\.0\.0\.1)(:\d+)?\z/', $host)) {
-    reply(403, ['success' => false, 'message' => 'Local test only.']);
-}
+// RADMIN_BUYER_AUTH_V1: require a real Buyer session for LAN/Radmin access.
+// Do not identify users by IP or allow unauthenticated access.
+require_once __DIR__ . '/buyer-po-common.php';
+buyerPoIdentity($conn);
 
 // The same Apache SetEnv IMS_API_KEY already configured for the Inventory app.
 $key = (string) (getenv('IMS_API_KEY') ?: ($_SERVER['IMS_API_KEY'] ?? ''));
@@ -41,7 +37,7 @@ if (!function_exists('curl_init')) {
     reply(500, ['success' => false, 'message' => 'PHP cURL extension is not enabled.']);
 }
 
-$url = 'http://127.0.0.1/inventory_management/api/requests.php';
+$url = 'http://127.0.0.1/ITPROFEL/INVENTORY/api/requests.php';
 $curl = curl_init($url);
 if ($curl === false) {
     reply(500, ['success' => false, 'message' => 'Could not start Inventory API connection.']);
