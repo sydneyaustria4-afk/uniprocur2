@@ -284,6 +284,22 @@ if (!in_array($warehouseValue, ['main', 'second'], true)) {
     }
 
     $prId = (int) $pr['id'];
+    // Do not accept a different warehouse from browser for Inventory-originated PRs.
+    require_once __DIR__ . '/uniprocur-inventory-warehouse.php';
+    $inventoryWh = uniInventoryWarehouseForPr($conn, $prId);
+    if (!$inventoryWh && uniInventoryPrHasLink($conn, $prId)) {
+        $conn->rollback();
+        $transactionStarted=false;
+        sendJson(422,['success'=>false,'message'=>'Inventory-linked PR has no recorded receiving warehouse. Backfill required before RFQ.']);
+    }
+    if ($inventoryWh) {
+        $requiredWh = uniInventoryWarehouseRfqKey((string)$inventoryWh['warehouse_code']);
+        if ($requiredWh === null || $warehouseValue !== $requiredWh) {
+            $conn->rollback();
+            $transactionStarted=false;
+            sendJson(422,['success'=>false,'message'=>'RFQ warehouse does not match the warehouse selected by Inventory.']);
+        }
+    }
 
     // Prevent duplicate RFQs for the same PR.
     $checkStmt = $conn->prepare(

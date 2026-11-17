@@ -63,7 +63,8 @@ if ($key === '') respond(503, ['success' => false, 'message' => 'Inventory API k
 if (!function_exists('curl_init')) respond(503, ['success' => false, 'message' => 'PHP cURL is not enabled.']);
 
 // Never trust item lists sent by browser: fetch request from Inventory's API again.
-$curl = curl_init('http://127.0.0.1/ITPROFEL/inventory_management/api/requests.php');
+require_once __DIR__ . '/uniprocur-inventory-sync.php';
+$curl = curl_init(uniInventoryUrl('requests'));
 if ($curl === false) respond(502, ['success' => false, 'message' => 'Could not start Inventory connection.']);
 curl_setopt_array($curl, [
     CURLOPT_RETURNTRANSFER => true,
@@ -94,6 +95,30 @@ foreach ($parsed['data'] as $candidate) {
 if (!$source || strcasecmp(trim((string)($source['destination'] ?? '')), 'Procurement') !== 0 ||
     strcasecmp(trim((string)($source['status'] ?? '')), 'Pending') !== 0) {
     respond(409, ['success' => false, 'message' => 'Request is missing or is no longer Pending for Procurement.']);
+}
+// Inventory-selected receiving warehouse: ensure every line belongs to ONE warehouse.
+// Never accept warehouse metadata from browser JSON.
+$sourceWarehouses = [];
+foreach (($source['items'] ?? []) as $rawWarehouseLine) {
+    if (!is_array($rawWarehouseLine)) continue;
+    $wid = (int)($rawWarehouseLine['warehouse_id'] ?? 0);
+    $wcode = strtoupper(trim((string)($rawWarehouseLine['warehouse_code'] ?? '')));
+    $wname = trim((string)($rawWarehouseLine['warehouse_name'] ?? ''));
+    if ($wid < 1 || $wcode === '' || $wname === '') {
+        respond(422, ['success'=>false,'message'=>'Warehouse metadata missing. Inventory team must deploy the updated requests API.']);
+    }
+    $sourceWarehouses[$wid] = [
+        'id'=>$wid, 'code'=>$wcode, 'name'=>$wname,
+        'location'=>trim((string)($rawWarehouseLine['warehouse_location'] ?? ''))
+    ];
+}
+if (count($sourceWarehouses) !== 1) {
+    respond(422, ['success'=>false,'message'=>'Request has multiple or missing receiving warehouses. Please ask Inventory to correct it.']);
+}
+$receivingWarehouse = reset($sourceWarehouses);
+require_once __DIR__ . '/uniprocur-inventory-warehouse.php';
+if (uniInventoryWarehouseRfqKey($receivingWarehouse['code']) === null) {
+    respond(422, ['success'=>false,'message'=>'Unknown Inventory warehouse code. Add a verified code mapping before converting.']);
 }
 $rawItems = $source['items'] ?? [];
 if (!is_array($rawItems) || count($rawItems) < 1 || count($rawItems) > 100) {
@@ -144,6 +169,10 @@ try {
         $delete->bind_param('s', $number);
         $delete->execute();
         $delete->close();
+        $clearMeta = $conn->prepare('DELETE FROM procurement_inventory_receiving_warehouses WHERE inventory_request_number=?');
+        $clearMeta->bind_param('s', $number);
+        $clearMeta->execute();
+        $clearMeta->close();
     }
     $tempNumber = 'TMP-' . bin2hex(random_bytes(12));
     $department = 'Procurement';
@@ -176,6 +205,25 @@ try {
     $link->bind_param('sii', $number, $prId, $buyerId);
     $link->execute();
     $link->close();
+    // Store the Inventory warehouse *on the same transaction* as the new PR.
+    $meta = $conn->prepare('INSERT INTO procurement_inventory_receiving_warehouses
+        (inventory_request_number,pr_id,inventory_warehouse_id,warehouse_code,warehouse_name,
+         warehouse_location,recipient_name,recipient_gmail,expected_days,expected_receive_date,original_remarks)
+         VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+    $whId=(int)$receivingWarehouse['id'];
+    $whCode=(string)$receivingWarehouse['code'];
+    $whName=(string)$receivingWarehouse['name'];
+    $whLocation=(string)$receivingWarehouse['location'];
+    $recipientName=trim((string)($source['recipient_name'] ?? ''));
+    $recipientGmail=trim((string)($source['recipient_gmail'] ?? ''));
+    $expectedDays=trim((string)($source['expected_days'] ?? ''));
+    $expectedReceiveDate=trim((string)($source['expected_receive_date'] ?? ($source['expected_date'] ?? '')));
+    if ($expectedReceiveDate === '') $expectedReceiveDate=null;
+    $originalRemarks=(string)($source['remarks'] ?? '');
+    $meta->bind_param('siissssssss', $number,$prId,$whId,$whCode,$whName,
+        $whLocation,$recipientName,$recipientGmail,$expectedDays,$expectedReceiveDate,$originalRemarks);
+    $meta->execute();
+    $meta->close();
     $conn->commit();
     $transaction = false;
     respond(201, [

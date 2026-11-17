@@ -364,6 +364,12 @@ document.addEventListener("DOMContentLoaded", () => {
     locationSelect.value = optionExists
       ? data.warehouseValue
       : "main";
+    // Confirm page must display the same original Inventory receiving warehouse.
+    if (data.inventoryWarehouseCode) {
+      const selected = locationSelect.options[locationSelect.selectedIndex];
+      if (selected) selected.textContent = data.warehouseText || 'Inventory receiving warehouse';
+      locationSelect.disabled = true;
+    }
 
   }
 

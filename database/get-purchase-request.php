@@ -155,7 +155,13 @@ try {
 
     $rfqStmt->close();
 
+    // Report the Inventory-assigned receiving warehouse with this PR (if any).
+    require_once __DIR__ . '/uniprocur-inventory-warehouse.php';
+    $inventoryDelivery = uniInventoryWarehouseForPr($conn, $prId);
+    $inventoryDeliveryMissing = $inventoryDelivery === null && uniInventoryPrHasLink($conn, $prId);
     sendJson(200, [
+        'inventory_delivery_missing' => $inventoryDeliveryMissing,
+        'inventory_delivery' => $inventoryDelivery,
         'success' => true,
         'buyer' => [
             'full_name' => $buyer['full_name'],

@@ -345,6 +345,23 @@ const images = {
     document.getElementById("prPurpose").textContent =
       request.purpose || "No justification provided.";
 
+    // Show the original Inventory receiving warehouse on the saved PR.
+    const receiving = result.inventory_delivery;
+    if (receiving || result.inventory_delivery_missing) {
+      const region = document.createElement('div');
+      region.className = 'purpose-panel';
+      region.style.cssText = 'margin:12px 0;border-left:3px solid #b91c1c;padding:12px;background:#fff7ed;line-height:1.6';
+      const title = document.createElement('strong');
+      title.textContent = 'Inventory receiving warehouse';
+      const body = document.createElement('p');
+      body.textContent = receiving
+        ? `${receiving.warehouse_name} (${receiving.warehouse_code})` +
+          (receiving.warehouse_location ? ` — ${receiving.warehouse_location}` : '') +
+          ' · Set by Inventory (read-only)'
+        : 'An older Inventory-linked request has no saved warehouse. Backfill is required before RFQ.';
+      region.append(title, body);
+      document.getElementById('prPurpose')?.parentElement?.insertAdjacentElement('beforebegin', region);
+    }
     renderItems(items, request.purpose);
     renderApprovalHistory(request);
 

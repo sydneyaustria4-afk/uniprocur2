@@ -130,8 +130,12 @@ $("expectedDelivery").readOnly = true;
 // Delivery Address = selected Create RFQ warehouse
 const warehouseKey = data.rfq.warehouse_value;
 
-$("deliveryAddress").value =
-    warehouseAddresses[warehouseKey] || "";
+$("deliveryAddress").value = data.rfq.inventory_warehouse_locked
+    ? (data.rfq.inventory_delivery_address || "")
+    : (warehouseAddresses[warehouseKey] || "");
+if (data.rfq.inventory_warehouse_locked && !data.rfq.inventory_delivery_address) {
+    $("deliveryAddress").placeholder = "Inventory warehouse physical address not verified in Apache configuration";
+}
 
 $("deliveryAddress").readOnly = true;
 

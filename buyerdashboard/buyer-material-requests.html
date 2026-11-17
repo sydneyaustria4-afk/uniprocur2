@@ -126,6 +126,7 @@
     <div class="mr-modal-head"><div><small>Inventory → Procurement • Demo</small><h2 id="convertDialogTitle">Convert to Purchase Request</h2></div><button type="button" class="mr-close" data-close-dialog="convertDialog" aria-label="Close">×</button></div>
     <p class="mr-modal-note">This is what the Inventory request could look like as a Buyer Purchase Request.</p>
     <dl class="mr-convert-summary"><div><dt>Request reference</dt><dd id="convertRequestNumber">—</dd></div><div><dt>Requested by</dt><dd id="convertRequester">—</dd></div><div><dt>New PR status</dt><dd>Draft preview only</dd></div></dl>
+    <dl class="mr-convert-summary mr-inventory-metadata" id="convertInventoryDetails" aria-label="Original Inventory request details"></dl>
     <h3 class="mr-modal-subtitle">Material lines</h3>
     <div id="convertMaterials"></div>
     <p class="mr-modal-disclaimer">No PR number is generated and nothing is saved to the Procurement database. Actual conversion will be connected after the Inventory API and field mapping are agreed.</p>

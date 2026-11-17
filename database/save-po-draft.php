@@ -205,6 +205,18 @@ try {
         $awarded['warehouse_value'] ?? ''
     );
     $amount = (float) $awarded['total_amount'];
+    // Confirm address with the Inventory team; never guess from storage labels.
+    require_once __DIR__ . '/uniprocur-inventory-warehouse.php';
+    $inventoryWh=uniInventoryWarehouseForRfq($conn,$rfqId);
+    if (!$inventoryWh && uniInventoryRfqHasLink($conn, $rfqId)) {
+        draftReject($conn,$started,422,'Inventory-linked PR has no recorded receiving warehouse. Backfill required before PO.');
+    }
+    if ($inventoryWh) {
+        $rfqKey=uniInventoryWarehouseRfqKey((string)$inventoryWh['warehouse_code']);
+        if ($rfqKey === null || $rfqKey !== $warehouse) {
+            draftReject($conn,$started,422,'RFQ warehouse differs from original Inventory receiving warehouse.');
+        }
+    }
 
     // ========================================
     // 4. AUTOMATIC DELIVERY INFORMATION
@@ -218,6 +230,14 @@ try {
             'Second Warehouse — Palina, Nagcarlan, Laguna'
     ];
 
+    if ($inventoryWh) {
+        $confirmedAddress=uniInventoryWarehouseAddress((string)$inventoryWh['warehouse_code']);
+        if ($confirmedAddress === null) {
+            draftReject($conn,$started,422,
+                'Inventory receiving warehouse full delivery address is not configured. Verify address with Inventory and set UNIPROCUR_WH_*_DELIVERY_ADDRESS.');
+        }
+        $warehouseAddresses[$warehouse]=$confirmedAddress;
+    }
     if (
         !isset($warehouseAddresses[$warehouse]) ||
         !preg_match(

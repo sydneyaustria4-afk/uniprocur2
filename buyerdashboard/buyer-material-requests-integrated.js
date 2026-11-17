@@ -86,6 +86,20 @@ document.querySelector(".mr-demo-banner")?.remove();
         lines.append(li);
       }
       card.append(lines);
+      // Quick overview on each request card, without overriding any submitted values.
+      const warehouseNames = [...new Set((req.items || [])
+        .map(item => String(item.warehouse_name || "").trim()
+          || (Number(item.warehouse_id) > 0 ? `Warehouse ID ${item.warehouse_id}` : ""))
+        .filter(Boolean))];
+      const quickInfo = [
+        req.destination ? `Destination: ${req.destination}` : "",
+        warehouseNames.length ? `Warehouse: ${warehouseNames.join(", ")}` : "Warehouse: Not provided",
+        req.recipient_name ? `Recipient: ${req.recipient_name}` : "",
+        req.expected_days ? `Expected delivery: ${req.expected_days}` : ""
+      ].filter(Boolean);
+      const meta = make("p", "mr-justification");
+      meta.append(make("strong", "", "Request details: "), document.createTextNode(quickInfo.join(" | ")));
+      card.append(meta);
       const reason = make("p", "mr-justification");
       reason.append(make("strong", "", "Remarks: "), document.createTextNode(req.remarks || "No remarks provided"));
       card.append(reason);
@@ -116,10 +130,38 @@ document.querySelector(".mr-demo-banner")?.remove();
     state.active = req;
     $("convertRequestNumber").textContent = req.request_number;
     $("convertRequester").textContent = req.requester_team || "Inventory";
+    // Original fields from Inventory are read-only. Buyer chooses PR required date below.
+    const inventoryDetails = $("convertInventoryDetails");
+    if (inventoryDetails) {
+      inventoryDetails.replaceChildren();
+      const showDetail = (label, raw) => {
+        const value = String(raw ?? "").trim() || "Not provided";
+        const item = make("div");
+        item.append(make("dt", "", label), make("dd", "", value));
+        inventoryDetails.append(item);
+      };
+      const warehouses = [...new Set((req.items || []).map(item => {
+        const name = String(item.warehouse_name || "").trim();
+        const place = String(item.warehouse_location || "").trim();
+        if (name) return place ? `${name} (${place})` : name;
+        return Number(item.warehouse_id) > 0 ? `Warehouse ID ${item.warehouse_id} (name unavailable)` : "";
+      }).filter(Boolean))];
+      const estimate = [req.expected_days, req.expected_receive_date]
+        .map(value => String(value || "").trim()).filter(Boolean).join(" · ");
+      showDetail("Destination / Department", req.destination);
+      showDetail("Inventory-selected warehouse", warehouses.join(" · "));
+      showDetail("Send to / Recipient", req.recipient_name);
+      showDetail("Recipient Gmail", req.recipient_gmail);
+      showDetail("Inventory expected delivery", estimate);
+      showDetail("Inventory remarks (original)", req.remarks);
+    }
     const lines = make("div", "mr-modal-items");
     for (const item of req.items || []) {
       const line = make("div", "mr-modal-item");
-      line.append(make("span", "", `${item.item_name} (${item.item_code || "No code"})`),
+      const itemDescription = `${item.item_name} (${item.item_code || "No code"})`
+        + (item.size ? ` · Size: ${item.size}` : "")
+        + (item.warehouse_name ? ` · Warehouse: ${item.warehouse_name}` : "");
+      line.append(make("span", "", itemDescription),
         make("strong", "", `${formatQty(item.quantity)} ${item.unit}`));
       lines.append(line);
     }

@@ -1,0 +1,106 @@
+/* Material Request — Figma-aligned, scoped to this page. Base sidebar from Buyer Dashboard. */
+.buyer-material-page .dashboard-shell {
+  background: radial-gradient(ellipse at 99% 100%, #f2a567 0%, #ef7837 20%, transparent 53%),
+              linear-gradient(146deg, #310e0d 0%, #85110d 23%, #cc0a06 45%, #ef0800 75%, #f45f21 100%);
+  min-height: 100vh;
+}
+.buyer-material-page .mr-main {padding: 24px 39px 68px 49px;min-width: 0;}
+.buyer-material-page .mr-inner {width: 100%;max-width: 1280px;margin: 0 auto;}
+.buyer-material-page .sidebar .mr-menu-icon {position: relative;}
+.buyer-material-page .sidebar .mr-menu-icon::after {content:"";position:absolute;right:-3px;top:-3px;width:7px;height:7px;border-radius:50%;background:#ec0c06;box-shadow:0 0 0 1px #fff;}
+.buyer-material-page .mr-topbar {
+  min-height: 76px;padding: 9px 19px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border:1px solid #ffffff70;border-radius:25px;background:#ffffff13;color:#fff;font-family:Geist,Inter,Arial,sans-serif;
+}
+.buyer-material-page .mr-workspace,.buyer-material-page .mr-user {display:flex;align-items:center;gap:11px;min-width:0;}
+.buyer-material-page .mr-workspace-logo {flex:0 0 54px;width:54px;height:54px;display:grid;place-items:center;border-radius:50%;border:1px solid #ffffff8c;background:#ffffff12;}
+.buyer-material-page .mr-workspace-logo img {width:31px;height:31px;object-fit:contain;}
+.buyer-material-page .mr-workspace-name,.buyer-material-page .mr-user-label {display:flex;flex-direction:column;min-width:0;gap:2px;}
+.buyer-material-page .mr-workspace-name small {font-size:12px;color:#ffffffd7;}
+.buyer-material-page .mr-workspace-name strong {font-size:18px;line-height:21px;}
+.buyer-material-page .mr-user {margin-left:auto;}
+.buyer-material-page .mr-bell {flex:0 0 47px;width:47px;height:47px;display:grid;place-items:center;background:#fff;border:0;border-radius:50%;padding:7px;cursor:pointer;}
+.buyer-material-page .mr-bell img {width:30px;height:30px;object-fit:contain;}
+.buyer-material-page .mr-account-rule {width:1px;height:40px;background:#fff9;margin-inline:4px;}
+.buyer-material-page .mr-user-label {text-align:right;max-width:230px;}
+.buyer-material-page .mr-user-label strong {font-size:15px;line-height:18px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.buyer-material-page .mr-user-label small {font-size:10px;line-height:14px;color:#ffffffd9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.buyer-material-page .mr-user-avatar {flex:0 0 47px;width:47px;height:47px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#af1717;font-weight:700;}
+.buyer-material-page .mr-demo-banner {display:flex;align-items:center;gap:11px;margin:17px 0 0;padding:10px 13px;border-radius:10px;border:1px solid #fff9;background:#fffdf8f5;color:#2b2827;font:400 12px/18px Inter,Arial,sans-serif;}
+.buyer-material-page .mr-demo-indicator {flex:0 0 9px;width:9px;height:9px;border-radius:50%;background:#ee640d;box-shadow:0 0 0 3px #fdddc4;}
+.buyer-material-page .mr-reset {margin-left:auto;white-space:nowrap;background:transparent;color:#b5140e;padding:5px;text-decoration:underline;text-underline-offset:3px;font-size:12px;font-weight:700;}
+.buyer-material-page .mr-controls {display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:34px;}
+.buyer-material-page .mr-search {flex:0 1 652px;min-width:260px;min-height:55px;border:2px solid #ffffffd9;border-radius:999px;background:#ffffff70;display:flex;align-items:center;gap:9px;padding:5px 7px 5px 8px;box-shadow:0 4px 4px #0002;backdrop-filter:blur(3px);}
+.buyer-material-page .mr-search-mark {flex:0 0 38px;width:38px;height:38px;background:#fff;border-radius:50%;display:grid;place-items:center;color:#222;}
+.buyer-material-page .mr-search input {flex:1;min-width:0;outline:none;border:0;background:transparent;color:#171717;font:400 17px Geist,Inter,Arial,sans-serif;}
+.buyer-material-page .mr-search input::placeholder {color:#222;opacity:1;}
+.buyer-material-page .mr-search button {flex:0 0 92px;height:36px;background:#fff;border:0;border-radius:99px;color:#181818;font-size:13px;}
+.buyer-material-page .mr-search button:hover,.buyer-material-page .mr-filter-button:hover {background:#f2f2f2;}
+.buyer-material-page .mr-filter-wrap {position:relative;z-index:4;}
+.buyer-material-page .mr-filter-button {height:53px;min-width:150px;background:#fff;border:1px solid #d5d5d5;border-radius:16px;padding:0 22px;display:flex;justify-content:center;align-items:center;gap:8px;font:500 16px Inter,Arial,sans-serif;box-shadow:0 3px 4px #0002;cursor:pointer;}
+.buyer-material-page .mr-filter-panel {position:absolute;top:calc(100% + 9px);left:0;width:245px;padding:17px;background:#fff;border:1px solid #ddd;border-radius:12px;box-shadow:0 13px 26px #0004;}
+.buyer-material-page .mr-filter-panel[hidden] {display:none;}
+.buyer-material-page .mr-filter-panel label {display:block;font-size:12px;font-weight:700;color:#393939;margin:0 0 5px;}
+.buyer-material-page .mr-filter-panel select {display:block;width:100%;height:38px;margin-bottom:14px;border:1px solid #cbd2da;border-radius:8px;background:#fff;padding:6px;font:13px Inter,Arial,sans-serif;}
+.buyer-material-page .mr-filter-actions {display:flex;gap:8px;}
+.buyer-material-page .mr-filter-actions button {flex:1;height:36px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;}
+.buyer-material-page .mr-filter-actions button:last-child {background:#111;color:#fff;border-color:#111;}
+.buyer-material-page .mr-showing {display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:26px 0 24px;color:#fff;font-size:15px;}
+.buyer-material-page .mr-showing-label {display:inline-flex;background:#f2f2f2;color:#5c5c5c;min-height:27px;align-items:center;padding:3px 12px;border-radius:4px;font-size:12px;}
+.buyer-material-page .mr-showing-count {margin-left:auto;opacity:.85;font-size:12px;}
+.buyer-material-page .mr-cards {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:23px;align-items:start;}
+.buyer-material-page .mr-card {min-height:386px;background:#fff;color:#111;border-radius:15px;box-shadow:0 4px 6px #0003;padding:18px 19px 17px;display:flex;flex-direction:column;gap:0;}
+.buyer-material-page .mr-card-top {display:flex;align-items:center;flex-wrap:wrap;gap:8px;}
+.buyer-material-page .mr-request-no,.buyer-material-page .mr-priority,.buyer-material-page .mr-status {display:inline-flex;align-items:center;min-height:23px;padding:2px 8px;border-radius:5px;font-size:10px;white-space:nowrap;}
+.buyer-material-page .mr-request-no {background:#f3f3f3;border:1px solid #cdd1d8;color:#5c6570;}
+.buyer-material-page .mr-priority {border:1px solid #ffb4ba;background:#fff2f3;color:#cc3740;}
+.buyer-material-page .mr-status {margin-left:auto;background:#eeeeef;border:1px solid #d5d7db;color:#51535a;}
+.buyer-material-page .mr-status.is-rejected {background:#ffebec;border-color:#ffb2b5;color:#a31b23;}
+.buyer-material-page .mr-status.is-converted {background:#e5f7eb;border-color:#a3ddb3;color:#137b3d;}
+.buyer-material-page .mr-card-title {font-size:24px;line-height:28px;letter-spacing:-.055em;margin:31px 0 3px;font-weight:800;}
+.buyer-material-page .mr-date {display:inline-flex;align-self:flex-start;border:1px solid #d9dce1;color:#707070;background:#f7f7f7;border-radius:4px;padding:3px 7px;font-size:10px;}
+.buyer-material-page .mr-lines {display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:6px 12px;list-style:none;margin:19px 0 14px;padding:0;}
+.buyer-material-page .mr-lines li {display:contents;}
+.buyer-material-page .mr-lines .mr-item-name {font-size:14px;font-weight:700;line-height:19px;overflow-wrap:anywhere;}
+.buyer-material-page .mr-lines .mr-item-qty {font-size:13px;font-weight:800;line-height:19px;white-space:nowrap;}
+.buyer-material-page .mr-justification {font-size:11px;line-height:16px;margin:0 0 20px;overflow-wrap:anywhere;}
+.buyer-material-page .mr-card-actions {margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:10px;}
+.buyer-material-page .mr-reject {height:40px;min-width:103px;border:1px solid #d42a24;background:#fff;color:#c5221d;border-radius:10px;padding:0 14px;font-size:13px;cursor:pointer;}
+.buyer-material-page .mr-convert {height:40px;min-width:0;background:#111;color:#fff;border:0;border-radius:10px;padding:0 16px;font-size:12px;cursor:pointer;}
+.buyer-material-page .mr-reject:hover {background:#fff1f0;}
+.buyer-material-page .mr-convert:hover {background:#303030;}
+.buyer-material-page .mr-state-note {margin:8px 0 0;color:#555;font-size:12px;line-height:18px;}
+.buyer-material-page .mr-empty,.buyer-material-page .mr-loading {grid-column:1/-1;width:min(100%,520px);background:#fff;padding:30px;border-radius:13px;color:#333;font-size:15px;}
+.buyer-material-page .mr-toast {position:fixed;z-index:100;bottom:24px;right:24px;max-width:min(420px,calc(100vw - 32px));padding:14px 18px;background:#202020;color:#fff;box-shadow:0 5px 17px #0005;border-radius:9px;font-size:13px;}
+.buyer-material-page .mr-toast[hidden] {display:none;}
+.buyer-material-page .mr-modal {position:fixed;max-width:min(95vw,540px);width:540px;max-height:86vh;border:0;border-radius:18px;padding:25px;background:#fff;color:#151515;box-shadow:0 15px 50px #0006;}
+.buyer-material-page .mr-modal::backdrop {background:#0009;}
+.buyer-material-page .mr-modal-head {display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:12px;}
+.buyer-material-page .mr-modal-head small {color:#b5140e;text-transform:uppercase;letter-spacing:.07em;font-size:11px;font-weight:700;}
+.buyer-material-page .mr-modal-head h2 {font-size:23px;line-height:29px;margin:5px 0 0;}
+.buyer-material-page .mr-close {font-size:25px;line-height:28px;flex:0 0 30px;background:#f1f2f4;border-radius:6px;cursor:pointer;}
+.buyer-material-page .mr-modal-note {color:#505050;font-size:13px;line-height:21px;margin:12px 0;}
+.buyer-material-page .mr-field {display:block;margin:14px 0 7px;font-weight:700;font-size:13px;}
+.buyer-material-page .mr-field span {color:#b40b10;}
+.buyer-material-page .mr-modal textarea {width:100%;height:110px;border:1px solid #cfd3db;border-radius:9px;resize:vertical;padding:12px;font:14px Inter,Arial,sans-serif;}
+.buyer-material-page .mr-modal-disclaimer {border-left:3px solid #e07628;background:#fff6ea;padding:10px 12px;color:#744a2b;font-size:12px;line-height:19px;}
+.buyer-material-page .mr-modal-actions {display:flex;justify-content:flex-end;gap:10px;margin-top:23px;flex-wrap:wrap;}
+.buyer-material-page .mr-modal-actions button {min-height:40px;padding:0 18px;border-radius:9px;cursor:pointer;font-size:13px;}
+.buyer-material-page .mr-secondary {background:#f2f2f2;border:1px solid #ddd;}
+.buyer-material-page .mr-danger {background:#ca2523;border:1px solid #ca2523;color:#fff;}
+.buyer-material-page .mr-primary {background:#111;border:1px solid #111;color:#fff;}
+.buyer-material-page .mr-convert-summary {display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0;}
+.buyer-material-page .mr-convert-summary div {background:#f5f5f6;border-radius:8px;padding:11px;}
+.buyer-material-page .mr-convert-summary dt {font-size:11px;color:#6d6d6d;margin-bottom:3px;}
+.buyer-material-page .mr-convert-summary dd {margin:0;font-size:13px;font-weight:700;}
+.buyer-material-page .mr-modal-subtitle {margin:15px 0 8px;font-size:14px;}
+.buyer-material-page .mr-modal-items {display:grid;width:100%;border:1px solid #e5e5e5;border-radius:9px;overflow:hidden;}
+.buyer-material-page .mr-modal-item {display:flex;justify-content:space-between;gap:8px;padding:9px 12px;font-size:12px;border-bottom:1px solid #e5e5e5;}
+.buyer-material-page .mr-modal-item:last-child {border-bottom:0;}
+.buyer-material-page .mr-modal-item strong {white-space:nowrap;}
+.buyer-material-page .mr-modal:focus {outline:none;}
+.buyer-material-page button:focus-visible,.buyer-material-page a:focus-visible,.buyer-material-page input:focus-visible,.buyer-material-page select:focus-visible,.buyer-material-page textarea:focus-visible {outline:3px solid #f9c03a;outline-offset:2px;}
+@media (max-width:1280px) {.buyer-material-page .mr-cards {grid-template-columns:repeat(2,minmax(0,1fr));}.buyer-material-page .mr-main {padding-inline:30px;}}
+@media (max-width:1050px) {.buyer-material-page .mr-cards {grid-template-columns:minmax(0,1fr);max-width:470px;}.buyer-material-page .mr-search {flex:1 1 390px;}.buyer-material-page .mr-main {padding:20px 22px 50px;}}
+@media (max-width:900px) {.buyer-material-page .dashboard-shell {display:block;}.buyer-material-page .sidebar {width:100%;min-width:0;min-height:0;position:relative;padding:15px;}.buyer-material-page .sidebar-bottom {margin-top:15px;}.buyer-material-page .nav-group nav {display:flex;flex-wrap:wrap;}.buyer-material-page .nav-item {width:auto;}.buyer-material-page .mr-inner {max-width:none;}}
+@media (max-width:600px) {.buyer-material-page .mr-main {padding:15px 13px 45px;}.buyer-material-page .mr-topbar {padding:8px 12px;border-radius:14px;}.buyer-material-page .mr-workspace-logo {flex-basis:40px;width:40px;height:40px;}.buyer-material-page .mr-workspace-logo img {width:25px;height:25px;}.buyer-material-page .mr-workspace-name strong {font-size:14px;}.buyer-material-page .mr-workspace-name small {font-size:9px;}.buyer-material-page .mr-user-label,.buyer-material-page .mr-account-rule {display:none;}.buyer-material-page .mr-bell,.buyer-material-page .mr-user-avatar {flex-basis:37px;width:37px;height:37px;}.buyer-material-page .mr-bell img {width:24px;height:24px;}.buyer-material-page .mr-demo-banner {align-items:flex-start;flex-wrap:wrap;}.buyer-material-page .mr-reset {margin-left:20px;}.buyer-material-page .mr-controls {margin-top:22px;}.buyer-material-page .mr-search {min-width:100%;}.buyer-material-page .mr-cards {max-width:none;}.buyer-material-page .mr-card {padding:15px;}.buyer-material-page .mr-modal {padding:17px;}}

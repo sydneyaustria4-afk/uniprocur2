@@ -129,6 +129,13 @@ try {
     }
     unset($supplier);
 
+    // Return authoritative Inventory receiving warehouse and confirmed physical address.
+    require_once __DIR__ . '/uniprocur-inventory-warehouse.php';
+    $linkedWarehouse = uniInventoryWarehouseForRfq($conn, (int)$rfq['id']);
+    $rfq['inventory_warehouse_locked'] = $linkedWarehouse !== null || uniInventoryRfqHasLink($conn, (int)$rfq['id']);
+    $rfq['inventory_warehouse_name'] = $linkedWarehouse['warehouse_name'] ?? null;
+    $rfq['inventory_delivery_address'] = $linkedWarehouse
+        ? uniInventoryWarehouseAddress((string)$linkedWarehouse['warehouse_code']) : null;
     rfqDetailsReply(200, [
         'success' => true,
         'buyer' => [

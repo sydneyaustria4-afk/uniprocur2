@@ -37,7 +37,8 @@ if (!function_exists('curl_init')) {
     reply(500, ['success' => false, 'message' => 'PHP cURL extension is not enabled.']);
 }
 
-$url = 'http://127.0.0.1/ITPROFEL/inventory_management/api/requests.php';
+require_once __DIR__ . '/uniprocur-inventory-sync.php';
+$url = uniInventoryUrl('requests');
 $curl = curl_init($url);
 if ($curl === false) {
     reply(500, ['success' => false, 'message' => 'Could not start Inventory API connection.']);
@@ -95,6 +96,11 @@ foreach ($json['data'] as $request) {
             'item_name' => (string) ($item['item_name'] ?? ''),
             'quantity' => (float) ($item['requested_quantity'] ?? 0),
             'unit' => (string) ($item['unit'] ?? ''),
+            'size' => (string) ($item['size'] ?? ''),
+            'warehouse_id' => (int) ($item['warehouse_id'] ?? 0),
+            'warehouse_code' => (string) ($item['warehouse_code'] ?? ''),
+            'warehouse_name' => (string) ($item['warehouse_name'] ?? ''),
+            'warehouse_location' => (string) ($item['warehouse_location'] ?? ''),
         ];
     }
     $requests[] = [
@@ -104,6 +110,11 @@ foreach ($json['data'] as $request) {
         'request_date' => (string) ($request['request_date'] ?? ''),
         'status' => (string) ($request['status'] ?? ''),
         'remarks' => (string) ($request['remarks'] ?? ''),
+        'destination' => (string) ($request['destination'] ?? ''),
+        'recipient_name' => (string) ($request['recipient_name'] ?? ''),
+        'recipient_gmail' => (string) ($request['recipient_gmail'] ?? ''),
+        'expected_days' => (string) ($request['expected_days'] ?? ''),
+        'expected_receive_date' => (string) ($request['expected_receive_date'] ?? ($request['expected_date'] ?? '')),
         'items' => $items,
     ];
 }

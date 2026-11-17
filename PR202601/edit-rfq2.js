@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let toastTimer;
   let attachedFiles = [];
   let purchaseRequestReady = !requestedPrNumber;
+  let inventoryWarehouseLocked = null;
 
   // ==========================================================================
   // Toast Helper
@@ -208,6 +209,34 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const pr = result.purchase_request;
+      // When created from an Inventory request, receiving warehouse is authoritative.
+      const delivery = result.inventory_delivery;
+      if (result.inventory_delivery_missing) {
+        throw new Error('This older Inventory-linked PR has no saved receiving warehouse. Please backfill the Inventory warehouse before creating an RFQ.');
+      }
+      if (delivery) {
+        const warehouseKey = ({'WH-MAIN':'main','WH-SECONDARY':'second'})[
+          String(delivery.warehouse_code || '').trim().toUpperCase()];
+        if (!warehouseKey) throw new Error('Unknown Inventory warehouse code. Ask the team to configure its RFQ mapping.');
+        const select = document.getElementById('warehouseLocation');
+        if (!select || !select.querySelector(`option[value="${warehouseKey}"]`)) {
+          throw new Error('Inventory warehouse is unavailable in the RFQ form.');
+        }
+        select.value = warehouseKey;
+        const selectedOption = select.querySelector(`option[value="${warehouseKey}"]`);
+        selectedOption.textContent = `${delivery.warehouse_name} (Inventory receiving warehouse)`;
+        select.disabled = true;
+        inventoryWarehouseLocked = delivery;
+        const note = document.createElement('p');
+        note.textContent = `Receiving warehouse set by Inventory: ${delivery.warehouse_name}` +
+          (delivery.warehouse_location ? ` — ${delivery.warehouse_location}` : '') +
+          '. Warehouse changes must be made by Inventory. Physical delivery address must be verified before PO creation.';
+        note.style.cssText = 'font-size:12px;line-height:1.5;color:#5b3220;margin-top:8px';
+        select.closest('.location-group')?.appendChild(note);
+        // The existing Leaflet pins are hardcoded addresses, not verified Inventory data.
+        const map = document.querySelector('.map-wrapper');
+        if (map) map.style.display = 'none';
+      }
       const metadata = document.querySelectorAll(
         ".metadata-row .metadata-item strong"
       );
@@ -793,6 +822,7 @@ window.location.href = "confirm-rfq.html";
 
     return {
 
+      inventoryWarehouseCode: inventoryWarehouseLocked?.warehouse_code || null,
       rfqNumber,
 
       prNumber,
